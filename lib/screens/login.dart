@@ -1,14 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:project_flutter_b6/amomimusdark.dart';
-import 'package:project_flutter_b6/screens/tugas1102.dart';
-import 'package:project_flutter_b6/screens/tugas11a.dart';
+import 'package:amomimus/amomimusdark.dart';
+import 'package:amomimus/screens/register_screen.dart';
+import 'package:amomimus/screens/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
-import 'package:project_flutter_b6/services/account_manager.dart';
+import 'package:amomimus/services/account_manager.dart';
 
-import '../database/db_helper.dart';
-import '../database/models/tugas11_user_register_sql.dart';
+import '../database/preference_handler.dart';
 import '../database/preference_handler.dart';
 
 void main() {
@@ -49,7 +48,8 @@ class _LoginScreenState extends State<LoginScreen>
   String? _passwordErrorMsg;
   bool _showEasterEggBubble = false;
 
-  Future<List<UserModelSql>>? _userListFuture;
+  // We will load accounts directly from AccountManager
+  // Future<List<UserModelSql>>? _userListFuture;
 
   @override
   void initState() {
@@ -63,8 +63,11 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   void _refreshUserList() {
-    setState(() {
-      _userListFuture = DBHelper().getAllUsers();
+    // Rely on AccountManager to refresh list automatically via loadAccounts if needed
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Provider.of<AccountManager>(context, listen: false).loadAccounts();
+      }
     });
   }
 
@@ -138,19 +141,12 @@ class _LoginScreenState extends State<LoginScreen>
       return;
     }
 
-    final user = await DBHelper().loginUser(email, password);
+    final accountManager = Provider.of<AccountManager>(context, listen: false);
+    final isSuccess = await accountManager.login(email, password);
 
-    if (user != null) {
+    if (isSuccess) {
       await _saveLoginPreferences();
       if (!mounted) return;
-
-      // Sync the AccountManager with the logged-in user
-      final accountManager = Provider.of<AccountManager>(context, listen: false);
-      final accountList = accountManager.accounts;
-      final matchingAccount = accountList.where((acc) => acc.email == email);
-      if (matchingAccount.isNotEmpty) {
-        accountManager.switchAccount(matchingAccount.first);
-      }
 
       Navigator.pushReplacement(
         context,
@@ -179,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen>
   void _handleGoogleLogin() {}
 
   // Extracted Dialog to prevent Context/Navigator collision mutations
-  void _showDeleteConfirmation(BuildContext context, UserModelSql user) async {
+  void _showDeleteConfirmation(BuildContext context, String userEmail, String userName) async {
     // 1. Show the dialog and await the user choice (returns true if deleted)
     final shouldRefresh = await showDialog<bool>(
       context: context,
@@ -187,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen>
         return AlertDialog(
           title: const Text('Delete User'),
           content: Text(
-            'Are you sure you want to remove ${user.fullName ?? "this user"}?',
+            'Are you sure you want to remove $userName?',
           ),
           actions: [
             TextButton(
@@ -196,12 +192,8 @@ class _LoginScreenState extends State<LoginScreen>
             ),
             TextButton(
               onPressed: () async {
-                final userEmail = user.email?.toString();
-                if (userEmail != null && userEmail.isNotEmpty) {
-                  // Await database elimination inside dialog context
-                  await DBHelper().deleteUser(userEmail);
-
-                  // Also delete from AccountManager (SharedPreferences state)
+                if (userEmail.isNotEmpty) {
+                  // Delete from AccountManager (Hybrid Architecture)
                   if (dialogContext.mounted) {
                     final accountManager = Provider.of<AccountManager>(dialogContext, listen: false);
                     await accountManager.deleteAccount(userEmail);
@@ -226,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen>
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${user.fullName ?? "User"} deleted'),
+          content: Text('$userName deleted'),
           backgroundColor: Colors.orange,
         ),
       );
@@ -253,18 +245,21 @@ class _LoginScreenState extends State<LoginScreen>
                   child: Transform.rotate(angle: -0.15, child: child),
                 );
               },
-              child: Container(
-                width: 140,
-                height: 160,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 250, 246, 255),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.diamond_outlined,
-                    size: 48,
-                    color: Color.fromARGB(255, 215, 192, 255),
+              child: Opacity(
+                opacity: 0.3,
+                child: Container(
+                  width: 140,
+                  height: 160,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 250, 246, 255),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.diamond_outlined,
+                      size: 48,
+                      color: Color.fromARGB(255, 215, 192, 255),
+                    ),
                   ),
                 ),
               ),
@@ -288,18 +283,21 @@ class _LoginScreenState extends State<LoginScreen>
                 );
               },
               child: Center(
-                child: Container(
-                  width: 140,
-                  height: 160,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 251, 240),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.android_outlined,
-                      size: 48,
-                      color: Color(0xFFFFD54F),
+                child: Opacity(
+                  opacity: 0.3,
+                  child: Container(
+                    width: 140,
+                    height: 160,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 251, 240),
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.android_outlined,
+                        size: 48,
+                        color: Color(0xFFFFD54F),
+                      ),
                     ),
                   ),
                 ),
@@ -321,18 +319,21 @@ class _LoginScreenState extends State<LoginScreen>
                   child: Transform.rotate(angle: 0.15, child: child),
                 );
               },
-              child: Container(
-                width: 140,
-                height: 160,
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 248, 248, 248),
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.water_outlined,
-                    size: 48,
-                    color: Color(0xFFE0E0E0),
+              child: Opacity(
+                opacity: 0.3,
+                child: Container(
+                  width: 140,
+                  height: 160,
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 248, 248, 248),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const Center(
+                    child: Icon(
+                      Icons.water_outlined,
+                      size: 48,
+                      color: Color(0xFFE0E0E0),
+                    ),
                   ),
                 ),
               ),
@@ -383,7 +384,7 @@ class _LoginScreenState extends State<LoginScreen>
                                     borderRadius: BorderRadius.circular(8),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withOpacity(0.15),
+                                        color: Colors.black.withValues(alpha: 0.15),
                                         blurRadius: 8,
                                         offset: const Offset(0, 4),
                                       ),
@@ -545,7 +546,7 @@ class _LoginScreenState extends State<LoginScreen>
                           borderRadius: BorderRadius.circular(14),
                         ),
                         elevation: 1,
-                        shadowColor: Colors.black.withOpacity(0.05),
+                        shadowColor: Colors.black.withValues(alpha: 0.05),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -626,24 +627,30 @@ class _LoginScreenState extends State<LoginScreen>
                   const SizedBox(height: 30),
                   const Divider(thickness: 1.5),
                   const SizedBox(height: 10),
-                  Center(
-                    child: Text(
-                      'REGISTERED USERS (REAL-TIME)',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
+                  Theme(
+                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                    child: ExpansionTile(
+                      tilePadding: EdgeInsets.zero,
+                      collapsedIconColor: Colors.grey[600],
+                      iconColor: const Color(0xff6c52a3),
+                      title: Text(
+                        'REGISTERED USERS (TESTING)',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                        ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 15),
+                      children: [
+                        const SizedBox(height: 15),
 
                   // SQLite List Field - Safely Managed Layout
-                  FutureBuilder<List<UserModelSql>>(
-                    future: _userListFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                  Consumer<AccountManager>(
+                    builder: (context, accountManager, child) {
+                      final daftarUser = accountManager.accounts;
+                      if (accountManager.isLoading) {
                         return const Center(
                           child: Padding(
                             padding: EdgeInsets.all(16.0),
@@ -651,16 +658,12 @@ class _LoginScreenState extends State<LoginScreen>
                           ),
                         );
                       }
-                      if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      }
 
-                      final daftarUser = snapshot.data;
-                      if (daftarUser == null || daftarUser.isEmpty) {
+                      if (daftarUser.isEmpty) {
                         return const Center(
                           child: Padding(
                             padding: EdgeInsets.all(16.0),
-                            child: Text('No users registered in SQLite yet.'),
+                            child: Text('No users registered yet.'),
                           ),
                         );
                       }
@@ -679,9 +682,8 @@ class _LoginScreenState extends State<LoginScreen>
                               leading: CircleAvatar(
                                 backgroundColor: const Color(0xff6c52a3),
                                 child: Text(
-                                  user.fullName != null &&
-                                          user.fullName!.isNotEmpty
-                                      ? user.fullName!
+                                  user.realUsername.isNotEmpty
+                                      ? user.realUsername
                                             .substring(0, 1)
                                             .toUpperCase()
                                       : 'U',
@@ -689,7 +691,7 @@ class _LoginScreenState extends State<LoginScreen>
                                 ),
                               ),
                               title: Text(
-                                user.fullName ?? 'No Name',
+                                user.realUsername,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -697,7 +699,7 @@ class _LoginScreenState extends State<LoginScreen>
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 4.0),
                                 child: Text(
-                                  'Email: ${user.email ?? "-"}\nFavorite: ${user.favoriteCharacter ?? "-"}',
+                                  'Email: ${user.email}\nAmomimus: ${user.anonymousUsername}',
                                   style: TextStyle(
                                     color: Colors.grey[700],
                                     fontSize: 13,
@@ -710,7 +712,7 @@ class _LoginScreenState extends State<LoginScreen>
                                   color: Colors.redAccent,
                                 ),
                                 onPressed: () =>
-                                    _showDeleteConfirmation(context, user),
+                                    _showDeleteConfirmation(context, user.email, user.realUsername),
                               ),
                             ),
                           );
@@ -718,7 +720,10 @@ class _LoginScreenState extends State<LoginScreen>
                       );
                     },
                   ),
-                  const SizedBox(height: 40),
+                ],
+              ),
+            ),
+            const SizedBox(height: 40),
                 ],
               ),
             ),
@@ -756,16 +761,43 @@ class CustomInputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            color: Color(0xff2d2d2d),
-          ),
+        Builder(
+          builder: (context) {
+            final words = label.split(' ');
+            if (words.length == 1) {
+              return Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                  color: Color(0xff121212),
+                ),
+              );
+            }
+            return RichText(
+              text: TextSpan(
+                text: '${words.first} ',
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                  color: Color(0xff6c52a3),
+                ),
+                children: [
+                  TextSpan(
+                    text: words.skip(1).join(' '),
+                    style: const TextStyle(color: Color(0xff121212)),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
         const SizedBox(height: 8),
         TextField(
           controller: controller,
+          style: const TextStyle(color: Color(0xff121212)),
           obscureText: obscureText,
           onChanged: onChanged,
           decoration: InputDecoration(

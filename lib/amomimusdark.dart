@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:amomimus/database/preference_handler.dart';
 
 class AmomimusDarkTheme extends ChangeNotifier {
   // 1. State privat untuk menyimpan kondisi tema saat ini (Default: Dark Mode = true)
-  bool _isDarkMode = true;
+  bool _isDarkMode = PreferenceHandler.isDarkMode;
 
   // 2. Getter public agar bisa dibaca dari berkas utama (mencegah error merah)
   bool get isDarkMode => _isDarkMode;
@@ -10,6 +11,7 @@ class AmomimusDarkTheme extends ChangeNotifier {
   // 3. Fungsi untuk mengganti tema secara real-time
   void toggleTheme() {
     _isDarkMode = !_isDarkMode;
+    PreferenceHandler.setIsDarkMode(_isDarkMode);
     notifyListeners(); // Memberitahu Flutter untuk menggambar ulang UI yang menggunakan tema ini
   }
 
@@ -178,8 +180,8 @@ class AmomimusDarkTheme extends ChangeNotifier {
       boxShadow: [
         BoxShadow(
           color: _isDarkMode
-              ? shadowColor.withOpacity(0.3)
-              : Colors.grey.withOpacity(0.2),
+              ? shadowColor.withValues(alpha: 0.3)
+              : Colors.grey.withValues(alpha: 0.2),
           blurRadius: 10,
           offset: const Offset(0, 4),
         ),
@@ -188,8 +190,8 @@ class AmomimusDarkTheme extends ChangeNotifier {
   }
 
   Color get blurOverlayColor => _isDarkMode
-      ? backgroundDark.withOpacity(0.75)
-      : Colors.white.withOpacity(0.75);
+      ? backgroundDark.withValues(alpha: 0.75)
+      : Colors.white.withValues(alpha: 0.75);
 
   // Tetap mempertahankan properti static lama agar tidak merusak halaman lain yang memanggil secara langsung
   static ThemeData get themeData => AmomimusDarkTheme().currentThemeData;

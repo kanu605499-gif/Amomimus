@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:math' as math;
 import '../language/language_manager.dart';
-
-import 'uii.dart';
+import '../database/models/user_register_sql.dart';
+import '../data/anonymous_names.dart';
+import '../services/account_manager.dart';
+import 'package:amomimus/screens/feed_screen.dart';
+import 'package:amomimus/screens/choose_amomimus_screen.dart';
 
 class AmomimusApp4 extends StatefulWidget {
   final String email;
   final String realUsername;
+  final String password;
+  final String favoriteCharacter;
 
   const AmomimusApp4({
     super.key,
     required this.email,
     required this.realUsername,
+    required this.password,
+    required this.favoriteCharacter,
   });
 
   @override
@@ -39,6 +47,8 @@ class _AmomimusApp4State extends State<AmomimusApp4> {
       AmomimusFormPage(
         email: widget.email,
         realUsername: widget.realUsername,
+        password: widget.password,
+        favoriteCharacter: widget.favoriteCharacter,
         isDarkMode: _isDarkMode,
       ),
       AboutPage(
@@ -211,12 +221,16 @@ class _AmomimusApp4State extends State<AmomimusApp4> {
 class AmomimusFormPage extends StatefulWidget {
   final String email;
   final String realUsername;
+  final String password;
+  final String favoriteCharacter;
   final bool isDarkMode;
 
   const AmomimusFormPage({
     super.key,
     required this.email,
     required this.realUsername,
+    required this.password,
+    required this.favoriteCharacter,
     required this.isDarkMode,
   });
 
@@ -463,7 +477,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                 margin: const EdgeInsets.symmetric(horizontal: 24.0),
                 padding: const EdgeInsets.all(18.0),
                 decoration: BoxDecoration(
-                  color: currentCardBg.withOpacity(0.92),
+                  color: currentCardBg.withValues(alpha: 0.92),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(color: borderColor),
                 ),
@@ -566,7 +580,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                             side: BorderSide(
                               color: _selectedDate != null
                                   ? borderColor
-                                  : Colors.redAccent.withOpacity(0.5),
+                                  : Colors.redAccent.withValues(alpha: 0.5),
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -582,7 +596,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                           context.watch<LanguageManager>().getString('dob_required'),
                           style: TextStyle(
                             fontSize: 11,
-                            color: Colors.redAccent.withOpacity(0.8),
+                            color: Colors.redAccent.withValues(alpha: 0.8),
                             fontStyle: FontStyle.italic,
                           ),
                         ),
@@ -624,7 +638,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                       height: 54,
                       child: ElevatedButton(
                         onPressed: (_hasAcceptedTerms && _selectedDate != null)
-                            ? () {
+                            ? () async {
                                 // Verify age >= 18
                                 final now = DateTime.now();
                                 final age =
@@ -656,13 +670,17 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                                   return;
                                 }
 
-                                // Data sync & verification passed
-                                Navigator.pushReplacement(
+                                // Navigate to Choose Your Amomus page
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => AmomimusApp1(
+                                    builder: (context) => ChooseAmomusPage(
                                       email: widget.email,
                                       realUsername: widget.realUsername,
+                                      password: widget.password,
+                                      favoriteCharacter: widget.favoriteCharacter,
+                                      dateOfBirth: _getFormattedDate(),
+                                      isDarkMode: widget.isDarkMode,
                                     ),
                                   ),
                                 );
@@ -709,14 +727,17 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
     required IconData icon,
     required Color iconColor,
   }) {
-    return Container(
-      width: 140,
-      height: 160,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(24),
+    return Opacity(
+      opacity: 0.3,
+      child: Container(
+        width: 140,
+        height: 160,
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Center(child: Icon(icon, size: 48, color: iconColor)),
       ),
-      child: Center(child: Icon(icon, size: 48, color: iconColor)),
     );
   }
 }
@@ -818,7 +839,7 @@ class AboutPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'v1.0.8 (Tugas 8)',
+                      'v1.0.0',
                       style: TextStyle(color: Color(0xfff1c66a)),
                     ),
                   ],

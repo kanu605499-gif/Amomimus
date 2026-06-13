@@ -1,9 +1,16 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../database_helper.dart';
 import '../models/report_model.dart';
+import '../models/user_indicator_model.dart';
 import '../helpers/benevolent_calculator.dart';
-
+import 'auth_service.dart';
+import '../database/models/user_register_sql.dart';
 class AccountManager extends ChangeNotifier {
+  final AuthService authService;
+
+  AccountManager({required this.authService});
+
   List<UserAccount> _accounts = [];
   UserAccount? _currentUser;
   bool _isLoading = true;
@@ -42,21 +49,35 @@ class AccountManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> registerAndLogin(UserAccount newUser) async {
-    try {
-      int id = await DatabaseHelper.instance.createUser(newUser);
-      await loadAccounts();
-      
-      // Set the newly created user as the active user
-      final createdUser = _accounts.firstWhere((acc) => acc.id == id, orElse: () => _accounts.last);
-      switchAccount(createdUser);
-    } catch (e) {
-      // sqflite not supported on web — create temporary in-memory account
-      print("==== DB REGISTER SKIPPED (possibly web): $e ====");
-      _currentUser = newUser;
+  Future<bool> registerAndLogin(UserModelSql credentials, UserAccount newUser) async {
+    bool isSuccess = await authService.registerAccount(credentials, newUser);
+    if (!isSuccess) return false;
+
+    // We fetch updated accounts to sync the internal state
+    await loadAccounts();
+    
+    // Set the newly created user as the active user
+    final createdUser = _accounts.firstWhere((acc) => acc.email == newUser.email, orElse: () {
       _accounts.add(newUser);
-      notifyListeners();
+      return newUser;
+    });
+    switchAccount(createdUser);
+    return true;
+  }
+
+  Future<bool> checkEmailExists(String email) async {
+    return await authService.isEmailRegistered(email);
+  }
+
+  Future<bool> login(String email, String password) async {
+    final user = await authService.login(email, password);
+    if (user != null) {
+      await loadAccounts();
+      final loggedInUser = _accounts.firstWhere((acc) => acc.email == email, orElse: () => user);
+      switchAccount(loggedInUser);
+      return true;
     }
+    return false;
   }
 
   void switchAccount(UserAccount account) {
@@ -66,9 +87,9 @@ class AccountManager extends ChangeNotifier {
 
   Future<void> deleteAccount(String email) async {
     try {
-      await DatabaseHelper.instance.deleteUser(email);
+      await authService.deleteAccount(email);
     } catch (e) {
-      print("==== DB DELETE SKIPPED (possibly web): $e ====");
+      print("==== DB DELETE SKIPPED: $e ====");
     }
     
     await loadAccounts();
@@ -130,6 +151,27 @@ class AccountManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  String getDisplayIndicator(String targetId, String globalIndicator) {
+    if (_currentUser == null) return globalIndicator;
+    
+    // Use max to prevent double-counting local points that are already in global points
+    final localPoints = _currentUser!.localAssignedPoints[targetId] ?? 0;
+    if (localPoints > 0) {
+      final targetUser = getAccountById(targetId);
+      final effectivePoints = math.max(targetUser?.benevolentPoints ?? 0, localPoints);
+      return UserIndicatorHelper.fromBenevolentPoints(effectivePoints).name;
+    }
+    return globalIndicator;
+  }
+
+  UserAccount? getAccountById(String id) {
+    try {
+      return _accounts.firstWhere((acc) => acc.amomimusId == id || acc.id.toString() == id);
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> submitReport(String targetId, ReportCategory category, {bool isChatBubbleReport = false}) async {
     String normalizedTargetId = targetId;
     final match = RegExp(r'#(?:YOU|AMO|AMI|AMOM)-(\d+)').firstMatch(targetId);
@@ -141,6 +183,7 @@ class AccountManager extends ChangeNotifier {
       normalizedTargetId = targetId.replaceAll(RegExp(r'#AM[OMI]+-'), '#AMM-');
     }
     final userIndex = _accounts.indexWhere((acc) => acc.amomimusId == targetId || acc.amomimusId == normalizedTargetId || acc.id.toString() == targetId);
+    
     if (userIndex != -1) {
       var user = _accounts[userIndex];
       
@@ -168,9 +211,39 @@ class AccountManager extends ChangeNotifier {
       if (_currentUser?.id == updatedUser.id) {
         _currentUser = updatedUser;
       }
-      
-      notifyListeners();
     }
+
+    // ALWAYS update local perspective, even for dummy users (userIndex == -1)
+    if (_currentUser != null && _currentUser!.amomimusId != targetId) {
+      final newPointsMap = Map<String, int>.from(_currentUser!.localAssignedPoints);
+      final currentLocalPoints = newPointsMap[targetId] ?? 0;
+      
+      final localStatus = BenevolentCalculator.addReportToUser(
+        currentPoints: currentLocalPoints,
+        category: category,
+        isChatBubbleReport: isChatBubbleReport,
+        currentIndicator: 'cloudy', // we don't care about the string here for local math
+        pointMultiplier: 4.0, // Scale up local points so 5 hate speech = Ghost
+      );
+      
+      newPointsMap[targetId] = localStatus.points;
+      
+      final newReporter = _currentUser!.copyWith(localAssignedPoints: newPointsMap);
+      _currentUser = newReporter;
+      
+      try {
+        await DatabaseHelper.instance.updateUser(newReporter);
+      } catch (e) {
+        print("==== DB UPDATE SKIPPED: $e ====");
+      }
+      
+      final reporterIndex = _accounts.indexWhere((acc) => acc.id == newReporter.id);
+      if (reporterIndex != -1) {
+        _accounts[reporterIndex] = newReporter;
+      }
+    }
+    
+    notifyListeners();
   }
 
   Future<void> blockUser(String userId) async {
@@ -253,5 +326,69 @@ class AccountManager extends ChangeNotifier {
     }
     
     notifyListeners();
+  }
+
+  Future<void> toggleWishlistBatch(String batchId) async {
+    if (_currentUser == null) return;
+    
+    final currentList = List<String>.from(_currentUser!.wishlistStickerBatches);
+    if (currentList.contains(batchId)) {
+      currentList.remove(batchId);
+    } else {
+      currentList.add(batchId);
+    }
+    
+    final updatedUser = _currentUser!.copyWith(wishlistStickerBatches: currentList);
+    
+    try {
+      await DatabaseHelper.instance.updateUser(updatedUser);
+    } catch (e) {
+      print("==== DB UPDATE SKIPPED: $e ====");
+    }
+    
+    _currentUser = updatedUser;
+    
+    final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
+    if (index != -1) {
+      _accounts[index] = updatedUser;
+    }
+    
+    notifyListeners();
+  }
+
+  Future<bool> purchaseStickerBatch(String batchId, int cost) async {
+    if (_currentUser == null) return false;
+    
+    if (_currentUser!.coins < cost) {
+      return false; // Not enough coins
+    }
+    
+    if (_currentUser!.ownedStickerBatches.contains(batchId)) {
+      return false; // Already owned
+    }
+
+    final newCoins = _currentUser!.coins - cost;
+    final updatedList = List<String>.from(_currentUser!.ownedStickerBatches)..add(batchId);
+    
+    final updatedUser = _currentUser!.copyWith(
+      coins: newCoins,
+      ownedStickerBatches: updatedList,
+    );
+    
+    try {
+      await DatabaseHelper.instance.updateUser(updatedUser);
+    } catch (e) {
+      print("==== DB UPDATE SKIPPED: $e ====");
+    }
+    
+    _currentUser = updatedUser;
+    
+    final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
+    if (index != -1) {
+      _accounts[index] = updatedUser;
+    }
+    
+    notifyListeners();
+    return true;
   }
 }

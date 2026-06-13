@@ -24,9 +24,13 @@ class UserAccount {
   final List<String> ownedStickers;
   final List<String> blockedUsers;
   final List<String> hiddenFeeds;
+  final List<String> wishlistStickerBatches; // NEW WISHLIST DB FIELD
+  final List<String> ownedStickerBatches;    // TRACKS PURCHASED PACKS
+
+  final Map<String, int> localAssignedPoints; // Maps amomimusId -> local points
 
   // Indicator system fields
-  final int benevolentPoints;    // 0–100 (percentage); 1–75 = CLOUDY, 76–100 = GHOST
+  final int benevolentPoints;    // 0–100 (percentage); 0-59 = CLOUDY, 60-89 = GHOST, 90-100 = NOISE
   final String indicator;        // 'cloudy', 'ghost', or 'noise' (noise = admin-only)
 
   UserAccount({
@@ -50,6 +54,9 @@ class UserAccount {
     this.ownedStickers = const [],
     this.blockedUsers = const [],
     this.hiddenFeeds = const [],
+    this.wishlistStickerBatches = const [],
+    this.ownedStickerBatches = const [],
+    this.localAssignedPoints = const {},
     this.benevolentPoints = 0,
     this.indicator = 'cloudy',
   });
@@ -86,6 +93,17 @@ class UserAccount {
               ?.map((e) => e as String)
               .toList() ??
           [],
+      wishlistStickerBatches: (map['wishlistStickerBatches'] as List?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      ownedStickerBatches: (map['ownedStickerBatches'] as List?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      localAssignedPoints: map['localAssignedPoints'] != null 
+          ? Map<String, int>.from(map['localAssignedPoints'] as Map)
+          : {},
       benevolentPoints: map['benevolentPoints'] ?? 0,
       indicator: map['indicator'] ?? 'cloudy',
     );
@@ -114,6 +132,9 @@ class UserAccount {
       'ownedStickers': ownedStickers,
       'blockedUsers': blockedUsers,
       'hiddenFeeds': hiddenFeeds,
+      'wishlistStickerBatches': wishlistStickerBatches,
+      'ownedStickerBatches': ownedStickerBatches,
+      'localAssignedPoints': localAssignedPoints,
       'benevolentPoints': benevolentPoints,
       'indicator': indicator,
     };
@@ -140,6 +161,9 @@ class UserAccount {
     List<String>? ownedStickers,
     List<String>? blockedUsers,
     List<String>? hiddenFeeds,
+    List<String>? wishlistStickerBatches,
+    List<String>? ownedStickerBatches,
+    Map<String, int>? localAssignedPoints,
     int? benevolentPoints,
     String? indicator,
   }) {
@@ -166,6 +190,9 @@ class UserAccount {
       ownedStickers: ownedStickers ?? this.ownedStickers,
       blockedUsers: blockedUsers ?? this.blockedUsers,
       hiddenFeeds: hiddenFeeds ?? this.hiddenFeeds,
+      wishlistStickerBatches: wishlistStickerBatches ?? this.wishlistStickerBatches,
+      ownedStickerBatches: ownedStickerBatches ?? this.ownedStickerBatches,
+      localAssignedPoints: localAssignedPoints ?? this.localAssignedPoints,
       benevolentPoints: benevolentPoints ?? this.benevolentPoints,
       indicator: indicator ?? this.indicator,
     );

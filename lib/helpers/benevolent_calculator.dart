@@ -6,9 +6,9 @@ import '../models/user_indicator_model.dart';
 /// **Benevolent Points** (0–100 percentage scale):
 /// - Points INCREASE when a user is reported (bad behavior).
 /// - Points DECREASE when a user receives resonates (redemption).
-/// - 0–49  → CLOUDY (grey, neutral user)
-/// - 50–79 → GHOST (yellow, amoral / nonchalant user)
-/// - 80–100 → NOISE (purple, flagged / toxic user)
+/// - 0–59  → CLOUDY (grey, neutral user)
+/// - 60–89 → GHOST (yellow, amoral / nonchalant user)
+/// - 90–100 → NOISE (purple, flagged / toxic user)
 ///
 /// **Point weights:**
 /// - Each report adds points based on its category severity.
@@ -20,17 +20,17 @@ class BenevolentCalculator {
   // ── Report weights (points ADDED per report) ──────────
 
   /// Base weight for a general (user-level) report.
-  static const int baseReportWeight = 16;
+  static const int baseReportWeight = 2;
 
   /// Extra weight when the report is a per-chat-bubble report.
   /// Chat behavior reports are weighted higher as requested.
-  static const int chatBubbleBonus = 4;
+  static const int chatBubbleBonus = 1;
 
   /// Severity multipliers per report category.
   static const Map<ReportCategory, double> categoryMultipliers = {
-    ReportCategory.spamHarassment: 1.0, // 8 pts (base)
-    ReportCategory.inappropriateContent: 1.25, // 10 pts (base)
-    ReportCategory.hateSpeech: 1.5, // 12 pts (base)
+    ReportCategory.spamHarassment: 1.0, // 2 pts (base)
+    ReportCategory.inappropriateContent: 1.25, // 2.5 pts (base)
+    ReportCategory.hateSpeech: 1.5, // 3 pts (base)
   };
 
   // ── Resonate weights (points SUBTRACTED per resonate) ──
@@ -106,13 +106,15 @@ class BenevolentCalculator {
     required ReportCategory category,
     required bool isChatBubbleReport,
     required String currentIndicator,
+    double pointMultiplier = 1.0,
   }) {
 
     final multiplier = categoryMultipliers[category] ?? 1.0;
     final base = baseReportWeight * multiplier;
     final bonus = isChatBubbleReport ? chatBubbleBonus : 0;
 
-    final int newPoints = (currentPoints + (base + bonus).round()).clamp(
+    final int pointsToAdd = ((base + bonus) * pointMultiplier).round();
+    final int newPoints = (currentPoints + pointsToAdd).clamp(
       0,
       100,
     );

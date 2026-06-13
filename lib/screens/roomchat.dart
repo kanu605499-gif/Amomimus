@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../amomimusdark.dart';
 import '../helpers/gender_helpers.dart';
@@ -12,8 +13,12 @@ import '../services/account_manager.dart';
 import '../services/chat_request_manager.dart';
 import '../services/chatmodel.dart';
 import '../widgets/report_dialog.dart';
+
 import 'profile_screen.dart';
 import '../language/language_manager.dart';
+import '../widgets/chat/chat_message_bubble.dart';
+import '../widgets/chat/chat_input_bar.dart';
+import 'fake_pdf_screen.dart';
 
 void main() {
   runApp(
@@ -40,9 +45,8 @@ class AmomimusApp6 extends StatefulWidget {
 }
 
 class _AmomimusApp6State extends State<AmomimusApp6>
-    with TickerProviderStateMixin {
-  final TextEditingController _messageController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
+    with SingleTickerProviderStateMixin {
+  final AutoScrollController _scrollController = AutoScrollController();
 
   ChatMessage? _replyingToMessage;
 
@@ -85,43 +89,67 @@ class _AmomimusApp6State extends State<AmomimusApp6>
 
   @override
   void dispose() {
-    _messageController.dispose();
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     _waveController.dispose();
     super.dispose();
   }
 
-  void _sendMessage() {
-    if (_messageController.text.trim().isNotEmpty) {
-      final text = _messageController.text.trim();
-      final username = widget.username ?? '@partner_dev';
-      final activeUser = context.read<AccountManager>().currentUser;
-      final senderName = activeUser?.anonymousUsername ?? 'You';
+  void _sendMessage(String text) {
+    final username = widget.username ?? '@partner_dev';
+    final activeUser = context.read<AccountManager>().currentUser;
+    final senderName = activeUser?.anonymousUsername ?? 'You';
 
-      context.read<ChatModel>().sendMessage(
-        username,
-        text,
-        senderName: senderName,
-        targetName: widget.name,
-        replyMessageId: _replyingToMessage?.id,
-      );
+    context.read<ChatModel>().sendMessage(
+      username,
+      text,
+      senderName: senderName,
+      targetName: widget.name,
+      replyMessageId: _replyingToMessage?.id,
+    );
 
-      setState(() {
-        _replyingToMessage = null;
-      });
-      _messageController.clear();
-      Future.delayed(const Duration(milliseconds: 100), () {
-        if (_scrollController.hasClients) {
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        }
-      });
-    }
+    setState(() {
+      _replyingToMessage = null;
+    });
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
+
+  void _sendSticker(String assetPath) {
+    final username = widget.username ?? '@partner_dev';
+    final activeUser = context.read<AccountManager>().currentUser;
+    final senderName = activeUser?.anonymousUsername ?? 'You';
+
+    context.read<ChatModel>().sendMessage(
+      username,
+      '[STICKER]:$assetPath',
+      senderName: senderName,
+      targetName: widget.name,
+      replyMessageId: _replyingToMessage?.id,
+    );
+
+    setState(() {
+      _replyingToMessage = null;
+    });
+
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
 
   void _showMemoriesPopup(
     BuildContext context,
@@ -152,12 +180,12 @@ class _AmomimusApp6State extends State<AmomimusApp6>
               color: currentBg,
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: themeColor.withOpacity(0.5),
+                color: themeColor.withValues(alpha: 0.5),
                 width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(isDark ? 0.4 : 0.1),
+                  color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.1),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -240,17 +268,17 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
                               color: isDark
-                                  ? Colors.black.withOpacity(0.2)
-                                  : Colors.grey.withOpacity(0.1),
+                                  ? Colors.black.withValues(alpha: 0.2)
+                                  : Colors.grey.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: themeColor.withOpacity(0.3),
+                                color: themeColor.withValues(alpha: 0.3),
                               ),
                               boxShadow: [
                                 BoxShadow(
                                   color: isDark
-                                      ? Colors.white.withOpacity(0.02)
-                                      : Colors.black.withOpacity(0.03),
+                                      ? Colors.white.withValues(alpha: 0.02)
+                                      : Colors.black.withValues(alpha: 0.03),
                                   offset: const Offset(0, 2),
                                   blurRadius: 4,
                                   spreadRadius: 0,
@@ -296,9 +324,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                                               child: Icon(
                                                 Icons.cloud,
                                                 size: 14,
-                                                color: themeColor.withOpacity(
-                                                  0.7,
-                                                ),
+                                                color: themeColor.withValues(alpha: 0.7),
                                               ),
                                             ),
                                           ),
@@ -355,12 +381,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
     final currentTextSecondary = themeProvider.isDarkMode
         ? AmomimusDarkTheme.textSecondary
         : Colors.black54;
-    final dynamicAccentColor = themeProvider.isDarkMode
-        ? AmomimusDarkTheme.policeLineYellow
-        : AmomimusDarkTheme.primaryPurple;
-
     final double statusBarHeight = MediaQuery.of(context).padding.top;
-    final double screenHeight = MediaQuery.of(context).size.height;
 
     // Get the target user's gender for dynamic styling
     final accountManager = context.watch<AccountManager>();
@@ -382,8 +403,8 @@ class _AmomimusApp6State extends State<AmomimusApp6>
 
     Widget expandableMiniIsland() {
       final Color dynamicOutlineColor = themeProvider.isDarkMode
-          ? Colors.white.withOpacity(0.2)
-          : Colors.black87.withOpacity(0.15);
+          ? Colors.white.withValues(alpha: 0.2)
+          : Colors.black87.withValues(alpha: 0.15);
 
       final Color islandBg = themeProvider.isDarkMode
           ? Colors.black54
@@ -406,8 +427,8 @@ class _AmomimusApp6State extends State<AmomimusApp6>
             border: Border.all(color: dynamicOutlineColor, width: 1.2),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(
-                  themeProvider.isDarkMode ? 0.2 : 0.05,
+                color: Colors.black.withValues(
+                  alpha: themeProvider.isDarkMode ? 0.2 : 0.05,
                 ),
                 blurRadius: 12,
                 offset: const Offset(0, 5),
@@ -571,6 +592,26 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                           );
                         },
                       ),
+                      const SizedBox(width: 2),
+                      IconButton(
+                        icon: Icon(
+                          Icons.menu_book,
+                          size: 15,
+                        ),
+                        color: themeProvider.isDarkMode ? AmomimusDarkTheme.textSecondary : Colors.black54,
+                        constraints: const BoxConstraints(),
+                        padding: const EdgeInsets.all(4),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (context, animation, secondaryAnimation) => const FakePdfScreen(),
+                              transitionDuration: Duration.zero,
+                              reverseTransitionDuration: Duration.zero,
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -583,7 +624,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
 
     Widget largeProfileWidget() {
       final Color uidColor = themeProvider.isDarkMode
-          ? currentTextSecondary.withOpacity(0.7)
+          ? currentTextSecondary.withValues(alpha: 0.7)
           : Colors.black45;
 
       return Container(
@@ -872,7 +913,12 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                     child: Column(
                       children: [
                         Expanded(
-                          child: CustomScrollView(
+                          child: GestureDetector(
+                            onTap: () {
+                              FocusScope.of(context).unfocus();
+
+                            },
+                            child: CustomScrollView(
                             controller: _scrollController,
                             slivers: [
                               SliverPadding(
@@ -904,54 +950,71 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                                         ? messages.firstWhere(
                                             (m) => m.id == msg.replyMessageId,
                                             orElse: () => ChatMessage(
-                                              text: 'Message deleted',
+                                              text: context.read<LanguageManager>().getString('message_deleted'),
                                               senderId: '',
                                               timeStamp: '',
                                             ),
                                           )
                                         : null;
 
-                                    return MessageBubble(
-                                      message: msg,
-                                      repliedMessage: repliedMsg,
-                                      isPinned: context
-                                          .watch<ChatModel>()
-                                          .isPinned(
-                                            widget.username ?? '@partner_dev',
-                                            msg.id ?? '',
-                                          ),
-                                      onTogglePin: () {
-                                        final cm = context.read<ChatModel>();
-                                        final target =
-                                            widget.username ?? '@partner_dev';
-                                        final msgId = msg.id ?? '';
-                                        if (cm.isPinned(target, msgId)) {
-                                          cm.unpinMessage(target, msgId);
-                                        } else {
-                                          final success = cm.pinMessage(
-                                            target,
-                                            msgId,
-                                          );
-                                          if (!success) {
-                                            ScaffoldMessenger.of(
-                                              context,
-                                            ).showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  context.read<LanguageManager>().getString('pin_limit_error'),
-                                                ),
-                                                backgroundColor:
-                                                    Colors.redAccent,
-                                              ),
+                                    return AutoScrollTag(
+                                      key: ValueKey(index),
+                                      controller: _scrollController,
+                                      index: index,
+                                      child: MessageBubble(
+                                        message: msg,
+                                        repliedMessage: repliedMsg,
+                                        isPinned: context
+                                            .watch<ChatModel>()
+                                            .isPinned(
+                                              widget.username ?? '@partner_dev',
+                                              msg.id ?? '',
+                                            ),
+                                        onTogglePin: () {
+                                          final cm = context.read<ChatModel>();
+                                          final target =
+                                              widget.username ?? '@partner_dev';
+                                          final msgId = msg.id ?? '';
+                                          if (cm.isPinned(target, msgId)) {
+                                            cm.unpinMessage(target, msgId);
+                                          } else {
+                                            final success = cm.pinMessage(
+                                              target,
+                                              msgId,
                                             );
+                                            if (!success) {
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    context.read<LanguageManager>().getString('pin_limit_error'),
+                                                  ),
+                                                  backgroundColor:
+                                                      Colors.redAccent,
+                                                ),
+                                              );
+                                            }
                                           }
-                                        }
-                                      },
-                                      onReply: () {
-                                        setState(() {
-                                          _replyingToMessage = msg;
-                                        });
-                                      },
+                                        },
+                                        onReply: () {
+                                          setState(() {
+                                            _replyingToMessage = msg;
+                                          });
+                                        },
+                                        onReplyTapped: () {
+                                          if (msg.replyMessageId != null) {
+                                            final targetIndex = messages.indexWhere((m) => m.id == msg.replyMessageId);
+                                            if (targetIndex != -1) {
+                                              _scrollController.scrollToIndex(
+                                                targetIndex + 1,
+                                                preferPosition: AutoScrollPosition.middle,
+                                                duration: const Duration(milliseconds: 500),
+                                              );
+                                            }
+                                          }
+                                        },
+                                      ),
                                     );
                                   }, childCount: messages.length + 1),
                                 ),
@@ -959,158 +1022,16 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                             ],
                           ),
                         ),
-                        if (_replyingToMessage != null)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              color: currentSurface,
-                              border: Border(
-                                top: BorderSide(
-                                  color: currentSurface.withOpacity(0.5),
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 4,
-                                  height: 36,
-                                  decoration: BoxDecoration(
-                                    color: dynamicAccentColor,
-                                    borderRadius: BorderRadius.circular(2),
-                                  ),
-                                  margin: const EdgeInsets.only(right: 8),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${context.read<LanguageManager>().getString('replying_to')}${_replyingToMessage!.senderName ?? 'User'}",
-                                        style: TextStyle(
-                                          color: dynamicAccentColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        _replyingToMessage!.text,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: currentTextSecondary,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.close,
-                                    color: currentTextSecondary,
-                                    size: 20,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _replyingToMessage = null;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        // BAGIAN INI SUDAH DIBATASI MAKSIMAL 1/3 TINGGI HP
-                        Container(
-                          constraints: BoxConstraints(
-                            maxHeight:
-                                screenHeight * 0.33, // Maksimal 1/3 layar hp
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: currentSurface.withOpacity(0.15),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .end, // Tombol send tetap rapi di bawah saat teks memanjang
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 6),
-                                child: Icon(
-                                  Icons.sentiment_satisfied_alt_outlined,
-                                  color: dynamicAccentColor,
-                                  size: 26,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: SingleChildScrollView(
-                                  keyboardDismissBehavior:
-                                      ScrollViewKeyboardDismissBehavior.onDrag,
-                                  child: TextField(
-                                    controller: _messageController,
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines:
-                                        null, // Membiarkannya bertambah baris secara dinamis
-                                    minLines: 1,
-                                    style: TextStyle(
-                                      color: currentText,
-                                      fontSize: 15,
-                                    ),
-                                    decoration: InputDecoration(
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                            horizontal: 16,
-                                            vertical: 8,
-                                          ),
-                                      border: InputBorder.none,
-                                      hintText: context.watch<LanguageManager>().getString('write_message'),
-                                      hintStyle: TextStyle(
-                                        fontSize: 14,
-                                        color: currentTextSecondary.withOpacity(
-                                          0.7,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 7),
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 2),
-                                child: SizedBox(
-                                  height: 40,
-                                  child: ElevatedButton(
-                                    onPressed: _sendMessage,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          AmomimusDarkTheme.primaryPurple,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(18),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                      ),
-                                    ),
-                                    child: const Icon(
-                                      Icons.send,
-                                      size: 18,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                      ),
+                        ChatInputBar(
+                          replyingToMessage: _replyingToMessage,
+                          onCancelReply: () {
+                            setState(() {
+                              _replyingToMessage = null;
+                            });
+                          },
+                          onSendMessage: _sendMessage,
+                          onSendSticker: _sendSticker,
                         ),
                       ],
                     ),
@@ -1144,367 +1065,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
   }
 }
 
-class MessageBubble extends StatefulWidget {
-  final ChatMessage message;
-  final ChatMessage? repliedMessage;
-  final VoidCallback? onReply;
-  final bool isPinned;
-  final VoidCallback? onTogglePin;
 
-  const MessageBubble({
-    super.key,
-    required this.message,
-    this.repliedMessage,
-    this.onReply,
-    this.isPinned = false,
-    this.onTogglePin,
-  });
-
-  @override
-  State<MessageBubble> createState() => _MessageBubbleState();
-}
-
-class _MessageBubbleState extends State<MessageBubble> {
-  bool _isExpanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final themeProvider = context.watch<AmomimusDarkTheme>();
-    final activeUser = context.watch<AccountManager>().currentUser;
-    final isDark = themeProvider.isDarkMode;
-    final isUserMessage = widget.message.senderId == activeUser?.amomimusId;
-    Color bubbleColor = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
-    final Color customBorderColor = isUserMessage
-        ? AmomimusDarkTheme.policeLineYellow
-        : AmomimusDarkTheme.primaryPurple;
-    final Color textColor = isDark ? Colors.white : Colors.black87;
-    final Color textSecondaryColor = isDark
-        ? AmomimusDarkTheme.textSecondary
-        : Colors.black54;
-
-    // Check if text is long enough to need collapsing
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: widget.message.text,
-        style: TextStyle(
-          color: textColor,
-          fontSize: 14.0,
-          fontWeight: FontWeight.w500,
-          height: 1.5,
-          fontFamily: 'serif',
-        ),
-      ),
-      maxLines: 4,
-      textDirection: TextDirection.ltr,
-    )..layout(maxWidth: MediaQuery.of(context).size.width * 0.62 - 32);
-    final bool isOverflowing = textPainter.didExceedMaxLines;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 13.0, horizontal: 11.0),
-      child: Row(
-        mainAxisAlignment: isUserMessage
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (isUserMessage) ...[
-            Text(
-              widget.message.timeStamp,
-              style: TextStyle(
-                fontSize: 9,
-                color: textSecondaryColor.withOpacity(0.6),
-              ),
-            ),
-            const SizedBox(width: 8),
-          ],
-          GestureDetector(
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: isDark
-                    ? AmomimusDarkTheme.backgroundDark
-                    : Colors.white,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                builder: (sheetContext) {
-                  return SafeArea(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          leading: Icon(Icons.reply, color: customBorderColor),
-                          title: Text(
-                            context.read<LanguageManager>().getString('reply'),
-                            style: TextStyle(color: textColor),
-                          ),
-                          onTap: () {
-                            Navigator.pop(sheetContext);
-                            if (widget.onReply != null) widget.onReply!();
-                          },
-                        ),
-                        ListTile(
-                          leading: Icon(
-                            widget.isPinned
-                                ? Icons.cloud
-                                : Icons.cloud_outlined,
-                            color: customBorderColor,
-                          ),
-                          title: Text(
-                            widget.isPinned
-                                ? context.read<LanguageManager>().getString('unpin_memories')
-                                : context.read<LanguageManager>().getString('pin_memories'),
-                            style: TextStyle(color: textColor),
-                          ),
-                          onTap: () {
-                            Navigator.pop(sheetContext);
-                            if (widget.onTogglePin != null) {
-                              widget.onTogglePin!();
-                            }
-                          },
-                        ),
-                        if (!isUserMessage)
-                          ListTile(
-                            leading: const Icon(
-                              Icons.report_gmailerrorred,
-                              color: Colors.redAccent,
-                            ),
-                            title: Text(
-                              context.read<LanguageManager>().getString('report'),
-                              style: const TextStyle(color: Colors.redAccent),
-                            ),
-                            onTap: () {
-                              Navigator.pop(sheetContext);
-                              showDialog(
-                                context: context,
-                                builder: (context) => ReportDialog(
-                                  targetId: widget.message.id ?? '',
-                                  isUserReport: false,
-                                ),
-                              );
-                            },
-                          ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.62,
-              ),
-              child: Column(
-                crossAxisAlignment: isUserMessage
-                    ? CrossAxisAlignment.end
-                    : CrossAxisAlignment.start,
-                children: [
-                  if (widget.message.senderName != null)
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 3,
-                        right: isUserMessage ? 4 : 0,
-                        left: isUserMessage ? 0 : 4,
-                      ),
-                      child: Text(
-                        widget.message.senderName!,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: isUserMessage
-                              ? AmomimusDarkTheme.policeLineYellow
-                              : AmomimusDarkTheme.primaryPurple,
-                        ),
-                      ),
-                    ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: bubbleColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(20),
-                        topRight: const Radius.circular(20),
-                        bottomLeft: isUserMessage
-                            ? const Radius.circular(20)
-                            : const Radius.circular(4),
-                        bottomRight: isUserMessage
-                            ? const Radius.circular(4)
-                            : const Radius.circular(20),
-                      ),
-                      border: Border.all(
-                        color: customBorderColor.withOpacity(0.7),
-                        width: 1.85,
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (widget.repliedMessage != null)
-                          GestureDetector(
-                            onTap: () {
-                              if (widget.repliedMessage!.text.length > 100) {
-                                showDialog(
-                                  context: context,
-                                  builder: (dialogContext) => AlertDialog(
-                                    backgroundColor: bubbleColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                      side: BorderSide(
-                                        color: customBorderColor.withOpacity(
-                                          0.7,
-                                        ),
-                                        width: 1.85,
-                                      ),
-                                    ),
-                                    content: Text(
-                                      widget.repliedMessage!.text,
-                                      style: TextStyle(
-                                        color: textColor,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(bottom: 8),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isDark
-                                    ? Colors.black.withOpacity(0.2)
-                                    : const Color.fromARGB(255, 255, 255, 255),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: customBorderColor.withOpacity(0.9),
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: isDark
-                                        ? Colors.white.withOpacity(0.02)
-                                        : Colors.black.withOpacity(0.005),
-                                    offset: const Offset(0, 2),
-                                    blurRadius: 1,
-                                    spreadRadius: 0,
-                                  ),
-                                ],
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    widget.repliedMessage!.senderName ?? 'User',
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                      color: customBorderColor,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    widget.repliedMessage!.text,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: textSecondaryColor,
-                                      fontSize: 12,
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        RichText(
-                          maxLines: _isExpanded ? null : 4,
-                          overflow: _isExpanded
-                              ? TextOverflow.clip
-                              : TextOverflow.ellipsis,
-                          text: TextSpan(
-                            text: widget.message.text,
-                            style: TextStyle(
-                              color: textColor,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                              height: 1.5,
-                              fontFamily: 'serif',
-                            ),
-                            children: [
-                              if (widget.isPinned)
-                                WidgetSpan(
-                                  alignment: PlaceholderAlignment.middle,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 6.0),
-                                    child: Icon(
-                                      Icons.cloud,
-                                      size: 12,
-                                      color: customBorderColor,
-                                    ),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                        if (isOverflowing)
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _isExpanded = !_isExpanded;
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 6),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    _isExpanded
-                                        ? Icons.expand_less
-                                        : Icons.expand_more,
-                                    size: 16,
-                                    color: customBorderColor,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    _isExpanded ? context.read<LanguageManager>().getString('show_less') : context.read<LanguageManager>().getString('show_more'),
-                                    style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                      color: customBorderColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          if (!isUserMessage) ...[
-            const SizedBox(width: 8),
-            Text(
-              widget.message.timeStamp,
-              style: TextStyle(
-                fontSize: 9,
-                color: textSecondaryColor.withOpacity(0.6),
-              ),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
 
 class AmomimusWaveClipper extends CustomClipper<Path> {
   final double animationValue;

@@ -1,0 +1,159 @@
+import 'package:flutter/material.dart';
+import 'package:amomimus/amomimusdark.dart';
+import 'package:amomimus/language/language_manager.dart';
+import 'package:amomimus/models/user_model.dart';
+import 'package:amomimus/services/feed_manager.dart';
+import 'package:amomimus/models/post_model.dart';
+import 'package:provider/provider.dart';
+
+void showCreatePostBottomSheet(BuildContext context, bool isDark, UserAccount currentUser) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    enableDrag: true,
+    backgroundColor: Colors.transparent,
+    builder: (context) {
+      return _CreatePostForm(isDark: isDark, currentUser: currentUser);
+    },
+  );
+}
+
+class _CreatePostForm extends StatefulWidget {
+  final bool isDark;
+  final UserAccount currentUser;
+
+  const _CreatePostForm({
+    required this.isDark,
+    required this.currentUser,
+  });
+
+  @override
+  State<_CreatePostForm> createState() => _CreatePostFormState();
+}
+
+class _CreatePostFormState extends State<_CreatePostForm> {
+  final TextEditingController _postController = TextEditingController();
+
+  @override
+  void dispose() {
+    _postController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          color: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: widget.isDark ? Colors.white24 : Colors.black12,
+                  borderRadius: BorderRadius.circular(2.5),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                context.watch<LanguageManager>().getString('create_post'),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: widget.isDark
+                      ? AmomimusDarkTheme.textPrimary
+                      : const Color.fromARGB(255, 140, 113, 199),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _postController,
+                maxLines: 5,
+                maxLength: 300,
+                style: TextStyle(
+                  color: widget.isDark
+                      ? AmomimusDarkTheme.textPrimary
+                      : Colors.black,
+                  fontSize: 16,
+                ),
+                decoration: InputDecoration(
+                  hintText: context.watch<LanguageManager>().getString('whats_on_your_mind'),
+                  hintStyle: TextStyle(
+                    color: widget.isDark
+                        ? AmomimusDarkTheme.textSecondary
+                        : Colors.grey[500],
+                    fontSize: 16,
+                  ),
+                  filled: false,
+                  contentPadding: const EdgeInsets.all(16),
+                  border: InputBorder.none,
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_postController.text.trim().isNotEmpty) {
+                      AccountType accountType;
+                      switch (widget.currentUser.gender) {
+                        case 'Ami': accountType = AccountType.ami; break;
+                        case 'Amom': accountType = AccountType.amom; break;
+                        case 'Amo': accountType = AccountType.amo; break;
+                        default: accountType = AccountType.user; break;
+                      }
+                      
+                      final newPost = FeedModel(
+                        userName: widget.currentUser.anonymousUsername,
+                        id: "#AMM-${DateTime.now().millisecondsSinceEpoch % 100000}",
+                        type: accountType,
+                        content: _postController.text,
+                        timeStamp: "Just now",
+                        realAuthorId: widget.currentUser.amomimusId,
+                        realAuthorName: widget.currentUser.anonymousUsername,
+                      );
+                      Provider.of<FeedManager>(context, listen: false).addPost(newPost);
+                      
+                      _postController.clear();
+                      Navigator.pop(context);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AmomimusDarkTheme.primaryPurple,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                  ),
+                  child: Text(
+                    context.watch<LanguageManager>().getString('send_post'),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

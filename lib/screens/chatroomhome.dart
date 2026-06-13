@@ -11,9 +11,9 @@ import '../services/chatmodel.dart';
 import '../database_helper.dart';
 import 'roomchat.dart';
 import '../models/user_model.dart';
-import '../models/user_model.dart';
 import '../helpers/gender_helpers.dart';
 import '../language/language_manager.dart';
+import 'fake_pdf_screen.dart';
 
 class AmomimusApp7 extends StatefulWidget {
   const AmomimusApp7({super.key});
@@ -117,7 +117,7 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
                     context.read<LanguageManager>().getString('no_incoming_requests'),
-                    style: TextStyle(color: textCol.withOpacity(0.6)),
+                    style: TextStyle(color: textCol.withValues(alpha: 0.6)),
                   ),
                 ),
               ...reqManager.incomingRequests.map((req) {
@@ -161,7 +161,7 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                   subtitle: Text(
                     'ID: ${req.senderId}',
                     style: TextStyle(
-                      color: textCol.withOpacity(0.7),
+                      color: textCol.withValues(alpha: 0.7),
                       fontSize: 12,
                     ),
                   ),
@@ -219,8 +219,8 @@ class _AmomimusApp7State extends State<AmomimusApp7>
     // Island mini di atas saat di-scroll
     Widget expandableMiniIsland() {
       final Color dynamicOutlineColor = themeProvider.isDarkMode
-          ? Colors.white.withOpacity(0.2)
-          : Colors.black87.withOpacity(0.15);
+          ? Colors.white.withValues(alpha: 0.2)
+          : Colors.black87.withValues(alpha: 0.15);
       return GestureDetector(
         onTap: () => setState(() => _isIslandExpanded = !_isIslandExpanded),
         child: AnimatedContainer(
@@ -230,8 +230,8 @@ class _AmomimusApp7State extends State<AmomimusApp7>
           width: _isIslandExpanded ? 180 : 46,
           decoration: BoxDecoration(
             color: themeProvider.isDarkMode
-                ? currentSurface.withOpacity(0.9)
-                : Colors.grey[100]!.withOpacity(0.95),
+                ? currentSurface.withValues(alpha: 0.9)
+                : Colors.grey[100]!.withValues(alpha: 0.95),
             borderRadius: BorderRadius.circular(25),
             border: Border.all(color: dynamicOutlineColor, width: 1.2),
           ),
@@ -290,7 +290,7 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                   return CustomPaint(
                     painter: ParticleBackgroundPainter(
                       progress: _particleController.value,
-                      color: dynamicAccentColor.withOpacity(0.12),
+                      color: dynamicAccentColor.withValues(alpha: 0.12),
                     ),
                   );
                 },
@@ -327,15 +327,29 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                               const SizedBox(width: 10),
                               IconButton(
                                 icon: Icon(
+                                  Icons.menu_book,
+                                  color: themeProvider.isDarkMode ? AmomimusDarkTheme.textSecondary : Colors.black54,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder: (context, animation, secondaryAnimation) => const FakePdfScreen(),
+                                      transitionDuration: Duration.zero,
+                                      reverseTransitionDuration: Duration.zero,
+                                    ),
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
                                   Icons.switch_account_outlined,
                                   color: dynamicAccentColor,
                                 ),
                                 onPressed: () {
                                   final accountManager = context
                                       .read<AccountManager>();
-                                  final accounts = accountManager.accounts
-                                      .where((a) => a.isDemo)
-                                      .toList();
+                                  final accounts = accountManager.accounts.toList();
                                   final isDark = themeProvider.isDarkMode;
 
                                   showModalBottomSheet(
@@ -401,12 +415,16 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                                                 ),
                                               )
                                             else
-                                              ...accounts.map((acc) {
-                                                final isActive =
-                                                    acc.id ==
-                                                    accountManager
-                                                        .currentUser
-                                                        ?.id;
+                                              ConstrainedBox(
+                                                constraints: const BoxConstraints(maxHeight: 225),
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: accounts.map((acc) {
+                                                      final isActive = acc.id ==
+                                                          accountManager
+                                                              .currentUser
+                                                              ?.id;
                                                 final genderColor =
                                                     GenderHelpers.getGenderColor(
                                                       acc.gender,
@@ -447,8 +465,8 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                                                       decoration: BoxDecoration(
                                                         color: isActive
                                                             ? genderColor
-                                                                  .withOpacity(
-                                                                    0.12,
+                                                                  .withValues(
+                                                                    alpha: 0.12,
                                                                   )
                                                             : Colors
                                                                   .transparent,
@@ -459,9 +477,7 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                                                         border: Border.all(
                                                           color: isActive
                                                               ? genderColor
-                                                                    .withOpacity(
-                                                                      0.6,
-                                                                    )
+                                                                    .withValues(alpha: 0.8)
                                                               : (isDark
                                                                     ? Colors
                                                                           .white12
@@ -544,7 +560,10 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                                                     ),
                                                   ),
                                                 );
-                                              }),
+                                              }).toList(),
+                                            ),
+                                          ),
+                                        ),
                                             const SizedBox(height: 8),
                                           ],
                                         ),
@@ -594,7 +613,7 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                                     : Colors.white,
                                 borderRadius: BorderRadius.circular(30),
                                 border: Border.all(
-                                  color: dynamicAccentColor.withOpacity(0.5),
+                                  color: dynamicAccentColor.withValues(alpha: 0.5),
                                   width: 1.5,
                                 ),
                               ),
@@ -732,7 +751,7 @@ class ChatListTileWidget extends StatelessWidget {
 
     final Color customBorderColor = (chat.unreadCount > 0)
         ? dynamicTileColor
-        : dynamicTileColor.withOpacity(0.5);
+        : dynamicTileColor.withValues(alpha: 0.5);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -743,7 +762,7 @@ class ChatListTileWidget extends StatelessWidget {
           alignment: Alignment.centerRight,
           padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: BoxDecoration(
-            color: Colors.redAccent.withOpacity(0.8),
+            color: Colors.redAccent.withValues(alpha: 0.8),
             borderRadius: BorderRadius.circular(20),
           ),
           child: const Icon(
@@ -802,7 +821,7 @@ class ChatListTileWidget extends StatelessWidget {
               color: tileBg,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: customBorderColor.withOpacity(0.7),
+                color: customBorderColor.withValues(alpha: 0.7),
                 width: 1.8,
               ),
             ),
@@ -865,7 +884,7 @@ class ChatListTileWidget extends StatelessWidget {
                             chat.time,
                             style: TextStyle(
                               fontSize: 10,
-                              color: subTextColor.withOpacity(0.6),
+                              color: subTextColor.withValues(alpha: 0.6),
                             ),
                           ),
                         ],
@@ -875,15 +894,13 @@ class ChatListTileWidget extends StatelessWidget {
                         chat.username,
                         style: TextStyle(
                           fontSize: 11,
-                          color: AmomimusDarkTheme.policeLineYellow.withOpacity(
-                            0.8,
-                          ),
+                          color: AmomimusDarkTheme.policeLineYellow.withValues(alpha: 0.5),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        chat.lastMessage,
+                        chat.lastMessage.startsWith('[STICKER]:') ? '[STICKER]' : chat.lastMessage,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -957,7 +974,7 @@ class ParticleBackgroundPainter extends CustomPainter {
       double x = particle.xPercent * size.width;
       double y = yFraction * size.height;
 
-      paint.color = color.withOpacity(color.opacity * particle.opacityFactor);
+      paint.color = color.withValues(alpha: color.opacity * particle.opacityFactor);
       canvas.drawCircle(Offset(x, y), particle.size, paint);
     }
   }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'models/tugas11_user_register_sql.dart';
+import 'models/user_register_sql.dart';
 
 class DBHelper {
   static final DBHelper _instance = DBHelper._internal();

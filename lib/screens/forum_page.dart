@@ -10,8 +10,9 @@ import '../services/notification_manager.dart';
 import '../models/notification_model.dart';
 import '../data/anonymous_names.dart';
 import '../models/post_model.dart';
-import 'tugas9ui.dart'; // To reuse FeedCard
+import '../widgets/feed/feed_post_card.dart'; // To reuse FeedCard
 import 'profile_screen.dart';
+import 'fake_pdf_screen.dart';
 
 class ForumPage extends StatefulWidget {
   final String feedId;
@@ -59,6 +60,24 @@ class _ForumPageState extends State<ForumPage> {
             fontSize: 24,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.menu_book,
+              color: isDark ? AmomimusDarkTheme.textSecondary : Colors.black54,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) => const FakePdfScreen(),
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Consumer<FeedManager>(
         builder: (context, feedManager, child) {

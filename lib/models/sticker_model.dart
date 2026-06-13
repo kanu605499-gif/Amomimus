@@ -9,6 +9,9 @@ class StickerModel {
   final String batchId; // Supports grouping stickers into batches
   final int price;
   final String? createdAt;
+  final int resonatedCount;
+  final int timesBought;
+  final String tier; // classic, common, rare, epic
 
   StickerModel({
     required this.id,
@@ -18,6 +21,9 @@ class StickerModel {
     this.batchId = 'batch_1',
     this.price = 100,
     this.createdAt,
+    this.resonatedCount = 0,
+    this.timesBought = 0,
+    this.tier = 'classic',
   });
 
   /// Firestore-ready: converts this [StickerModel] to a [Map].
@@ -30,6 +36,9 @@ class StickerModel {
       'batchId': batchId,
       'price': price,
       'createdAt': createdAt ?? DateTime.now().toIso8601String(),
+      'resonatedCount': resonatedCount,
+      'timesBought': timesBought,
+      'tier': tier,
     };
   }
 
@@ -43,6 +52,9 @@ class StickerModel {
       batchId: map['batchId'] ?? 'batch_1',
       price: map['price'] ?? 100,
       createdAt: map['createdAt'],
+      resonatedCount: map['resonatedCount'] ?? 0,
+      timesBought: map['timesBought'] ?? 0,
+      tier: map['tier'] ?? 'classic',
     );
   }
 }

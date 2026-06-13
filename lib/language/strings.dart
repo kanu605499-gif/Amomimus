@@ -13,10 +13,46 @@ class AppStrings {
       'privacy': 'Privacy',
       'about': 'About',
       'policy': 'Policy',
+      'options': 'Options',
+      'how_it_works': 'How Amomimus Works',
       'report_bug_glitch': 'Report a Bug / Glitch',
       'terms_of': 'Terms of ',
       'privacy_rules_agreement': 'Privacy & Rules Agreement',
-      'privacy_rules_text': 'Last updated: May 2026\n\n1. Keep It Ghostly\nYou\'re a ghost here, bud. No real names, no phone numbers, and definitely no leaking your ex\'s address or social media handles. We want this space to be completely detached from your real-world drama.\n\nIf you accidentally slip up and reveal your true identity or doxx someone else, don\'t expect a warning. We will scrub that post faster than you can blink, and your access might vanish along with it. Keep it 100% incognito.\n\n2. Don\'t Be a Total Jerk\nRanting? Cool. Crying? We got you. Venting about how much your job or life sucks is exactly why we built this app, so feel free to let off some steam without holding back.\n\nBut throwing straight-up hate speech, targeted harassment, or bullying someone who is already down? Nah, that\'s a fast pass to getting booted. There is a very clear line between venting your pain and just being a miserable troll.\n\n3. Zero Data Retention\nWe don\'t buy, sell, or even care about your personal data. What happens in Amomimus, stays in Amomimus. Your temporary sessions are encrypted and will be wiped clean periodically from our servers.\n\n4. No Commercial Spamming\nThis platform is made for human emotions, not for selling your crypto coins, promoting your online shop, or spamming affiliate links. Commercial ads without permission will result in an immediate hardware ban.\n\n5. Age Restriction\nUsers must be at least 18 years old to participate in this blind community. The contents shared here can be mature, heavy, and raw. Protect your own mental health before reading others\' rants.\n\n6. Content Ownership Disclaimer\nYou own the words you write, but by posting them here, you grant Amomimus a non-exclusive right to display them anonymously within the app interface. We will never claim your stories as our corporate property.\n\n7. Report and Moderation System\nEven ghosts have boundaries. If you find a post that violates our community safety guidelines, use the report feature immediately. Our automated system and moderators review flags 24/7.\n\n8. Illegal Activities Ban\nDo not use this app to plan, coordinate, or promote any form of illegal activities, physical violence, or real-world harm. We comply with digital safety regulations and will take strict action against violations.\n\n9. Application Analytics\nWe only collect anonymous technical logs (such as crash reports, device model, and system language) to ensure the app runs smoothly on your phone. None of these logs can be traced back to your real identity.\n\n10. Changes to the Terms\nAmomimus reserves the right to update these rules anytime to adapt to new laws or features. Continued use of the app after updates means you agree to follow the latest ghostly protocols.',
+      'privacy_rules_text': '''Last updated: May 2026
+
+1. Keep It Ghostly
+You're a ghost here, bud. No real names, no phone numbers, and definitely no leaking your ex's address or social media handles. We want this space to be completely detached from your real-world drama.
+
+If you accidentally slip up and reveal your true identity or doxx someone else, don't expect a warning. We will scrub that post faster than you can blink, and your access might vanish along with it. Keep it 100% incognito.
+
+2. Don't Be a Total Jerk
+Ranting? Cool. Crying? We got you. Venting about how much your job or life sucks is exactly why we built this app, so feel free to let off some steam without holding back.
+
+But throwing straight-up hate speech, targeted harassment, or bullying someone who is already down? Nah, that's a fast pass to getting booted. There is a very clear line between venting your pain and just being a miserable troll.
+
+3. Zero Data Retention
+We don't buy, sell, or even care about your personal data. What happens in Amomimus, stays in Amomimus. Your temporary sessions are encrypted and will be wiped clean periodically from our servers.
+
+4. No Commercial Spamming
+This platform is made for human emotions, not for selling your crypto coins, promoting your online shop, or spamming affiliate links. Commercial ads without permission will result in an immediate hardware ban.
+
+5. Age Restriction
+Users must be at least 18 years old to participate in this blind community. The contents shared here can be mature, heavy, and raw. Protect your own mental health before reading others' rants.
+
+6. Content Ownership Disclaimer
+You own the words you write, but by posting them here, you grant Amomimus a non-exclusive right to display them anonymously within the app interface. We will never claim your stories as our corporate property.
+
+7. Report and Moderation System
+Even ghosts have boundaries. If you find a post that violates our community safety guidelines, use the report feature immediately. Our automated system and moderators review flags 24/7.
+
+8. Illegal Activities Ban
+Do not use this app to plan, coordinate, or promote any form of illegal activities, physical violence, or real-world harm. We comply with digital safety regulations and will take strict action against violations.
+
+9. Application Analytics
+We only collect anonymous technical logs (such as crash reports, device model, and system language) to ensure the app runs smoothly on your phone. None of these logs can be traced back to your real identity.
+
+10. Changes to the Terms
+Amomimus reserves the right to update these rules anytime to adapt to new laws or features. Continued use of the app after updates means you agree to follow the latest ghostly protocols.''',
       'system_language': 'Amomimus System Language:',
       'dob': 'Date of Birth:',
       'dob_required': '* Required — you must select your date of birth',
@@ -28,10 +64,39 @@ class AppStrings {
       'accept_terms_first': 'Accept the terms first',
       'mobile_app': 'Amomimus Mobile App',
       'app_desc': 'A secure and a room of anonymous venting platform designed for digital catharsis.',
+      'create_your': 'Create Your ',
+      'anonymous_username_label': 'ANONYMOUS USERNAME',
+      'leave_blank_random': 'Leave blank for a random name',
+      'enter_username_hint': 'Enter your username',
+      'id_generator_title': 'AMOMIMUS ID GENERATOR',
+      'random_generate_id': 'Random Generate ID:',
+      'choose_avatar_title': 'CHOOSE YOUR AMOMUS AVATAR',
+      'incomplete_selection': 'Incomplete Selection',
+      'proceed': 'Proceed',
+      'choose_avatar_first': 'Please choose your Amomus Avatar first!',
+      'incomplete_selection_desc_1': "You haven't ",
+      'incomplete_selection_desc_2': '''.\n\nYou won't be restricted, but you will not have your custom name displayed to you. The system will auto-generate a random one instead. Do you want to proceed?''',
+      'you_found_easter_egg': 'You found the easter egg',
       'developer': 'Developer:',
+      'skip': 'Skip',
+      'welcome_to': 'Welcome to ',
+      'safe_space_desc': 'A safe space to share your thoughts, ask questions, and connect with others.',
+      'identity_hidden_desc_1': 'Your real identity is hidden beneath an ',
+      'identity_hidden_desc_2': ' name.',
+      'identity_protected_desc': '''We ensure your identity is protected.\nChat freely without worrying about who is on the other side.''',
+      'intro_indicators': 'Introducing Amomimus Indicators:',
+      'neutral': 'Neutral',
+      'users_participate_normally': ' users who participate normally.',
+      'amoral': 'Amoral',
+      'users_nonchalant': ' or nonchalant users to watch out for.',
+      'toxic': 'Toxic',
+      'users_flagged': ' users flagged by the community.',
+      'safe_and': 'Safe & ',
+      'respectful': 'Respectful',
+      'value_privacy_desc': 'We value privacy and kindness. Please follow our community rules while you explore.',
       'app_version': 'App Version:',
       'create_post': 'Create a Post',
-      'whats_on_your_mind': 'What\'s on your mind anonymously?',
+      'whats_on_your_mind': "What's on your mind anonymously?",
       'send_post': 'Send Post',
       'notifications': 'Notifications',
       'no_notifications': 'No notifications yet',
@@ -50,7 +115,7 @@ class AppStrings {
       'indicator_noise_limit': 'Your Amomimus Indicator is NOISE. Chat requests are prohibited.',
       'ghost_limit_reached': 'GHOST Indicator limit reached: 7 chat requests per day.',
       'initiate_chat': 'Initiate Chat',
-      'confirm_chat': 'Are you sure you want to chat with the author of this post?\n\nThey will see you as ',
+      'confirm_chat': '''Are you sure you want to chat with the author of this post?\n\nThey will see you as ''',
       'cancel': 'Cancel',
       'send_request': 'Send Request',
       'chat_req_sent': 'Chat Request Sent!',
@@ -94,6 +159,10 @@ class AppStrings {
       'switch_account': 'Switch Account',
       'no_accounts_registered': 'No accounts registered yet.',
       'chat_requests': 'Chat Requests',
+      'chat_request_title': 'Chat Request',
+      'chat_request_desc1': 'Sending a chat request to this amomimus will reveal your registered username "',
+      'chat_request_desc2': '" instead of your feed name "',
+      'chat_request_desc3': '".\n\nThey will also be able to see your profile if they accept.',
       'delete_chat_title': 'Delete Chat',
       'delete_chat_confirm_prefix': 'Are you sure you want to delete this chat with ',
       'delete_chat_confirm_suffix': '?',
@@ -111,8 +180,52 @@ class AppStrings {
       'show_less': 'Show less',
       'show_more': 'Show more',
       'post_detail': 'Post Detail',
+      'sticker_shop': 'Sticker Shop',
+      'view': 'View',
+      'buy': 'Buy',
+      'unlock_stickers': 'Unlock your stickers here',
+      'already_own_batch': 'You already own this batch.',
+      'not_enough_coins': 'Not enough coins.',
+      'emojis': 'Emojis',
+      'my_stickers': 'My Stickers',
+      'no_stickers_owned': 'No stickers owned yet.',
+      'sticker': 'Sticker',
+      'message_deleted': 'Message deleted',
+      'my_sticker_stash': 'My Sticker Stash',
+      'stash_empty': 'Your stash is empty.',
+      'visit_sticker_shop': 'Visit the Sticker Shop to grab some packs!',
+      'stickers': 'Stickers',
+      'own_these_stickers': 'You own these stickers.',
+      'chosen_amomus_prefix': 'Your chosen Amomus: ',
+      'character_not_chosen': 'Character not chosen yet!',
     },
     'ID': {
+      'skip': 'Lewati',
+      'create_your': 'Buat Anda ',
+      'anonymous_username_label': 'USERNAME ANONIM',
+      'leave_blank_random': 'Kosongkan untuk nama acak',
+      'enter_username_hint': 'Masukkan username Anda',
+      'id_generator_title': 'GENERATOR ID AMOMIMUS',
+      'random_generate_id': 'Generate ID Acak:',
+      'choose_avatar_title': 'PILIH AVATAR AMOMUS ANDA',
+      'incomplete_selection': 'Pilihan Belum Lengkap',
+      'proceed': 'Lanjutkan',
+      'choose_avatar_first': 'Silakan pilih Avatar Amomus Anda terlebih dahulu!',
+      'incomplete_selection_desc_1': 'Anda belum memilih ',
+      'incomplete_selection_desc_2': '''.\n\nAnda tidak akan dibatasi, tetapi Anda tidak akan memiliki nama khusus yang ditampilkan kepada Anda. Sistem akan membuatkan nama acak sebagai gantinya. Apakah Anda ingin melanjutkan?''',
+      'you_found_easter_egg': 'Anda menemukan easter egg',
+      'welcome_to': 'Selamat datang di ',
+      'safe_space_desc': 'Ruang aman untuk berbagi pikiran, bertanya, dan terhubung dengan orang lain.',
+      'identity_hidden_desc_1': 'Identitas asli Anda disembunyikan di balik nama ',
+      'identity_hidden_desc_2': '.',
+      'identity_protected_desc': '''Kami memastikan identitas Anda terlindungi.\nNgobrol bebas tanpa khawatir tentang siapa yang ada di sisi lain.''',
+      'intro_indicators': 'Memperkenalkan Indikator Amomimus:',
+      'neutral': 'Netral',
+      'users_participate_normally': ' pengguna yang berpartisipasi secara normal.',
+      'amoral': 'Amoral',
+      'users_nonchalant': ' atau pengguna acuh tak acuh yang perlu diwaspadai.',
+      'toxic': 'Toxic',
+      'users_flagged_by_community': ' pengguna yang ditandai oleh komunitas.',
       'app_doc': 'Dokumentasi Aplikasi',
       'contact_dev': 'Hubungi Developer',
       'language': 'Bahasa',
@@ -125,19 +238,55 @@ class AppStrings {
       'privacy': 'Privasi',
       'about': 'Tentang',
       'policy': 'Kebijakan',
+      'options': 'Opsi',
+      'how_it_works': 'Cara Kerja Amomimus',
       'report_bug_glitch': 'Laporkan Bug / Kesalahan',
       'terms_of': 'Syarat ',
       'privacy_rules_agreement': 'Perjanjian Privasi & Aturan',
-      'privacy_rules_text': 'Pembaruan terakhir: Mei 2026\n\n1. Tetap Menjadi Hantu\nAnda adalah hantu di sini, kawan. Tidak ada nama asli, tidak ada nomor telepon, dan pastinya tidak ada membocorkan alamat atau akun media sosial mantan Anda. Kami ingin ruang ini sepenuhnya terlepas dari drama dunia nyata Anda.\n\nJika Anda secara tidak sengaja tergelincir dan mengungkapkan identitas asli Anda atau melakukan doxing terhadap orang lain, jangan berharap peringatan. Kami akan menghapus postingan itu lebih cepat dari kedipan mata, dan akses Anda mungkin akan lenyap bersamaan dengannya. Tetap 100% incognito.\n\n2. Jangan Jadi Brengsek Seutuhnya\nCurhat? Keren. Menangis? Kami mengerti. Melampiaskan betapa menyebalkan pekerjaan atau kehidupan Anda adalah alasan utama kami membangun aplikasi ini, jadi silakan lepaskan beban tanpa menahan diri.\n\nTetapi melontarkan ujaran kebencian, pelecehan yang ditargetkan, atau menindas seseorang yang sudah jatuh? Tidak, itu adalah jalan cepat untuk ditendang. Ada batas yang sangat jelas antara melampiaskan rasa sakit Anda dan sekadar menjadi troll yang menyedihkan.\n\n3. Retensi Data Nol\nKami tidak membeli, menjual, atau bahkan peduli dengan data pribadi Anda. Apa yang terjadi di Amomimus, tetap di Amomimus. Sesi sementara Anda dienkripsi dan akan dibersihkan secara berkala dari server kami.\n\n4. Tidak Ada Spam Komersial\nPlatform ini dibuat untuk emosi manusia, bukan untuk menjual koin kripto Anda, mempromosikan toko online Anda, atau melakukan spam link afiliasi. Iklan komersial tanpa izin akan mengakibatkan pemblokiran perangkat keras secara langsung.\n\n5. Batasan Usia\nPengguna setidaknya harus berusia 18 tahun untuk berpartisipasi dalam komunitas buta ini. Konten yang dibagikan di sini bisa jadi dewasa, berat, dan mentah. Lindungi kesehatan mental Anda sendiri sebelum membaca curhatan orang lain.\n\n6. Penafian Kepemilikan Konten\nAnda memiliki kata-kata yang Anda tulis, tetapi dengan mempostingnya di sini, Anda memberi Amomimus hak non-eksklusif untuk menampilkannya secara anonim di dalam antarmuka aplikasi. Kami tidak akan pernah mengklaim cerita Anda sebagai properti perusahaan kami.\n\n7. Sistem Laporan dan Moderasi\nBahkan hantu memiliki batasan. Jika Anda menemukan postingan yang melanggar pedoman keamanan komunitas kami, gunakan fitur lapor segera. Sistem otomatis dan moderator kami meninjau laporan 24/7.\n\n8. Larangan Aktivitas Ilegal\nJangan gunakan aplikasi ini untuk merencanakan, mengoordinasikan, atau mempromosikan bentuk aktivitas ilegal, kekerasan fisik, atau bahaya di dunia nyata. Kami mematuhi peraturan keamanan digital dan akan mengambil tindakan tegas terhadap pelanggaran.\n\n9. Analitik Aplikasi\nKami hanya mengumpulkan log teknis anonim (seperti laporan kerusakan, model perangkat, dan bahasa sistem) untuk memastikan aplikasi berjalan lancar di ponsel Anda. Tidak satu pun dari log ini dapat dilacak kembali ke identitas asli Anda.\n\n10. Perubahan Ketentuan\nAmomimus berhak untuk memperbarui aturan ini kapan saja untuk beradaptasi dengan undang-undang atau fitur baru. Terus menggunakan aplikasi setelah pembaruan berarti Anda setuju untuk mengikuti protokol hantu terbaru.',
+      'privacy_rules_text': '''Pembaruan terakhir: Mei 2026
+
+1. Tetap Menjadi Hantu
+Anda adalah hantu di sini, kawan. Tidak ada nama asli, tidak ada nomor telepon, dan pastinya tidak ada membocorkan alamat atau akun media sosial mantan Anda. Kami ingin ruang ini sepenuhnya terlepas dari drama dunia nyata Anda.
+
+Jika Anda secara tidak sengaja tergelincir dan mengungkapkan identitas asli Anda atau melakukan doxing terhadap orang lain, jangan berharap peringatan. Kami akan menghapus postingan itu lebih cepat dari kedipan mata, dan akses Anda mungkin akan lenyap bersamaan dengannya. Tetap 100% incognito.
+
+2. Jangan Jadi Brengsek Seutuhnya
+Curhat? Keren. Menangis? Kami mengerti. Melampiaskan betapa menyebalkan pekerjaan atau kehidupan Anda adalah alasan utama kami membangun aplikasi ini, jadi silakan lepaskan beban tanpa menahan diri.
+
+Tetapi melontarkan ujaran kebencian, pelecehan yang ditargetkan, atau menindas seseorang yang sudah jatuh? Tidak, itu adalah jalan cepat untuk ditendang. Ada batas yang sangat jelas antara melampiaskan rasa sakit Anda dan sekadar menjadi troll yang menyedihkan.
+
+3. Retensi Data Nol
+Kami tidak membeli, menjual, atau bahkan peduli dengan data pribadi Anda. Apa yang terjadi di Amomimus, tetap di Amomimus. Sesi sementara Anda dienkripsi dan akan dibersihkan secara berkala dari server kami.
+
+4. Tidak Ada Spam Komersial
+Platform ini dibuat untuk emosi manusia, bukan untuk menjual koin kripto Anda, mempromosikan toko online Anda, atau melakukan spam link afiliasi. Iklan komersial tanpa izin akan mengakibatkan pemblokiran perangkat keras secara langsung.
+
+5. Batasan Usia
+Pengguna setidaknya harus berusia 18 tahun untuk berpartisipasi dalam komunitas buta ini. Konten yang dibagikan di sini bisa jadi dewasa, berat, dan mentah. Lindungi kesehatan mental Anda sendiri sebelum membaca curhatan orang lain.
+
+6. Penafian Kepemilikan Konten
+Anda memiliki kata-kata yang Anda tulis, tetapi dengan mempostingnya di sini, Anda memberi Amomimus hak non-eksklusif untuk menampilkannya secara anonim di dalam antarmuka aplikasi. Kami tidak akan pernah mengklaim cerita Anda sebagai properti perusahaan kami.
+
+7. Sistem Laporan dan Moderasi
+Bahkan hantu memiliki batasan. Jika Anda menemukan postingan yang melanggar pedoman keamanan komunitas kami, gunakan fitur lapor segera. Sistem otomatis dan moderator kami meninjau laporan 24/7.
+
+8. Larangan Aktivitas Ilegal
+Jangan gunakan aplikasi ini untuk merencanakan, mengoordinasikan, atau mempromosikan bentuk aktivitas ilegal, kekerasan fisik, atau bahaya di dunia nyata. Kami mematuhi peraturan keamanan digital dan akan mengambil tindakan tegas terhadap pelanggaran.
+
+9. Analitik Aplikasi
+Kami hanya mengumpulkan log teknis anonim (seperti laporan kerusakan, model perangkat, dan bahasa sistem) untuk memastikan aplikasi berjalan lancar di ponsel Anda. Tidak satu pun dari log ini dapat dilacak kembali ke identitas asli Anda.
+
+10. Perubahan Ketentuan
+Amomimus berhak untuk memperbarui aturan ini kapan saja untuk beradaptasi dengan undang-undang atau fitur baru. Terus menggunakan aplikasi setelah pembaruan berarti Anda setuju untuk mengikuti protokol hantu terbaru.''',
       'system_language': 'Bahasa Sistem Amomimus:',
       'dob': 'Tanggal Lahir:',
-      'dob_required': '* Wajib — Anda harus memilih tanggal lahir Anda',
-      'agreement_verified': 'Perjanjian diverifikasi',
-      'ready_to_verify': 'Siap memverifikasi syarat kami?',
-      'age_warning': 'Anda setidaknya harus berusia 18 tahun untuk menggunakan Amomimus.',
+      'dob_required': '* Required — you must select your date of birth',
+      'agreement_verified': 'Agreement verified',
+      'ready_to_verify': 'Ready to verify our terms?',
+      'age_warning': 'You must be at least 18 years old to use Amomimus.',
       'accept_continue': 'Terima & Lanjutkan',
-      'select_birthday_first': 'Pilih tanggal lahir Anda terlebih dahulu',
-      'accept_terms_first': 'Terima syarat terlebih dahulu',
+      'select_birthday_first': 'Select your date of birth first',
+      'accept_terms_first': 'Accept the terms first',
       'mobile_app': 'Aplikasi Seluler Amomimus',
       'app_desc': 'Platform katarsis digital anonim yang aman dan ruang untuk melampiaskan perasaan.',
       'developer': 'Pengembang:',
@@ -162,7 +311,7 @@ class AppStrings {
       'indicator_noise_limit': 'Indikator Amomimus Anda adalah NOISE. Permintaan chat dilarang.',
       'ghost_limit_reached': 'Batas Indikator GHOST tercapai: 7 permintaan chat per hari.',
       'initiate_chat': 'Mulai Chat',
-      'confirm_chat': 'Apakah Anda yakin ingin mengobrol dengan penulis postingan ini?\n\nMereka akan melihat Anda sebagai ',
+      'confirm_chat': '''Apakah Anda yakin ingin mengobrol dengan penulis postingan ini?\n\nMereka akan melihat Anda sebagai ''',
       'cancel': 'Batal',
       'send_request': 'Kirim Permintaan',
       'chat_req_sent': 'Permintaan Chat Terkirim!',
@@ -192,10 +341,10 @@ class AppStrings {
       'all_resonates': 'Semua Resonansi',
       'no_resonates_yet': 'Belum ada resonansi',
       'delete_post_title': 'Hapus Postingan',
-      'delete_post_confirm': 'Apakah Anda yakin ingin menghapus postingan ini? Ini akan menghapusnya dari feed.',
+      'delete_post_confirm': 'Apakah Anda yakin ingin menghapus postingan ini? Postingan ini akan dihapus dari feed.',
       'delete': 'Hapus',
       'profile_locked': 'Profil Terkunci',
-      'locked_desc': 'Anda harus membuat koneksi chat dengan pengguna ini untuk melihat profil lengkap mereka.',
+      'locked_desc': 'Anda perlu membangun koneksi chat dengan pengguna ini untuk melihat profil lengkap mereka.',
       'profile': 'Profil',
       'no_active_user': 'Tidak ada pengguna aktif.',
       'incoming_requests': 'Permintaan Masuk',
@@ -206,23 +355,45 @@ class AppStrings {
       'switch_account': 'Ganti Akun',
       'no_accounts_registered': 'Belum ada akun yang terdaftar.',
       'chat_requests': 'Permintaan Chat',
+      'chat_request_title': 'Permintaan Chat',
+      'chat_request_desc1': 'Mengirim permintaan chat ke amomimus ini akan membuka username terdaftarmu "',
+      'chat_request_desc2': '" alih-alih nama feed kamu "',
+      'chat_request_desc3': '".\n\nMereka juga bisa melihat profilmu jika menerima.',
       'delete_chat_title': 'Hapus Chat',
       'delete_chat_confirm_prefix': 'Apakah Anda yakin ingin menghapus chat dengan ',
       'delete_chat_confirm_suffix': '?',
       'chat_deleted_prefix': 'Chat dengan ',
-      'chat_deleted_suffix': ' telah dihapus',
+      'chat_deleted_suffix': ' dihapus',
       'memories': 'Kenangan',
       'no_memories_pinned': 'Belum ada kenangan yang disematkan.',
       'delete_chat_room_confirm': 'Apakah Anda yakin ingin menghapus chat ini?',
-      'pin_limit_error': 'Anda hanya dapat menyematkan hingga 9 memori. Lepaskan sematan satu terlebih dahulu!',
+      'pin_limit_error': 'Anda hanya dapat menyematkan hingga 9 kenangan. Lepaskan sematan salah satunya terlebih dahulu!',
       'write_message': 'Tulis pesan...',
       'reply': 'Balas',
-      'unpin_memories': 'Lepas dari Kenangan',
+      'unpin_memories': 'Lepaskan sematan dari Kenangan',
       'pin_memories': 'Sematkan ke Kenangan',
       'report': 'Laporkan',
       'show_less': 'Tampilkan lebih sedikit',
       'show_more': 'Tampilkan lebih banyak',
       'post_detail': 'Detail Postingan',
+      'sticker_shop': 'Toko Stiker',
+      'view': 'Lihat',
+      'buy': 'Beli',
+      'unlock_stickers': 'Buka stiker Anda di sini',
+      'already_own_batch': 'Anda sudah memiliki paket ini.',
+      'not_enough_coins': 'Koin tidak cukup.',
+      'emojis': 'Emoji',
+      'my_stickers': 'Stiker Saya',
+      'no_stickers_owned': 'Belum memiliki stiker.',
+      'sticker': 'Stiker',
+      'message_deleted': 'Pesan dihapus',
+      'my_sticker_stash': 'Koleksi Stiker Saya',
+      'stash_empty': 'Koleksi Anda kosong.',
+      'visit_sticker_shop': 'Kunjungi Toko Stiker untuk mengambil beberapa paket!',
+      'stickers': 'Stiker',
+      'own_these_stickers': 'Anda memiliki stiker-stiker ini.',
+      'chosen_amomus_prefix': 'Amomus pilihan Anda: ',
+      'character_not_chosen': 'Karakter belum dipilih!',
     },
     'JP': {
       'app_doc': 'アプリのドキュメント',
@@ -237,10 +408,46 @@ class AppStrings {
       'privacy': 'プライバシー',
       'about': '概要',
       'policy': 'ポリシー',
+      'options': 'オプション',
+      'how_it_works': 'Amomimusの仕組み',
       'report_bug_glitch': 'バグ/不具合を報告',
       'terms_of': '利用規約 ',
       'privacy_rules_agreement': 'プライバシーとルールの同意',
-      'privacy_rules_text': '最終更新日：2026年5月\n\n1. ゴーストであり続けること\nここではあなたはゴーストです。本名や電話番号はもちろん、元カレ・元カノの住所やSNSアカウントを漏らさないでください。この空間は、現実世界のドラマから完全に切り離されたものにしたいのです。\n\nうっかり正体を明かしたり、他人を晒したりした場合、警告があるとは期待しないでください。私たちは瞬きするより早くその投稿を消去し、あなたのアクセス権も一緒に消滅するかもしれません。100%匿名性を保ってください。\n\n2. 嫌な奴にならないこと\n愚痴？いいですね。泣くこと？分かります。仕事や人生がどれだけ最悪かを吐き出すことこそが、私たちがこのアプリを作った理由です。遠慮せずにストレスを発散してください。\n\nしかし、あからさまなヘイトスピーチ、標的を絞った嫌がらせ、あるいは既に落ち込んでいる人をいじめること？いいえ、それは追放への近道です。痛みを吐き出すことと、単に惨めな荒らしになることの間には、非常に明確な線引きがあります。\n\n3. データ保持ゼロ\n私たちはあなたの個人情報を買ったり、売ったり、気にしたりすることすらありません。Amomimusで起きたことは、Amomimusに留まります。一時的なセッションは暗号化され、定期的にサーバーから完全に消去されます。\n\n4. 商業的なスパム行為の禁止\nこのプラットフォームは人間の感情のためのものであり、暗号通貨を販売したり、オンラインショップを宣伝したり、アフィリエイトリンクをスパム送信したりするためのものではありません。許可のない商業広告は、即座にハードウェアバンにつながります。\n\n5. 年齢制限\nユーザーがこの匿名のコミュニティに参加するには、18歳以上である必要があります。ここで共有されるコンテンツは、成熟していて、重く、生々しい場合があります。他人の愚痴を読む前に、自分自身のメンタルヘルスを守ってください。\n\n6. コンテンツの所有権に関する免責事項\nあなたが書いた言葉はあなたのものですが、ここに投稿することで、あなたはAmomimusに対し、アプリのインターフェース内でそれらを匿名で表示する非独占的な権利を付与することになります。私たちはあなたの物語を当社の企業財産として主張することは決してありません。\n\n7. 報告およびモデレーションシステム\nゴーストであっても境界線はあります。コミュニティの安全ガイドラインに違反する投稿を見つけた場合は、直ちに報告機能を使用してください。私たちの自動化システムとモデレーターは、24時間365日フラグを審査しています。\n\n8. 違法行為の禁止\nいかなる形態の違法行為、物理的な暴力、または現実世界の危害を計画、調整、または促進するためにこのアプリを使用しないでください。私たちはデジタル安全規制を遵守し、違反に対しては厳格な措置を講じます。\n\n9. アプリケーション分析\n私たちは、アプリが携帯電話でスムーズに動作することを保証するために、匿名の技術ログ（クラッシュレポート、デバイスモデル、システム言語など）のみを収集します。これらのログからあなたの本当の身元がたどられることは決してありません。\n\n10. 規約の変更\nAmomimusは、新しい法律や機能に適応するため、いつでもこれらのルールを更新する権利を留保します。更新後もアプリの使用を継続することは、最新のゴーストプロトコルに従うことに同意したことを意味します。',
+      'privacy_rules_text': '''最終更新日：2026年5月
+
+1. ゴーストであり続けること
+ここではあなたはゴーストです。本名や電話番号はもちろん、元カレ・元カノの住所やSNSアカウントを漏らさないでください。この空間は、現実世界のドラマから完全に切り離されたものにしたいのです。
+
+うっかり正体を明かしたり、他人を晒したりした場合、警告があるとは期待しないでください。私たちは瞬きするより早くその投稿を消去し、あなたのアクセス権も一緒に消滅するかもしれません。100%匿名性を保ってください。
+
+2. 嫌な奴にならないこと
+愚痴？いいですね。泣くこと？分かります。仕事や人生がどれだけ最悪かを吐き出すことこそが、私たちがこのアプリを作った理由です。遠慮せずにストレスを発散してください。
+
+しかし、あからさまなヘイトスピーチ、標的を絞った嫌がらせ、あるいは既に落ち込んでいる人をいじめること？いいえ、それは追放への近道です。痛みを吐き出すことと、単に惨めな荒らしになることの間には、非常に明確な線引きがあります。
+
+3. データ保持ゼロ
+私たちはあなたの個人情報を買ったり、売ったり、気にしたりすることすらありません。Amomimusで起きたことは、Amomimusに留まります。一時的なセッションは暗号化され、定期的にサーバーから完全に消去されます。
+
+4. 商業的なスパム行為の禁止
+このプラットフォームは人間の感情のためのものであり、暗号通貨を販売したり、オンラインショップを宣伝したり、アフィリエイトリンクをスパム送信したりするためのものではありません。許可のない商業広告は、即座にハードウェアバンにつながります。
+
+5. 年齢制限
+ユーザーがこの匿名のコミュニティに参加するには、18歳以上である必要があります。ここで共有されるコンテンツは、成熟していて、重く、生々しい場合があります。他人の愚痴を読む前に、自分自身のメンタルヘルスを守ってください。
+
+6. コンテンツの所有権に関する免責事項
+あなたが書いた言葉はあなたのものですが、ここに投稿することで、あなたはAmomimusに対し、アプリのインターフェース内でそれらを匿名で表示する非独占的な権利を付与することになります。私たちはあなたの物語を当社の企業財産として主張することは決してありません。
+
+7. 報告およびモデレーションシステム
+ゴーストであっても境界線はあります。コミュニティの安全ガイドラインに違反する投稿を見つけた場合は、直ちに報告機能を使用してください。私たちの自動化システムとモデレーターは、24時間365日フラグを審査しています。
+
+8. 違法行為の禁止
+いかなる形態の違法行為、物理的な暴力、または現実世界の危害を計画、調整、または促進するためにこのアプリを使用しないでください。私たちはデジタル安全規制を遵守し、違反に対しては厳格な措置を講じます。
+
+9. アプリケーション分析
+私たちは、アプリが携帯電話でスムーズに動作することを保証するために、匿名の技術ログ（クラッシュレポート、デバイスモデル、システム言語など）のみを収集します。これらのログからあなたの本当の身元がたどられることは決してありません。
+
+10. 規約の変更
+Amomimusは、新しい法律や機能に適応するため、いつでもこれらのルールを更新する権利を留保します。更新後もアプリの使用を継続することは、最新のゴーストプロトコルに従うことに同意したことを意味します。''',
       'system_language': 'Amomimusシステム言語:',
       'dob': '生年月日:',
       'dob_required': '* 必須 — 生年月日を選択する必要があります',
@@ -252,7 +459,36 @@ class AppStrings {
       'accept_terms_first': '最初に規約に同意してください',
       'mobile_app': 'Amomimus モバイルアプリ',
       'app_desc': 'デジタルカタルシスのために設計された、安全で匿名の愚痴をこぼすプラットフォーム。',
+      'create_your': 'あなたの',
+      'anonymous_username_label': '匿名ユーザー名',
+      'leave_blank_random': 'ランダムな名前の場合は空白のままにします',
+      'enter_username_hint': 'ユーザー名を入力',
+      'id_generator_title': 'AMOMIMUS IDジェネレーター',
+      'random_generate_id': 'ランダム生成ID:',
+      'choose_avatar_title': 'AMOMUSアバターを選択',
+      'incomplete_selection': '選択が不完全です',
+      'proceed': '続行する',
+      'choose_avatar_first': '先にAmomusアバターを選択してください！',
+      'incomplete_selection_desc_1': 'まだ',
+      'incomplete_selection_desc_2': '''を選択していません。\n\n制限されることはありませんが、カスタム名は表示されません。システムが代わりにランダムな名前を生成します。続行しますか？''',
+      'you_found_easter_egg': 'イースターエッグを見つけました',
       'developer': '開発者:',
+      'skip': 'スキップ',
+      'welcome_to': 'ようこそ ',
+      'safe_space_desc': 'あなたの考えを共有し、質問し、他の人とつながるための安全なスペース。',
+      'identity_hidden_desc_1': 'あなたの本当のアイデンティティは',
+      'identity_hidden_desc_2': '名の裏に隠されています。',
+      'identity_protected_desc': '''私たちはあなたのアイデンティティが守られることを保証します。\n相手が誰であるかを気にせずに自由にチャットしましょう。''',
+      'intro_indicators': 'Amomimusインジケーターの紹介:',
+      'neutral': 'Neutral',
+      'users_participate_normally': ' 正常に参加しているユーザー。',
+      'amoral': 'Amoral',
+      'users_nonchalant': ' 注意が必要な無関心なユーザー。',
+      'toxic': 'Toxic',
+      'users_flagged': ' コミュニティによってフラグが立てられたユーザー。',
+      'safe_and': '安全で ',
+      'respectful': '敬意を持って',
+      'value_privacy_desc': '私たちはプライバシーと思いやりを大切にしています。探索中はコミュニティルールに従ってください。',
       'app_version': 'アプリバージョン:',
       'create_post': '投稿を作成',
       'whats_on_your_mind': '匿名で何を考えていますか？',
@@ -274,7 +510,7 @@ class AppStrings {
       'indicator_noise_limit': 'あなたのAmomimusインジケーターはNOISEです。チャットリクエストは禁止されています。',
       'ghost_limit_reached': 'GHOSTインジケーターの制限に達しました：1日あたり7回のチャットリクエスト。',
       'initiate_chat': 'チャットを開始',
-      'confirm_chat': '本当にこの投稿の作成者とチャットしますか？\n\n相手には次のように表示されます：',
+      'confirm_chat': '''本当にこの投稿の作成者とチャットしますか？\n\n相手には次のように表示されます：''',
       'cancel': 'キャンセル',
       'send_request': 'リクエストを送信',
       'chat_req_sent': 'チャットリクエストを送信しました！',
@@ -318,6 +554,10 @@ class AppStrings {
       'switch_account': 'アカウントを切り替える',
       'no_accounts_registered': '登録されているアカウントはまだありません。',
       'chat_requests': 'チャットリクエスト',
+      'chat_request_title': 'チャットリクエスト',
+      'chat_request_desc1': 'このamomimusにチャットリクエストを送信すると、登録済みのユーザー名「',
+      'chat_request_desc2': '」がフィード名「',
+      'chat_request_desc3': '」の代わりに表示されます。\n\n承認されると、相手はあなたのプロフィールを見ることができます。',
       'delete_chat_title': 'チャットを削除',
       'delete_chat_confirm_prefix': '本当に',
       'delete_chat_confirm_suffix': 'とのチャットを削除しますか？',
@@ -335,6 +575,24 @@ class AppStrings {
       'show_less': '一部を表示',
       'show_more': 'さらに表示',
       'post_detail': '投稿の詳細',
-    }
+      'sticker_shop': 'ステッカーショップ',
+      'view': '見る',
+      'buy': '購入',
+      'unlock_stickers': 'ここでステッカーのロックを解除',
+      'already_own_batch': 'すでにこのセットを所有しています。',
+      'not_enough_coins': 'コインが足りません。',
+      'emojis': '絵文字',
+      'my_stickers': 'マイステッカー',
+      'no_stickers_owned': '所有しているステッカーはまだありません。',
+      'sticker': 'ステッカー',
+      'message_deleted': 'メッセージは削除されました',
+      'my_sticker_stash': 'マイステッカーコレクション',
+      'stash_empty': 'コレクションは空です。',
+      'visit_sticker_shop': 'ステッカーショップを訪れてパックを手に入れましょう！',
+      'stickers': 'ステッカー',
+      'own_these_stickers': 'これらのステッカーを所有しています。',
+      'chosen_amomus_prefix': 'あなたの選んだAmomus: ',
+      'character_not_chosen': 'キャラクターがまだ選択されていません！',
+    },
   };
 }

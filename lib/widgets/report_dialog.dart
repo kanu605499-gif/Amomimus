@@ -29,7 +29,7 @@ class _ReportDialogState extends State<ReportDialog> {
     super.dispose();
   }
 
-  void _submitReport() {
+  Future<void> _submitReport() async {
     final comment = _commentController.text.trim();
     if (_banUser && comment.isEmpty) {
       // Should not happen as checkbox is disabled if comment is empty
@@ -39,7 +39,7 @@ class _ReportDialogState extends State<ReportDialog> {
     final accountManager = context.read<AccountManager>();
     
     // Process the report to update points and indicators
-    accountManager.submitReport(
+    await accountManager.submitReport(
       widget.targetId,
       _selectedCategory,
       isChatBubbleReport: !widget.isUserReport,
@@ -48,17 +48,58 @@ class _ReportDialogState extends State<ReportDialog> {
     if (_banUser) {
       // Block the user locally. We assume targetId for isUserReport is the realAuthorId/userId.
       accountManager.blockUser(widget.targetId);
-      
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Report submitted and user blocked.')),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Report submitted successfully.')),
-      );
     }
+    
+    final amomimusTheme = context.read<AmomimusDarkTheme>();
+    final isDark = amomimusTheme.isDarkMode;
+    final bgColor = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black87;
 
-    Navigator.pop(context, true); // true = success
+    await showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: bgColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.check_circle_outline, color: Colors.green, size: 54),
+              const SizedBox(height: 16),
+              Text(
+                "Report Submitted",
+                style: TextStyle(color: textColor, fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                _banUser ? "The report was sent and the user is now blocked." : "Thank you for making Amomimus a safer place.",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: isDark ? Colors.white70 : Colors.black54),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                    foregroundColor: isDark ? Colors.black : Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  child: const Text("Close", style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (mounted) {
+      Navigator.pop(context, true); // true = success
+    }
   }
 
   @override
@@ -136,7 +177,7 @@ class _ReportDialogState extends State<ReportDialog> {
               style: TextStyle(color: textColor),
               decoration: InputDecoration(
                 hintText: "Please provide details...",
-                hintStyle: TextStyle(color: textSecondaryColor.withOpacity(0.5)),
+                hintStyle: TextStyle(color: textSecondaryColor.withValues(alpha: 0.5)),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: borderColor),

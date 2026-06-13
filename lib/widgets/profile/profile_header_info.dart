@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../amomimusdark.dart';
+import '../../helpers/gender_helpers.dart';
+import '../../language/language_manager.dart';
+
+class ProfileHeaderInfo extends StatelessWidget {
+  final dynamic user;
+  final bool isDark;
+  final bool isOtherUser;
+  final bool isLocked;
+
+  const ProfileHeaderInfo({
+    super.key,
+    required this.user,
+    required this.isDark,
+    required this.isOtherUser,
+    required this.isLocked,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Color iconColor = GenderHelpers.getGenderColor(user.gender);
+    IconData icon = GenderHelpers.getGenderIcon(user.gender);
+
+    return Column(
+      children: [
+        Stack(
+          alignment: Alignment.bottomRight,
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: iconColor, width: 2),
+              ),
+              child: Center(child: Icon(icon, size: 50, color: iconColor)),
+            ),
+            Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: Colors.green, // Active indicator
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
+                  width: 3,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Text(
+          isLocked
+              ? user.amomimusId
+              : (!isOtherUser && user.customUsername != null && user.customUsername!.isNotEmpty)
+                  ? user.customUsername!
+                  : user.anonymousUsername,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+          ),
+        ),
+        if (!isLocked && !isOtherUser && user.customUsername != null && user.customUsername!.isNotEmpty) ...[
+          const SizedBox(height: 4),
+          Text(
+            "${context.watch<LanguageManager>().getString('public_name')}: ${user.anonymousUsername}",
+            style: TextStyle(
+              fontSize: 12,
+              color: isDark ? Colors.grey[400] : Colors.grey[600],
+            ),
+          ),
+        ],
+        if (!isLocked) ...[
+          const SizedBox(height: 4),
+          Text(
+            user.amomimusId,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: isDark ? Colors.grey[400] : Colors.grey[600],
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}

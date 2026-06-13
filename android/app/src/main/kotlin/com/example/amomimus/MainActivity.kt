@@ -1,4 +1,4 @@
-package com.example.project_flutter_b6
+package com.example.amomimus
 
 import io.flutter.embedding.android.FlutterActivity
 

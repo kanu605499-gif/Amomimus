@@ -16,7 +16,15 @@ class UserIndicatorHelper {
   static const Color ghostColor = Color(0xFFFFD54F);  // yellow
   static const Color noiseColor = Color(0xFFB388FF);  // purple
 
-  /// Returns the theme [Color] for the given [indicator].
+  // Ghost colors for Feed Card Label
+  static const Color ghostColorDark = Color(0xFFFFE082); // Bright pastel yellow for dark theme
+  static const Color ghostColorLight = Color(0xFFF57F17); // Deep amber for light theme
+
+  // Noise colors for Feed Card Label
+  static const Color noiseColorDark = Color(0xFFD500F9); // Neon purple for dark theme
+  static const Color noiseColorLight = Color(0xFF6200EA); // Deep purple for light theme
+
+  /// Returns the standard theme [Color] for the given [indicator].
   static Color getColor(UserIndicator indicator) {
     switch (indicator) {
       case UserIndicator.cloudy:
@@ -25,6 +33,18 @@ class UserIndicatorHelper {
         return ghostColor;
       case UserIndicator.noise:
         return noiseColor;
+    }
+  }
+
+  /// Returns the Feed Card Label [Color] for the given [indicator].
+  static Color getFeedCardLabelColor(UserIndicator indicator, {bool isDarkTheme = true}) {
+    switch (indicator) {
+      case UserIndicator.cloudy:
+        return cloudyColor;
+      case UserIndicator.ghost:
+        return isDarkTheme ? ghostColorDark : ghostColorLight;
+      case UserIndicator.noise:
+        return isDarkTheme ? noiseColorDark : noiseColorLight;
     }
   }
 
@@ -89,14 +109,14 @@ class UserIndicatorHelper {
 
   /// Determines the indicator from benevolent points alone.
   ///
-  /// - 0–49 → CLOUDY
-  /// - 50–79 → GHOST
-  /// - 80–100 → NOISE
+  /// - 0–59 → CLOUDY
+  /// - 60–89 → GHOST
+  /// - 90–100 → NOISE
   static UserIndicator fromBenevolentPoints(int points) {
     final clamped = points.clamp(0, 100);
-    if (clamped >= 80) {
+    if (clamped >= 90) {
       return UserIndicator.noise;
-    } else if (clamped >= 50) {
+    } else if (clamped >= 60) {
       return UserIndicator.ghost;
     }
     return UserIndicator.cloudy;

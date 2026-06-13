@@ -3,9 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../database/db_helper.dart';
-import '../database/models/tugas11_user_register_sql.dart';
-import 'welcometoourules.dart';
+import 'welcome_form_screen.dart';
 
 class AmomimusApp3 extends StatefulWidget {
   const AmomimusApp3({super.key});
@@ -71,7 +69,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xff121212).withOpacity(0.04),
+                    color: const Color(0xff121212).withValues(alpha: 0.04),
                     blurRadius: 24,
                     offset: const Offset(0, 12),
                   ),
@@ -153,41 +151,18 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                         onPressed: () async {
                           Navigator.pop(dialogContext);
 
-                          final newUser = UserModelSql(
-                            fullName: _nameController.text,
-                            email: _emailController.text,
-                            favoriteCharacter: _cityController.text,
-                            password: _passwordController.text,
-                          );
-
-                          bool isSuccess = await DBHelper().registerUser(
-                            newUser,
-                          );
-
                           if (context.mounted) {
-                            if (isSuccess) {
-                              // 2. Kalau BENAR-BENAR sukses masuk DB, baru boleh pindah halaman
-                              print("==== REGISTRASI REAL-TIME SUKSES ==== ");
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AmomimusApp4(
-                                    email: _emailController.text,
-                                    realUsername: _nameController.text,
-                                  ),
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AmomimusApp4(
+                                  email: _emailController.text,
+                                  realUsername: _nameController.text,
+                                  password: _passwordController.text,
+                                  favoriteCharacter: _cityController.text,
                                 ),
-                              );
-                            } else {
-                              // 3. Kalau gagal, tampilin ScaffoldMessenger biar keliatan errornya
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'Gagal menyimpan data ke database! Cek log konsol.',
-                                  ),
-                                  backgroundColor: Colors.redAccent,
-                                ),
-                              );
-                            }
+                              ),
+                            );
                           }
                         },
                         child: const Text(
@@ -239,6 +214,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xfffdfbfe),
       body: Stack(
         children: [
           Positioned(
@@ -285,7 +261,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
                     RichText(
                       text: const TextSpan(
                         text: 'Cooking Your ',
@@ -471,14 +447,17 @@ class _AmomimusApp3State extends State<AmomimusApp3>
           child: Transform.rotate(angle: angle, child: child),
         );
       },
-      child: Container(
-        width: 140,
-        height: 160,
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(24),
+      child: Opacity(
+        opacity: 0.3,
+        child: Container(
+          width: 140,
+          height: 160,
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Center(child: Icon(icon, size: 48, color: iconColor)),
         ),
-        child: Center(child: Icon(icon, size: 48, color: iconColor)),
       ),
     );
   }
@@ -536,16 +515,43 @@ class _CustomInputFieldState extends State<CustomInputField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.label,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            color: Color(0xff2d2d2d),
-          ),
+        Builder(
+          builder: (context) {
+            final words = widget.label.split(' ');
+            if (words.length == 1) {
+              return Text(
+                widget.label,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                  color: Color(0xff121212),
+                ),
+              );
+            }
+            return RichText(
+              text: TextSpan(
+                text: '${words.first} ',
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.2,
+                  color: Color(0xff6c52a3),
+                ),
+                children: [
+                  TextSpan(
+                    text: words.skip(1).join(' '),
+                    style: const TextStyle(color: Color(0xff121212)),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
         const SizedBox(height: 8),
         TextFormField(
           controller: widget.controller,
+          style: const TextStyle(color: Color(0xff121212)),
           validator: widget.validator,
           keyboardType: widget.keyboardType,
           obscureText: widget.isPassword ? _obscureText : false,

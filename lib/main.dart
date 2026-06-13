@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:project_flutter_b6/amomimusdark.dart';
-import 'package:project_flutter_b6/services/chatmodel.dart';
-import 'package:project_flutter_b6/services/account_manager.dart';
-import 'package:project_flutter_b6/database/preference_handler.dart';
-import 'package:project_flutter_b6/screens/tugas1101.dart';
-import 'package:project_flutter_b6/screens/tugas9ui.dart';
-import 'package:project_flutter_b6/screens/tugas11a.dart'; // Add SplashScreen
+import 'package:amomimus/amomimusdark.dart';
+import 'package:amomimus/services/chatmodel.dart';
+import 'package:amomimus/services/account_manager.dart';
+import 'package:amomimus/database/preference_handler.dart';
+import 'package:amomimus/screens/splash_screen.dart'; // Add SplashScreen
 import 'package:provider/provider.dart';
 
-import 'package:project_flutter_b6/services/feed_manager.dart';
-import 'package:project_flutter_b6/services/chat_request_manager.dart';
-import 'package:project_flutter_b6/services/notification_manager.dart';
-import 'package:project_flutter_b6/language/language_manager.dart';
+import 'package:amomimus/services/auth_service.dart';
+import 'package:amomimus/services/local_auth_service.dart';
+
+import 'package:amomimus/services/feed_manager.dart';
+import 'package:amomimus/services/chat_request_manager.dart';
+import 'package:amomimus/services/notification_manager.dart';
+import 'package:amomimus/language/language_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +24,11 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => LanguageManager()),
         ChangeNotifierProvider(create: (context) => AmomimusDarkTheme()),
-        ChangeNotifierProvider(create: (context) => AccountManager()..loadAccounts()),
+        Provider<AuthService>(create: (_) => LocalAuthService()),
+        ChangeNotifierProxyProvider<AuthService, AccountManager>(
+          create: (context) => AccountManager(authService: context.read<AuthService>())..loadAccounts(),
+          update: (context, authService, previous) => previous ?? AccountManager(authService: authService)..loadAccounts(),
+        ),
         ChangeNotifierProxyProvider<AccountManager, ChatModel>(
           create: (context) => ChatModel(),
           update: (context, auth, chatModel) {
@@ -55,7 +60,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool userSudahLogin = PreferenceHandler.isLogin;
+
 
     // FIXED: Wrap MaterialApp in a Consumer to guarantee responsive UI updates
     return Consumer<AmomimusDarkTheme>(
