@@ -1,0 +1,264 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../amomimusdark.dart';
+import '../../helpers/gender_helpers.dart';
+import 'package:amomimus/i18n/strings.g.dart';
+import '../../models/user_model.dart';
+import '../../services/account_manager.dart';
+import '../../services/chat_request_manager.dart';
+import '../../services/chatmodel.dart';
+import '../../screens/roomchat.dart';
+import '../effects/glitch_effect.dart';
+
+class ChatListTileWidget extends StatelessWidget {
+  final ChatPreview chat;
+  const ChatListTileWidget({super.key, required this.chat});
+
+  @override
+  Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
+    final themeProvider = context.watch<AmomimusDarkTheme>();
+    final isDark = themeProvider.isDarkMode;
+
+    final Color tileBg = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
+    final Color textColor = isDark ? Colors.white : Colors.black87;
+    final Color subTextColor = isDark
+        ? AmomimusDarkTheme.textSecondary
+        : Colors.black54;
+
+    // Get the target user's gender for dynamic styling
+    final accountManager = context.watch<AccountManager>();
+    final targetAccount = accountManager.accounts.firstWhere(
+      (acc) => acc.amomimusId == chat.username,
+      orElse: () => UserAccount(
+        email: '',
+        realUsername: '',
+        anonymousUsername: '',
+        amomimusId: '',
+        gender: 'Amo',
+        registrationDate: '',
+        isDemo: false,
+      ),
+    );
+    final targetGender = targetAccount.gender;
+    final dynamicTileIcon = GenderHelpers.getGenderIcon(targetGender);
+    final dynamicTileColor = GenderHelpers.getGenderColor(targetGender);
+
+    final Color customBorderColor = (chat.unreadCount > 0)
+        ? dynamicTileColor
+        : dynamicTileColor.withValues(alpha: 0.5);
+
+    final isRecentlyUnblocked = accountManager.isRecentlyUnblocked(chat.username);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Dismissible(
+        key: Key(chat.username),
+        direction: DismissDirection.endToStart,
+        background: Container(
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          decoration: BoxDecoration(
+            color: Colors.redAccent.withValues(alpha: 0.8),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Icon(
+            Icons.delete_outline,
+            color: Colors.white,
+            size: 28,
+          ),
+        ),
+        confirmDismiss: (direction) async {
+          return await showDialog(
+            context: context,
+            builder: (BuildContext dialogContext) {
+              return AlertDialog(
+                backgroundColor: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
+                title: Text(t.delete_chat_title, style: TextStyle(color: isDark ? Colors.white : Colors.black)),
+                content: Text("${t.delete_chat_confirm_prefix}${chat.name}${t.delete_chat_confirm_suffix}", style: TextStyle(color: isDark ? Colors.white70 : Colors.black87)),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(false),
+                    child: Text(t.cancel, style: const TextStyle(color: Colors.grey)),
+                  ),
+                  TextButton(
+                    onPressed: () => Navigator.of(dialogContext).pop(true),
+                    child: Text(t.delete, style: const TextStyle(color: Colors.redAccent)),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        onDismissed: (direction) {
+          context.read<ChatModel>().deleteChat(chat.username);
+          context.read<ChatRequestManager>().deleteRequestWith(chat.username);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${t.chat_deleted_prefix}${chat.name}${t.chat_deleted_suffix}'),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        },
+        child: InkWell(
+          onTap: () {
+            context.read<ChatModel>().markAsRead(chat.username);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    AmomimusApp6(username: chat.username, name: chat.name),
+              ),
+            );
+          },
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: tileBg,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: customBorderColor.withValues(alpha: 0.7),
+                width: 1.8,
+              ),
+            ),
+            child: GlitchEffect(
+              isActive: isRecentlyUnblocked,
+              child: Row(
+                children: [
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: dynamicTileColor, width: 1.2),
+                        ),
+                        child: Icon(
+                          dynamicTileIcon,
+                          color: dynamicTileColor,
+                          size: 28,
+                        ),
+                      ),
+                      if (chat.isOnline)
+                        Positioned(
+                          bottom: -1,
+                          right: -1,
+                          child: Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: tileBg, width: 1.5),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(width: 14),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              (targetAccount.anonymousUsername.isNotEmpty)
+                                  ? targetAccount.anonymousUsername
+                                  : chat.name,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: textColor,
+                              ),
+                            ),
+                            Text(
+                              chat.time,
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: subTextColor.withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            Text(
+                              chat.username,
+                              style: TextStyle(
+                                fontSize: 11,
+                                color: AmomimusDarkTheme.policeLineYellow.withValues(alpha: 0.5),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            if (isRecentlyUnblocked) ...[
+                              const SizedBox(width: 6),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                decoration: BoxDecoration(
+                                  color: Colors.redAccent.withValues(alpha: 0.2),
+                                  border: Border.all(color: Colors.redAccent, width: 1),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  t.ex_blocked,
+                                  style: const TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 8,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          chat.lastMessage.startsWith('[STICKER]:') ? '[STICKER]' : chat.lastMessage,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: subTextColor,
+                            fontFamily: 'serif',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  if (chat.unreadCount > 0) ...[
+                    const SizedBox(width: 10),
+                    Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: const BoxDecoration(
+                        color: AmomimusDarkTheme.primaryPurple,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        "${chat.unreadCount}",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

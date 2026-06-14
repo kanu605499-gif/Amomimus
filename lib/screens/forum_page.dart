@@ -1,8 +1,8 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../amomimusdark.dart';
-import '../language/language_manager.dart';
 import '../services/feed_manager.dart';
 import '../services/account_manager.dart';
 import '../models/comment_model.dart';
@@ -37,6 +37,8 @@ class _ForumPageState extends State<ForumPage> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     final amomimusTheme = Provider.of<AmomimusDarkTheme>(context);
     final isDark = amomimusTheme.isDarkMode;
     
@@ -53,7 +55,7 @@ class _ForumPageState extends State<ForumPage> {
         elevation: 0,
         titleSpacing: 16,
         title: Text(
-          context.watch<LanguageManager>().getString('post_detail'),
+          t.post_detail,
           style: TextStyle(
             color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
             fontWeight: FontWeight.bold,
@@ -63,8 +65,8 @@ class _ForumPageState extends State<ForumPage> {
         actions: [
           IconButton(
             icon: Icon(
-              Icons.menu_book,
-              color: isDark ? AmomimusDarkTheme.textSecondary : Colors.black54,
+              Icons.search,
+              color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
             ),
             onPressed: () {
               Navigator.push(
@@ -91,7 +93,7 @@ class _ForumPageState extends State<ForumPage> {
           if (feedModel == null) {
             return Center(
               child: Text(
-                context.watch<LanguageManager>().getString('no_feeds'),
+                t.no_feeds,
                 style: TextStyle(color: currentTextPrimary),
               ),
             );
@@ -115,7 +117,7 @@ class _ForumPageState extends State<ForumPage> {
                         Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: Text(
-                            context.watch<LanguageManager>().getString('no_comments'),
+                            t.no_comments,
                             style: TextStyle(color: currentTextPrimary),
                           ),
                         )
@@ -159,7 +161,7 @@ class _ForumPageState extends State<ForumPage> {
                                         border: Border(left: BorderSide(color: Colors.grey, width: 2)),
                                       ),
                                       child: Text(
-                                        "${context.watch<LanguageManager>().getString('replying_to')} ${comment.replyToName}:\n${comment.replyToText}",
+                                        "${t.replying_to} ${comment.replyToName}:\n${comment.replyToText}",
                                         style: const TextStyle(fontSize: 11, color: Colors.grey),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
@@ -226,7 +228,7 @@ class _ForumPageState extends State<ForumPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                "${context.watch<LanguageManager>().getString('replying_to')} ${_replyTarget!.authorName}",
+                                "${t.replying_to} ${_replyTarget!.authorName}",
                                 style: TextStyle(
                                   color: isDark ? Colors.white70 : Colors.black87,
                                   fontSize: 12,
@@ -254,7 +256,7 @@ class _ForumPageState extends State<ForumPage> {
                             controller: _commentController,
                             style: TextStyle(color: isDark ? Colors.white : Colors.black),
                             decoration: InputDecoration(
-                              hintText: context.watch<LanguageManager>().getString('write_message'),
+                              hintText: t.write_message,
                               hintStyle: const TextStyle(color: Colors.grey),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),

@@ -23,6 +23,7 @@ class UserAccount {
   final int totalResonatesReceived;
   final List<String> ownedStickers;
   final List<String> blockedUsers;
+  final List<String> exBlockedUsers; // For historical blocked users
   final List<String> hiddenFeeds;
   final List<String> wishlistStickerBatches; // NEW WISHLIST DB FIELD
   final List<String> ownedStickerBatches;    // TRACKS PURCHASED PACKS
@@ -53,6 +54,7 @@ class UserAccount {
     this.totalResonatesReceived = 0,
     this.ownedStickers = const [],
     this.blockedUsers = const [],
+    this.exBlockedUsers = const [],
     this.hiddenFeeds = const [],
     this.wishlistStickerBatches = const [],
     this.ownedStickerBatches = const [],
@@ -86,6 +88,10 @@ class UserAccount {
               .toList() ??
           [],
       blockedUsers: (map['blockedUsers'] as List?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      exBlockedUsers: (map['exBlockedUsers'] as List?)
               ?.map((e) => e as String)
               .toList() ??
           [],
@@ -131,6 +137,7 @@ class UserAccount {
       'totalResonatesReceived': totalResonatesReceived,
       'ownedStickers': ownedStickers,
       'blockedUsers': blockedUsers,
+      'exBlockedUsers': exBlockedUsers,
       'hiddenFeeds': hiddenFeeds,
       'wishlistStickerBatches': wishlistStickerBatches,
       'ownedStickerBatches': ownedStickerBatches,
@@ -160,6 +167,7 @@ class UserAccount {
     int? totalResonatesReceived,
     List<String>? ownedStickers,
     List<String>? blockedUsers,
+    List<String>? exBlockedUsers,
     List<String>? hiddenFeeds,
     List<String>? wishlistStickerBatches,
     List<String>? ownedStickerBatches,
@@ -189,6 +197,7 @@ class UserAccount {
           totalResonatesReceived ?? this.totalResonatesReceived,
       ownedStickers: ownedStickers ?? this.ownedStickers,
       blockedUsers: blockedUsers ?? this.blockedUsers,
+      exBlockedUsers: exBlockedUsers ?? this.exBlockedUsers,
       hiddenFeeds: hiddenFeeds ?? this.hiddenFeeds,
       wishlistStickerBatches: wishlistStickerBatches ?? this.wishlistStickerBatches,
       ownedStickerBatches: ownedStickerBatches ?? this.ownedStickerBatches,

@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../amomimusdark.dart';
-import '../../language/language_manager.dart';
 import '../../models/message_model.dart';
-
 import 'sticker_keyboard.dart';
+import 'package:amomimus/i18n/strings.g.dart';
 
 class ChatInputBar extends StatefulWidget {
   final ChatMessage? replyingToMessage;
@@ -56,6 +55,8 @@ class _ChatInputBarState extends State<ChatInputBar> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     final themeProvider = context.watch<AmomimusDarkTheme>();
     final isDark = themeProvider.isDarkMode;
     final currentSurface = isDark ? AmomimusDarkTheme.surfaceDark : Colors.grey[200]!;
@@ -98,7 +99,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${context.read<LanguageManager>().getString('replying_to')} ${widget.replyingToMessage!.senderName ?? 'User'}",
+                        "${t.replying_to} ${widget.replyingToMessage!.senderName ?? 'User'}",
                         style: TextStyle(
                           color: dynamicAccentColor,
                           fontWeight: FontWeight.bold,
@@ -111,7 +112,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                           children: [
                             Icon(Icons.sticky_note_2, size: 14, color: currentTextSecondary),
                             const SizedBox(width: 4),
-                            Text(context.read<LanguageManager>().getString('sticker'), style: const TextStyle(fontSize: 13, color: Colors.grey)),
+                            Text(t.sticker, style: const TextStyle(fontSize: 13, color: Colors.grey)),
                             const SizedBox(width: 8),
                             Image.asset(
                               widget.replyingToMessage!.text.replaceFirst('[STICKER]:', ''),
@@ -158,7 +159,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
             vertical: 10,
           ),
           decoration: BoxDecoration(
-            color: currentSurface.withValues(alpha: 0.15),
+            color: Colors.transparent,
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -214,7 +215,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                         vertical: 8,
                       ),
                       border: InputBorder.none,
-                      hintText: context.watch<LanguageManager>().getString('write_message'),
+                      hintText: t.write_message,
                       hintStyle: TextStyle(
                         fontSize: 14,
                         color: currentTextSecondary.withValues(alpha: 0.7),

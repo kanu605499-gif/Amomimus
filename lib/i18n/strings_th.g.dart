@@ -1,0 +1,497 @@
+///
+/// Generated file. Do not edit.
+///
+// coverage:ignore-file
+// ignore_for_file: type=lint, unused_import
+// dart format off
+
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:slang/generated.dart';
+import 'strings.g.dart';
+
+// Path: <root>
+class TranslationsTh extends Translations with BaseTranslations<AppLocale, Translations> {
+	/// You can call this constructor and build your own translation instance of this locale.
+	/// Constructing via the enum [AppLocale.build] is preferred.
+	TranslationsTh({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
+		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
+		  $meta = meta ?? TranslationMetadata(
+		    locale: AppLocale.th,
+		    overrides: overrides ?? {},
+		    cardinalResolver: cardinalResolver,
+		    ordinalResolver: ordinalResolver,
+		  ),
+		  super(cardinalResolver: cardinalResolver, ordinalResolver: ordinalResolver) {
+		super.$meta.setFlatMapFunction($meta.getTranslation); // copy base translations to super.$meta
+		$meta.setFlatMapFunction(_flatMapFunction);
+	}
+
+	/// Metadata for the translations of <th>.
+	@override final TranslationMetadata<AppLocale, Translations> $meta;
+
+	/// Access flat map
+	@override dynamic operator[](String key) => $meta.getTranslation(key) ?? super.$meta.getTranslation(key);
+
+	late final TranslationsTh _root = this; // ignore: unused_field
+
+	@override 
+	TranslationsTh $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsTh(meta: meta ?? this.$meta);
+
+	// Translations
+	@override String get app_doc => 'เอกสารประกอบแอป';
+	@override String get contact_dev => 'ติดต่อนักพัฒนา';
+	@override String get language => 'ภาษา';
+	@override String get report_bug => 'รายงานปัญหา';
+	@override String get exit => 'ออกจากระบบ';
+	@override String get center => 'ศูนย์ช่วยเหลือ Amomimus';
+	@override String get support_queries => 'สำหรับความช่วยเหลือและข้อสงสัย';
+	@override String get help_support => 'ความช่วยเหลือและสนับสนุน';
+	@override String get public_name => 'ชื่อสาธารณะ';
+	@override String get privacy_settings => 'ความเป็นส่วนตัวและการตั้งค่า';
+	@override String get danger_zone => 'พื้นที่อันตราย';
+	@override String get delete_account_warning => 'การลบบัญชีของคุณจะลบข้อมูลเซสชัน ประวัติการสะท้อน และการตั้งค่าทั้งหมดอย่างถาวร การกระทำนี้ไม่สามารถยกเลิกได้';
+	@override String get privacy => 'ความเป็นส่วนตัว';
+	@override String get about => 'เกี่ยวกับ';
+	@override String get policy => 'นโยบาย';
+	@override String get options => 'ตัวเลือก';
+	@override String get how_it_works => 'วิธีที่ Amomimus ทำงาน';
+	@override String get report_bug_glitch => 'รายงานข้อผิดพลาด / บั๊ก';
+	@override String get terms_of => 'เงื่อนไขของ ';
+	@override String get privacy_rules_agreement => 'ข้อตกลงความเป็นส่วนตัวและกฎ';
+	@override String get privacy_rules_text => 'อัปเดตล่าสุด: พฤษภาคม 2026\n\n1. เป็นผีไปเถอะ\nคุณคือผีในนี้ ไม่มีชื่อจริง ไม่มีเบอร์โทร และห้ามเปิดเผยที่อยู่หรือโซเชียลมีเดียของแฟนเก่าเด็ดขาด เราอยากให้พื้นที่นี้แยกตัวจากดราม่าในชีวิตจริงอย่างสิ้นเชิง\n\nหากคุณเผลอเปิดเผยตัวตนที่แท้จริงของคุณหรือนำข้อมูลผู้อื่นมาเผยแพร่ อย่าหวังว่าจะมีการเตือน เราจะลบโพสต์นั้นให้เร็วกว่าที่คุณกระพริบตา และการเข้าถึงของคุณก็อาจหายไปด้วย รักษาความไม่ระบุตัวตน 100%\n\n2. อย่าทำตัวงี่เง่า\nบ่น? ได้สิ ร้องไห้? เราเข้าใจ การระบายเกี่ยวกับงานหรือชีวิตที่แย่ๆ คือเหตุผลที่เราสร้างแอปนี้ ดังนั้นปลดปล่อยอารมณ์ของคุณได้เต็มที่\n\nแต่ถ้าใช้คำพูดเกลียดชัง คุกคามผู้คน หรือรังแกคนที่กำลังแย่อยู่แล้ว? นั่นเป็นตั๋วตรงสู่การโดนแบน มีเส้นแบ่งชัดเจนระหว่างการระบายความเจ็บปวดกับการเป็นแค่เกรียนที่น่ารำคาญ\n\n3. ไม่มีการเก็บข้อมูล\nเราไม่ซื้อ ขาย หรือแม้แต่จะสนใจข้อมูลส่วนตัวของคุณ สิ่งที่เกิดขึ้นใน Amomimus ให้อยู่ใน Amomimus เซสชันของคุณจะถูกเข้ารหัสและลบออกจากเซิร์ฟเวอร์ของเราเป็นระยะ\n\n4. ห้ามสแปมเพื่อการค้า\nแพลตฟอร์มนี้สร้างขึ้นเพื่ออารมณ์ของมนุษย์ ไม่ใช่เพื่อขายเหรียญคริปโต โปรโมทร้านค้า หรือสแปมลิงก์พันธมิตร โฆษณาเชิงพาณิชย์ที่ไม่ได้รับอนุญาตจะถูกแบนระดับฮาร์ดแวร์ทันที\n\n5. จำกัดอายุ\nผู้ใช้จะต้องมีอายุอย่างน้อย 18 ปีเพื่อเข้าร่วมชุมชนนี้ เนื้อหาที่นี่อาจมีความเป็นผู้ใหญ่ หนักหน่วง และตรงไปตรงมา ปกป้องสุขภาพจิตของคุณเองก่อนที่จะอ่านการระบายของคนอื่น\n\n6. ข้อสงวนสิทธิ์การเป็นเจ้าของเนื้อหา\nคุณเป็นเจ้าของคำที่คุณเขียน แต่การโพสต์ลงที่นี่ คุณอนุญาตให้ Amomimus มีสิทธิ์ที่จะแสดงเนื้อหานั้นแบบไม่ระบุชื่อในแอป เราจะไม่เคยอ้างสิทธิ์ในเรื่องราวของคุณว่าเป็นของเรา\n\n7. ระบบรายงานและการตรวจสอบ\nแม้แต่ผีก็ยังมีขีดจำกัด หากคุณพบโพสต์ที่ละเมิดกฎความปลอดภัยของเรา โปรดใช้ฟีเจอร์รายงานทันที ระบบอัตโนมัติและผู้ดูแลของเราคอยตรวจสอบตลอด 24 ชั่วโมง\n\n8. ห้ามกิจกรรมผิดกฎหมาย\nห้ามใช้แอปนี้เพื่อวางแผน หรือส่งเสริมกิจกรรมผิดกฎหมาย ความรุนแรง หรือการทำร้ายในชีวิตจริง เราปฏิบัติตามกฎความปลอดภัยดิจิทัลและจะจัดการขั้นเด็ดขาดกับการละเมิด\n\n9. ข้อมูลเชิงลึกของแอป\nเรารวบรวมเฉพาะบันทึกทางเทคนิคแบบไม่ระบุชื่อ (เช่น รายงานแอปค้าง รุ่นอุปกรณ์ และภาษาของระบบ) เพื่อให้แอปทำงานได้ราบรื่น บันทึกเหล่านี้ไม่สามารถติดตามกลับไปยังตัวตนที่แท้จริงของคุณได้\n\n10. การเปลี่ยนแปลงเงื่อนไข\nAmomimus ขอสงวนสิทธิ์ในการอัปเดตกฎเหล่านี้ได้ตลอดเวลาเพื่อปรับให้เข้ากับกฎหมายหรือฟีเจอร์ใหม่ การใช้งานแอปหลังการอัปเดตหมายความว่าคุณตกลงที่จะปฏิบัติตามกฎใหม่ล่าสุด';
+	@override String get system_language => 'ภาษาของระบบ Amomimus:';
+	@override String get dob => 'วันเกิด:';
+	@override String get dob_required => '* จำเป็น – คุณต้องเลือกวันเกิดของคุณ';
+	@override String get agreement_verified => 'ตรวจสอบข้อตกลงแล้ว';
+	@override String get ready_to_verify => 'พร้อมที่จะยืนยันข้อกำหนดของเราแล้วหรือยัง?';
+	@override String get age_warning => 'คุณต้องมีอายุอย่างน้อย 18 ปีจึงจะสามารถใช้ Amomimus';
+	@override String get accept_continue => 'ยอมรับและดำเนินการต่อ';
+	@override String get select_birthday_first => 'เลือกวันเกิดของคุณก่อน';
+	@override String get accept_terms_first => 'ยอมรับเงื่อนไขก่อน';
+	@override String get mobile_app => 'แอปมือถือ Amomimus';
+	@override String get app_desc => 'พื้นที่ปลอดภัยสำหรับการระบายความในใจแบบไม่ระบุตัวตน ออกแบบมาเพื่อปลดปล่อยทางอารมณ์ในโลกดิจิทัล';
+	@override String get create_your => 'สร้างของคุณ';
+	@override String get anonymous_username_label => 'ชื่อผู้ใช้ที่ไม่ระบุชื่อ';
+	@override String get leave_blank_random => 'เว้นว่างไว้สำหรับชื่อแบบสุ่ม';
+	@override String get enter_username_hint => 'กรอกชื่อผู้ใช้ของคุณ';
+	@override String get id_generator_title => 'เครื่องกำเนิด AMOMIMUS ID';
+	@override String get random_generate_id => 'รหัสสร้างแบบสุ่ม:';
+	@override String get choose_avatar_title => 'เลือก AMOMUS AVATAR ของคุณ';
+	@override String get incomplete_selection => 'การเลือกที่ไม่สมบูรณ์';
+	@override String get proceed => 'ดำเนินการ';
+	@override String get choose_avatar_first => 'โปรดเลือกอวาตาร์ Amomus ของคุณก่อน!';
+	@override String get incomplete_selection_desc_1 => 'คุณไม่ได้';
+	@override String get incomplete_selection_desc_2 => '.\n\nคุณจะไม่ถูกจำกัดแต่คุณจะไม่แสดงชื่อที่คุณกำหนดเอง ระบบจะสร้างแบบสุ่มขึ้นมาแทน คุณต้องการดำเนินการต่อหรือไม่?';
+	@override String get you_found_easter_egg => 'คุณพบไข่อีสเตอร์';
+	@override String get developer => 'ผู้พัฒนา:';
+	@override String get skip => 'ข้าม';
+	@override String get welcome_to => 'ยินดีต้อนรับสู่';
+	@override String get safe_space_desc => 'พื้นที่ปลอดภัยสำหรับแบ่งปันความคิด ถามคำถาม และเชื่อมต่อกับผู้อื่น';
+	@override String get identity_hidden_desc_1 => 'ตัวตนที่แท้จริงของคุณถูกซ่อนอยู่ภายใต้';
+	@override String get identity_hidden_desc_2 => 'ชื่อ.';
+	@override String get identity_protected_desc => 'เรามั่นใจว่าตัวตนของคุณได้รับการคุ้มครอง\nสนทนาได้อย่างอิสระโดยไม่ต้องกังวลว่าใครจะอยู่อีกด้านหนึ่ง';
+	@override String get intro_indicators => 'ขอแนะนำตัวบ่งชี้ Amomimus:';
+	@override String get neutral => 'เป็นกลาง';
+	@override String get users_participate_normally => 'ผู้ใช้ที่เข้าร่วมตามปกติ';
+	@override String get amoral => 'ศีลธรรม';
+	@override String get users_nonchalant => 'หรือผู้ใช้ที่ไม่เมินเฉยที่ต้องระวัง';
+	@override String get toxic => 'พิษ';
+	@override String get users_flagged => 'ผู้ใช้ที่ชุมชนตั้งค่าสถานะ';
+	@override String get safe_and => 'ปลอดภัย &';
+	@override String get respectful => 'ขอแสดงความนับถือ';
+	@override String get value_privacy_desc => 'เราให้ความสำคัญกับความเป็นส่วนตัวและความเมตตา โปรดปฏิบัติตามกฎชุมชนของเราในขณะที่คุณสำรวจ';
+	@override String get app_version => 'เวอร์ชันของแอป:';
+	@override String get share_to_chat => 'ส่งในแชท';
+	@override String get create_post => 'สร้างโพสต์';
+	@override String get whats_on_your_mind => 'กำลังคิดอะไรอยู่? ระบายมาได้เลย';
+	@override String get send_post => 'ส่งโพสต์';
+	@override String get notifications => 'การแจ้งเตือน';
+	@override String get no_notifications => 'ยังไม่มีการแจ้งเตือน';
+	@override String get no_feeds => 'ยังไม่มีฟีดใดๆ';
+	@override String get comments => 'ความคิดเห็น';
+	@override String get no_comments => 'ยังไม่มีความคิดเห็น มาเป็นคนแรกกันเถอะ!';
+	@override String get add_comment => 'เพิ่มความคิดเห็น...';
+	@override String get replying_to => 'กำลังตอบกลับ';
+	@override String get chat_this_amomim => 'แชทกับ Amomim นี้';
+	@override String get delete_post => 'ลบโพสต์นี้';
+	@override String get hide_feed => 'ซ่อนฟีดนี้';
+	@override String get report_amomim => 'รายงาน Amomim นี้';
+	@override String get resonated => 'สะท้อนใจ';
+	@override String get resonates => 'ความสะท้อนใจ';
+	@override String get chat_req_pending => 'คำขอแชทที่รอดำเนินการ...';
+	@override String get indicator_noise_limit => 'อินดิเคเตอร์ Amomimus ของคุณคือ NOISE คำขอแชทถูกห้าม';
+	@override String get ghost_limit_reached => 'คุณถึงขีดจำกัด GHOST: ส่งคำขอแชทได้ 7 ครั้งต่อวัน';
+	@override String get initiate_chat => 'เริ่มแชท';
+	@override String get confirm_chat => 'คุณแน่ใจหรือไม่ว่าต้องการแชทกับผู้เขียนโพสต์นี้?\n\nพวกเขาจะเห็นคุณเป็น ';
+	@override String get cancel => 'ยกเลิก';
+	@override String get send_request => 'ส่งคำขอ';
+	@override String get chat_req_sent => 'ส่งคำขอแชทแล้ว!';
+	@override String get feed_hidden => 'ซ่อนฟีดเรียบร้อยแล้ว';
+	@override String get bio => 'ประวัติ';
+	@override String get no_bio_yet => 'ยังไม่มีประวัติ';
+	@override String get write_bio => 'เขียนประวัติของคุณ...';
+	@override String get select_date => 'เลือกวันที่';
+	@override String get ok => 'ตกลง';
+	@override String get error_format => 'รูปแบบไม่ถูกต้อง';
+	@override String get error_invalid => 'วันที่ไม่ถูกต้อง';
+	@override String get notif_resonate => 'สะท้อนความรู้สึกโพสต์ของคุณ';
+	@override String get notif_comment => 'แสดงความคิดเห็นบนโพสต์ของคุณ';
+	@override String get notif_reply => 'ตอบกลับความคิดเห็นของคุณ';
+	@override String get just_now => 'เมื่อสักครู่';
+	@override String get bio_updated => 'อัปเดตประวัติแล้ว!';
+	@override String get coins_redemption => 'แลกเปลี่ยนเหรียญ';
+	@override String get redeemed_100_coins => 'แลกแล้ว 100 เหรียญ!';
+	@override String get vault_merit => 'ห้องนิรภัยและรางวัล';
+	@override String get my_coins => 'เหรียญของฉัน';
+	@override String get owned => 'ครอบครอง';
+	@override String get sticker_stash => 'คลังสติกเกอร์';
+	@override String get amomimus_indicators => 'อินดิเคเตอร์ Amomimus:';
+	@override String get recent_resonates => 'การสะท้อนความรู้สึกเมื่อเร็วๆ นี้';
+	@override String get see_all => 'ดูทั้งหมด';
+	@override String get no_recent_resonates => 'ไม่มีการสะท้อนใจเมื่อเร็วๆ นี้';
+	@override String get all_resonates => 'การสะท้อนใจทั้งหมด';
+	@override String get no_resonates_yet => 'ยังไม่มีการสะท้อนใจ';
+	@override String get delete_post_title => 'ลบโพสต์';
+	@override String get delete_post_confirm => 'คุณแน่ใจหรือไม่ว่าต้องการลบโพสต์นี้? มันจะหายไปจากฟีดทันที';
+	@override String get delete_account => 'ลบบัญชี';
+	@override String get delete => 'ลบ';
+	@override String get profile_locked => 'โปรไฟล์ถูกล็อก';
+	@override String get locked_desc => 'คุณต้องเชื่อมต่อแชทกับผู้ใช้นี้ก่อนถึงจะดูโปรไฟล์เต็มได้';
+	@override String get profile => 'โปรไฟล์';
+	@override String get no_active_user => 'ไม่มีผู้ใช้ที่ใช้งานอยู่';
+	@override String get incoming_requests => 'คำขอเข้า';
+	@override String get no_incoming_requests => 'ไม่มีคำขอที่เข้ามา';
+	@override String get chat_req_accepted => 'ตอบรับคำขอแชทแล้ว!';
+	@override String get messages => 'ข้อความ';
+	@override String get amomus_list => 'รายชื่อ Amomus';
+	@override String get switch_account => 'สลับบัญชี';
+	@override String get no_accounts_registered => 'ยังไม่ได้ลงทะเบียนบัญชีใดๆ';
+	@override String get chat_requests => 'คำขอแชท';
+	@override String get chat_request_title => 'คำขอแชท';
+	@override String get chat_request_desc1 => 'การส่งคำขอแชทถึง amomimus คนนี้จะเปิดเผยชื่อที่แท้จริงของคุณ "';
+	@override String get chat_request_desc2 => '" แทนที่จะเป็นชื่อฟีดของคุณ "';
+	@override String get chat_request_desc3 => '".\n\nพวกเขายังสามารถเห็นโปรไฟล์ของคุณได้หากพวกเขายอมรับ';
+	@override String get delete_chat_title => 'ลบแชท';
+	@override String get delete_chat_confirm_prefix => 'คุณแน่ใจหรือไม่ว่าต้องการลบแชทกับ ';
+	@override String get delete_chat_confirm_suffix => '?';
+	@override String get chat_deleted_prefix => 'ลบแชทกับ ';
+	@override String get chat_deleted_suffix => ' แล้ว';
+	@override String get memories => 'ความทรงจำ';
+	@override String get no_memories_pinned => 'ยังไม่มีความทรงจำที่ปักหมุด';
+	@override String get delete_chat_room_confirm => 'คุณแน่ใจหรือไม่ว่าต้องการลบแชทนี้?';
+	@override String get pin_limit_error => 'คุณปักหมุดได้สูงสุด 9 ความทรงจำเท่านั้น ถอนหมุดสักอันก่อนนะ!';
+	@override String get write_message => 'เขียนข้อความ...';
+	@override String get reply => 'ตอบกลับ';
+	@override String get doc_title => 'เอกสารประกอบแอป';
+	@override String get doc_category_legal => 'กฎหมายและนโยบายความเป็นส่วนตัว';
+	@override String get doc_rule_1_title => '1. การรวบรวมข้อมูล';
+	@override String get doc_rule_1_desc => 'เรารวบรวมข้อมูลเพียงน้อยนิดที่จำเป็นสำหรับคุณสมบัติหลัก ตัวระบุที่ไม่ระบุชื่อของคุณไม่ได้เชื่อมโยงกับตัวตนส่วนบุคคลของคุณ';
+	@override String get doc_rule_2_title => '2. การเข้ารหัสต้นทางถึงปลายทาง';
+	@override String get doc_rule_2_desc => 'ข้อความแชททั้งหมดมีการเข้ารหัสตั้งแต่ต้นจนจบ เราไม่สามารถอ่านข้อความส่วนตัวของคุณได้';
+	@override String get doc_rule_3_title => '3. ข้อมูลเซสชัน';
+	@override String get doc_rule_3_desc => 'ข้อมูลเซสชันในเครื่องจะถูกจัดเก็บไว้อย่างปลอดภัยบนอุปกรณ์ของคุณ การลบข้อมูลแอปจะลบประวัติของคุณอย่างถาวร';
+	@override String get doc_rule_4_title => '4. บริการของบุคคลที่สาม';
+	@override String get doc_rule_4_desc => 'เราไม่ขายหรือแชร์ข้อมูลของคุณกับบุคคลที่สาม การผสานระบบภายนอกเพื่อการดำเนินงานเท่านั้น';
+	@override String get doc_rule_5_title => '5. ความรับผิดชอบต่อเนื้อหาของผู้ใช้';
+	@override String get doc_rule_5_desc => 'คุณต้องรับผิดชอบต่อเนื้อหาที่คุณโพสต์ Amomimus ไม่รับผิดชอบต่อเนื้อหาที่สร้างโดยผู้ใช้';
+	@override String get doc_rule_6_title => '6. รับประกันความเป็นนิรนาม';
+	@override String get doc_rule_6_desc => 'การโต้ตอบสาธารณะของคุณจะไม่ระบุชื่อ เว้นแต่คุณจะเลือกเปิดเผยตัวตนผ่านคำขอแชทอย่างชัดเจน';
+	@override String get doc_rule_7_title => '7. การลบบัญชี';
+	@override String get doc_rule_7_desc => 'คุณมีสิทธิ์ลบบัญชีของคุณเมื่อใดก็ได้ การกระทำนี้ไม่สามารถยกเลิกได้และจะลบประวัติที่เกี่ยวข้องทั้งหมด';
+	@override String get doc_rule_8_title => '8. การล่วงละเมิด';
+	@override String get doc_rule_8_desc => 'เรารักษานโยบายการไม่ยอมรับการล่วงละเมิดอย่างเด็ดขาด ผู้ฝ่าฝืนจะถูกแบนถาวร';
+	@override String get doc_rule_9_title => '9. ทรัพย์สินทางปัญญา';
+	@override String get doc_rule_9_desc => 'เนื้อหาดั้งเดิมทั้งหมด รวมถึงสติกเกอร์และ UI เป็นทรัพย์สินทางปัญญาของ Amomimus';
+	@override String get doc_rule_10_title => '10. การอัปเดตนโยบาย';
+	@override String get doc_rule_10_desc => 'เราขอสงวนสิทธิ์ในการอัปเดตเงื่อนไขเหล่านี้ การใช้แอปต่อไปถือเป็นการยอมรับเงื่อนไขใหม่';
+	@override String get unpin_memories => 'ถอนหมุดจากความทรงจำ';
+	@override String get pin_memories => 'ปักหมุดความทรงจำ';
+	@override String get report => 'รายงาน';
+	@override String get show_less => 'แสดงน้อยลง';
+	@override String get show_more => 'แสดงเพิ่มเติม';
+	@override String get post_detail => 'รายละเอียดโพสต์';
+	@override String get sticker_shop => 'ร้านสติกเกอร์';
+	@override String get view => 'ดู';
+	@override String get buy => 'ซื้อ';
+	@override String get unlock_stickers => 'ปลดล็อกสติกเกอร์ของคุณที่นี่';
+	@override String get includes_exclusive_items => 'มีไอเท็มพิเศษ {count} ชิ้น';
+	@override String get stickers_inside => 'มีสติกเกอร์ {tier} {count} ชิ้นอยู่ข้างใน';
+	@override String get premium => 'พรีเมียม';
+	@override String get already_own_batch => 'คุณเป็นเจ้าของเซตนี้อยู่แล้ว';
+	@override String get not_enough_coins => 'เหรียญไม่พอ';
+	@override String get emojis => 'อีโมจิ';
+	@override String get my_stickers => 'สติกเกอร์ของฉัน';
+	@override String get no_stickers_owned => 'ยังไม่มีสติกเกอร์เลย';
+	@override String get sticker => 'สติกเกอร์';
+	@override String get message_deleted => 'ข้อความถูกลบแล้ว';
+	@override String get my_sticker_stash => 'คลังสติกเกอร์ของฉัน';
+	@override String get stash_empty => 'คลังของคุณว่างเปล่า';
+	@override String get visit_sticker_shop => 'แวะร้านค้าสติกเกอร์เพื่อสอยสักแพ็กสิ!';
+	@override String get stickers => 'สติกเกอร์';
+	@override String get own_these_stickers => 'คุณเป็นเจ้าของสติกเกอร์เหล่านี้';
+	@override String get chosen_amomus_prefix => 'Amomus ที่เลือก: ';
+	@override String get character_not_chosen => 'ยังไม่ได้เลือกตัวละคร!';
+	@override String get press_back_again => 'กดกลับอีกครั้งเพื่อออก';
+	@override String get ex_blocked => 'เคยบล็อก';
+	@override String get blocked_users => 'ผู้ใช้ที่ถูกบล็อก';
+	@override String get previously_blocked => 'ผู้ใช้ที่เคยถูกบล็อก';
+	@override String get no_blocked_users => 'คุณไม่ได้บล็อกใครเลย';
+	@override String get splash_shutting_down => 'กำลังปิดเครื่อง...';
+	@override String get splash_unplug => 'ถอดปลั๊กดิสโทเปีย';
+	@override String get splash_returning => 'กลับไปสู่ความเป็นจริง';
+	@override String get splash_no_signal => 'ไม่มีสัญญาณ';
+	@override String get splash_stand_by => 'ยืนเคียงข้าง...';
+	@override String get splash_embrace => 'โอบกอดเสียงรบกวน';
+	@override String get smileys_emotion => 'สไมลีย์และอารมณ์';
+	@override String get people_body => 'ผู้คนและร่างกาย';
+	@override String get animals_nature => 'สัตว์และธรรมชาติ';
+	@override String get food_drink => 'อาหารและเครื่องดื่ม';
+	@override String get no_previous_blocks => 'ไม่มีใครที่คุณเคยบล็อกเลย';
+	@override String get unblock => 'ปลดบล็อก';
+	@override String get block_again => 'บล็อกอีกครั้ง';
+	@override String get error_loading_account_data => 'เกิดข้อผิดพลาดในการโหลดข้อมูลบัญชี';
+	@override String get security_auth => 'ความปลอดภัยและการยืนยันตัวตน';
+	@override String get favorite_character => 'ตัวละครโปรด (2FA/กู้คืน)';
+	@override String get edit_max_1_day => 'แก้ไข (จำกัด 1 ครั้ง/วัน)';
+	@override String get forget_passcode => 'ลืมรหัสผ่าน';
+	@override String get reset_passcode_hint => 'ใช้ตัวละครโปรดเพื่อรีเซ็ตรหัสผ่านของคุณ';
+	@override String get reset_passcode => 'รีเซ็ตรหัสผ่าน';
+	@override String get share => 'แชร์';
+	@override String get continue_btn => 'ต่อไป';
+	@override String get validation_form => 'แบบฟอร์มตรวจสอบ';
+}
+
+/// The flat map containing all translations for locale <th>.
+/// Only for edge cases! For simple maps, use the map function of this library.
+///
+/// The Dart AOT compiler has issues with very large switch statements,
+/// so the map is split into smaller functions (512 entries each).
+extension on TranslationsTh {
+	dynamic _flatMapFunction(String path) {
+		return switch (path) {
+			'app_doc' => 'เอกสารประกอบแอป',
+			'contact_dev' => 'ติดต่อนักพัฒนา',
+			'language' => 'ภาษา',
+			'report_bug' => 'รายงานปัญหา',
+			'exit' => 'ออกจากระบบ',
+			'center' => 'ศูนย์ช่วยเหลือ Amomimus',
+			'support_queries' => 'สำหรับความช่วยเหลือและข้อสงสัย',
+			'help_support' => 'ความช่วยเหลือและสนับสนุน',
+			'public_name' => 'ชื่อสาธารณะ',
+			'privacy_settings' => 'ความเป็นส่วนตัวและการตั้งค่า',
+			'danger_zone' => 'พื้นที่อันตราย',
+			'delete_account_warning' => 'การลบบัญชีของคุณจะลบข้อมูลเซสชัน ประวัติการสะท้อน และการตั้งค่าทั้งหมดอย่างถาวร การกระทำนี้ไม่สามารถยกเลิกได้',
+			'privacy' => 'ความเป็นส่วนตัว',
+			'about' => 'เกี่ยวกับ',
+			'policy' => 'นโยบาย',
+			'options' => 'ตัวเลือก',
+			'how_it_works' => 'วิธีที่ Amomimus ทำงาน',
+			'report_bug_glitch' => 'รายงานข้อผิดพลาด / บั๊ก',
+			'terms_of' => 'เงื่อนไขของ ',
+			'privacy_rules_agreement' => 'ข้อตกลงความเป็นส่วนตัวและกฎ',
+			'privacy_rules_text' => 'อัปเดตล่าสุด: พฤษภาคม 2026\n\n1. เป็นผีไปเถอะ\nคุณคือผีในนี้ ไม่มีชื่อจริง ไม่มีเบอร์โทร และห้ามเปิดเผยที่อยู่หรือโซเชียลมีเดียของแฟนเก่าเด็ดขาด เราอยากให้พื้นที่นี้แยกตัวจากดราม่าในชีวิตจริงอย่างสิ้นเชิง\n\nหากคุณเผลอเปิดเผยตัวตนที่แท้จริงของคุณหรือนำข้อมูลผู้อื่นมาเผยแพร่ อย่าหวังว่าจะมีการเตือน เราจะลบโพสต์นั้นให้เร็วกว่าที่คุณกระพริบตา และการเข้าถึงของคุณก็อาจหายไปด้วย รักษาความไม่ระบุตัวตน 100%\n\n2. อย่าทำตัวงี่เง่า\nบ่น? ได้สิ ร้องไห้? เราเข้าใจ การระบายเกี่ยวกับงานหรือชีวิตที่แย่ๆ คือเหตุผลที่เราสร้างแอปนี้ ดังนั้นปลดปล่อยอารมณ์ของคุณได้เต็มที่\n\nแต่ถ้าใช้คำพูดเกลียดชัง คุกคามผู้คน หรือรังแกคนที่กำลังแย่อยู่แล้ว? นั่นเป็นตั๋วตรงสู่การโดนแบน มีเส้นแบ่งชัดเจนระหว่างการระบายความเจ็บปวดกับการเป็นแค่เกรียนที่น่ารำคาญ\n\n3. ไม่มีการเก็บข้อมูล\nเราไม่ซื้อ ขาย หรือแม้แต่จะสนใจข้อมูลส่วนตัวของคุณ สิ่งที่เกิดขึ้นใน Amomimus ให้อยู่ใน Amomimus เซสชันของคุณจะถูกเข้ารหัสและลบออกจากเซิร์ฟเวอร์ของเราเป็นระยะ\n\n4. ห้ามสแปมเพื่อการค้า\nแพลตฟอร์มนี้สร้างขึ้นเพื่ออารมณ์ของมนุษย์ ไม่ใช่เพื่อขายเหรียญคริปโต โปรโมทร้านค้า หรือสแปมลิงก์พันธมิตร โฆษณาเชิงพาณิชย์ที่ไม่ได้รับอนุญาตจะถูกแบนระดับฮาร์ดแวร์ทันที\n\n5. จำกัดอายุ\nผู้ใช้จะต้องมีอายุอย่างน้อย 18 ปีเพื่อเข้าร่วมชุมชนนี้ เนื้อหาที่นี่อาจมีความเป็นผู้ใหญ่ หนักหน่วง และตรงไปตรงมา ปกป้องสุขภาพจิตของคุณเองก่อนที่จะอ่านการระบายของคนอื่น\n\n6. ข้อสงวนสิทธิ์การเป็นเจ้าของเนื้อหา\nคุณเป็นเจ้าของคำที่คุณเขียน แต่การโพสต์ลงที่นี่ คุณอนุญาตให้ Amomimus มีสิทธิ์ที่จะแสดงเนื้อหานั้นแบบไม่ระบุชื่อในแอป เราจะไม่เคยอ้างสิทธิ์ในเรื่องราวของคุณว่าเป็นของเรา\n\n7. ระบบรายงานและการตรวจสอบ\nแม้แต่ผีก็ยังมีขีดจำกัด หากคุณพบโพสต์ที่ละเมิดกฎความปลอดภัยของเรา โปรดใช้ฟีเจอร์รายงานทันที ระบบอัตโนมัติและผู้ดูแลของเราคอยตรวจสอบตลอด 24 ชั่วโมง\n\n8. ห้ามกิจกรรมผิดกฎหมาย\nห้ามใช้แอปนี้เพื่อวางแผน หรือส่งเสริมกิจกรรมผิดกฎหมาย ความรุนแรง หรือการทำร้ายในชีวิตจริง เราปฏิบัติตามกฎความปลอดภัยดิจิทัลและจะจัดการขั้นเด็ดขาดกับการละเมิด\n\n9. ข้อมูลเชิงลึกของแอป\nเรารวบรวมเฉพาะบันทึกทางเทคนิคแบบไม่ระบุชื่อ (เช่น รายงานแอปค้าง รุ่นอุปกรณ์ และภาษาของระบบ) เพื่อให้แอปทำงานได้ราบรื่น บันทึกเหล่านี้ไม่สามารถติดตามกลับไปยังตัวตนที่แท้จริงของคุณได้\n\n10. การเปลี่ยนแปลงเงื่อนไข\nAmomimus ขอสงวนสิทธิ์ในการอัปเดตกฎเหล่านี้ได้ตลอดเวลาเพื่อปรับให้เข้ากับกฎหมายหรือฟีเจอร์ใหม่ การใช้งานแอปหลังการอัปเดตหมายความว่าคุณตกลงที่จะปฏิบัติตามกฎใหม่ล่าสุด',
+			'system_language' => 'ภาษาของระบบ Amomimus:',
+			'dob' => 'วันเกิด:',
+			'dob_required' => '* จำเป็น – คุณต้องเลือกวันเกิดของคุณ',
+			'agreement_verified' => 'ตรวจสอบข้อตกลงแล้ว',
+			'ready_to_verify' => 'พร้อมที่จะยืนยันข้อกำหนดของเราแล้วหรือยัง?',
+			'age_warning' => 'คุณต้องมีอายุอย่างน้อย 18 ปีจึงจะสามารถใช้ Amomimus',
+			'accept_continue' => 'ยอมรับและดำเนินการต่อ',
+			'select_birthday_first' => 'เลือกวันเกิดของคุณก่อน',
+			'accept_terms_first' => 'ยอมรับเงื่อนไขก่อน',
+			'mobile_app' => 'แอปมือถือ Amomimus',
+			'app_desc' => 'พื้นที่ปลอดภัยสำหรับการระบายความในใจแบบไม่ระบุตัวตน ออกแบบมาเพื่อปลดปล่อยทางอารมณ์ในโลกดิจิทัล',
+			'create_your' => 'สร้างของคุณ',
+			'anonymous_username_label' => 'ชื่อผู้ใช้ที่ไม่ระบุชื่อ',
+			'leave_blank_random' => 'เว้นว่างไว้สำหรับชื่อแบบสุ่ม',
+			'enter_username_hint' => 'กรอกชื่อผู้ใช้ของคุณ',
+			'id_generator_title' => 'เครื่องกำเนิด AMOMIMUS ID',
+			'random_generate_id' => 'รหัสสร้างแบบสุ่ม:',
+			'choose_avatar_title' => 'เลือก AMOMUS AVATAR ของคุณ',
+			'incomplete_selection' => 'การเลือกที่ไม่สมบูรณ์',
+			'proceed' => 'ดำเนินการ',
+			'choose_avatar_first' => 'โปรดเลือกอวาตาร์ Amomus ของคุณก่อน!',
+			'incomplete_selection_desc_1' => 'คุณไม่ได้',
+			'incomplete_selection_desc_2' => '.\n\nคุณจะไม่ถูกจำกัดแต่คุณจะไม่แสดงชื่อที่คุณกำหนดเอง ระบบจะสร้างแบบสุ่มขึ้นมาแทน คุณต้องการดำเนินการต่อหรือไม่?',
+			'you_found_easter_egg' => 'คุณพบไข่อีสเตอร์',
+			'developer' => 'ผู้พัฒนา:',
+			'skip' => 'ข้าม',
+			'welcome_to' => 'ยินดีต้อนรับสู่',
+			'safe_space_desc' => 'พื้นที่ปลอดภัยสำหรับแบ่งปันความคิด ถามคำถาม และเชื่อมต่อกับผู้อื่น',
+			'identity_hidden_desc_1' => 'ตัวตนที่แท้จริงของคุณถูกซ่อนอยู่ภายใต้',
+			'identity_hidden_desc_2' => 'ชื่อ.',
+			'identity_protected_desc' => 'เรามั่นใจว่าตัวตนของคุณได้รับการคุ้มครอง\nสนทนาได้อย่างอิสระโดยไม่ต้องกังวลว่าใครจะอยู่อีกด้านหนึ่ง',
+			'intro_indicators' => 'ขอแนะนำตัวบ่งชี้ Amomimus:',
+			'neutral' => 'เป็นกลาง',
+			'users_participate_normally' => 'ผู้ใช้ที่เข้าร่วมตามปกติ',
+			'amoral' => 'ศีลธรรม',
+			'users_nonchalant' => 'หรือผู้ใช้ที่ไม่เมินเฉยที่ต้องระวัง',
+			'toxic' => 'พิษ',
+			'users_flagged' => 'ผู้ใช้ที่ชุมชนตั้งค่าสถานะ',
+			'safe_and' => 'ปลอดภัย &',
+			'respectful' => 'ขอแสดงความนับถือ',
+			'value_privacy_desc' => 'เราให้ความสำคัญกับความเป็นส่วนตัวและความเมตตา โปรดปฏิบัติตามกฎชุมชนของเราในขณะที่คุณสำรวจ',
+			'app_version' => 'เวอร์ชันของแอป:',
+			'share_to_chat' => 'ส่งในแชท',
+			'create_post' => 'สร้างโพสต์',
+			'whats_on_your_mind' => 'กำลังคิดอะไรอยู่? ระบายมาได้เลย',
+			'send_post' => 'ส่งโพสต์',
+			'notifications' => 'การแจ้งเตือน',
+			'no_notifications' => 'ยังไม่มีการแจ้งเตือน',
+			'no_feeds' => 'ยังไม่มีฟีดใดๆ',
+			'comments' => 'ความคิดเห็น',
+			'no_comments' => 'ยังไม่มีความคิดเห็น มาเป็นคนแรกกันเถอะ!',
+			'add_comment' => 'เพิ่มความคิดเห็น...',
+			'replying_to' => 'กำลังตอบกลับ',
+			'chat_this_amomim' => 'แชทกับ Amomim นี้',
+			'delete_post' => 'ลบโพสต์นี้',
+			'hide_feed' => 'ซ่อนฟีดนี้',
+			'report_amomim' => 'รายงาน Amomim นี้',
+			'resonated' => 'สะท้อนใจ',
+			'resonates' => 'ความสะท้อนใจ',
+			'chat_req_pending' => 'คำขอแชทที่รอดำเนินการ...',
+			'indicator_noise_limit' => 'อินดิเคเตอร์ Amomimus ของคุณคือ NOISE คำขอแชทถูกห้าม',
+			'ghost_limit_reached' => 'คุณถึงขีดจำกัด GHOST: ส่งคำขอแชทได้ 7 ครั้งต่อวัน',
+			'initiate_chat' => 'เริ่มแชท',
+			'confirm_chat' => 'คุณแน่ใจหรือไม่ว่าต้องการแชทกับผู้เขียนโพสต์นี้?\n\nพวกเขาจะเห็นคุณเป็น ',
+			'cancel' => 'ยกเลิก',
+			'send_request' => 'ส่งคำขอ',
+			'chat_req_sent' => 'ส่งคำขอแชทแล้ว!',
+			'feed_hidden' => 'ซ่อนฟีดเรียบร้อยแล้ว',
+			'bio' => 'ประวัติ',
+			'no_bio_yet' => 'ยังไม่มีประวัติ',
+			'write_bio' => 'เขียนประวัติของคุณ...',
+			'select_date' => 'เลือกวันที่',
+			'ok' => 'ตกลง',
+			'error_format' => 'รูปแบบไม่ถูกต้อง',
+			'error_invalid' => 'วันที่ไม่ถูกต้อง',
+			'notif_resonate' => 'สะท้อนความรู้สึกโพสต์ของคุณ',
+			'notif_comment' => 'แสดงความคิดเห็นบนโพสต์ของคุณ',
+			'notif_reply' => 'ตอบกลับความคิดเห็นของคุณ',
+			'just_now' => 'เมื่อสักครู่',
+			'bio_updated' => 'อัปเดตประวัติแล้ว!',
+			'coins_redemption' => 'แลกเปลี่ยนเหรียญ',
+			'redeemed_100_coins' => 'แลกแล้ว 100 เหรียญ!',
+			'vault_merit' => 'ห้องนิรภัยและรางวัล',
+			'my_coins' => 'เหรียญของฉัน',
+			'owned' => 'ครอบครอง',
+			'sticker_stash' => 'คลังสติกเกอร์',
+			'amomimus_indicators' => 'อินดิเคเตอร์ Amomimus:',
+			'recent_resonates' => 'การสะท้อนความรู้สึกเมื่อเร็วๆ นี้',
+			'see_all' => 'ดูทั้งหมด',
+			'no_recent_resonates' => 'ไม่มีการสะท้อนใจเมื่อเร็วๆ นี้',
+			'all_resonates' => 'การสะท้อนใจทั้งหมด',
+			'no_resonates_yet' => 'ยังไม่มีการสะท้อนใจ',
+			'delete_post_title' => 'ลบโพสต์',
+			'delete_post_confirm' => 'คุณแน่ใจหรือไม่ว่าต้องการลบโพสต์นี้? มันจะหายไปจากฟีดทันที',
+			'delete_account' => 'ลบบัญชี',
+			'delete' => 'ลบ',
+			'profile_locked' => 'โปรไฟล์ถูกล็อก',
+			'locked_desc' => 'คุณต้องเชื่อมต่อแชทกับผู้ใช้นี้ก่อนถึงจะดูโปรไฟล์เต็มได้',
+			'profile' => 'โปรไฟล์',
+			'no_active_user' => 'ไม่มีผู้ใช้ที่ใช้งานอยู่',
+			'incoming_requests' => 'คำขอเข้า',
+			'no_incoming_requests' => 'ไม่มีคำขอที่เข้ามา',
+			'chat_req_accepted' => 'ตอบรับคำขอแชทแล้ว!',
+			'messages' => 'ข้อความ',
+			'amomus_list' => 'รายชื่อ Amomus',
+			'switch_account' => 'สลับบัญชี',
+			'no_accounts_registered' => 'ยังไม่ได้ลงทะเบียนบัญชีใดๆ',
+			'chat_requests' => 'คำขอแชท',
+			'chat_request_title' => 'คำขอแชท',
+			'chat_request_desc1' => 'การส่งคำขอแชทถึง amomimus คนนี้จะเปิดเผยชื่อที่แท้จริงของคุณ "',
+			'chat_request_desc2' => '" แทนที่จะเป็นชื่อฟีดของคุณ "',
+			'chat_request_desc3' => '".\n\nพวกเขายังสามารถเห็นโปรไฟล์ของคุณได้หากพวกเขายอมรับ',
+			'delete_chat_title' => 'ลบแชท',
+			'delete_chat_confirm_prefix' => 'คุณแน่ใจหรือไม่ว่าต้องการลบแชทกับ ',
+			'delete_chat_confirm_suffix' => '?',
+			'chat_deleted_prefix' => 'ลบแชทกับ ',
+			'chat_deleted_suffix' => ' แล้ว',
+			'memories' => 'ความทรงจำ',
+			'no_memories_pinned' => 'ยังไม่มีความทรงจำที่ปักหมุด',
+			'delete_chat_room_confirm' => 'คุณแน่ใจหรือไม่ว่าต้องการลบแชทนี้?',
+			'pin_limit_error' => 'คุณปักหมุดได้สูงสุด 9 ความทรงจำเท่านั้น ถอนหมุดสักอันก่อนนะ!',
+			'write_message' => 'เขียนข้อความ...',
+			'reply' => 'ตอบกลับ',
+			'doc_title' => 'เอกสารประกอบแอป',
+			'doc_category_legal' => 'กฎหมายและนโยบายความเป็นส่วนตัว',
+			'doc_rule_1_title' => '1. การรวบรวมข้อมูล',
+			'doc_rule_1_desc' => 'เรารวบรวมข้อมูลเพียงน้อยนิดที่จำเป็นสำหรับคุณสมบัติหลัก ตัวระบุที่ไม่ระบุชื่อของคุณไม่ได้เชื่อมโยงกับตัวตนส่วนบุคคลของคุณ',
+			'doc_rule_2_title' => '2. การเข้ารหัสต้นทางถึงปลายทาง',
+			'doc_rule_2_desc' => 'ข้อความแชททั้งหมดมีการเข้ารหัสตั้งแต่ต้นจนจบ เราไม่สามารถอ่านข้อความส่วนตัวของคุณได้',
+			'doc_rule_3_title' => '3. ข้อมูลเซสชัน',
+			'doc_rule_3_desc' => 'ข้อมูลเซสชันในเครื่องจะถูกจัดเก็บไว้อย่างปลอดภัยบนอุปกรณ์ของคุณ การลบข้อมูลแอปจะลบประวัติของคุณอย่างถาวร',
+			'doc_rule_4_title' => '4. บริการของบุคคลที่สาม',
+			'doc_rule_4_desc' => 'เราไม่ขายหรือแชร์ข้อมูลของคุณกับบุคคลที่สาม การผสานระบบภายนอกเพื่อการดำเนินงานเท่านั้น',
+			'doc_rule_5_title' => '5. ความรับผิดชอบต่อเนื้อหาของผู้ใช้',
+			'doc_rule_5_desc' => 'คุณต้องรับผิดชอบต่อเนื้อหาที่คุณโพสต์ Amomimus ไม่รับผิดชอบต่อเนื้อหาที่สร้างโดยผู้ใช้',
+			'doc_rule_6_title' => '6. รับประกันความเป็นนิรนาม',
+			'doc_rule_6_desc' => 'การโต้ตอบสาธารณะของคุณจะไม่ระบุชื่อ เว้นแต่คุณจะเลือกเปิดเผยตัวตนผ่านคำขอแชทอย่างชัดเจน',
+			'doc_rule_7_title' => '7. การลบบัญชี',
+			'doc_rule_7_desc' => 'คุณมีสิทธิ์ลบบัญชีของคุณเมื่อใดก็ได้ การกระทำนี้ไม่สามารถยกเลิกได้และจะลบประวัติที่เกี่ยวข้องทั้งหมด',
+			'doc_rule_8_title' => '8. การล่วงละเมิด',
+			'doc_rule_8_desc' => 'เรารักษานโยบายการไม่ยอมรับการล่วงละเมิดอย่างเด็ดขาด ผู้ฝ่าฝืนจะถูกแบนถาวร',
+			'doc_rule_9_title' => '9. ทรัพย์สินทางปัญญา',
+			'doc_rule_9_desc' => 'เนื้อหาดั้งเดิมทั้งหมด รวมถึงสติกเกอร์และ UI เป็นทรัพย์สินทางปัญญาของ Amomimus',
+			'doc_rule_10_title' => '10. การอัปเดตนโยบาย',
+			'doc_rule_10_desc' => 'เราขอสงวนสิทธิ์ในการอัปเดตเงื่อนไขเหล่านี้ การใช้แอปต่อไปถือเป็นการยอมรับเงื่อนไขใหม่',
+			'unpin_memories' => 'ถอนหมุดจากความทรงจำ',
+			'pin_memories' => 'ปักหมุดความทรงจำ',
+			'report' => 'รายงาน',
+			'show_less' => 'แสดงน้อยลง',
+			'show_more' => 'แสดงเพิ่มเติม',
+			'post_detail' => 'รายละเอียดโพสต์',
+			'sticker_shop' => 'ร้านสติกเกอร์',
+			'view' => 'ดู',
+			'buy' => 'ซื้อ',
+			'unlock_stickers' => 'ปลดล็อกสติกเกอร์ของคุณที่นี่',
+			'includes_exclusive_items' => 'มีไอเท็มพิเศษ {count} ชิ้น',
+			'stickers_inside' => 'มีสติกเกอร์ {tier} {count} ชิ้นอยู่ข้างใน',
+			'premium' => 'พรีเมียม',
+			'already_own_batch' => 'คุณเป็นเจ้าของเซตนี้อยู่แล้ว',
+			'not_enough_coins' => 'เหรียญไม่พอ',
+			'emojis' => 'อีโมจิ',
+			'my_stickers' => 'สติกเกอร์ของฉัน',
+			'no_stickers_owned' => 'ยังไม่มีสติกเกอร์เลย',
+			'sticker' => 'สติกเกอร์',
+			'message_deleted' => 'ข้อความถูกลบแล้ว',
+			'my_sticker_stash' => 'คลังสติกเกอร์ของฉัน',
+			'stash_empty' => 'คลังของคุณว่างเปล่า',
+			'visit_sticker_shop' => 'แวะร้านค้าสติกเกอร์เพื่อสอยสักแพ็กสิ!',
+			'stickers' => 'สติกเกอร์',
+			'own_these_stickers' => 'คุณเป็นเจ้าของสติกเกอร์เหล่านี้',
+			'chosen_amomus_prefix' => 'Amomus ที่เลือก: ',
+			'character_not_chosen' => 'ยังไม่ได้เลือกตัวละคร!',
+			'press_back_again' => 'กดกลับอีกครั้งเพื่อออก',
+			'ex_blocked' => 'เคยบล็อก',
+			'blocked_users' => 'ผู้ใช้ที่ถูกบล็อก',
+			'previously_blocked' => 'ผู้ใช้ที่เคยถูกบล็อก',
+			'no_blocked_users' => 'คุณไม่ได้บล็อกใครเลย',
+			'splash_shutting_down' => 'กำลังปิดเครื่อง...',
+			'splash_unplug' => 'ถอดปลั๊กดิสโทเปีย',
+			'splash_returning' => 'กลับไปสู่ความเป็นจริง',
+			'splash_no_signal' => 'ไม่มีสัญญาณ',
+			'splash_stand_by' => 'ยืนเคียงข้าง...',
+			'splash_embrace' => 'โอบกอดเสียงรบกวน',
+			'smileys_emotion' => 'สไมลีย์และอารมณ์',
+			'people_body' => 'ผู้คนและร่างกาย',
+			'animals_nature' => 'สัตว์และธรรมชาติ',
+			'food_drink' => 'อาหารและเครื่องดื่ม',
+			'no_previous_blocks' => 'ไม่มีใครที่คุณเคยบล็อกเลย',
+			'unblock' => 'ปลดบล็อก',
+			'block_again' => 'บล็อกอีกครั้ง',
+			'error_loading_account_data' => 'เกิดข้อผิดพลาดในการโหลดข้อมูลบัญชี',
+			'security_auth' => 'ความปลอดภัยและการยืนยันตัวตน',
+			'favorite_character' => 'ตัวละครโปรด (2FA/กู้คืน)',
+			'edit_max_1_day' => 'แก้ไข (จำกัด 1 ครั้ง/วัน)',
+			'forget_passcode' => 'ลืมรหัสผ่าน',
+			'reset_passcode_hint' => 'ใช้ตัวละครโปรดเพื่อรีเซ็ตรหัสผ่านของคุณ',
+			'reset_passcode' => 'รีเซ็ตรหัสผ่าน',
+			'share' => 'แชร์',
+			'continue_btn' => 'ต่อไป',
+			'validation_form' => 'แบบฟอร์มตรวจสอบ',
+			_ => null,
+		};
+	}
+}

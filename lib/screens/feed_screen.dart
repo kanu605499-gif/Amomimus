@@ -1,4 +1,6 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:math';
+import 'dart:ui';
 
 
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ import '../services/notification_manager.dart';
 import '../models/notification_model.dart';
 import 'forum_page.dart';
 import 'profile_screen.dart';
-import '../language/language_manager.dart';
+
 
 class AmomimusApp5 extends StatefulWidget {
   const AmomimusApp5({super.key});
@@ -61,6 +63,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
   }
 
   void _showNotificationsSheet(BuildContext context, bool isDark) {
+    final t = Translations.of(context);
     final currentUser = Provider.of<AccountManager>(context, listen: false).currentUser;
     if (currentUser == null) return;
     
@@ -97,7 +100,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
               ),
               const SizedBox(height: 16),
               Text(
-                context.watch<LanguageManager>().getString('notifications'),
+                t.notifications,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -109,7 +112,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                 child: notifications.isEmpty
                     ? Center(
                         child: Text(
-                          context.watch<LanguageManager>().getString('no_notifications'),
+                          t.no_notifications,
                           style: TextStyle(color: isDark ? Colors.white54 : Colors.black54),
                         ),
                       )
@@ -124,17 +127,17 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                             case NotificationType.resonate:
                               iconData = Icons.favorite;
                               iconColor = Colors.red;
-                              translatedMessage = context.read<LanguageManager>().getString('notif_resonate');
+                              translatedMessage = t.notif_resonate;
                               break;
                             case NotificationType.comment:
                               iconData = Icons.chat_bubble;
                               iconColor = AmomimusDarkTheme.primaryPurple;
-                              translatedMessage = context.read<LanguageManager>().getString('notif_comment');
+                              translatedMessage = t.notif_comment;
                               break;
                             case NotificationType.reply:
                               iconData = Icons.reply;
                               iconColor = isDark ? Colors.yellow : Colors.amber.shade800;
-                              translatedMessage = context.read<LanguageManager>().getString('notif_reply');
+                              translatedMessage = t.notif_reply;
                               break;
                           }
                           return ListTile(
@@ -152,7 +155,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                               ),
                             ),
                             subtitle: Text(
-                              context.read<LanguageManager>().getString('just_now'), // Ideally parse ISO string to time ago
+                              t.just_now, // Ideally parse ISO string to time ago
                               style: TextStyle(color: isDark ? Colors.white54 : Colors.black54, fontSize: 12),
                             ),
                             onTap: () {
@@ -211,7 +214,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
           currentBackPressTime = now;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(context.read<LanguageManager>().getString('press_back_again')),
+              content: Text(Translations.of(context).press_back_again),
               duration: const Duration(seconds: 2),
             ),
           );
@@ -283,7 +286,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
               ),
               Positioned.fill(
                 child: feedData.isEmpty
-                    ? Center(child: Text(context.watch<LanguageManager>().getString('no_feeds')))
+                    ? Center(child: Text(Translations.of(context).no_feeds))
                     : ListView.builder(
                         padding: const EdgeInsets.only(top: 95, bottom: 120),
                         itemCount: feedData.length,
@@ -297,12 +300,15 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                 top: 0,
                 left: 0,
                 right: 0,
-                child: Container(
-                  height: 90,
-                  padding: const EdgeInsets.only(top: 30, right: 16, left: 16),
-                  color: currentScaffoldBg.withValues(alpha: 0.9),
-                  child: Row(
-                    children: [
+                child: ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                    child: Container(
+                      height: 90,
+                      padding: const EdgeInsets.only(top: 30, right: 16, left: 16),
+                      color: currentScaffoldBg.withValues(alpha: 0.6),
+                      child: Row(
+                        children: [
                       Builder(
                         builder: (scaffoldContext) {
                           return IconButton(
@@ -344,8 +350,8 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                             children: [
                               IconButton(
                                 icon: Icon(
-                                  Icons.menu_book,
-                                  color: isDark ? AmomimusDarkTheme.textSecondary : Colors.black54,
+                                  Icons.search,
+                                  color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
                                 ),
                                 onPressed: () {
                                   Navigator.push(
@@ -390,14 +396,19 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                   ),
                 ),
               ),
-              Positioned(
+            ),
+          ),
+          Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: Container(
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
+                child: ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                    child: Container(
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: isDark ? AmomimusDarkTheme.surfaceDark.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.6),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.05),
@@ -473,7 +484,9 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                   ),
                 ),
               ),
-              Positioned(
+            ),
+          ),
+          Positioned(
                 bottom: 40,
                 left: 0,
                 right: 0,
@@ -526,11 +539,9 @@ class _AmomimusApp5State extends State<AmomimusApp5>
           ),
           drawer: Builder(
             builder: (context) {
-              final lang = context.watch<LanguageManager>();
               return LeftDrawerMenu(
                 currentUser: currentUser,
                 isDark: isDark,
-                lang: lang,
               );
             }
           ),
@@ -566,3 +577,4 @@ class AmomimusWaveClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
 }
+

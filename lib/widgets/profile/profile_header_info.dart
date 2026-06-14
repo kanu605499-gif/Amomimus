@@ -1,9 +1,11 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../amomimusdark.dart';
 import '../../helpers/gender_helpers.dart';
-import '../../language/language_manager.dart';
+import '../effects/glitch_effect.dart';
+import '../../services/account_manager.dart';
 
 class ProfileHeaderInfo extends StatelessWidget {
   final dynamic user;
@@ -21,6 +23,8 @@ class ProfileHeaderInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     Color iconColor = GenderHelpers.getGenderColor(user.gender);
     IconData icon = GenderHelpers.getGenderIcon(user.gender);
 
@@ -54,22 +58,25 @@ class ProfileHeaderInfo extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        Text(
-          isLocked
-              ? user.amomimusId
-              : (!isOtherUser && user.customUsername != null && user.customUsername!.isNotEmpty)
-                  ? user.customUsername!
-                  : user.anonymousUsername,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+        GlitchEffect(
+          isActive: !isLocked && Provider.of<AccountManager>(context).isRecentlyUnblocked(user.amomimusId),
+          child: Text(
+            isLocked
+                ? user.amomimusId
+                : (!isOtherUser && user.customUsername != null && user.customUsername!.isNotEmpty)
+                    ? user.customUsername!
+                    : user.anonymousUsername,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+            ),
           ),
         ),
         if (!isLocked && !isOtherUser && user.customUsername != null && user.customUsername!.isNotEmpty) ...[
           const SizedBox(height: 4),
           Text(
-            "${context.watch<LanguageManager>().getString('public_name')}: ${user.anonymousUsername}",
+            "${t.public_name}: ${user.anonymousUsername}",
             style: TextStyle(
               fontSize: 12,
               color: isDark ? Colors.grey[400] : Colors.grey[600],

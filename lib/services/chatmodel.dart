@@ -86,7 +86,7 @@ class ChatModel extends ChangeNotifier {
   List<ChatPreview> get chatList {
     if (_currentUserId == null) return [];
 
-    return _sessions
+    final list = _sessions
         .where(
           (s) =>
               (s.user1Id == _currentUserId || s.user2Id == _currentUserId) &&
@@ -108,6 +108,19 @@ class ChatModel extends ChangeNotifier {
           );
         })
         .toList();
+
+    // Sort by latest message timestamp (descending)
+    list.sort((a, b) {
+      final msgA = a.messages.last;
+      final msgB = b.messages.last;
+      
+      final timeA = int.tryParse(msgA.id?.split('_').first ?? '0') ?? 0;
+      final timeB = int.tryParse(msgB.id?.split('_').first ?? '0') ?? 0;
+      
+      return timeB.compareTo(timeA);
+    });
+
+    return list;
   }
 
   bool get hasUnreadMessages {

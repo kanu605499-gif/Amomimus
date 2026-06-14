@@ -1,9 +1,9 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../amomimusdark.dart';
-import '../../language/language_manager.dart';
 import '../../models/post_model.dart';
 import '../../services/feed_manager.dart';
 
@@ -66,7 +66,7 @@ class ProfileRecentResonates extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        context.watch<LanguageManager>().getString('all_resonates'),
+                        t.all_resonates,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -87,7 +87,7 @@ class ProfileRecentResonates extends StatelessWidget {
                                     const Icon(Icons.delete_outline, color: Colors.redAccent),
                                     const SizedBox(width: 8),
                                     Text(
-                                      context.read<LanguageManager>().getString('delete_post_title'),
+                                      t.delete_post_title,
                                       style: TextStyle(
                                         color: isDark ? AmomimusDarkTheme.policeLineYellow : const Color(0xff684ca3),
                                         fontWeight: FontWeight.bold,
@@ -97,7 +97,7 @@ class ProfileRecentResonates extends StatelessWidget {
                                   ],
                                 ),
                                 content: Text(
-                                  context.read<LanguageManager>().getString('delete_post_confirm'),
+                                  t.delete_post_confirm,
                                   style: TextStyle(
                                     color: isDark ? Colors.white70 : Colors.black87,
                                     fontSize: 14,
@@ -107,7 +107,7 @@ class ProfileRecentResonates extends StatelessWidget {
                                   TextButton(
                                     onPressed: () => Navigator.pop(dialogContext),
                                     child: Text(
-                                      context.read<LanguageManager>().getString('cancel'),
+                                      t.cancel,
                                       style: TextStyle(color: Colors.grey),
                                     ),
                                   ),
@@ -122,7 +122,7 @@ class ProfileRecentResonates extends StatelessWidget {
                                     },
                                     style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
                                     child: Text(
-                                      context.read<LanguageManager>().getString('delete'),
+                                      t.delete,
                                       style: const TextStyle(color: Colors.white),
                                     ),
                                   ),
@@ -138,7 +138,7 @@ class ProfileRecentResonates extends StatelessWidget {
                     child: userFeeds.isEmpty
                         ? Center(
                             child: Text(
-                              context.watch<LanguageManager>().getString('no_resonates_yet'),
+                              t.no_resonates_yet,
                               style: TextStyle(
                                 color: isDark
                                     ? Colors.grey[400]
@@ -264,6 +264,8 @@ class ProfileRecentResonates extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     final feedManager = Provider.of<FeedManager>(context);
     final userFeeds = feedManager.feeds.where((f) {
       if (f.realAuthorId != user.amomimusId) return false;
@@ -291,7 +293,7 @@ class ProfileRecentResonates extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  context.watch<LanguageManager>().getString('recent_resonates'),
+                  t.recent_resonates,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -308,7 +310,7 @@ class ProfileRecentResonates extends StatelessWidget {
                     isOtherUser,
                   ),
                   child: Text(
-                    context.watch<LanguageManager>().getString('see_all'),
+                    t.see_all,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -324,7 +326,7 @@ class ProfileRecentResonates extends StatelessWidget {
           const SizedBox(height: 12),
           if (userFeeds.isEmpty)
             Text(
-              context.watch<LanguageManager>().getString('no_recent_resonates'),
+              t.no_recent_resonates,
               style: TextStyle(
                 color: isDark ? Colors.grey[400] : Colors.grey[600],
               ),

@@ -11,6 +11,14 @@ class FeedManager extends ChangeNotifier {
   List<FeedModel> get feeds => _feeds;
   bool get isLoading => _isLoading;
 
+  FeedModel? getPostById(String feedId) {
+    try {
+      return _feeds.firstWhere((f) => f.id == feedId);
+    } catch (_) {
+      return null;
+    }
+  }
+
   static const String _feedsKey = 'amomimus_app_feeds';
 
   Future<void> loadFeeds() async {

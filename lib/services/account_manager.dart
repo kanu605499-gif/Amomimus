@@ -151,6 +151,117 @@ class AccountManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> blockUser(String targetAmomimusId) async {
+    if (_currentUser == null) return;
+    if (_currentUser!.blockedUsers.contains(targetAmomimusId)) return;
+
+    final updatedBlocked = List<String>.from(_currentUser!.blockedUsers)..add(targetAmomimusId);
+    final updatedExBlocked = List<String>.from(_currentUser!.exBlockedUsers)..removeWhere((e) => e.startsWith('$targetAmomimusId|') || e == targetAmomimusId);
+
+    final updatedUser = _currentUser!.copyWith(
+      blockedUsers: updatedBlocked,
+      exBlockedUsers: updatedExBlocked,
+    );
+
+    try {
+      await DatabaseHelper.instance.updateUser(updatedUser);
+    } catch (e) {
+      print("==== DB UPDATE SKIPPED: $e ====");
+    }
+
+    _currentUser = updatedUser;
+    final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
+    if (index != -1) _accounts[index] = updatedUser;
+
+    notifyListeners();
+  }
+
+  Future<void> unblockUser(String targetAmomimusId) async {
+    if (_currentUser == null) return;
+    if (!_currentUser!.blockedUsers.contains(targetAmomimusId)) return;
+
+    final updatedBlocked = List<String>.from(_currentUser!.blockedUsers)..remove(targetAmomimusId);
+    final updatedExBlocked = List<String>.from(_currentUser!.exBlockedUsers);
+    
+    // Remove old entry if exists
+    updatedExBlocked.removeWhere((e) => e.startsWith('$targetAmomimusId|') || e == targetAmomimusId);
+    
+    // Add new entry with timestamp
+    final timestamp = DateTime.now().toIso8601String();
+    updatedExBlocked.add('$targetAmomimusId|$timestamp');
+
+    final updatedUser = _currentUser!.copyWith(
+      blockedUsers: updatedBlocked,
+      exBlockedUsers: updatedExBlocked,
+    );
+
+    try {
+      await DatabaseHelper.instance.updateUser(updatedUser);
+    } catch (e) {
+      print("==== DB UPDATE SKIPPED: $e ====");
+    }
+
+    _currentUser = updatedUser;
+    final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
+    if (index != -1) _accounts[index] = updatedUser;
+
+    notifyListeners();
+  }
+
+  bool isRecentlyUnblocked(String targetAmomimusId) {
+    if (_currentUser == null) return false;
+    
+    for (var entry in _currentUser!.exBlockedUsers) {
+      if (entry.startsWith('$targetAmomimusId|')) {
+        final parts = entry.split('|');
+        if (parts.length == 2) {
+          final unblockDate = DateTime.tryParse(parts[1]);
+          if (unblockDate != null) {
+            final diff = DateTime.now().difference(unblockDate);
+            return diff.inDays <= 3;
+          }
+        }
+      } else if (entry == targetAmomimusId) {
+        // Legacy entry without timestamp. Treat as expired.
+        return false;
+      }
+    }
+    return false;
+  }
+
+  Future<bool> updateFavoriteCharacter(String newCharacter) async {
+    if (_currentUser == null) return false;
+    final creds = await authService.getCredentials(_currentUser!.email);
+    if (creds == null) return false;
+
+    // Check last edit date
+    if (creds.lastFavCharEditDate != null) {
+      final lastEdit = DateTime.tryParse(creds.lastFavCharEditDate!);
+      if (lastEdit != null) {
+        final diff = DateTime.now().difference(lastEdit);
+        if (diff.inHours < 24) {
+          return false; // Can only edit once every 24 hours
+        }
+      }
+    }
+
+    final updatedCreds = creds.copyWith(
+      favoriteCharacter: newCharacter,
+      lastFavCharEditDate: DateTime.now().toIso8601String(),
+    );
+
+    return await authService.updateCredentials(updatedCreds);
+  }
+
+  Future<bool> resetPassword(String newPassword) async {
+    if (_currentUser == null) return false;
+    final creds = await authService.getCredentials(_currentUser!.email);
+    if (creds == null) return false;
+
+    final updatedCreds = creds.copyWith(password: newPassword);
+    return await authService.updateCredentials(updatedCreds);
+  }
+
   String getDisplayIndicator(String targetId, String globalIndicator) {
     if (_currentUser == null) return globalIndicator;
     
@@ -246,29 +357,6 @@ class AccountManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> blockUser(String userId) async {
-    if (_currentUser == null) return;
-    
-    if (!_currentUser!.blockedUsers.contains(userId)) {
-      final updatedList = List<String>.from(_currentUser!.blockedUsers)..add(userId);
-      final updatedUser = _currentUser!.copyWith(blockedUsers: updatedList);
-      
-      try {
-        await DatabaseHelper.instance.updateUser(updatedUser);
-      } catch (e) {
-        print("==== DB UPDATE SKIPPED: $e ====");
-      }
-      
-      _currentUser = updatedUser;
-      
-      final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
-      if (index != -1) {
-        _accounts[index] = updatedUser;
-      }
-      
-      notifyListeners();
-    }
-  }
 
   Future<void> hideFeed(String feedId) async {
     if (_currentUser == null) return;

@@ -1,8 +1,8 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../amomimusdark.dart';
-import '../../language/language_manager.dart';
 import '../../screens/sticker_inventory_screen.dart';
 
 class ProfileVaultSection extends StatelessWidget {
@@ -17,13 +17,15 @@ class ProfileVaultSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            context.watch<LanguageManager>().getString('vault_merit'),
+            t.vault_merit,
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
@@ -58,7 +60,7 @@ class ProfileVaultSection extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          context.watch<LanguageManager>().getString('my_coins'),
+                          t.my_coins,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12,
@@ -108,7 +110,7 @@ class ProfileVaultSection extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            context.watch<LanguageManager>().getString('owned'),
+                            t.owned,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 12,
@@ -117,7 +119,7 @@ class ProfileVaultSection extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            context.watch<LanguageManager>().getString('sticker_stash'),
+                            t.sticker_stash,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 18,

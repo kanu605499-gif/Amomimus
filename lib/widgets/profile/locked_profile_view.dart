@@ -1,9 +1,8 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../amomimusdark.dart';
-import '../../language/language_manager.dart';
-
 class LockedProfileView extends StatelessWidget {
   final bool isDark;
 
@@ -14,6 +13,8 @@ class LockedProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(40),
@@ -33,7 +34,7 @@ class LockedProfileView extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            context.watch<LanguageManager>().getString('profile_locked'),
+            t.profile_locked,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -42,7 +43,7 @@ class LockedProfileView extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            context.watch<LanguageManager>().getString('locked_desc'),
+            t.locked_desc,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,

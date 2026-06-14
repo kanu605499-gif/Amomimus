@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' as math;
-import '../language/language_manager.dart';
+import '../database/preference_handler.dart';
+import 'package:amomimus/screens/about_screen.dart';
+import 'package:amomimus/i18n/strings.g.dart';
 import '../database/models/user_register_sql.dart';
 import '../data/anonymous_names.dart';
 import '../services/account_manager.dart';
@@ -32,6 +34,7 @@ class _AmomimusApp4State extends State<AmomimusApp4> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     final Color mainTextColor = _isDarkMode
         ? Colors.white
         : const Color(0xff121212);
@@ -64,134 +67,33 @@ class _AmomimusApp4State extends State<AmomimusApp4> {
     return Scaffold(
       backgroundColor: scaffoldBg,
       appBar: AppBar(
-        title: RichText(
-          text: TextSpan(
-            text: _currentIndex == 0 ? '${context.watch<LanguageManager>().getString('privacy')} ' : '${context.watch<LanguageManager>().getString('about')} ',
-            style: TextStyle(
-              color: mainTextColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              fontFamily: 'Sans-Serif',
-            ),
-            children: [
-              TextSpan(
-                text: _currentIndex == 0 ? context.watch<LanguageManager>().getString('policy') : 'Amomimus',
-                style: TextStyle(color: const Color(0xff8c72c4)),
+        title: Padding(
+          padding: EdgeInsets.only(left: 9.0),
+          child: RichText(
+            text: TextSpan(
+              text: _currentIndex == 0 ? '${t.privacy} ' : '${t.about} ',
+              style: TextStyle(
+                color: mainTextColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                fontFamily: 'Sans-Serif',
               ),
-            ],
+              children: [
+                TextSpan(
+                  text: _currentIndex == 0 ? t.policy : 'Amomimus',
+                  style: TextStyle(color: const Color(0xff8c72c4)),
+                ),
+              ],
+            ),
           ),
         ),
         backgroundColor: navBg,
         elevation: 0,
         iconTheme: IconThemeData(color: mainTextColor),
         automaticallyImplyLeading: false,
-        leading: _currentIndex == 0
-            ? Builder(
-                builder: (context) => IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                ),
-              )
-            : null,
+        leading: null,
       ),
-      drawer: _currentIndex == 0
-          ? Drawer(
-              child: Container(
-                color: navBg,
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    DrawerHeader(
-                      decoration: const BoxDecoration(color: Color(0xff6c52a3)),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            context.watch<LanguageManager>().getString('center'),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            context.watch<LanguageManager>().getString('support_queries'),
-                            style: const TextStyle(
-                              color: Color(0xfff1c66a),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 8.0,
-                      ),
-                      child: Text(
-                        context.watch<LanguageManager>().getString('help_support'),
-                        style: TextStyle(
-                          color: Colors.grey[500],
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.help_outline,
-                        color: Color(0xff8c72c4),
-                      ),
-                      title: Text(
-                        context.watch<LanguageManager>().getString('app_doc'),
-                        style: TextStyle(color: mainTextColor),
-                      ),
-                      onTap: () => Navigator.pop(context),
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.bug_report_outlined,
-                        color: Color(0xff8c72c4),
-                      ),
-                      title: Text(
-                        context.watch<LanguageManager>().getString('report_bug_glitch'),
-                        style: TextStyle(color: mainTextColor),
-                      ),
-                      onTap: () => Navigator.pop(context),
-                    ),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.contact_page_rounded,
-                        color: Color(0xff8c72c4),
-                      ),
-                      title: Text(
-                        context.watch<LanguageManager>().getString('contact_dev'),
-                        style: TextStyle(color: mainTextColor),
-                      ),
-                      onTap: () => Navigator.pop(context),
-                    ),
-                    Divider(color: borderColor, indent: 16, endIndent: 16),
-                    ListTile(
-                      leading: const Icon(
-                        Icons.logout,
-                        color: Colors.redAccent,
-                      ),
-                      title: Text(
-                        context.watch<LanguageManager>().getString('exit'),
-                        style: TextStyle(color: Colors.redAccent),
-                      ),
-                      onTap: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          : null,
+      drawer: null,
       body: pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -206,11 +108,11 @@ class _AmomimusApp4State extends State<AmomimusApp4> {
         items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.shield_outlined),
-            label: context.watch<LanguageManager>().getString('privacy'),
+            label: t.privacy,
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.info_outline),
-            label: context.watch<LanguageManager>().getString('about'),
+            label: t.about,
           ),
         ],
       ),
@@ -264,25 +166,25 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
     final day = _selectedDate!.day.toString().padLeft(2, '0');
     final month = _selectedDate!.month.toString().padLeft(2, '0');
     final year = _selectedDate!.year;
-    
-    final lang = context.read<LanguageManager>();
-    return lang.currentLanguageCode == 'EN'
+
+    final String currentLang = LocaleSettings.currentLocale.languageTag;
+    return currentLang.startsWith('en')
         ? '$month/$day/$year'
         : '$day/$month/$year';
   }
 
   Future<void> _pickDate(BuildContext context) async {
-    final lang = context.read<LanguageManager>();
+    final t = Translations.of(context);
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime(2000, 1, 1),
       firstDate: DateTime(1950),
       lastDate: DateTime.now(),
-      helpText: lang.getString('select_date'),
-      cancelText: lang.getString('cancel'),
-      confirmText: lang.getString('ok'),
-      errorFormatText: lang.getString('error_format'),
-      errorInvalidText: lang.getString('error_invalid'),
+      helpText: t.select_date,
+      cancelText: t.cancel,
+      confirmText: t.ok,
+      errorFormatText: t.error_format,
+      errorInvalidText: t.error_invalid,
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -454,7 +356,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                 ),
                 child: RichText(
                   text: TextSpan(
-                    text: context.watch<LanguageManager>().getString('terms_of'),
+                    text: t.terms_of,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -486,7 +388,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        context.watch<LanguageManager>().getString('privacy_rules_agreement'),
+                        t.privacy_rules_agreement,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -495,7 +397,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        context.watch<LanguageManager>().getString('privacy_rules_text'),
+                        t.privacy_rules_text,
                         style: TextStyle(
                           fontSize: 14,
                           color: subTextColor,
@@ -515,14 +417,29 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          context.watch<LanguageManager>().getString('system_language'),
+                          t.system_language,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             color: mainTextColor,
                           ),
                         ),
                         DropdownButton<String>(
-                          value: context.watch<LanguageManager>().dropdownValue,
+                          value: () {
+                            switch (LocaleSettings.currentLocale) {
+                              case AppLocale.en:
+                                return 'English';
+                              case AppLocale.ja:
+                                return '忍者';
+                              case AppLocale.tm:
+                                return 'Tamriel';
+                              case AppLocale.de:
+                                return 'Deutsch';
+                              case AppLocale.th:
+                                return 'ภาษาไทย';
+                              default:
+                                return 'Bahasa';
+                            }
+                          }(),
                           dropdownColor: currentCardBg,
                           style: TextStyle(
                             color: mainTextColor,
@@ -534,17 +451,43 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                           ),
                           onChanged: (String? newValue) {
                             if (newValue != null) {
-                              context.read<LanguageManager>().setLanguageFromDropdown(newValue);
+                              setState(() {
+                                if (newValue == 'Bahasa') {
+                                  LocaleSettings.setLocale(AppLocale.id);
+                                  PreferenceHandler.setLanguage('id');
+                                } else if (newValue == 'English') {
+                                  LocaleSettings.setLocale(AppLocale.en);
+                                  PreferenceHandler.setLanguage('en');
+                                } else if (newValue == 'Deutsch') {
+                                  LocaleSettings.setLocale(AppLocale.de);
+                                  PreferenceHandler.setLanguage('de');
+                                } else if (newValue == 'ภาษาไทย') {
+                                  LocaleSettings.setLocale(AppLocale.th);
+                                  PreferenceHandler.setLanguage('th');
+                                } else if (newValue == '忍者') {
+                                  LocaleSettings.setLocale(AppLocale.ja);
+                                  PreferenceHandler.setLanguage('ja');
+                                } else if (newValue == 'Tamriel') {
+                                  LocaleSettings.setLocale(AppLocale.tm);
+                                  PreferenceHandler.setLanguage('tm');
+                                }
+                              });
                             }
                           },
-                          items: <String>['Bahasa', 'English', '忍者', 'Tamriel']
-                              .map<DropdownMenuItem<String>>((String value) {
+                          items:
+                              <String>[
+                                'Bahasa',
+                                'Deutsch',
+                                'English',
+                                'ภาษาไทย',
+                                '忍者',
+                                'Tamriel',
+                              ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
                                   child: Text(value),
                                 );
-                              })
-                              .toList(),
+                              }).toList(),
                         ),
                       ],
                     ),
@@ -553,7 +496,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          context.watch<LanguageManager>().getString('dob'),
+                          t.dob,
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             color: mainTextColor,
@@ -593,7 +536,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                       Padding(
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(
-                          context.watch<LanguageManager>().getString('dob_required'),
+                          t.dob_required,
                           style: TextStyle(
                             fontSize: 11,
                             color: Colors.redAccent.withValues(alpha: 0.8),
@@ -608,8 +551,8 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                           child: CheckboxListTile(
                             title: Text(
                               _hasAcceptedTerms
-                                  ? context.watch<LanguageManager>().getString('agreement_verified')
-                                  : context.watch<LanguageManager>().getString('ready_to_verify'),
+                                  ? t.agreement_verified
+                                  : t.ready_to_verify,
                               style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,
@@ -655,7 +598,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
-                                        context.watch<LanguageManager>().getString('age_warning'),
+                                        t.age_warning,
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -678,7 +621,8 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                                       email: widget.email,
                                       realUsername: widget.realUsername,
                                       password: widget.password,
-                                      favoriteCharacter: widget.favoriteCharacter,
+                                      favoriteCharacter:
+                                          widget.favoriteCharacter,
                                       dateOfBirth: _getFormattedDate(),
                                       isDarkMode: widget.isDarkMode,
                                     ),
@@ -698,10 +642,10 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                         ),
                         child: Text(
                           (_hasAcceptedTerms && _selectedDate != null)
-                              ? context.watch<LanguageManager>().getString('accept_continue')
+                              ? t.accept_continue
                               : _selectedDate == null
-                              ? context.watch<LanguageManager>().getString('select_birthday_first')
-                              : context.watch<LanguageManager>().getString('accept_terms_first'),
+                              ? t.select_birthday_first
+                              : t.accept_terms_first,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -729,124 +673,16 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
   }) {
     return Opacity(
       opacity: 0.3,
-      child: Container(
-        width: 140,
-        height: 160,
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Center(child: Icon(icon, size: 48, color: iconColor)),
-      ),
-    );
-  }
-}
-
-class AboutPage extends StatelessWidget {
-  final bool isDarkMode;
-  final VoidCallback? onBackToPrivacy;
-
-  const AboutPage({super.key, required this.isDarkMode, this.onBackToPrivacy});
-
-  @override
-  Widget build(BuildContext context) {
-    final Color mainTextColor = isDarkMode
-        ? Colors.white
-        : const Color(0xff121212);
-    final Color subTextColor = isDarkMode
-        ? Colors.grey[400]!
-        : Colors.grey[700]!;
-    final Color cardBg = isDarkMode ? const Color(0xff1e1b24) : Colors.white;
-    final Color borderColor = isDarkMode
-        ? const Color(0xff3d344d)
-        : const Color(0xffe1dbec);
-
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        if (onBackToPrivacy != null) {
-          onBackToPrivacy!();
-        }
-      },
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(24.0),
-            decoration: BoxDecoration(
-              color: cardBg,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: borderColor),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(
-                  Icons.alternate_email_outlined,
-                  size: 64,
-                  color: Color(0xff8c72c4),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  context.watch<LanguageManager>().getString('mobile_app'),
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: mainTextColor,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  context.watch<LanguageManager>().getString('app_desc'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: subTextColor,
-                    height: 1.4,
-                  ),
-                ),
-                const Divider(height: 32, thickness: 1),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      context.watch<LanguageManager>().getString('developer'),
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: mainTextColor,
-                      ),
-                    ),
-                    const Text(
-                      'Kanu',
-                      style: TextStyle(
-                        color: Color(0xff8c72c4),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      context.watch<LanguageManager>().getString('app_version'),
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: mainTextColor,
-                      ),
-                    ),
-                    Text(
-                      'v1.0.0',
-                      style: TextStyle(color: Color(0xfff1c66a)),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Container(
+          width: 140,
+          height: 160,
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(24),
           ),
+          child: Center(child: Icon(icon, size: 48, color: iconColor)),
         ),
       ),
     );

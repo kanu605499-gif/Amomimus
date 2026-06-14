@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../amomimusdark.dart';
-import '../../language/language_manager.dart';
 import '../../models/message_model.dart';
+import '../../services/feed_manager.dart';
+import '../../i18n/strings.g.dart';
 import '../../services/account_manager.dart';
 import '../../widgets/report_dialog.dart';
+import 'chat_shared_post.dart';
 
 class MessageBubble extends StatefulWidget {
   final ChatMessage message;
@@ -34,6 +36,7 @@ class _MessageBubbleState extends State<MessageBubble> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     final themeProvider = context.watch<AmomimusDarkTheme>();
     final activeUser = context.watch<AccountManager>().currentUser;
     final isDark = themeProvider.isDarkMode;
@@ -51,9 +54,14 @@ class _MessageBubbleState extends State<MessageBubble> {
     final bool isSticker = widget.message.text.startsWith('[STICKER]:');
     final String stickerAsset = isSticker ? widget.message.text.substring(10) : '';
 
+    final bool isSharedPost = widget.message.text.startsWith('[SHARED_POST]:');
+    final String sharedPostId = isSharedPost ? widget.message.text.substring(14) : '';
+    final feedManager = context.read<FeedManager>();
+    final sharedPost = isSharedPost ? feedManager.getPostById(sharedPostId) : null;
+
     final textPainter = TextPainter(
       text: TextSpan(
-        text: isSticker ? '' : widget.message.text,
+        text: isSticker || isSharedPost ? '' : widget.message.text,
         style: TextStyle(
           color: textColor,
           fontSize: 14.0,
@@ -103,7 +111,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                         ListTile(
                           leading: Icon(Icons.reply, color: customBorderColor),
                           title: Text(
-                            context.read<LanguageManager>().getString('reply'),
+                            t.reply,
                             style: TextStyle(color: textColor),
                           ),
                           onTap: () {
@@ -120,8 +128,8 @@ class _MessageBubbleState extends State<MessageBubble> {
                           ),
                           title: Text(
                             widget.isPinned
-                                ? context.read<LanguageManager>().getString('unpin_memories')
-                                : context.read<LanguageManager>().getString('pin_memories'),
+                                ? t.unpin_memories
+                                : t.pin_memories,
                             style: TextStyle(color: textColor),
                           ),
                           onTap: () {
@@ -138,7 +146,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                               color: Colors.redAccent,
                             ),
                             title: Text(
-                              context.read<LanguageManager>().getString('report'),
+                              t.report,
                               style: const TextStyle(color: Colors.redAccent),
                             ),
                             onTap: () {
@@ -186,10 +194,10 @@ class _MessageBubbleState extends State<MessageBubble> {
                       ),
                     ),
                   Container(
-                    padding: isSticker 
+                    padding: (isSticker || isSharedPost) 
                         ? EdgeInsets.zero 
                         : const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    decoration: isSticker 
+                    decoration: (isSticker || isSharedPost) 
                         ? null 
                         : BoxDecoration(
                             color: bubbleColor,
@@ -282,7 +290,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                                         Icon(Icons.sticky_note_2, size: 12, color: textSecondaryColor),
                                         const SizedBox(width: 4),
                                         Text(
-                                          context.read<LanguageManager>().getString('sticker'),
+                                          t.sticker,
                                           style: TextStyle(
                                             color: textSecondaryColor,
                                             fontSize: 12,
@@ -318,6 +326,27 @@ class _MessageBubbleState extends State<MessageBubble> {
                             width: 130,
                             fit: BoxFit.contain,
                           )
+                        else if (isSharedPost && sharedPost != null)
+                          ChatSharedPost(
+                            sharedPost: sharedPost,
+                            bubbleColor: bubbleColor,
+                            customBorderColor: customBorderColor,
+                            textColor: textColor,
+                            isUserMessage: isUserMessage,
+                          )
+                        else if (isSharedPost && sharedPost == null)
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: bubbleColor,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: customBorderColor.withValues(alpha: 0.5)),
+                            ),
+                            child: Text(
+                              'Post is no longer available.',
+                              style: TextStyle(color: textSecondaryColor, fontStyle: FontStyle.italic),
+                            ),
+                          )
                         else
                           RichText(
                             maxLines: _isExpanded ? null : 4,
@@ -349,7 +378,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                               ],
                             ),
                           ),
-                        if (isOverflowing)
+                        if (!isSticker && !isSharedPost && isOverflowing)
                           GestureDetector(
                             onTap: () {
                               setState(() {
@@ -370,7 +399,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    _isExpanded ? context.read<LanguageManager>().getString('show_less') : context.read<LanguageManager>().getString('show_more'),
+                                    _isExpanded ? t.show_less : t.show_more,
                                     style: TextStyle(
                                       fontSize: 11,
                                       fontWeight: FontWeight.w600,

@@ -1,163 +1,231 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:amomimus/amomimusdark.dart';
-import 'package:amomimus/language/language_manager.dart';
 import 'package:provider/provider.dart';
+import 'dart:ui';
+
+import '../../amomimusdark.dart';
+import 'package:amomimus/i18n/strings.g.dart';
+import '../../database/preference_handler.dart';
+
+class RightOptionsPanel extends StatefulWidget {
+  final bool isDark;
+
+  const RightOptionsPanel({
+    super.key,
+    required this.isDark,
+  });
+
+  @override
+  State<RightOptionsPanel> createState() => _RightOptionsPanelState();
+}
+
+class _RightOptionsPanelState extends State<RightOptionsPanel> {
+  @override
+  Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
+    
+    return Drawer(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
+          child: Container(
+            color: widget.isDark ? AmomimusDarkTheme.backgroundDark.withValues(alpha: 0.15) : Colors.white.withValues(alpha: 0.85),
+            child: SafeArea(
+              child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.settings,
+                    color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                    size: 28,
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    t.options,
+                    style: TextStyle(
+                      color: widget.isDark ? AmomimusDarkTheme.textPrimary : Colors.black,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      color: widget.isDark ? AmomimusDarkTheme.textSecondary : Colors.grey,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              color: widget.isDark ? Colors.white12 : Colors.black12,
+              height: 1,
+            ),
+            Expanded(
+              child: ListView(
+                children: [
+                  ListTile(
+                    leading: Icon(
+                      Icons.contact_mail_outlined,
+                      color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                    ),
+                    title: Text(
+                      t.contact_dev,
+                      style: TextStyle(
+                        color: widget.isDark ? AmomimusDarkTheme.textPrimary : Colors.black,
+                      ),
+                    ),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.bug_report_outlined,
+                      color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                    ),
+                    title: Text(
+                      t.report_bug,
+                      style: TextStyle(
+                        color: widget.isDark ? AmomimusDarkTheme.textPrimary : Colors.black,
+                      ),
+                    ),
+                    onTap: () {},
+                  ),
+                  ListTile(
+                    leading: Icon(
+                      Icons.language,
+                      color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                    ),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          t.language,
+                          style: TextStyle(
+                            color: widget.isDark ? AmomimusDarkTheme.textPrimary : Colors.black,
+                          ),
+                        ),
+                        PopupMenuButton<String>(
+                          position: PopupMenuPosition.under,
+                          color: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
+                          constraints: const BoxConstraints(maxHeight: 156),
+                          initialValue: () {
+                            final loc = LocaleSettings.currentLocale;
+                            if (loc == AppLocale.id) return 'Bahasa';
+                            if (loc == AppLocale.ja) return '忍者';
+                            if (loc == AppLocale.de) return 'Deutsch';
+                            if (loc == AppLocale.th) return 'ภาษาไทย';
+                            if (loc == AppLocale.tm) return 'Tamriel';
+                            return 'English';
+                          }(),
+                          onSelected: (String newValue) {
+                            setState(() {
+                              if (newValue == 'Bahasa') {
+                                LocaleSettings.setLocale(AppLocale.id);
+                                PreferenceHandler.setLanguage('id');
+                              } else if (newValue == '忍者') {
+                                LocaleSettings.setLocale(AppLocale.ja);
+                                PreferenceHandler.setLanguage('ja');
+                              } else if (newValue == 'Deutsch') {
+                                LocaleSettings.setLocale(AppLocale.de);
+                                PreferenceHandler.setLanguage('de');
+                              } else if (newValue == 'ภาษาไทย') {
+                                LocaleSettings.setLocale(AppLocale.th);
+                                PreferenceHandler.setLanguage('th');
+                              } else if (newValue == 'Tamriel') {
+                                LocaleSettings.setLocale(AppLocale.tm);
+                                PreferenceHandler.setLanguage('tm');
+                              } else {
+                                LocaleSettings.setLocale(AppLocale.en);
+                                PreferenceHandler.setLanguage('en');
+                              }
+                            });
+                          },
+                          itemBuilder: (BuildContext context) {
+                            return <String>['Bahasa', 'Deutsch', 'English', 'ภาษาไทย', '忍者', 'Tamriel']
+                                .map((String value) {
+                              return PopupMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    color: widget.isDark ? AmomimusDarkTheme.textPrimary : Colors.black,
+                                  ),
+                                ),
+                              );
+                            }).toList();
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                () {
+                                  final loc = LocaleSettings.currentLocale;
+                                  if (loc == AppLocale.id) return 'Bahasa';
+                                  if (loc == AppLocale.ja) return '忍者';
+                                  if (loc == AppLocale.de) return 'Deutsch';
+                                  if (loc == AppLocale.th) return 'ภาษาไทย';
+                                  if (loc == AppLocale.tm) return 'Tamriel';
+                                  return 'English';
+                                }(),
+                                style: TextStyle(
+                                  color: widget.isDark ? AmomimusDarkTheme.textPrimary : Colors.black,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              Icon(
+                                Icons.arrow_drop_down,
+                                color: widget.isDark ? AmomimusDarkTheme.textSecondary : Colors.grey,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      ),
+      ),
+      ),
+    );
+  }
+}
 
 void showRightOptionsPanel(BuildContext context, bool isDark) {
   showGeneralDialog(
     context: context,
     barrierDismissible: true,
-    barrierLabel: "Options",
-    barrierColor: Colors.black.withValues(alpha: 0.5),
+    barrierLabel: 'right_options',
     transitionDuration: const Duration(milliseconds: 300),
-    pageBuilder: (context, anim1, anim2) {
-      return RightOptionsPanelContent(isDark: isDark);
+    pageBuilder: (context, animation, secondaryAnimation) {
+      return Align(
+        alignment: Alignment.centerRight,
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.7,
+          child: RightOptionsPanel(isDark: isDark),
+        ),
+      );
     },
-    transitionBuilder: (context, anim1, anim2, child) {
+    transitionBuilder: (context, animation, secondaryAnimation, child) {
       return SlideTransition(
         position: Tween<Offset>(
-          begin: const Offset(1, 0),
+          begin: const Offset(1.0, 0.0),
           end: Offset.zero,
-        ).animate(CurvedAnimation(
-          parent: anim1,
-          curve: Curves.easeOutCubic,
-        )),
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
         child: child,
       );
     },
   );
-}
-
-class RightOptionsPanelContent extends StatefulWidget {
-  final bool isDark;
-  
-  const RightOptionsPanelContent({super.key, required this.isDark});
-
-  @override
-  State<RightOptionsPanelContent> createState() => _RightOptionsPanelContentState();
-}
-
-class _RightOptionsPanelContentState extends State<RightOptionsPanelContent> {
-  @override
-  Widget build(BuildContext context) {
-    final currentLang = context.watch<LanguageManager>();
-    
-    return Align(
-      alignment: Alignment.centerRight,
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.7,
-            height: double.infinity,
-            decoration: BoxDecoration(
-              color: widget.isDark ? AmomimusDarkTheme.surfaceDark.withValues(alpha: 0.85) : Colors.white.withValues(alpha: 0.9),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.2),
-                  blurRadius: 10,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.fromLTRB(16, 50, 16, 20),
-                  color: widget.isDark ? AmomimusDarkTheme.backgroundDark.withValues(alpha: 0.8) : Colors.grey[100]?.withValues(alpha: 0.9),
-                  child: Row(
-                    children: [
-                      Icon(Icons.settings_outlined, color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple),
-                      const SizedBox(width: 12),
-                      Text(
-                        currentLang.getString('options') == 'options' ? 'Options' : currentLang.getString('options'),
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: widget.isDark ? AmomimusDarkTheme.textPrimary : Colors.black,
-                        ),
-                      ),
-                      const Spacer(),
-                      IconButton(
-                        icon: Icon(Icons.close, color: widget.isDark ? AmomimusDarkTheme.textSecondary : Colors.grey),
-                        onPressed: () => Navigator.pop(context),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                ListTile(
-                  leading: Icon(
-                    Icons.language,
-                    color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-                  ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        currentLang.getString('language'),
-                        style: TextStyle(
-                          color: widget.isDark ? AmomimusDarkTheme.textPrimary : Colors.black,
-                        ),
-                      ),
-                      DropdownButton<String>(
-                        value: currentLang.dropdownValue,
-                        dropdownColor: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
-                        style: TextStyle(
-                          color: widget.isDark ? AmomimusDarkTheme.textPrimary : Colors.black,
-                        ),
-                        underline: const SizedBox(),
-                        icon: Icon(Icons.arrow_drop_down, color: widget.isDark ? AmomimusDarkTheme.textSecondary : Colors.grey),
-                        onChanged: (String? newValue) {
-                          if (newValue != null) {
-                            currentLang.setLanguageFromDropdown(newValue);
-                          }
-                        },
-                        items: <String>['Bahasa', 'English', '忍者', 'Tamriel']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ],
-                  ),
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.bug_report_outlined,
-                    color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-                  ),
-                  title: Text(
-                    currentLang.getString('report_bug'),
-                    style: TextStyle(
-                      color: widget.isDark ? AmomimusDarkTheme.textPrimary : Colors.black,
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.contact_mail_outlined,
-                    color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-                  ),
-                  title: Text(
-                    currentLang.getString('contact_dev'),
-                    style: TextStyle(
-                      color: widget.isDark ? AmomimusDarkTheme.textPrimary : Colors.black,
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

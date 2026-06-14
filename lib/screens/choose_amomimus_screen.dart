@@ -1,8 +1,9 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' as math;
 
-import '../language/language_manager.dart';
+
 import '../database/models/user_register_sql.dart';
 import '../data/anonymous_names.dart';
 import '../services/account_manager.dart';
@@ -113,7 +114,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
   }
 
   void _showIncompleteDialog() {
-    final lang = context.read<LanguageManager>();
+    
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -131,7 +132,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                lang.getString('incomplete_selection'),
+                t.incomplete_selection,
                 style: TextStyle(
                   color: widget.isDarkMode ? Colors.white : const Color(0xff121212),
                   fontWeight: FontWeight.bold,
@@ -142,7 +143,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
           ],
         ),
         content: Text(
-          "${lang.getString('incomplete_selection_desc_1')}\"${lang.getString('anonymous_username_label')}\"${lang.getString('incomplete_selection_desc_2')}",
+          "${t.incomplete_selection_desc_1}\"${t.anonymous_username_label}\"${t.incomplete_selection_desc_2}",
           style: TextStyle(
             color: widget.isDarkMode ? Colors.grey[400] : Colors.grey[700],
             height: 1.4,
@@ -152,7 +153,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: Text(
-              lang.getString('cancel'),
+              t.cancel,
               style: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.bold),
             ),
           ),
@@ -167,7 +168,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
               elevation: 0,
             ),
             child: Text(
-              lang.getString('proceed'),
+              t.proceed,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
@@ -205,12 +206,14 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     final Color mainTextColor = widget.isDarkMode ? Colors.white : const Color(0xff121212);
     final Color subTextColor = widget.isDarkMode ? Colors.grey[400]! : Colors.grey[700]!;
     final Color scaffoldBg = widget.isDarkMode ? const Color(0xff121212) : const Color(0xfffdfbfe);
     final Color cardBg = widget.isDarkMode ? const Color(0xff1e1b24) : Colors.white;
     final Color borderColor = widget.isDarkMode ? const Color(0xff3d344d) : const Color(0xffe1dbec);
-    final lang = context.watch<LanguageManager>();
+    
 
     final List<Map<String, dynamic>> genders = [
       {
@@ -242,7 +245,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
         automaticallyImplyLeading: false, // Delete back arrow icon
         title: RichText(
           text: TextSpan(
-            text: lang.getString('create_your'),
+            text: t.create_your,
             style: TextStyle(
               color: mainTextColor, // Base title color to black/white (e.g. あなたの)
               fontWeight: FontWeight.bold,
@@ -267,13 +270,13 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 1. ── ANONYMOUS USERNAME (ON THE TOP) ──
-            _buildKeywordLabel(lang.getString('anonymous_username_label'), mainTextColor),
+            _buildKeywordLabel(t.anonymous_username_label, mainTextColor),
             const SizedBox(height: 8),
             TextFormField(
               controller: _usernameController,
               style: const TextStyle(color: Color(0xff8c72c4)),
               decoration: InputDecoration(
-                hintText: lang.getString('enter_username_hint'),
+                hintText: t.enter_username_hint,
                 hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14),
                 filled: true,
                 fillColor: cardBg,
@@ -291,7 +294,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text(
-                lang.getString('leave_blank_random'),
+                t.leave_blank_random,
                 style: const TextStyle(fontSize: 11, color: Color(0xff8c72c4), fontStyle: FontStyle.italic),
               ),
             ),
@@ -299,7 +302,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             const SizedBox(height: 28),
 
             // 2. ── AMOMIMUS ID GENERATOR (SECOND, CENSORED) ──
-            _buildKeywordLabel(lang.getString('id_generator_title'), mainTextColor),
+            _buildKeywordLabel(t.id_generator_title, mainTextColor),
             const SizedBox(height: 8),
             Container(
               width: double.infinity,
@@ -312,24 +315,26 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        lang.getString('random_generate_id'),
-                        style: TextStyle(fontSize: 12, color: subTextColor),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        _generatedId,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xff8c72c4),
-                          letterSpacing: 1.5,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          t.random_generate_id,
+                          style: TextStyle(fontSize: 12, color: subTextColor),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 4),
+                        Text(
+                          _generatedId,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff8c72c4),
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   // Removed the refresh button because it is censored/automatic
                   const Icon(Icons.lock_outline_rounded, color: Color(0xff8c72c4)),
@@ -340,7 +345,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             const SizedBox(height: 36),
 
             // 3. ── CHOOSE AVATAR TITLE & SELECTOR (IN THE MIDDLE) ──
-            _buildKeywordLabel(lang.getString('choose_avatar_title'), mainTextColor),
+            _buildKeywordLabel(t.choose_avatar_title, mainTextColor),
             const SizedBox(height: 32), // INCREASED VERTICAL GAP BEFORE ICONS
 
             // ── ANIMATED GENDER SELECTOR (stair bounce) ──
@@ -369,9 +374,9 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
                         );
                       },
                       child: Container(
-                        margin: EdgeInsets.only(top: stairOffset, left: 10, right: 10), // Applied stairOffset as margin!
-                        width: 105, // Adjusted size to prevent tightness
-                        height: 105, // Adjusted size to prevent tightness
+                        margin: const EdgeInsets.symmetric(horizontal: 8), // Standard horizontal layout
+                        width: 90, // Adjusted size to fit all screens
+                        height: 90, // Adjusted size to fit all screens
                         child: Material(
                           color: g['bgColor'] as Color, // ALWAYS colored
                           elevation: isSelected ? 8 : 4,
@@ -421,7 +426,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
                     }
                     if (_selectedGender == null) {
                       return Text(
-                        lang.getString('character_not_chosen'),
+                        t.character_not_chosen,
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -431,7 +436,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
                     } else {
                       return RichText(
                         text: TextSpan(
-                          text: lang.getString('chosen_amomus_prefix'),
+                          text: t.chosen_amomus_prefix,
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -486,7 +491,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
                         ),
                       )
                     : Text(
-                        lang.getString('proceed'),
+                        t.proceed,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

@@ -17,4 +17,10 @@ abstract class AuthService {
 
   /// Deletes a user account.
   Future<void> deleteAccount(String email);
+
+  /// Updates user credentials
+  Future<bool> updateCredentials(UserModelSql updatedCredentials);
+
+  /// Gets user credentials
+  Future<UserModelSql?> getCredentials(String email);
 }

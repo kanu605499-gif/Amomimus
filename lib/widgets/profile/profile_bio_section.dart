@@ -1,8 +1,9 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../amomimusdark.dart';
-import '../../language/language_manager.dart';
+
 import '../../services/account_manager.dart';
 
 class ProfileBioSection extends StatefulWidget {
@@ -30,8 +31,8 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
   void initState() {
     super.initState();
     if (!widget.isOtherUser) {
-      final lang = context.read<LanguageManager>();
-      _bioController.text = widget.user.bio == lang.getString('no_bio_yet') || widget.user.bio == "No bio yet" ? "" : widget.user.bio;
+      
+      _bioController.text = widget.user.bio == t.no_bio_yet || widget.user.bio == "No bio yet" ? "" : widget.user.bio;
     }
   }
 
@@ -44,6 +45,8 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     if (widget.isOtherUser) {
       return SizedBox(
         height: 140,
@@ -63,7 +66,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    context.watch<LanguageManager>().getString('bio'),
+                    t.bio,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: widget.isDark ? Colors.grey[400] : Colors.grey[700],
@@ -73,7 +76,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
               ),
               const Spacer(),
               Text(
-                widget.user.bio.isEmpty ? context.watch<LanguageManager>().getString('no_bio_yet') : widget.user.bio,
+                widget.user.bio.isEmpty ? t.no_bio_yet : widget.user.bio,
                 style: TextStyle(
                   fontSize: 16,
                   color: widget.isDark ? Colors.white : Colors.black87,
@@ -108,7 +111,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      context.watch<LanguageManager>().getString('bio'),
+                      t.bio,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: widget.isDark ? Colors.grey[400] : Colors.grey[700],
@@ -135,7 +138,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                             color: widget.isDark ? Colors.white : Colors.black87,
                           ),
                           decoration: InputDecoration(
-                            hintText: context.watch<LanguageManager>().getString('write_bio'),
+                            hintText: t.write_bio,
                             hintStyle: TextStyle(
                               color: widget.isDark ? Colors.grey[600] : Colors.grey[400],
                             ),
@@ -159,7 +162,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text(context.read<LanguageManager>().getString('bio_updated')),
+                                  content: Text(t.bio_updated),
                                   backgroundColor: widget.isDark
                                       ? AmomimusDarkTheme.policeLineYellow
                                       : AmomimusDarkTheme.primaryPurple,
@@ -242,7 +245,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      context.watch<LanguageManager>().getString('coins_redemption'),
+                      t.coins_redemption,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : Colors.amber.shade900,
@@ -281,7 +284,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text(context.read<LanguageManager>().getString('redeemed_100_coins')),
+                                    content: Text(t.redeemed_100_coins),
                                     backgroundColor: Colors.orange,
                                   ),
                                 );

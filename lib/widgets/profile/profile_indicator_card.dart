@@ -1,9 +1,9 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../amomimusdark.dart';
 import '../../helpers/gender_helpers.dart';
-import '../../language/language_manager.dart';
 import '../../models/user_indicator_model.dart';
 import '../../services/account_manager.dart';
 import '../particle_background.dart';
@@ -20,6 +20,8 @@ class ProfileIndicatorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     final displayIndicator = context.read<AccountManager>().getDisplayIndicator(user.amomimusId, user.indicator);
     UserIndicator indicator = UserIndicatorHelper.fromValue(displayIndicator);
     String indicatorLabel = UserIndicatorHelper.getLabel(indicator);
@@ -69,7 +71,7 @@ class ProfileIndicatorCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      context.watch<LanguageManager>().getString('amomimus_indicators'),
+                      t.amomimus_indicators,
                       style: TextStyle(
                         fontSize: 12,
                         color: isDark ? Colors.grey[400] : Colors.grey[600],

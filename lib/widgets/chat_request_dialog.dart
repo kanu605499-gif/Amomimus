@@ -1,9 +1,8 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../amomimusdark.dart';
-import '../language/language_manager.dart';
-
 class ChatRequestDialog extends StatelessWidget {
   final VoidCallback onConfirm;
   final String targetUserName;
@@ -20,6 +19,8 @@ class ChatRequestDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     final isDark = Provider.of<AmomimusDarkTheme>(context).isDarkMode;
     
     return Dialog(
@@ -39,7 +40,7 @@ class ChatRequestDialog extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              context.watch<LanguageManager>().getString('chat_request_title'),
+              t.chat_request_title,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -57,7 +58,7 @@ class ChatRequestDialog extends StatelessWidget {
                   height: 1.5,
                 ),
                 children: [
-                  TextSpan(text: context.watch<LanguageManager>().getString('chat_request_desc1')),
+                  TextSpan(text: t.chat_request_desc1),
                   TextSpan(
                     text: myRegisteredName,
                     style: TextStyle(
@@ -65,7 +66,7 @@ class ChatRequestDialog extends StatelessWidget {
                       color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
                     ),
                   ),
-                  TextSpan(text: context.watch<LanguageManager>().getString('chat_request_desc2')),
+                  TextSpan(text: t.chat_request_desc2),
                   TextSpan(
                     text: myTemporaryName,
                     style: TextStyle(
@@ -73,7 +74,7 @@ class ChatRequestDialog extends StatelessWidget {
                       color: isDark ? AmomimusDarkTheme.primaryPurple : AmomimusDarkTheme.policeLineYellow,
                     ),
                   ),
-                  TextSpan(text: context.watch<LanguageManager>().getString('chat_request_desc3')),
+                  TextSpan(text: t.chat_request_desc3),
                 ],
               ),
             ),
@@ -81,35 +82,42 @@ class ChatRequestDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  ),
-                  child: Text(
-                    context.watch<LanguageManager>().getString('cancel'),
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w600,
+                Expanded(
+                  child: TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
+                    child: Text(
+                      t.cancel,
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    onConfirm();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-                    foregroundColor: isDark ? AmomimusDarkTheme.primaryPurple : Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      onConfirm();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                      foregroundColor: isDark ? AmomimusDarkTheme.primaryPurple : Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  ),
-                  child: Text(
-                    context.watch<LanguageManager>().getString('send_request'),
-                    style: const TextStyle(fontWeight: FontWeight.w600),
+                    child: Text(
+                      t.send_request,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
               ],

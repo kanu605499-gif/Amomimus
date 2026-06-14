@@ -1,4 +1,6 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -24,6 +26,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   double _glitchOffset = 0.0;
   List<double> _noiseBars = [];
   bool _showColorBars = false;
+  final AudioPlayer _audioPlayer = AudioPlayer();
   
   String _currentCaption = "";
   List<String> _captions = [];
@@ -33,13 +36,14 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   @override
   void initState() {
     super.initState();
+    _audioPlayer.play(AssetSource('audio/splash_sound.mp3'));
     
     if (widget.isShutdown) {
-      _currentCaption = "SHUTTING DOWN...";
-      _captions = ["SHUTTING DOWN...", "UNPLUG THE DYSTOPIA", "RETURNING TO REALITY"];
+      _currentCaption = "shutting_down";
+      _captions = ["shutting_down", "unplug_dystopia", "returning_to_reality"];
     } else {
-      _currentCaption = "NO SIGNAL";
-      _captions = ["NO SIGNAL", "STAND BY...", "EMBRACE THE NOISE"];
+      _currentCaption = "no_signal";
+      _captions = ["no_signal", "stand_by", "embrace_the_noise"];
     }
     _scanlineController = AnimationController(
       vsync: this,
@@ -72,6 +76,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
   @override
   void dispose() {
+    _audioPlayer.dispose();
     _scanlineController.dispose();
     _glitchController.dispose();
     _noiseTimer?.cancel();
@@ -130,6 +135,17 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   }
 
   Widget _buildLogo(Color color) {
+    final t = Translations.of(context);
+    String translatedCaption = _currentCaption;
+    switch (_currentCaption) {
+      case 'shutting_down': translatedCaption = t.splash_shutting_down; break;
+      case 'unplug_dystopia': translatedCaption = t.splash_unplug; break;
+      case 'returning_to_reality': translatedCaption = t.splash_returning; break;
+      case 'no_signal': translatedCaption = t.splash_no_signal; break;
+      case 'stand_by': translatedCaption = t.splash_stand_by; break;
+      case 'embrace_the_noise': translatedCaption = t.splash_embrace; break;
+    }
+    
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -144,24 +160,91 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
           style: TextStyle(
             fontSize: 42,
             fontWeight: FontWeight.w900,
-            letterSpacing: 14,
+            letterSpacing: 6,
             color: color,
             fontFamily: 'monospace',
           ),
         ),
-        const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          color: color,
-          child: Text(
-            _currentCaption,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 6,
-              color: Colors.black,
-              fontFamily: 'monospace',
-            ),
+        const SizedBox(height: 24),
+        // VHS Lower-Third + CRT Burn-In Hybrid
+        SizedBox(
+          width: 260,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Top scan-line bar
+              Container(
+                height: 1.5,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.transparent,
+                      color.withValues(alpha: 0.6),
+                      color,
+                      color.withValues(alpha: 0.6),
+                      Colors.transparent,
+                    ],
+                    stops: const [0.0, 0.15, 0.5, 0.85, 1.0],
+                  ),
+                ),
+              ),
+              // Caption area with dark translucent backdrop
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.45),
+                  border: Border(
+                    left: BorderSide(color: color.withValues(alpha: 0.3), width: 1),
+                    right: BorderSide(color: color.withValues(alpha: 0.3), width: 1),
+                  ),
+                ),
+                child: Text(
+                  translatedCaption,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 3.5,
+                    color: color,
+                    fontFamily: 'monospace',
+                    shadows: [
+                      // Phosphor burn-in glow — inner
+                      Shadow(
+                        color: color.withValues(alpha: 0.9),
+                        blurRadius: 4,
+                      ),
+                      // Phosphor burn-in glow — mid
+                      Shadow(
+                        color: color.withValues(alpha: 0.5),
+                        blurRadius: 12,
+                      ),
+                      // Phosphor burn-in glow — outer haze
+                      Shadow(
+                        color: color.withValues(alpha: 0.2),
+                        blurRadius: 28,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Bottom scan-line bar
+              Container(
+                height: 1.5,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.transparent,
+                      color.withValues(alpha: 0.6),
+                      color,
+                      color.withValues(alpha: 0.6),
+                      Colors.transparent,
+                    ],
+                    stops: const [0.0, 0.15, 0.5, 0.85, 1.0],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],

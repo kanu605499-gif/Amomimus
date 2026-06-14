@@ -1,3 +1,4 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -8,12 +9,11 @@ import '../services/account_manager.dart';
 import '../amomimusdark.dart';
 import '../services/chat_request_manager.dart';
 import '../services/chatmodel.dart';
-import '../database_helper.dart';
-import 'roomchat.dart';
-import '../models/user_model.dart';
 import '../helpers/gender_helpers.dart';
-import '../language/language_manager.dart';
 import 'fake_pdf_screen.dart';
+import '../widgets/chat/chat_home_requests_sheet.dart';
+import '../widgets/chat/chat_home_mini_island.dart';
+import '../widgets/chat/chat_home_list_section.dart';
 
 class AmomimusApp7 extends StatefulWidget {
   const AmomimusApp7({super.key});
@@ -72,135 +72,10 @@ class _AmomimusApp7State extends State<AmomimusApp7>
     super.dispose();
   }
 
-  void _showRequestsBottomSheet(
-    BuildContext context,
-    ChatRequestManager reqManager,
-    AmomimusDarkTheme themeProvider,
-  ) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      builder: (ctx) {
-        final isDark = themeProvider.isDarkMode;
-        final bgCol = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
-        final textCol = isDark ? Colors.white : Colors.black87;
-
-        return Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: bgCol,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: isDark ? Colors.white24 : Colors.black12,
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                context.read<LanguageManager>().getString('incoming_requests'),
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: textCol,
-                ),
-              ),
-              const SizedBox(height: 16),
-              if (reqManager.incomingRequests.isEmpty)
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    context.read<LanguageManager>().getString('no_incoming_requests'),
-                    style: TextStyle(color: textCol.withValues(alpha: 0.6)),
-                  ),
-                ),
-              ...reqManager.incomingRequests.map((req) {
-                final accountManager = context.read<AccountManager>();
-                final senderAccount = accountManager.accounts.firstWhere(
-                  (acc) => acc.amomimusId == req.senderId,
-                  orElse: () => UserAccount(
-                    email: '',
-                    realUsername: '',
-                    anonymousUsername: '',
-                    amomimusId: '',
-                    gender: 'Amo',
-                    registrationDate: '',
-                    isDemo: false,
-                  ),
-                );
-                final senderGender = senderAccount.gender;
-                final senderIcon = GenderHelpers.getGenderIcon(senderGender);
-                final senderColor = GenderHelpers.getGenderColor(senderGender);
-
-                return ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  leading: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: senderColor, width: 1.5),
-                    ),
-                    child: Icon(senderIcon, color: senderColor, size: 22),
-                  ),
-                  title: Text(
-                    senderAccount.anonymousUsername.isNotEmpty
-                        ? senderAccount.anonymousUsername
-                        : req.senderName,
-                    style: TextStyle(
-                      color: textCol,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  subtitle: Text(
-                    'ID: ${req.senderId}',
-                    style: TextStyle(
-                      color: textCol.withValues(alpha: 0.7),
-                      fontSize: 12,
-                    ),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.close, color: Colors.redAccent),
-                        onPressed: () {
-                          reqManager.rejectRequest(req.id);
-                          Navigator.pop(ctx);
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.check, color: Colors.green),
-                        onPressed: () {
-                          reqManager.acceptRequest(req.id);
-                          // Initialize chat with accepted message
-                          context.read<ChatModel>().sendMessage(
-                            req.senderId,
-                            context.read<LanguageManager>().getString('chat_req_accepted'),
-                            targetName: req.senderName,
-                          );
-                          Navigator.pop(ctx);
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              }),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     final themeProvider = context.watch<AmomimusDarkTheme>();
     final chatModel = context.watch<ChatModel>();
     final chatList = chatModel.chatList;
@@ -215,60 +90,6 @@ class _AmomimusApp7State extends State<AmomimusApp7>
         : AmomimusDarkTheme.primaryPurple;
 
     final double statusBarHeight = MediaQuery.of(context).padding.top;
-
-    // Island mini di atas saat di-scroll
-    Widget expandableMiniIsland() {
-      final Color dynamicOutlineColor = themeProvider.isDarkMode
-          ? Colors.white.withValues(alpha: 0.2)
-          : Colors.black87.withValues(alpha: 0.15);
-      return GestureDetector(
-        onTap: () => setState(() => _isIslandExpanded = !_isIslandExpanded),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeInOut,
-          height: 46,
-          width: _isIslandExpanded ? 180 : 46,
-          decoration: BoxDecoration(
-            color: themeProvider.isDarkMode
-                ? currentSurface.withValues(alpha: 0.9)
-                : Colors.grey[100]!.withValues(alpha: 0.95),
-            borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: dynamicOutlineColor, width: 1.2),
-          ),
-          child: _isIslandExpanded
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      context.watch<LanguageManager>().getString('messages'),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        themeProvider.isDarkMode
-                            ? Icons.wb_sunny_rounded
-                            : Icons.nightlight_round,
-                        size: 16,
-                      ),
-                      color: dynamicAccentColor,
-                      onPressed: () =>
-                          context.read<AmomimusDarkTheme>().toggleTheme(),
-                    ),
-                  ],
-                )
-              : Center(
-                  child: Icon(
-                    Icons.chat_bubble_outline_rounded,
-                    color: dynamicAccentColor,
-                    size: 20,
-                  ),
-                ),
-        ),
-      );
-    }
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
@@ -310,269 +131,312 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                       ),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                context.watch<LanguageManager>().getString('amomus_list'),
-                                style: TextStyle(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                  color: themeProvider.isDarkMode
-                                      ? Colors.white
-                                      : Colors.black87,
-                                  letterSpacing: 1.2,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.menu_book,
-                                  color: themeProvider.isDarkMode ? AmomimusDarkTheme.textSecondary : Colors.black54,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation, secondaryAnimation) => const FakePdfScreen(),
-                                      transitionDuration: Duration.zero,
-                                      reverseTransitionDuration: Duration.zero,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      t.amomus_list,
+                                      style: TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold,
+                                        color: themeProvider.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black87,
+                                        letterSpacing: 1.2,
+                                      ),
                                     ),
-                                  );
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.switch_account_outlined,
-                                  color: dynamicAccentColor,
+                                  ),
                                 ),
-                                onPressed: () {
-                                  final accountManager = context
-                                      .read<AccountManager>();
-                                  final accounts = accountManager.accounts.toList();
-                                  final isDark = themeProvider.isDarkMode;
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.search,
+                                        color: themeProvider.isDarkMode
+                                            ? AmomimusDarkTheme.policeLineYellow
+                                            : AmomimusDarkTheme.primaryPurple,
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          PageRouteBuilder(
+                                            pageBuilder:
+                                                (
+                                                  context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                ) => const FakePdfScreen(),
+                                            transitionDuration: Duration.zero,
+                                            reverseTransitionDuration:
+                                                Duration.zero,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.switch_account_outlined,
+                                        color: dynamicAccentColor,
+                                      ),
+                                      onPressed: () {
+                                        final accountManager = context
+                                            .read<AccountManager>();
+                                        final accounts = accountManager.accounts
+                                            .toList();
+                                        final isDark = themeProvider.isDarkMode;
 
-                                  showModalBottomSheet(
-                                    context: context,
-                                    backgroundColor: Colors.transparent,
-                                    builder: (ctx) {
-                                      final sheetBg = isDark
-                                          ? AmomimusDarkTheme.surfaceDark
-                                          : Colors.white;
-                                      final textCol = isDark
-                                          ? Colors.white
-                                          : Colors.black87;
-                                      final subCol = isDark
-                                          ? AmomimusDarkTheme.textSecondary
-                                          : Colors.black54;
+                                        showModalBottomSheet(
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          builder: (ctx) {
+                                            final sheetBg = isDark
+                                                ? AmomimusDarkTheme.surfaceDark
+                                                : Colors.white;
+                                            final textCol = isDark
+                                                ? Colors.white
+                                                : Colors.black87;
+                                            final subCol = isDark
+                                                ? AmomimusDarkTheme
+                                                      .textSecondary
+                                                : Colors.black54;
 
-                                      return Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 20,
-                                          vertical: 16,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: sheetBg,
-                                          borderRadius:
-                                              const BorderRadius.vertical(
-                                                top: Radius.circular(24),
-                                              ),
-                                        ),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Container(
-                                              width: 40,
-                                              height: 5,
-                                              decoration: BoxDecoration(
-                                                color: isDark
-                                                    ? Colors.white24
-                                                    : Colors.black12,
-                                                borderRadius:
-                                                    BorderRadius.circular(2.5),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 16),
-                                            Text(
-                                              context.read<LanguageManager>().getString('switch_account'),
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: textCol,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 16),
-                                            if (accounts.isEmpty)
-                                              Padding(
-                                                padding: const EdgeInsets.all(
-                                                  20,
-                                                ),
-                                                child: Text(
-                                                  context.read<LanguageManager>().getString('no_accounts_registered'),
-                                                  style: TextStyle(
-                                                    color: subCol,
+                                            return Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 20,
+                                                    vertical: 16,
                                                   ),
-                                                ),
-                                              )
-                                            else
-                                              ConstrainedBox(
-                                                constraints: const BoxConstraints(maxHeight: 225),
-                                                child: SingleChildScrollView(
-                                                  child: Column(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: accounts.map((acc) {
-                                                      final isActive = acc.id ==
-                                                          accountManager
-                                                              .currentUser
-                                                              ?.id;
-                                                final genderColor =
-                                                    GenderHelpers.getGenderColor(
-                                                      acc.gender,
-                                                    );
-                                                final genderIcon =
-                                                    GenderHelpers.getGenderIcon(
-                                                      acc.gender,
-                                                    );
-
-                                                return Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                        vertical: 4,
-                                                      ),
-                                                  child: InkWell(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          16,
-                                                        ),
-                                                    onTap: () {
-                                                      accountManager
-                                                          .switchAccount(acc);
-                                                      // Sync ChatModel with the new account
-                                                      context
-                                                          .read<ChatModel>()
-                                                          .setCurrentUser(
-                                                            acc.amomimusId,
-                                                            acc.anonymousUsername,
-                                                          );
-                                                      Navigator.pop(ctx);
-                                                    },
-                                                    child: Container(
-                                                      padding:
-                                                          const EdgeInsets.symmetric(
-                                                            horizontal: 14,
-                                                            vertical: 12,
+                                              decoration: BoxDecoration(
+                                                color: sheetBg,
+                                                borderRadius:
+                                                    const BorderRadius.vertical(
+                                                      top: Radius.circular(24),
+                                                    ),
+                                              ),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Container(
+                                                    width: 40,
+                                                    height: 5,
+                                                    decoration: BoxDecoration(
+                                                      color: isDark
+                                                          ? Colors.white24
+                                                          : Colors.black12,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            2.5,
                                                           ),
-                                                      decoration: BoxDecoration(
-                                                        color: isActive
-                                                            ? genderColor
-                                                                  .withValues(
-                                                                    alpha: 0.12,
-                                                                  )
-                                                            : Colors
-                                                                  .transparent,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              16,
-                                                            ),
-                                                        border: Border.all(
-                                                          color: isActive
-                                                              ? genderColor
-                                                                    .withValues(alpha: 0.8)
-                                                              : (isDark
-                                                                    ? Colors
-                                                                          .white12
-                                                                    : Colors
-                                                                          .black12),
-                                                          width: isActive
-                                                              ? 1.5
-                                                              : 1,
-                                                        ),
-                                                      ),
-                                                      child: Row(
-                                                        children: [
-                                                          Container(
-                                                            width: 40,
-                                                            height: 40,
-                                                            decoration: BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                    12,
-                                                                  ),
-                                                              border: Border.all(
-                                                                color:
-                                                                    genderColor,
-                                                                width: 1.2,
-                                                              ),
-                                                            ),
-                                                            child: Icon(
-                                                              genderIcon,
-                                                              color:
-                                                                  genderColor,
-                                                              size: 22,
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 12,
-                                                          ),
-                                                          Expanded(
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text(
-                                                                  acc.anonymousUsername,
-                                                                  style: TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color:
-                                                                        textCol,
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  '${acc.amomimusId} · ${acc.gender}',
-                                                                  style: TextStyle(
-                                                                    fontSize:
-                                                                        11,
-                                                                    color:
-                                                                        genderColor,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          if (isActive)
-                                                            Icon(
-                                                              Icons
-                                                                  .check_circle,
-                                                              color:
-                                                                  genderColor,
-                                                              size: 20,
-                                                            ),
-                                                        ],
-                                                      ),
                                                     ),
                                                   ),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ),
-                                        ),
-                                            const SizedBox(height: 8),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
+                                                  const SizedBox(height: 16),
+                                                  Text(
+                                                    t.switch_account,
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: textCol,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 16),
+                                                  if (accounts.isEmpty)
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                            20,
+                                                          ),
+                                                      child: Text(
+                                                        t.no_accounts_registered,
+                                                        style: TextStyle(
+                                                          color: subCol,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  else
+                                                    ConstrainedBox(
+                                                      constraints:
+                                                          const BoxConstraints(
+                                                            maxHeight: 225,
+                                                          ),
+                                                      child: SingleChildScrollView(
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: accounts.map((
+                                                            acc,
+                                                          ) {
+                                                            final isActive =
+                                                                acc.id ==
+                                                                accountManager
+                                                                    .currentUser
+                                                                    ?.id;
+                                                            final genderColor =
+                                                                GenderHelpers.getGenderColor(
+                                                                  acc.gender,
+                                                                );
+                                                            final genderIcon =
+                                                                GenderHelpers.getGenderIcon(
+                                                                  acc.gender,
+                                                                );
+
+                                                            return Padding(
+                                                              padding:
+                                                                  const EdgeInsets.symmetric(
+                                                                    vertical: 4,
+                                                                  ),
+                                                              child: InkWell(
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                      16,
+                                                                    ),
+                                                                onTap: () {
+                                                                  accountManager
+                                                                      .switchAccount(
+                                                                        acc,
+                                                                      );
+                                                                  // Sync ChatModel with the new account
+                                                                  context
+                                                                      .read<
+                                                                        ChatModel
+                                                                      >()
+                                                                      .setCurrentUser(
+                                                                        acc.amomimusId,
+                                                                        acc.anonymousUsername,
+                                                                      );
+                                                                  Navigator.pop(
+                                                                    ctx,
+                                                                  );
+                                                                },
+                                                                child: Container(
+                                                                  padding:
+                                                                      const EdgeInsets.symmetric(
+                                                                        horizontal:
+                                                                            14,
+                                                                        vertical:
+                                                                            12,
+                                                                      ),
+                                                                  decoration: BoxDecoration(
+                                                                    color:
+                                                                        isActive
+                                                                        ? genderColor.withValues(
+                                                                            alpha:
+                                                                                0.12,
+                                                                          )
+                                                                        : Colors
+                                                                              .transparent,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                          16,
+                                                                        ),
+                                                                    border: Border.all(
+                                                                      color:
+                                                                          isActive
+                                                                          ? genderColor.withValues(
+                                                                              alpha: 0.8,
+                                                                            )
+                                                                          : (isDark
+                                                                                ? Colors.white12
+                                                                                : Colors.black12),
+                                                                      width:
+                                                                          isActive
+                                                                          ? 1.5
+                                                                          : 1,
+                                                                    ),
+                                                                  ),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Container(
+                                                                        width:
+                                                                            40,
+                                                                        height:
+                                                                            40,
+                                                                        decoration: BoxDecoration(
+                                                                          borderRadius: BorderRadius.circular(
+                                                                            12,
+                                                                          ),
+                                                                          border: Border.all(
+                                                                            color:
+                                                                                genderColor,
+                                                                            width:
+                                                                                1.2,
+                                                                          ),
+                                                                        ),
+                                                                        child: Icon(
+                                                                          genderIcon,
+                                                                          color:
+                                                                              genderColor,
+                                                                          size:
+                                                                              22,
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        width:
+                                                                            12,
+                                                                      ),
+                                                                      Expanded(
+                                                                        child: Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
+                                                                          children: [
+                                                                            Text(
+                                                                              acc.anonymousUsername,
+                                                                              style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                color: textCol,
+                                                                              ),
+                                                                            ),
+                                                                            Text(
+                                                                              '${acc.amomimusId} · ${acc.gender}',
+                                                                              style: TextStyle(
+                                                                                fontSize: 11,
+                                                                                color: genderColor,
+                                                                                fontWeight: FontWeight.w500,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      if (isActive)
+                                                                        Icon(
+                                                                          Icons
+                                                                              .check_circle,
+                                                                          color:
+                                                                              genderColor,
+                                                                          size:
+                                                                              20,
+                                                                        ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }).toList(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  const SizedBox(height: 8),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -596,7 +460,7 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                             vertical: 12,
                           ),
                           child: InkWell(
-                            onTap: () => _showRequestsBottomSheet(
+                            onTap: () => showRequestsBottomSheet(
                               context,
                               reqManager,
                               themeProvider,
@@ -613,7 +477,9 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                                     : Colors.white,
                                 borderRadius: BorderRadius.circular(30),
                                 border: Border.all(
-                                  color: dynamicAccentColor.withValues(alpha: 0.5),
+                                  color: dynamicAccentColor.withValues(
+                                    alpha: 0.5,
+                                  ),
                                   width: 1.5,
                                 ),
                               ),
@@ -644,7 +510,7 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Text(
-                                      '${context.watch<LanguageManager>().getString('chat_requests')} (${requests.length})',
+                                      '${t.chat_requests} (${requests.length})',
                                       style: TextStyle(
                                         color: themeProvider.isDarkMode
                                             ? Colors.white
@@ -704,237 +570,21 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                   alignment: Alignment.topCenter,
                   child: Opacity(
                     opacity: _headerOpacity,
-                    child: expandableMiniIsland(),
+                    child: ChatHomeMiniIsland(
+                      isExpanded: _isIslandExpanded,
+                      onToggle: () {
+                        setState(() {
+                          _isIslandExpanded = !_isIslandExpanded;
+                        });
+                      },
+                      themeProvider: themeProvider,
+                      currentSurface: currentSurface,
+                      dynamicAccentColor: dynamicAccentColor,
+                    ),
                   ),
                 ),
               ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-// Widget Komponen Item Chat / List Tile Orang
-class ChatListTileWidget extends StatelessWidget {
-  final ChatPreview chat;
-  const ChatListTileWidget({super.key, required this.chat});
-
-  @override
-  Widget build(BuildContext context) {
-    final themeProvider = context.watch<AmomimusDarkTheme>();
-    final isDark = themeProvider.isDarkMode;
-
-    final Color tileBg = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
-    final Color textColor = isDark ? Colors.white : Colors.black87;
-    final Color subTextColor = isDark
-        ? AmomimusDarkTheme.textSecondary
-        : Colors.black54;
-
-    // Get the target user's gender for dynamic styling
-    final accountManager = context.watch<AccountManager>();
-    final targetAccount = accountManager.accounts.firstWhere(
-      (acc) => acc.amomimusId == chat.username,
-      orElse: () => UserAccount(
-        email: '',
-        realUsername: '',
-        anonymousUsername: '',
-        amomimusId: '',
-        gender: 'Amo',
-        registrationDate: '',
-        isDemo: false,
-      ),
-    );
-    final targetGender = targetAccount.gender;
-    final dynamicTileIcon = GenderHelpers.getGenderIcon(targetGender);
-    final dynamicTileColor = GenderHelpers.getGenderColor(targetGender);
-
-    final Color customBorderColor = (chat.unreadCount > 0)
-        ? dynamicTileColor
-        : dynamicTileColor.withValues(alpha: 0.5);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Dismissible(
-        key: Key(chat.username),
-        direction: DismissDirection.endToStart,
-        background: Container(
-          alignment: Alignment.centerRight,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          decoration: BoxDecoration(
-            color: Colors.redAccent.withValues(alpha: 0.8),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: const Icon(
-            Icons.delete_outline,
-            color: Colors.white,
-            size: 28,
-          ),
-        ),
-        confirmDismiss: (direction) async {
-          return await showDialog(
-            context: context,
-            builder: (BuildContext dialogContext) {
-              return AlertDialog(
-                backgroundColor: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
-                title: Text(context.read<LanguageManager>().getString('delete_chat_title'), style: TextStyle(color: isDark ? Colors.white : Colors.black)),
-                content: Text("${context.read<LanguageManager>().getString('delete_chat_confirm_prefix')}${chat.name}${context.read<LanguageManager>().getString('delete_chat_confirm_suffix')}", style: TextStyle(color: isDark ? Colors.white70 : Colors.black87)),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(false),
-                    child: Text(context.read<LanguageManager>().getString('cancel'), style: const TextStyle(color: Colors.grey)),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(dialogContext).pop(true),
-                    child: Text(context.read<LanguageManager>().getString('delete'), style: const TextStyle(color: Colors.redAccent)),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-        onDismissed: (direction) {
-          context.read<ChatModel>().deleteChat(chat.username);
-          context.read<ChatRequestManager>().deleteRequestWith(chat.username);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${context.read<LanguageManager>().getString('chat_deleted_prefix')}${chat.name}${context.read<LanguageManager>().getString('chat_deleted_suffix')}'),
-              duration: const Duration(seconds: 2),
-            ),
-          );
-        },
-        child: InkWell(
-          onTap: () {
-            context.read<ChatModel>().markAsRead(chat.username);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    AmomimusApp6(username: chat.username, name: chat.name),
-              ),
-            );
-          },
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            decoration: BoxDecoration(
-              color: tileBg,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: customBorderColor.withValues(alpha: 0.7),
-                width: 1.8,
-              ),
-            ),
-            child: Row(
-              children: [
-                // Avatar Kotak Melengkung + Indikator Online mirip `image_d3b1e5.png`
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: dynamicTileColor, width: 1.2),
-                      ),
-                      child: Icon(
-                        dynamicTileIcon,
-                        color: dynamicTileColor,
-                        size: 28,
-                      ),
-                    ),
-                    if (chat.isOnline)
-                      Positioned(
-                        bottom: -1,
-                        right: -1,
-                        child: Container(
-                          width: 12,
-                          height: 12,
-                          decoration: BoxDecoration(
-                            color: Colors.green,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: tileBg, width: 1.5),
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                const SizedBox(width: 14),
-
-                // Detail Nama dan Pesan Terakhir
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            (targetAccount.anonymousUsername.isNotEmpty)
-                                ? targetAccount.anonymousUsername
-                                : chat.name,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: textColor,
-                            ),
-                          ),
-                          Text(
-                            chat.time,
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: subTextColor.withValues(alpha: 0.6),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        chat.username,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: AmomimusDarkTheme.policeLineYellow.withValues(alpha: 0.5),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        chat.lastMessage.startsWith('[STICKER]:') ? '[STICKER]' : chat.lastMessage,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: subTextColor,
-                          fontFamily: 'serif',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                // Badge Pesan Belum Dibaca (jika ada)
-                if (chat.unreadCount > 0) ...[
-                  const SizedBox(width: 10),
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: const BoxDecoration(
-                      color: AmomimusDarkTheme.primaryPurple,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      "${chat.unreadCount}",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
         ),
       ),
     );
@@ -974,7 +624,7 @@ class ParticleBackgroundPainter extends CustomPainter {
       double x = particle.xPercent * size.width;
       double y = yFraction * size.height;
 
-      paint.color = color.withValues(alpha: color.opacity * particle.opacityFactor);
+      paint.color = color.withValues(alpha: color.a * particle.opacityFactor);
       canvas.drawCircle(Offset(x, y), particle.size, paint);
     }
   }

@@ -2,8 +2,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:amomimus/i18n/strings.g.dart';
 
 import 'welcome_form_screen.dart';
+import '../widgets/custom_input_field.dart';
 
 class AmomimusApp3 extends StatefulWidget {
   const AmomimusApp3({super.key});
@@ -82,7 +84,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                 children: [
                   RichText(
                     text: const TextSpan(
-                      text: 'Form ',
+                      text: 'Validation ',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w700,
@@ -91,7 +93,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                       ),
                       children: [
                         TextSpan(
-                          text: 'Validation',
+                          text: 'Form',
                           style: TextStyle(
                             color: Color(0xFFFFD54F),
                             fontWeight: FontWeight.w800,
@@ -126,8 +128,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                     children: [
                       TextButton(
                         onPressed: () => Navigator.pop(dialogContext),
-                        child: const Text(
-                          'Batal',
+                        child: Text(Translations.of(context).cancel,
                           style: TextStyle(
                             color: Color(0xff9e9bc2),
                             fontWeight: FontWeight.w600,
@@ -165,8 +166,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                             );
                           }
                         },
-                        child: const Text(
-                          'Lanjut',
+                        child: Text(Translations.of(context).continue_btn,
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ),
                       ),
@@ -283,9 +283,20 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                       label: 'FULL NAME',
                       hintText: 'Input your full name here',
                       controller: _nameController,
-                      validator: (v) => v == null || v.isEmpty
-                          ? 'Your name is required'
-                          : null,
+                      textCapitalization: TextCapitalization.words,
+                      validator: (v) {
+                        if (v == null || v.isEmpty) {
+                          return 'Your name is required';
+                        }
+                        if (v.trim().isEmpty) {
+                          return 'Your name cannot be just spaces';
+                        }
+                        final firstChar = v.trim()[0];
+                        if (firstChar.toUpperCase() != firstChar) {
+                          return 'The first letter must be capitalized';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 20),
                     CustomInputField(
@@ -478,126 +489,6 @@ class _AmomimusApp3State extends State<AmomimusApp3>
           ),
         ),
         const Expanded(child: Divider()),
-      ],
-    );
-  }
-}
-
-class CustomInputField extends StatefulWidget {
-  final String label;
-  final String hintText;
-  final TextEditingController controller;
-  final FormFieldValidator<String>? validator;
-  final TextInputType? keyboardType;
-  final Color focusedBorderColor;
-  final bool isPassword;
-
-  const CustomInputField({
-    super.key,
-    required this.label,
-    required this.hintText,
-    required this.controller,
-    this.validator,
-    this.keyboardType,
-    this.focusedBorderColor = const Color(0xFFFFD54F),
-    this.isPassword = false,
-  });
-
-  @override
-  State<CustomInputField> createState() => _CustomInputFieldState();
-}
-
-class _CustomInputFieldState extends State<CustomInputField> {
-  bool _obscureText = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Builder(
-          builder: (context) {
-            final words = widget.label.split(' ');
-            if (words.length == 1) {
-              return Text(
-                widget.label,
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.2,
-                  color: Color(0xff121212),
-                ),
-              );
-            }
-            return RichText(
-              text: TextSpan(
-                text: '${words.first} ',
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.2,
-                  color: Color(0xff6c52a3),
-                ),
-                children: [
-                  TextSpan(
-                    text: words.skip(1).join(' '),
-                    style: const TextStyle(color: Color(0xff121212)),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: widget.controller,
-          style: const TextStyle(color: Color(0xff121212)),
-          validator: widget.validator,
-          keyboardType: widget.keyboardType,
-          obscureText: widget.isPassword ? _obscureText : false,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          decoration: InputDecoration(
-            hintText: widget.hintText,
-            hintStyle: const TextStyle(color: Color(0xffdadada), fontSize: 14),
-            filled: true,
-            fillColor: const Color(0xfff8f6fc),
-            contentPadding: const EdgeInsets.all(16),
-            suffixIcon: widget.isPassword
-                ? IconButton(
-                    icon: Icon(
-                      _obscureText
-                          ? Icons.visibility_off_rounded
-                          : Icons.visibility_rounded,
-                      color: const Color(0xff9e9bc2),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                  )
-                : null,
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Color(0xffe1dbec)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(
-                color: widget.focusedBorderColor,
-                width: 2.0,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Colors.redAccent),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Colors.red, width: 2),
-            ),
-          ),
-        ),
       ],
     );
   }

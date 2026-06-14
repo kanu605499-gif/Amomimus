@@ -5,6 +5,7 @@ class PreferenceHandler {
   static const _keyIsLogin = "isLogin";
   static const _keyHasSeenOnboarding = "hasSeenOnboarding";
   static const _keyIsDarkMode = "isDarkMode";
+  static const _keyLanguage = "language";
 
   static Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -16,6 +17,14 @@ class PreferenceHandler {
 
   static bool get isDarkMode {
     return _prefs.getBool(_keyIsDarkMode) ?? true; // Default to dark mode
+  }
+
+  static Future<void> setLanguage(String lang) async {
+    await _prefs.setString(_keyLanguage, lang);
+  }
+
+  static String? get language {
+    return _prefs.getString(_keyLanguage);
   }
 
   static Future<void> setLogin(bool isLogin) async {

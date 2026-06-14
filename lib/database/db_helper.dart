@@ -97,4 +97,25 @@ class DBHelper {
     }
     return 0; // 0 rows deleted
   }
+
+  Future<bool> updateCredentials(UserModelSql updatedUser) async {
+    try {
+      final users = await getAllUsers();
+      final index = users.indexWhere((u) => u.email == updatedUser.email);
+      
+      if (index != -1) {
+        users[index] = updatedUser;
+        final prefs = await _prefs;
+        await prefs.setString(
+          _usersKey, 
+          jsonEncode(users.map((u) => u.toMap()).toList())
+        );
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print("Error updating credentials: $e");
+      return false;
+    }
+  }
 }

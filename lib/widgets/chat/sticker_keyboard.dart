@@ -1,8 +1,9 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:amomimus/i18n/strings.g.dart';
 
 import '../../amomimusdark.dart';
-import '../../language/language_manager.dart';
 import '../../models/sticker_batch_model.dart';
 import '../../services/account_manager.dart';
 
@@ -20,11 +21,13 @@ class StickerKeyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     if (!isExpanded) return const SizedBox.shrink();
 
     final themeProvider = context.watch<AmomimusDarkTheme>();
     final isDark = themeProvider.isDarkMode;
-    final currentSurface = isDark ? AmomimusDarkTheme.surfaceDark : Colors.grey[200]!;
+    final currentSurface = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white.withValues(alpha: 0.85);
     final dynamicAccentColor = isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
 
     final accountManager = context.watch<AccountManager>();
@@ -37,166 +40,173 @@ class StickerKeyboard extends StatelessWidget {
 
     final List<Map<String, dynamic>> emojiCategories = [
       {
-        'name': 'Smileys & Emotion',
+        'name': t.smileys_emotion,
         'emojis': ['😀','😃','😄','😁','😆','😅','😂','🤣','🥲','☺️','😊','😇','🙂','🙃','😉','😌','😍','🥰','😘','😗','😙','😚','😋','😛','😝','😜','🤪','🤨','🧐','🤓','😎','🥸','🤩','🥳','😏','😒','😞','😔','😟','😕','🙁','☹️','😣','😖','😫','😩','🥺','😢','😭','😤','😠','😡','🤬','🤯','😳','🥵','🥶','😱','😨','😰','😥','😓','🤗','🤔','🤭','🤫','🤥','😶','😐','😑','😬','🙄','😯','😦','😧','😮','😲','🥱','😴','🤤','😪','😵','🤐','🥴','🤢','🤮','🤧','😷','🤒','🤕','🤑','🤠','😈','👿','👹','👺','🤡','💩','👻','💀','☠️','👽','👾','🤖','🎃','😺','😸','😹','😻','😼','😽','🙀','😿','😾']
       },
       {
-        'name': 'People & Body',
+        'name': t.people_body,
         'emojis': ['👋','🤚','🖐','✋','🖖','👌','🤌','🤏','✌️','🤞','🤟','🤘','🤙','👈','👉','👆','🖕','👇','☝️','👍','👎','✊','👊','🤛','🤜','👏','🙌','👐','🤲','🤝','🙏','✍️','💅','🤳','💪','🦾','🦿','🦵','🦶','👂','🦻','👃','🧠','🫀','🫁','🦷','🦴','👀','👁','👅','👄']
       },
       {
-        'name': 'Animals & Nature',
+        'name': t.animals_nature,
         'emojis': ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐻‍❄️','🐨','🐯','🦁','🐮','🐷','🐽','🐸','🐵','🙈','🙉','🙊','🐒','🐔','🐧','🐦','🐤','🐣','🐥','🦆','🦅','🦉','🦇','🐺','🐗','🐴','🦄','🐝','🪱','🐛','🦋','🐌','🐞','🐜','🪰','🪲','🪳','🦟','🦗','🕷','🕸','🦂','🐢','🐍','🦎','🦖','🦕','🐙','🦑','🦐','🦞','🦀','🐡','🐠','🐟','🐬','🐳','🐋','🦈','🦭','🐊','🐅','🐆','🦓','🦍','🦧','🦣','🐘','🦛','🦏','🐪','🐫','🦒','🦘','🦬','🐃','🐂','🐄','🐎','🐖','🐏','🐑','🦙','🐐','🦌','🐕','🐩','🦮','🐕‍🦺','🐈','🐈‍⬛','🪶','🐓','🦃','🦤','🦚','🦜','🦢','🦩','🕊','🐇','🦝','🦨','🦡','🦫','🦦','🦥','🐁','🐀','🐿','🦔','🐾','🐉','🐲','🌵','🎄','🌲','🌳','🌴','🪵','🌱','🌿','☘️','🍀','🎍','🪴','🎋','🍃','🍂','🍁','🍄','🐚','🪨','🌾','💐','🌷','🌹','🥀','🌺','🌸','🌼','🌻','🌞','🌝','🌛','🌜','🌚','🌕','🌖','🌗','🌘','🌑','🌒','🌓','🌔','🌙','🌎','🌍','🌏','🪐','💫','⭐️','🌟','✨','⚡️','☄️','💥','🔥','🌪','🌈','☀️','🌤','⛅️','🌥','☁️','🌦','🌧','⛈','🌩','🌨','❄️','☃️','⛄️','🌬','💨','💧','💦','☔️','☂️','🌊','🌫']
       },
       {
-        'name': 'Food & Drink',
+        'name': t.food_drink,
         'emojis': ['🍏','🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🫐','🍈','🍒','🍑','🥭','🍍','🥥','🥝','🍅','🍆','🥑','🥦','🥬','🥒','🌶','🫑','🌽','🥕','🫒','🧄','🧅','🥔','🍠','🥐','🥯','🍞','🥖','🥨','🧀','🥚','🍳','🧈','🥞','🧇','🥓','🥩','🍗','🍖','🌭','🍔','🍟','🍕','🫓','🥪','🥙','🧆','🌮','🌯','🫔','🥗','🥘','🫕','🥫','🍝','🍜','🍲','🍛','🍣','🍱','🥟','🦪','🍤','🍙','🍚','🍘','🍥','🥠','🥮','🍢','🍡','🍧','🍨','🍦','🥧','🧁','🍰','🎂','🍮','🍭','🍬','🍫','🍿','🍩','🍪','🌰','🥜','🍯','🥛','🍼','🫖','☕️','🍵','🧃','🥤','🧋','🍶','🍺','🍻','🥂','🍷','🥃','🍸','🍹','🧉','🍾','🧊','🥄','🍴','🍽','🥣','🥡','🥢','🧂']
       },
     ];
 
-    return Container(
-      height: 250,
-      decoration: BoxDecoration(
-        color: currentSurface,
-        border: Border(
-          top: BorderSide(
-            color: isDark ? Colors.white12 : Colors.black12,
-            width: 1,
-          ),
-        ),
-      ),
-      child: DefaultTabController(
-        length: 2,
-        child: Column(
-          children: [
-            TabBar(
-              indicatorColor: dynamicAccentColor,
-              labelColor: dynamicAccentColor,
-              unselectedLabelColor: isDark ? Colors.grey[500] : Colors.grey[600],
-              tabs: [
-                Tab(text: context.read<LanguageManager>().getString('emojis')),
-                Tab(text: context.read<LanguageManager>().getString('my_stickers')),
-              ],
-            ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  ListView.builder(
-                    itemCount: emojiCategories.length,
-                    itemBuilder: (context, index) {
-                      final category = emojiCategories[index];
-                      final emojis = category['emojis'] as List<String>;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            child: Text(
-                              category['name'],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: isDark ? Colors.white54 : Colors.black54,
-                              ),
-                            ),
-                          ),
-                          GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 7,
-                            ),
-                            itemCount: emojis.length,
-                            itemBuilder: (context, gridIndex) {
-                              final emoji = emojis[gridIndex];
-                              return InkWell(
-                                onTap: () {
-                                  messageController.text += emoji;
-                                },
-                                child: Center(
-                                  child: Text(emoji, style: const TextStyle(fontSize: 24)),
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                        ],
-                      );
-                    },
-                  ),
-                  ownedBatches.isEmpty
-                      ? Center(
-                          child: Text(
-                            context.read<LanguageManager>().getString('no_stickers_owned'),
-                            style: TextStyle(color: isDark ? Colors.white54 : Colors.black54),
-                          ),
-                        )
-                      : ListView.builder(
-                          itemCount: ownedBatches.length,
-                          itemBuilder: (context, index) {
-                            final batch = ownedBatches[index];
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                  child: Text(
-                                    batch.name,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                      color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 90,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                                    itemCount: batch.stickers.length,
-                                    itemBuilder: (context, sIndex) {
-                                      final sticker = batch.stickers[sIndex];
-                                      return GestureDetector(
-                                        onTap: () {
-                                          onSendSticker(sticker.imageAsset);
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(right: 12.0),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(12),
-                                              color: isDark ? Colors.black12 : Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black.withValues(alpha: 0.05),
-                                                  blurRadius: 4,
-                                                  offset: const Offset(0, 2),
-                                                ),
-                                              ],
-                                            ),
-                                            padding: const EdgeInsets.all(8),
-                                            child: Image.asset(
-                                              sticker.imageAsset,
-                                              width: 70,
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Divider(height: 1, color: isDark ? Colors.white12 : Colors.black12),
-                              ],
-                            );
-                          },
-                        ),
-                ],
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          height: 250,
+          decoration: BoxDecoration(
+            color: currentSurface,
+            border: Border(
+              top: BorderSide(
+                color: isDark ? Colors.white12 : Colors.black12,
+                width: 1,
               ),
             ),
-          ],
+          ),
+          child: DefaultTabController(
+            length: 2,
+            child: Column(
+              children: [
+                TabBar(
+                  indicatorColor: dynamicAccentColor,
+                  labelColor: dynamicAccentColor,
+                  unselectedLabelColor: isDark ? Colors.grey[500] : Colors.grey[600],
+                  tabs: [
+                    Tab(text: t.emojis),
+                    Tab(text: t.my_stickers),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      ListView.builder(
+                        padding: const EdgeInsets.only(bottom: 40),
+                        itemCount: emojiCategories.length,
+                        itemBuilder: (context, index) {
+                          final category = emojiCategories[index];
+                          final emojis = category['emojis'] as List<String>;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                child: Text(
+                                  category['name'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: isDark ? Colors.white54 : Colors.black54,
+                                  ),
+                                ),
+                              ),
+                              GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: const EdgeInsets.symmetric(horizontal: 8),
+                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 7,
+                                ),
+                                itemCount: emojis.length,
+                                itemBuilder: (context, gridIndex) {
+                                  final emoji = emojis[gridIndex];
+                                  return InkWell(
+                                    onTap: () {
+                                      messageController.text += emoji;
+                                    },
+                                    child: Center(
+                                      child: Text(emoji, style: TextStyle(fontSize: 24, color: isDark ? Colors.white : Colors.black)),
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                            ],
+                          );
+                        },
+                      ),
+                      ownedBatches.isEmpty
+                          ? Center(
+                              child: Text(
+                                t.no_stickers_owned,
+                                style: TextStyle(color: isDark ? Colors.white54 : Colors.black54),
+                              ),
+                            )
+                          : ListView.builder(
+                              padding: const EdgeInsets.only(bottom: 40),
+                              itemCount: ownedBatches.length,
+                              itemBuilder: (context, index) {
+                                final batch = ownedBatches[index];
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                      child: Text(
+                                        batch.name,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 90,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                                        itemCount: batch.stickers.length,
+                                        itemBuilder: (context, sIndex) {
+                                          final sticker = batch.stickers[sIndex];
+                                          return GestureDetector(
+                                            onTap: () {
+                                              onSendSticker(sticker.imageAsset);
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(right: 12.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  color: isDark ? Colors.black12 : Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black.withValues(alpha: 0.05),
+                                                      blurRadius: 4,
+                                                      offset: const Offset(0, 2),
+                                                    ),
+                                                  ],
+                                                ),
+                                                padding: const EdgeInsets.all(8),
+                                                child: Image.asset(
+                                                  sticker.imageAsset,
+                                                  width: 70,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Divider(height: 1, color: isDark ? Colors.white12 : Colors.black12),
+                                  ],
+                                );
+                              },
+                            ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

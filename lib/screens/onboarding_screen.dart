@@ -1,22 +1,10 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:amomimus/database/preference_handler.dart';
 import 'package:amomimus/screens/login.dart'; // AmomimusApp2 (Login)
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:amomimus/models/user_indicator_model.dart'; // Colors
-import 'package:provider/provider.dart';
-import 'package:amomimus/language/language_manager.dart';
-
-String _getText(BuildContext context, String key, String fallback, bool fromDrawer) {
-  if (fromDrawer) {
-    try {
-      return context.watch<LanguageManager>().getString(key);
-    } catch (e) {
-      return fallback;
-    }
-  }
-  return fallback;
-}
 
 class OnboardingScreen extends StatefulWidget {
   final bool fromDrawer;
@@ -44,6 +32,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -74,7 +64,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: TextButton(
                 onPressed: _finishOnboarding,
                 child: Text(
-                  _getText(context, 'skip', 'Skip', widget.fromDrawer),
+                  t.skip,
                   style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
@@ -157,6 +147,8 @@ class _Slide1WelcomeIconsState extends State<_Slide1WelcomeIcons> with SingleTic
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     return Container(
       color: Colors.white,
       child: Center(
@@ -195,7 +187,7 @@ class _Slide1WelcomeIconsState extends State<_Slide1WelcomeIcons> with SingleTic
             child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                text: _getText(context, 'welcome_to', 'Welcome to ', widget.fromDrawer),
+                text: t.welcome_to,
                 style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.black),
                 children: const [
                   TextSpan(
@@ -211,7 +203,7 @@ class _Slide1WelcomeIconsState extends State<_Slide1WelcomeIcons> with SingleTic
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: Text(
-              _getText(context, 'safe_space_desc', "A safe space to share your thoughts, ask questions, and connect with others.", widget.fromDrawer),
+              t.safe_space_desc,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16, color: Colors.black54, height: 1.5),
             ),
@@ -273,6 +265,8 @@ class _Slide2IdentityProtectionState extends State<_Slide2IdentityProtection> wi
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     return Container(
       color: Colors.white,
       child: Center(
@@ -298,7 +292,7 @@ class _Slide2IdentityProtectionState extends State<_Slide2IdentityProtection> wi
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                  text: _getText(context, 'identity_hidden_desc_1', "Your real identity is hidden beneath an ", widget.fromDrawer),
+                  text: t.identity_hidden_desc_1,
                   style: const TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.w600,
@@ -309,13 +303,13 @@ class _Slide2IdentityProtectionState extends State<_Slide2IdentityProtection> wi
                       text: "Amomimus",
                       style: TextStyle(color: Color(0xff684ca3)),
                     ),
-                    TextSpan(text: _getText(context, 'identity_hidden_desc_2', " name.", widget.fromDrawer)),
+                    TextSpan(text: t.identity_hidden_desc_2),
                   ],
                 ),
               ),
               const SizedBox(height: 16),
               Text(
-                _getText(context, 'identity_protected_desc', "We ensure your identity is protected.\nChat freely without worrying about who is on the other side.", widget.fromDrawer),
+                t.identity_protected_desc,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 16, height: 1.5),
               ),
@@ -406,6 +400,8 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerP
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     return Container(
       color: Colors.black,
       child: Stack(
@@ -427,9 +423,9 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerP
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                padding: const EdgeInsets.only(bottom: 20),
+                padding: const EdgeInsets.only(bottom: 20, left: 40, right: 40),
                 child: Text(
-                  _getText(context, 'intro_indicators', "Introducing Amomimus Indicators:", widget.fromDrawer),
+                  t.intro_indicators,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     fontSize: 22,
@@ -485,8 +481,8 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerP
         text: TextSpan(
           style: const TextStyle(color: Colors.white70, fontSize: 15, height: 1.5, letterSpacing: 0.3),
           children: [
-            TextSpan(text: _getText(context, 'neutral', "Neutral", widget.fromDrawer), style: const TextStyle(color: UserIndicatorHelper.cloudyColor, fontWeight: FontWeight.bold, fontSize: 16)),
-            TextSpan(text: _getText(context, 'users_participate_normally', " users who participate normally.", widget.fromDrawer)),
+            TextSpan(text: t.neutral, style: const TextStyle(color: UserIndicatorHelper.cloudyColor, fontWeight: FontWeight.bold, fontSize: 16)),
+            TextSpan(text: t.users_participate_normally),
           ],
         ),
       );
@@ -496,8 +492,8 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerP
         text: TextSpan(
           style: const TextStyle(color: Colors.white70, fontSize: 15, height: 1.5, letterSpacing: 0.3),
           children: [
-            TextSpan(text: _getText(context, 'amoral', "Amoral", widget.fromDrawer), style: const TextStyle(color: UserIndicatorHelper.ghostColor, fontWeight: FontWeight.bold, fontSize: 16)),
-            TextSpan(text: _getText(context, 'users_nonchalant', " or nonchalant users to watch out for.", widget.fromDrawer)),
+            TextSpan(text: t.amoral, style: const TextStyle(color: UserIndicatorHelper.ghostColor, fontWeight: FontWeight.bold, fontSize: 16)),
+            TextSpan(text: t.users_nonchalant),
           ],
         ),
       );
@@ -507,8 +503,8 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerP
         text: TextSpan(
           style: const TextStyle(color: Colors.white70, fontSize: 15, height: 1.5, letterSpacing: 0.3),
           children: [
-            TextSpan(text: _getText(context, 'toxic', "Toxic", widget.fromDrawer), style: const TextStyle(color: UserIndicatorHelper.noiseColor, fontWeight: FontWeight.bold, fontSize: 16)),
-            TextSpan(text: _getText(context, 'users_flagged', " users flagged by the community.", widget.fromDrawer)),
+            TextSpan(text: t.toxic, style: const TextStyle(color: UserIndicatorHelper.noiseColor, fontWeight: FontWeight.bold, fontSize: 16)),
+            TextSpan(text: t.users_flagged),
           ],
         ),
       );
@@ -579,6 +575,8 @@ class _Slide4SafeAndRespectfulState extends State<_Slide4SafeAndRespectful> with
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     return Container(
       color: Colors.white,
       child: Padding(
@@ -601,11 +599,11 @@ class _Slide4SafeAndRespectfulState extends State<_Slide4SafeAndRespectful> with
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                text: _getText(context, 'safe_and', "Safe & ", widget.fromDrawer),
+                text: t.safe_and,
                 style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w600, color: Colors.black87),
                 children: [
                   TextSpan(
-                    text: _getText(context, 'respectful', "Respectful", widget.fromDrawer),
+                    text: t.respectful,
                     style: const TextStyle(color: Color(0xff684ca3)),
                   ),
                 ],
@@ -613,7 +611,7 @@ class _Slide4SafeAndRespectfulState extends State<_Slide4SafeAndRespectful> with
             ),
             const SizedBox(height: 16),
             Text(
-              _getText(context, 'value_privacy_desc', "We value privacy and kindness. Please follow our community rules while you explore.", widget.fromDrawer),
+              t.value_privacy_desc,
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16, color: Colors.black54),
             ),

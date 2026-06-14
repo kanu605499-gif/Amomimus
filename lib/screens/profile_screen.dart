@@ -1,3 +1,4 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +11,6 @@ import '../services/chatmodel.dart';
 import '../helpers/gender_helpers.dart';
 import '../widgets/report_dialog.dart';
 import '../models/user_model.dart';
-import '../language/language_manager.dart';
 import '../widgets/profile/profile_header_info.dart';
 import '../widgets/profile/locked_profile_view.dart';
 import '../widgets/profile/profile_bio_section.dart';
@@ -18,6 +18,7 @@ import '../widgets/profile/profile_vault_section.dart';
 import '../widgets/profile/profile_recent_resonates.dart';
 import '../widgets/profile/profile_indicator_card.dart';
 import 'fake_pdf_screen.dart';
+import 'settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String? targetUserId;
@@ -70,6 +71,8 @@ class _ProfileScreenState extends State<ProfileScreen>
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     final isDark = Provider.of<AmomimusDarkTheme>(context).isDarkMode;
     final accountManager = Provider.of<AccountManager>(context);
     final reqManager = Provider.of<ChatRequestManager>(context);
@@ -119,8 +122,8 @@ class _ProfileScreenState extends State<ProfileScreen>
 
     if (user == null) {
       return Scaffold(
-        appBar: AppBar(title: Text(context.watch<LanguageManager>().getString('profile'))),
-        body: Center(child: Text(context.watch<LanguageManager>().getString('no_active_user'))),
+        appBar: AppBar(title: Text(t.profile)),
+        body: Center(child: Text(t.no_active_user)),
       );
     }
 
@@ -131,7 +134,7 @@ class _ProfileScreenState extends State<ProfileScreen>
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text(
-          context.watch<LanguageManager>().getString('profile'),
+          t.profile,
           style: TextStyle(
             fontFamily: 'SansSerif',
             fontWeight: FontWeight.bold,
@@ -148,8 +151,8 @@ class _ProfileScreenState extends State<ProfileScreen>
         actions: [
           IconButton(
             icon: Icon(
-              Icons.menu_book,
-              color: isDark ? AmomimusDarkTheme.textSecondary : Colors.black54,
+              Icons.search,
+              color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
             ),
             onPressed: () {
               Navigator.push(
@@ -162,6 +165,19 @@ class _ProfileScreenState extends State<ProfileScreen>
               );
             },
           ),
+          if (!isOtherUser)
+            IconButton(
+              icon: Icon(
+                Icons.settings,
+                color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                );
+              },
+            ),
           if (isOtherUser)
             IconButton(
               icon: const Icon(

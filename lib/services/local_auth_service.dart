@@ -62,4 +62,19 @@ class LocalAuthService implements AuthService {
       print("==== DB DELETE PROFILE SKIPPED: $e ====");
     }
   }
+
+  @override
+  Future<bool> updateCredentials(UserModelSql updatedCredentials) async {
+    return await _dbHelper.updateCredentials(updatedCredentials);
+  }
+
+  @override
+  Future<UserModelSql?> getCredentials(String email) async {
+    final users = await _dbHelper.getAllUsers();
+    try {
+      return users.firstWhere((u) => u.email == email);
+    } catch (_) {
+      return null;
+    }
+  }
 }

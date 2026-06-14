@@ -1,3 +1,4 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/effects/plastic_box_effect_model.dart';
@@ -6,7 +7,6 @@ import '../amomimusdark.dart';
 
 import '../models/sticker_batch_model.dart';
 import '../services/account_manager.dart';
-import '../language/language_manager.dart';
 import 'sticker_inventory_screen.dart';
 
 class StickerShopScreen extends StatefulWidget {
@@ -186,7 +186,7 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
               ),
               const SizedBox(height: 8),
               Text(
-                "Includes ${batch.stickers.length} exclusive items",
+                t.includes_exclusive_items.replaceAll('{count}', '${batch.stickers.length}'),
                 style: TextStyle(
                   fontSize: 14,
                   color: isDark ? AmomimusDarkTheme.textSecondary : Colors.grey[600],
@@ -316,14 +316,14 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                         } else {
                           final isOwned = accountManager.currentUser?.ownedStickerBatches.contains(batch.id) ?? false;
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(isOwned ? context.read<LanguageManager>().getString('already_own_batch') : context.read<LanguageManager>().getString('not_enough_coins'))),
+                            SnackBar(content: Text(isOwned ? t.already_own_batch : t.not_enough_coins)),
                           );
                         }
                       },
                       child: Text(
                         isOwned 
-                            ? context.read<LanguageManager>().getString('view') 
-                            : '${context.read<LanguageManager>().getString('buy')} - ${batch.price} Coins',
+                            ? t.view 
+                            : '${t.buy} - ${batch.price} Coins',
                         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     );
@@ -489,7 +489,9 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        "${batch.stickers.length} ${batch.stickers.isNotEmpty ? batch.stickers.first.tier : 'premium'} stickers inside.",
+                        t.stickers_inside
+                            .replaceAll('{count}', '${batch.stickers.length}')
+                            .replaceAll('{tier}', batch.stickers.isNotEmpty ? batch.stickers.first.tier : t.premium),
                         style: TextStyle(
                           fontSize: 14,
                           fontStyle: FontStyle.italic,
@@ -549,7 +551,7 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                               ),
                               child: Center(
                                 child: Text(
-                                  isOwned ? context.read<LanguageManager>().getString('view') : context.read<LanguageManager>().getString('buy'),
+                                  isOwned ? t.view : t.buy,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -576,6 +578,8 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     final amomimusTheme = Provider.of<AmomimusDarkTheme>(context);
     final isDark = amomimusTheme.isDarkMode;
     final currentUser = Provider.of<AccountManager>(context).currentUser;
@@ -583,22 +587,19 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
     return Scaffold(
       backgroundColor: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
       appBar: AppBar(
-        title: Text(
-          context.read<LanguageManager>().getString('sticker_shop'),
-          style: TextStyle(
-            color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-            fontWeight: FontWeight.bold,
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            t.sticker_shop,
+            style: TextStyle(
+              color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         backgroundColor: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
         actions: [
           // Moved the coins to the AppBar so it's clean and perfectly aligned
           Center(
@@ -677,6 +678,8 @@ class _HeartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
     final accountManager = Provider.of<AccountManager>(context);
     final isDark = Provider.of<AmomimusDarkTheme>(context).isDarkMode;
     

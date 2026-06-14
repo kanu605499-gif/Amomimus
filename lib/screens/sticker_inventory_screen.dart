@@ -4,7 +4,7 @@ import '../amomimusdark.dart';
 import '../models/sticker_batch_model.dart';
 import '../services/account_manager.dart';
 import '../models/effects/plastic_box_effect_model.dart';
-import '../language/language_manager.dart';
+import 'package:amomimus/i18n/strings.g.dart';
 
 class StickerInventoryScreen extends StatelessWidget {
   const StickerInventoryScreen({super.key});
@@ -25,7 +25,7 @@ class StickerInventoryScreen extends StatelessWidget {
       backgroundColor: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
       appBar: AppBar(
         title: Text(
-          context.read<LanguageManager>().getString('my_sticker_stash'),
+          Translations.of(context).my_sticker_stash,
           style: TextStyle(
             color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
             fontWeight: FontWeight.bold,
@@ -33,13 +33,7 @@ class StickerInventoryScreen extends StatelessWidget {
         ),
         backgroundColor: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: ownedBatches.isEmpty
           ? Center(
@@ -53,7 +47,7 @@ class StickerInventoryScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    context.read<LanguageManager>().getString('stash_empty'),
+                    Translations.of(context).stash_empty,
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -61,10 +55,15 @@ class StickerInventoryScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    context.read<LanguageManager>().getString('visit_sticker_shop'),
-                    style: TextStyle(
-                      color: isDark ? Colors.grey[700] : Colors.grey[500],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                    child: Text(
+                      Translations.of(context).visit_sticker_shop,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: isDark ? Colors.grey[700] : Colors.grey[500],
+                        height: 1.5,
+                      ),
                     ),
                   ),
                 ],
@@ -137,7 +136,7 @@ class StickerInventoryScreen extends StatelessWidget {
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
-                                    "${batch.stickers.length} ${context.read<LanguageManager>().getString('stickers')}",
+                                    "${batch.stickers.length} ${Translations.of(context).stickers}",
                                     style: TextStyle(
                                       fontSize: 13,
                                       color: isDark ? Colors.grey[400] : Colors.grey[600],
@@ -166,6 +165,7 @@ class StickerInventoryScreen extends StatelessWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
+        final t = Translations.of(context);
         return Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -193,7 +193,7 @@ class StickerInventoryScreen extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                context.read<LanguageManager>().getString('own_these_stickers'),
+                t.own_these_stickers,
                 style: TextStyle(
                   fontSize: 14,
                   color: isDark ? AmomimusDarkTheme.textSecondary : Colors.grey[600],

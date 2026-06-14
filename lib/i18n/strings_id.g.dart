@@ -1,0 +1,497 @@
+///
+/// Generated file. Do not edit.
+///
+// coverage:ignore-file
+// ignore_for_file: type=lint, unused_import
+// dart format off
+
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:slang/generated.dart';
+import 'strings.g.dart';
+
+// Path: <root>
+class TranslationsId extends Translations with BaseTranslations<AppLocale, Translations> {
+	/// You can call this constructor and build your own translation instance of this locale.
+	/// Constructing via the enum [AppLocale.build] is preferred.
+	TranslationsId({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
+		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
+		  $meta = meta ?? TranslationMetadata(
+		    locale: AppLocale.id,
+		    overrides: overrides ?? {},
+		    cardinalResolver: cardinalResolver,
+		    ordinalResolver: ordinalResolver,
+		  ),
+		  super(cardinalResolver: cardinalResolver, ordinalResolver: ordinalResolver) {
+		super.$meta.setFlatMapFunction($meta.getTranslation); // copy base translations to super.$meta
+		$meta.setFlatMapFunction(_flatMapFunction);
+	}
+
+	/// Metadata for the translations of <id>.
+	@override final TranslationMetadata<AppLocale, Translations> $meta;
+
+	/// Access flat map
+	@override dynamic operator[](String key) => $meta.getTranslation(key) ?? super.$meta.getTranslation(key);
+
+	late final TranslationsId _root = this; // ignore: unused_field
+
+	@override 
+	TranslationsId $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsId(meta: meta ?? this.$meta);
+
+	// Translations
+	@override String get app_doc => 'Dokumentasi Aplikasi';
+	@override String get contact_dev => 'Hubungi Developer';
+	@override String get language => 'Bahasa';
+	@override String get report_bug => 'Laporkan Bug';
+	@override String get exit => 'Keluar dari Sesi';
+	@override String get center => 'Pusat Bantuan Amomimus';
+	@override String get support_queries => 'Untuk Pertanyaan dan Bantuan Teknis';
+	@override String get help_support => 'BANTUAN & DUKUNGAN';
+	@override String get public_name => 'Nama Publik';
+	@override String get privacy_settings => 'Privasi & Pengaturan';
+	@override String get danger_zone => 'Zona Bahaya';
+	@override String get delete_account_warning => 'Menghapus akun akan memusnahkan semua data sesi lokal, riwayat resonansi, dan pengaturan secara permanen. Tindakan ini nggak bisa dibatalkan.';
+	@override String get privacy => 'Privasi';
+	@override String get about => 'Tentang';
+	@override String get policy => 'Kebijakan';
+	@override String get options => 'Opsi';
+	@override String get how_it_works => 'Cara Kerja Amomimus';
+	@override String get report_bug_glitch => 'Laporkan Bug / Glitch';
+	@override String get terms_of => 'Ketentuan';
+	@override String get privacy_rules_agreement => 'Perjanjian Privasi & Aturan';
+	@override String get privacy_rules_text => 'Pembaruan terakhir: Mei 2026\n\n1. Tetap Menjadi Hantu\nKamu adalah hantu di sini. Tidak ada nama asli, tidak ada nomor telepon, dan pastinya dilarang keras ngebocorin alamat atau medsos mantanmu. Ruang ini murni bebas dari drama dunia nyata.\n\nKalau kamu nggak sengaja keceplosan mengungkap identitas aslimu atau nge-doxx orang lain, jangan harap ada peringatan. Postingan itu bakal langsung dihapus, dan aksesmu mungkin ikut lenyap. Tetaplah 100% rahasia.\n\n2. Jangan Jadi Orang Menyebalkan\nMengeluh? Boleh. Nangis? Paham kok. Ngeluarin unek-unek soal kerjaan atau hidup yang lagi capek emang tujuan aplikasi ini dibuat, jadi bebas keluarin semuanya.\n\nTapi kalau sampai nyebar ujaran kebencian, ngelecehin orang, atau nge-bully orang yang lagi down? Itu tiket cepat buat kena ban. Ada batas yang jelas antara meluapkan rasa sakit dan cuma sekadar jadi troll caper.\n\n3. Nol Simpan Data\nKami nggak beli, jual, atau peduli sama data pribadimu. Apa yang terjadi di Amomimus, tetap di Amomimus. Sesi sementara kamu dienkripsi dan akan dibersihkan secara berkala dari server.\n\n4. Dilarang Spam Promosi\nPlatform ini dibikin untuk emosi manusia, bukan buat nawarin koin kripto, promosi olshop, atau spam link referral. Iklan komersial tanpa izin bakal langsung kena ban permanen di perangkat.\n\n5. Batasan Umur\nPengguna wajib berumur minimal 18 tahun buat gabung di komunitas buta ini. Konten di sini bisa aja dewasa, berat, dan tanpa filter. Jaga kesehatan mentalmu dulu sebelum baca keluh kesah orang lain.\n\n6. Pelepasan Hak Konten\nKamu punya hak atas apa yang kamu tulis, tapi dengan nge-post di sini, kamu ngasih Amomimus hak buat nampilin kontenmu secara anonim di aplikasi. Kami nggak bakal pernah ngeklaim cerita kamu sebagai properti perusahaan.\n\n7. Sistem Report dan Moderasi\nHantu aja punya batas wajar. Kalau nemu postingan yang melanggar aturan keamanan komunitas, langsung pake fitur report. Sistem otomatis dan moderator kami ngecek laporan 24/7.\n\n8. Larangan Aktivitas Ilegal\nJangan pake aplikasi ini buat merencanakan, mengoordinasi, atau promosiin tindakan ilegal, kekerasan fisik, atau bahaya di dunia nyata. Kami patuh sama aturan keamanan digital dan bakal ambil tindakan tegas kalau ada pelanggaran.\n\n9. Analitik Aplikasi\nKami cuma ngumpulin log teknis anonim (kayak laporan crash, model HP, dan bahasa sistem) biar aplikasinya jalan lancar di HP kamu. Nggak ada satu pun log ini yang bisa dilacak balik ke identitas aslimu.\n\n10. Perubahan Ketentuan\nAmomimus berhak update aturan ini kapan aja buat nyesuaiin sama aturan atau fitur baru. Kalau kamu lanjut pake aplikasinya setelah update, berarti kamu setuju ngikutin protokol hantu yang terbaru.';
+	@override String get system_language => 'Bahasa Sistem Amomimus:';
+	@override String get dob => 'Tanggal lahir:';
+	@override String get dob_required => '* Wajib – Anda harus memilih tanggal lahir Anda';
+	@override String get agreement_verified => 'Perjanjian diverifikasi';
+	@override String get ready_to_verify => 'Siap untuk memverifikasi persyaratan kami?';
+	@override String get age_warning => 'Anda harus berusia minimal 18 tahun untuk menggunakan Amomimus.';
+	@override String get accept_continue => 'Terima & Lanjutkan';
+	@override String get select_birthday_first => 'Pilih tanggal lahir Anda terlebih dahulu';
+	@override String get accept_terms_first => 'Terima persyaratannya terlebih dahulu';
+	@override String get mobile_app => 'Aplikasi Mobile Amomimus';
+	@override String get app_desc => 'Ruang aman buat sambat secara anonim, dirancang khusus untuk katarsis digital.';
+	@override String get create_your => 'Buat milik Anda';
+	@override String get anonymous_username_label => 'NAMA PENGGUNA ANONIM';
+	@override String get leave_blank_random => 'Biarkan kosong untuk nama acak';
+	@override String get enter_username_hint => 'Masukkan nama pengguna Anda';
+	@override String get id_generator_title => 'GENERATOR ID AMOMIMUS';
+	@override String get random_generate_id => 'ID Hasilkan Acak:';
+	@override String get choose_avatar_title => 'PILIH AVATAR AMOMUS ANDA';
+	@override String get incomplete_selection => 'Seleksi Tidak Lengkap';
+	@override String get proceed => 'Melanjutkan';
+	@override String get choose_avatar_first => 'Silakan pilih Avatar Amomus Anda terlebih dahulu!';
+	@override String get incomplete_selection_desc_1 => 'Anda belum';
+	@override String get incomplete_selection_desc_2 => '.\n\nAnda tidak akan dibatasi, tetapi nama khusus Anda tidak akan ditampilkan kepada Anda. Sistem akan secara otomatis menghasilkan yang acak. Apakah Anda ingin melanjutkan?';
+	@override String get you_found_easter_egg => 'Anda menemukan telur paskah';
+	@override String get developer => 'Pengembang:';
+	@override String get skip => 'Melewati';
+	@override String get welcome_to => 'Selamat Datang di';
+	@override String get safe_space_desc => 'Tempat yang aman untuk berbagi pemikiran, mengajukan pertanyaan, dan terhubung dengan orang lain.';
+	@override String get identity_hidden_desc_1 => 'Identitas asli Anda tersembunyi di bawah';
+	@override String get identity_hidden_desc_2 => 'nama.';
+	@override String get identity_protected_desc => 'Kami memastikan identitas Anda terlindungi.\nNgobrol dengan bebas tanpa mengkhawatirkan siapa yang ada di seberang sana.';
+	@override String get intro_indicators => 'Memperkenalkan Indikator Amomimus:';
+	@override String get neutral => 'Netral';
+	@override String get users_participate_normally => 'pengguna yang berpartisipasi secara normal.';
+	@override String get amoral => 'Amoral';
+	@override String get users_nonchalant => 'atau pengguna acuh tak acuh yang harus diwaspadai.';
+	@override String get toxic => 'Beracun';
+	@override String get users_flagged => 'pengguna yang ditandai oleh komunitas.';
+	@override String get safe_and => 'Aman &';
+	@override String get respectful => 'Hormat';
+	@override String get value_privacy_desc => 'Kami menghargai privasi dan kebaikan. Harap ikuti aturan komunitas kami saat Anda menjelajah.';
+	@override String get app_version => 'Versi Aplikasi:';
+	@override String get share_to_chat => 'Bagikan ke';
+	@override String get create_post => 'Buat Postingan';
+	@override String get whats_on_your_mind => 'Apa yang lagi kamu pikirin?';
+	@override String get send_post => 'Kirim Post';
+	@override String get notifications => 'Notifikasi';
+	@override String get no_notifications => 'Belum ada notifikasi';
+	@override String get no_feeds => 'Nggak ada feed yang tersedia.';
+	@override String get comments => 'Komentar';
+	@override String get no_comments => 'Belum ada komentar. Jadilah yang pertama berkomentar!';
+	@override String get add_comment => 'Tambahkan komentar...';
+	@override String get replying_to => 'Membalas ke';
+	@override String get chat_this_amomim => 'Chat dengan Amomim ini';
+	@override String get delete_post => 'Hapus postingan ini';
+	@override String get hide_feed => 'Sembunyikan feed ini';
+	@override String get report_amomim => 'Laporkan Amomim ini';
+	@override String get resonated => 'Beresonansi';
+	@override String get resonates => 'Resonansi';
+	@override String get chat_req_pending => 'Permintaan Chat Tertunda...';
+	@override String get indicator_noise_limit => 'Indikator Amomimus kamu NOISE. Permintaan chat dilarang.';
+	@override String get ghost_limit_reached => 'Batas Indikator GHOST tercapai: 7 permintaan chat per hari.';
+	@override String get initiate_chat => 'Mulai Chat';
+	@override String get confirm_chat => 'Yakin mau nge-chat sama penulis postingan ini?\n\nMereka bakal ngelihat kamu sebagai ';
+	@override String get cancel => 'Batal';
+	@override String get send_request => 'Kirim Permintaan';
+	@override String get chat_req_sent => 'Permintaan Chat Terkirim!';
+	@override String get feed_hidden => 'Feed disembunyikan.';
+	@override String get bio => 'Bio';
+	@override String get no_bio_yet => 'Belum ada bio';
+	@override String get write_bio => 'Tulis biomu di sini...';
+	@override String get select_date => 'Pilih Tanggal';
+	@override String get ok => 'OK';
+	@override String get error_format => 'Format tidak valid';
+	@override String get error_invalid => 'Tanggal tidak valid';
+	@override String get notif_resonate => 'beresonansi dengan postinganmu';
+	@override String get notif_comment => 'mengomentari postinganmu';
+	@override String get notif_reply => 'membalas komentarmu';
+	@override String get just_now => 'Baru saja';
+	@override String get bio_updated => 'Bio berhasil diupdate!';
+	@override String get coins_redemption => 'Tukar Koin';
+	@override String get redeemed_100_coins => '100 Koin berhasil ditukar!';
+	@override String get vault_merit => 'Vault & Merit';
+	@override String get my_coins => 'Koin Saya';
+	@override String get owned => 'Dimiliki';
+	@override String get sticker_stash => 'Koleksi Stiker';
+	@override String get amomimus_indicators => 'Indikator Amomimus:';
+	@override String get recent_resonates => 'Resonansi Terbaru';
+	@override String get see_all => 'Lihat Semua';
+	@override String get no_recent_resonates => 'Nggak ada resonansi baru-baru ini.';
+	@override String get all_resonates => 'Semua Resonansi';
+	@override String get no_resonates_yet => 'Belum ada resonansi';
+	@override String get delete_post_title => 'Hapus Postingan';
+	@override String get delete_post_confirm => 'Yakin mau hapus postingan ini? Ini bakal ngehapus postingannya dari feed.';
+	@override String get delete_account => 'Hapus Akun';
+	@override String get delete => 'Hapus';
+	@override String get profile_locked => 'Profil Terkunci';
+	@override String get locked_desc => 'Kamu butuh koneksi chat sama pengguna ini buat ngelihat profil lengkapnya.';
+	@override String get profile => 'Profil';
+	@override String get no_active_user => 'Nggak ada pengguna aktif.';
+	@override String get incoming_requests => 'Permintaan Masuk';
+	@override String get no_incoming_requests => 'Nggak ada permintaan masuk';
+	@override String get chat_req_accepted => 'Permintaan chat diterima!';
+	@override String get messages => 'Pesan';
+	@override String get amomus_list => 'Daftar Amomus';
+	@override String get switch_account => 'Ganti Akun';
+	@override String get no_accounts_registered => 'Belum ada akun yang terdaftar.';
+	@override String get chat_requests => 'Permintaan Chat';
+	@override String get chat_request_title => 'Permintaan Chat';
+	@override String get chat_request_desc1 => 'Ngirim permintaan chat ke amomimus ini bakal nampilin username aslimu "';
+	@override String get chat_request_desc2 => '" sebagai ganti dari nama feed-mu "';
+	@override String get chat_request_desc3 => '".\n\nMereka juga bisa ngelihat profilmu kalau mereka terima.';
+	@override String get delete_chat_title => 'Hapus Chat';
+	@override String get delete_chat_confirm_prefix => 'Yakin mau hapus chat bareng ';
+	@override String get delete_chat_confirm_suffix => '?';
+	@override String get chat_deleted_prefix => 'Chat bareng ';
+	@override String get chat_deleted_suffix => ' dihapus';
+	@override String get memories => 'Memori';
+	@override String get no_memories_pinned => 'Belum ada memori yang disematkan.';
+	@override String get delete_chat_room_confirm => 'Yakin mau hapus chat ini?';
+	@override String get pin_limit_error => 'Maksimal cuma 9 memori. Lepas sematan yang lain dulu!';
+	@override String get write_message => 'Tulis pesan...';
+	@override String get reply => 'Balas';
+	@override String get doc_title => 'Dokumentasi Aplikasi';
+	@override String get doc_category_legal => 'Kebijakan Hukum & Privasi';
+	@override String get doc_rule_1_title => '1. Pengumpulan Data';
+	@override String get doc_rule_1_desc => 'Kami cuma ngumpulin data minimal yang dibutuhin buat fitur utama. Identitas anonim kamu nggak terhubung sama identitas aslimu di dunia nyata.';
+	@override String get doc_rule_2_title => '2. Enkripsi End-to-End';
+	@override String get doc_rule_2_desc => 'Semua pesan chat dienkripsi end-to-end. Kami nggak bisa baca pesan pribadimu sama sekali.';
+	@override String get doc_rule_3_title => '3. Data Sesi';
+	@override String get doc_rule_3_desc => 'Data sesi lokal disimpen secara aman di hapemu. Kalau kamu hapus data aplikasi, riwayat lokalmu bakal musnah permanen.';
+	@override String get doc_rule_4_title => '4. Layanan Pihak Ketiga';
+	@override String get doc_rule_4_desc => 'Kami nggak ngejual atau bagiin datamu sama pihak ketiga. Integrasi eksternal apa pun itu cuma buat keperluan operasional.';
+	@override String get doc_rule_5_title => '5. Tanggung Jawab Konten';
+	@override String get doc_rule_5_desc => 'Kamu bertanggung jawab penuh atas konten yang kamu posting. Amomimus nggak bertanggung jawab atas konten buatan pengguna.';
+	@override String get doc_rule_6_title => '6. Jaminan Anonimitas';
+	@override String get doc_rule_6_desc => 'Interaksi publikmu tetep anonim kecuali kamu secara sadar ngebongkar identitasmu lewat permintaan chat.';
+	@override String get doc_rule_7_title => '7. Penghapusan Akun';
+	@override String get doc_rule_7_desc => 'Kamu berhak hapus akunmu kapan aja. Tindakan ini permanen dan bakal ngehapus semua riwayat yang terkait.';
+	@override String get doc_rule_8_title => '8. Pelecehan & Kekerasan';
+	@override String get doc_rule_8_desc => 'Kami pake kebijakan zero-tolerance yang super ketat buat nindak pelecehan. Pelanggar bakal kena banned permanen.';
+	@override String get doc_rule_9_title => '9. Kekayaan Intelektual';
+	@override String get doc_rule_9_desc => 'Semua aset asli, termasuk stiker dan elemen UI, adalah hak kekayaan intelektual milik Amomimus.';
+	@override String get doc_rule_10_title => '10. Update Kebijakan';
+	@override String get doc_rule_10_desc => 'Kami berhak update ketentuan ini. Lanjut make aplikasi berarti kamu setuju sama aturan baru.';
+	@override String get unpin_memories => 'Lepas dari Memori';
+	@override String get pin_memories => 'Sematkan ke Memori';
+	@override String get report => 'Laporkan';
+	@override String get show_less => 'Tampilkan lebih sedikit';
+	@override String get show_more => 'Tampilkan lebih banyak';
+	@override String get post_detail => 'Detail Postingan';
+	@override String get sticker_shop => 'Toko Stiker';
+	@override String get view => 'Lihat';
+	@override String get buy => 'Beli';
+	@override String get unlock_stickers => 'Buka kunci stikermu di sini';
+	@override String get includes_exclusive_items => 'Termasuk {count} item eksklusif';
+	@override String get stickers_inside => '{count} {tier} stiker di dalamnya.';
+	@override String get premium => 'premium';
+	@override String get already_own_batch => 'Kamu udah punya batch ini.';
+	@override String get not_enough_coins => 'Koin nggak cukup.';
+	@override String get emojis => 'Emoji';
+	@override String get my_stickers => 'Stiker Saya';
+	@override String get no_stickers_owned => 'Belum ada stiker.';
+	@override String get sticker => 'Stiker';
+	@override String get message_deleted => 'Pesan dihapus';
+	@override String get my_sticker_stash => 'Koleksi Stiker Saya';
+	@override String get stash_empty => 'Koleksimu kosong.';
+	@override String get visit_sticker_shop => 'Kunjungi Toko Stiker buat nyari paket stiker!';
+	@override String get stickers => 'Stiker';
+	@override String get own_these_stickers => 'Kamu punya stiker ini.';
+	@override String get chosen_amomus_prefix => 'Amomus pilihanmu: ';
+	@override String get character_not_chosen => 'Karakter belum dipilih!';
+	@override String get press_back_again => 'Tekan kembali sekali lagi buat keluar';
+	@override String get ex_blocked => 'MANTAN BLOKIR';
+	@override String get blocked_users => 'Pengguna yang Diblokir';
+	@override String get previously_blocked => 'Pengguna yang Pernah Diblokir';
+	@override String get no_blocked_users => 'Kamu belum ngeblokir siapa pun.';
+	@override String get splash_shutting_down => 'MENUTUP...';
+	@override String get splash_unplug => 'cabut distopianya';
+	@override String get splash_returning => 'KEMBALI KE KENYATAAN';
+	@override String get splash_no_signal => 'TIDAK ADA SINYAL';
+	@override String get splash_stand_by => 'BERDIRI...';
+	@override String get splash_embrace => 'RANGKULAH KEBISINGAN';
+	@override String get smileys_emotion => 'Smiley & Emosi';
+	@override String get people_body => 'Orang & Tubuh';
+	@override String get animals_nature => 'Hewan & Alam';
+	@override String get food_drink => 'Makanan & Minuman';
+	@override String get no_previous_blocks => 'Nggak ada riwayat blokir.';
+	@override String get unblock => 'Buka Blokir';
+	@override String get block_again => 'Blokir Lagi';
+	@override String get error_loading_account_data => 'Gagal memuat data akun.';
+	@override String get security_auth => 'Keamanan & Autentikasi';
+	@override String get favorite_character => 'Karakter Favorit (2FA/Recovery)';
+	@override String get edit_max_1_day => 'Edit (Maks 1/hari)';
+	@override String get forget_passcode => 'Lupa Passcode';
+	@override String get reset_passcode_hint => 'Pake karakter favoritmu buat ngereset passcode.';
+	@override String get reset_passcode => 'Reset Passcode';
+	@override String get share => 'Bagikan';
+	@override String get continue_btn => 'Lanjut';
+	@override String get validation_form => 'Form Validasi';
+}
+
+/// The flat map containing all translations for locale <id>.
+/// Only for edge cases! For simple maps, use the map function of this library.
+///
+/// The Dart AOT compiler has issues with very large switch statements,
+/// so the map is split into smaller functions (512 entries each).
+extension on TranslationsId {
+	dynamic _flatMapFunction(String path) {
+		return switch (path) {
+			'app_doc' => 'Dokumentasi Aplikasi',
+			'contact_dev' => 'Hubungi Developer',
+			'language' => 'Bahasa',
+			'report_bug' => 'Laporkan Bug',
+			'exit' => 'Keluar dari Sesi',
+			'center' => 'Pusat Bantuan Amomimus',
+			'support_queries' => 'Untuk Pertanyaan dan Bantuan Teknis',
+			'help_support' => 'BANTUAN & DUKUNGAN',
+			'public_name' => 'Nama Publik',
+			'privacy_settings' => 'Privasi & Pengaturan',
+			'danger_zone' => 'Zona Bahaya',
+			'delete_account_warning' => 'Menghapus akun akan memusnahkan semua data sesi lokal, riwayat resonansi, dan pengaturan secara permanen. Tindakan ini nggak bisa dibatalkan.',
+			'privacy' => 'Privasi',
+			'about' => 'Tentang',
+			'policy' => 'Kebijakan',
+			'options' => 'Opsi',
+			'how_it_works' => 'Cara Kerja Amomimus',
+			'report_bug_glitch' => 'Laporkan Bug / Glitch',
+			'terms_of' => 'Ketentuan',
+			'privacy_rules_agreement' => 'Perjanjian Privasi & Aturan',
+			'privacy_rules_text' => 'Pembaruan terakhir: Mei 2026\n\n1. Tetap Menjadi Hantu\nKamu adalah hantu di sini. Tidak ada nama asli, tidak ada nomor telepon, dan pastinya dilarang keras ngebocorin alamat atau medsos mantanmu. Ruang ini murni bebas dari drama dunia nyata.\n\nKalau kamu nggak sengaja keceplosan mengungkap identitas aslimu atau nge-doxx orang lain, jangan harap ada peringatan. Postingan itu bakal langsung dihapus, dan aksesmu mungkin ikut lenyap. Tetaplah 100% rahasia.\n\n2. Jangan Jadi Orang Menyebalkan\nMengeluh? Boleh. Nangis? Paham kok. Ngeluarin unek-unek soal kerjaan atau hidup yang lagi capek emang tujuan aplikasi ini dibuat, jadi bebas keluarin semuanya.\n\nTapi kalau sampai nyebar ujaran kebencian, ngelecehin orang, atau nge-bully orang yang lagi down? Itu tiket cepat buat kena ban. Ada batas yang jelas antara meluapkan rasa sakit dan cuma sekadar jadi troll caper.\n\n3. Nol Simpan Data\nKami nggak beli, jual, atau peduli sama data pribadimu. Apa yang terjadi di Amomimus, tetap di Amomimus. Sesi sementara kamu dienkripsi dan akan dibersihkan secara berkala dari server.\n\n4. Dilarang Spam Promosi\nPlatform ini dibikin untuk emosi manusia, bukan buat nawarin koin kripto, promosi olshop, atau spam link referral. Iklan komersial tanpa izin bakal langsung kena ban permanen di perangkat.\n\n5. Batasan Umur\nPengguna wajib berumur minimal 18 tahun buat gabung di komunitas buta ini. Konten di sini bisa aja dewasa, berat, dan tanpa filter. Jaga kesehatan mentalmu dulu sebelum baca keluh kesah orang lain.\n\n6. Pelepasan Hak Konten\nKamu punya hak atas apa yang kamu tulis, tapi dengan nge-post di sini, kamu ngasih Amomimus hak buat nampilin kontenmu secara anonim di aplikasi. Kami nggak bakal pernah ngeklaim cerita kamu sebagai properti perusahaan.\n\n7. Sistem Report dan Moderasi\nHantu aja punya batas wajar. Kalau nemu postingan yang melanggar aturan keamanan komunitas, langsung pake fitur report. Sistem otomatis dan moderator kami ngecek laporan 24/7.\n\n8. Larangan Aktivitas Ilegal\nJangan pake aplikasi ini buat merencanakan, mengoordinasi, atau promosiin tindakan ilegal, kekerasan fisik, atau bahaya di dunia nyata. Kami patuh sama aturan keamanan digital dan bakal ambil tindakan tegas kalau ada pelanggaran.\n\n9. Analitik Aplikasi\nKami cuma ngumpulin log teknis anonim (kayak laporan crash, model HP, dan bahasa sistem) biar aplikasinya jalan lancar di HP kamu. Nggak ada satu pun log ini yang bisa dilacak balik ke identitas aslimu.\n\n10. Perubahan Ketentuan\nAmomimus berhak update aturan ini kapan aja buat nyesuaiin sama aturan atau fitur baru. Kalau kamu lanjut pake aplikasinya setelah update, berarti kamu setuju ngikutin protokol hantu yang terbaru.',
+			'system_language' => 'Bahasa Sistem Amomimus:',
+			'dob' => 'Tanggal lahir:',
+			'dob_required' => '* Wajib – Anda harus memilih tanggal lahir Anda',
+			'agreement_verified' => 'Perjanjian diverifikasi',
+			'ready_to_verify' => 'Siap untuk memverifikasi persyaratan kami?',
+			'age_warning' => 'Anda harus berusia minimal 18 tahun untuk menggunakan Amomimus.',
+			'accept_continue' => 'Terima & Lanjutkan',
+			'select_birthday_first' => 'Pilih tanggal lahir Anda terlebih dahulu',
+			'accept_terms_first' => 'Terima persyaratannya terlebih dahulu',
+			'mobile_app' => 'Aplikasi Mobile Amomimus',
+			'app_desc' => 'Ruang aman buat sambat secara anonim, dirancang khusus untuk katarsis digital.',
+			'create_your' => 'Buat milik Anda',
+			'anonymous_username_label' => 'NAMA PENGGUNA ANONIM',
+			'leave_blank_random' => 'Biarkan kosong untuk nama acak',
+			'enter_username_hint' => 'Masukkan nama pengguna Anda',
+			'id_generator_title' => 'GENERATOR ID AMOMIMUS',
+			'random_generate_id' => 'ID Hasilkan Acak:',
+			'choose_avatar_title' => 'PILIH AVATAR AMOMUS ANDA',
+			'incomplete_selection' => 'Seleksi Tidak Lengkap',
+			'proceed' => 'Melanjutkan',
+			'choose_avatar_first' => 'Silakan pilih Avatar Amomus Anda terlebih dahulu!',
+			'incomplete_selection_desc_1' => 'Anda belum',
+			'incomplete_selection_desc_2' => '.\n\nAnda tidak akan dibatasi, tetapi nama khusus Anda tidak akan ditampilkan kepada Anda. Sistem akan secara otomatis menghasilkan yang acak. Apakah Anda ingin melanjutkan?',
+			'you_found_easter_egg' => 'Anda menemukan telur paskah',
+			'developer' => 'Pengembang:',
+			'skip' => 'Melewati',
+			'welcome_to' => 'Selamat Datang di',
+			'safe_space_desc' => 'Tempat yang aman untuk berbagi pemikiran, mengajukan pertanyaan, dan terhubung dengan orang lain.',
+			'identity_hidden_desc_1' => 'Identitas asli Anda tersembunyi di bawah',
+			'identity_hidden_desc_2' => 'nama.',
+			'identity_protected_desc' => 'Kami memastikan identitas Anda terlindungi.\nNgobrol dengan bebas tanpa mengkhawatirkan siapa yang ada di seberang sana.',
+			'intro_indicators' => 'Memperkenalkan Indikator Amomimus:',
+			'neutral' => 'Netral',
+			'users_participate_normally' => 'pengguna yang berpartisipasi secara normal.',
+			'amoral' => 'Amoral',
+			'users_nonchalant' => 'atau pengguna acuh tak acuh yang harus diwaspadai.',
+			'toxic' => 'Beracun',
+			'users_flagged' => 'pengguna yang ditandai oleh komunitas.',
+			'safe_and' => 'Aman &',
+			'respectful' => 'Hormat',
+			'value_privacy_desc' => 'Kami menghargai privasi dan kebaikan. Harap ikuti aturan komunitas kami saat Anda menjelajah.',
+			'app_version' => 'Versi Aplikasi:',
+			'share_to_chat' => 'Bagikan ke',
+			'create_post' => 'Buat Postingan',
+			'whats_on_your_mind' => 'Apa yang lagi kamu pikirin?',
+			'send_post' => 'Kirim Post',
+			'notifications' => 'Notifikasi',
+			'no_notifications' => 'Belum ada notifikasi',
+			'no_feeds' => 'Nggak ada feed yang tersedia.',
+			'comments' => 'Komentar',
+			'no_comments' => 'Belum ada komentar. Jadilah yang pertama berkomentar!',
+			'add_comment' => 'Tambahkan komentar...',
+			'replying_to' => 'Membalas ke',
+			'chat_this_amomim' => 'Chat dengan Amomim ini',
+			'delete_post' => 'Hapus postingan ini',
+			'hide_feed' => 'Sembunyikan feed ini',
+			'report_amomim' => 'Laporkan Amomim ini',
+			'resonated' => 'Beresonansi',
+			'resonates' => 'Resonansi',
+			'chat_req_pending' => 'Permintaan Chat Tertunda...',
+			'indicator_noise_limit' => 'Indikator Amomimus kamu NOISE. Permintaan chat dilarang.',
+			'ghost_limit_reached' => 'Batas Indikator GHOST tercapai: 7 permintaan chat per hari.',
+			'initiate_chat' => 'Mulai Chat',
+			'confirm_chat' => 'Yakin mau nge-chat sama penulis postingan ini?\n\nMereka bakal ngelihat kamu sebagai ',
+			'cancel' => 'Batal',
+			'send_request' => 'Kirim Permintaan',
+			'chat_req_sent' => 'Permintaan Chat Terkirim!',
+			'feed_hidden' => 'Feed disembunyikan.',
+			'bio' => 'Bio',
+			'no_bio_yet' => 'Belum ada bio',
+			'write_bio' => 'Tulis biomu di sini...',
+			'select_date' => 'Pilih Tanggal',
+			'ok' => 'OK',
+			'error_format' => 'Format tidak valid',
+			'error_invalid' => 'Tanggal tidak valid',
+			'notif_resonate' => 'beresonansi dengan postinganmu',
+			'notif_comment' => 'mengomentari postinganmu',
+			'notif_reply' => 'membalas komentarmu',
+			'just_now' => 'Baru saja',
+			'bio_updated' => 'Bio berhasil diupdate!',
+			'coins_redemption' => 'Tukar Koin',
+			'redeemed_100_coins' => '100 Koin berhasil ditukar!',
+			'vault_merit' => 'Vault & Merit',
+			'my_coins' => 'Koin Saya',
+			'owned' => 'Dimiliki',
+			'sticker_stash' => 'Koleksi Stiker',
+			'amomimus_indicators' => 'Indikator Amomimus:',
+			'recent_resonates' => 'Resonansi Terbaru',
+			'see_all' => 'Lihat Semua',
+			'no_recent_resonates' => 'Nggak ada resonansi baru-baru ini.',
+			'all_resonates' => 'Semua Resonansi',
+			'no_resonates_yet' => 'Belum ada resonansi',
+			'delete_post_title' => 'Hapus Postingan',
+			'delete_post_confirm' => 'Yakin mau hapus postingan ini? Ini bakal ngehapus postingannya dari feed.',
+			'delete_account' => 'Hapus Akun',
+			'delete' => 'Hapus',
+			'profile_locked' => 'Profil Terkunci',
+			'locked_desc' => 'Kamu butuh koneksi chat sama pengguna ini buat ngelihat profil lengkapnya.',
+			'profile' => 'Profil',
+			'no_active_user' => 'Nggak ada pengguna aktif.',
+			'incoming_requests' => 'Permintaan Masuk',
+			'no_incoming_requests' => 'Nggak ada permintaan masuk',
+			'chat_req_accepted' => 'Permintaan chat diterima!',
+			'messages' => 'Pesan',
+			'amomus_list' => 'Daftar Amomus',
+			'switch_account' => 'Ganti Akun',
+			'no_accounts_registered' => 'Belum ada akun yang terdaftar.',
+			'chat_requests' => 'Permintaan Chat',
+			'chat_request_title' => 'Permintaan Chat',
+			'chat_request_desc1' => 'Ngirim permintaan chat ke amomimus ini bakal nampilin username aslimu "',
+			'chat_request_desc2' => '" sebagai ganti dari nama feed-mu "',
+			'chat_request_desc3' => '".\n\nMereka juga bisa ngelihat profilmu kalau mereka terima.',
+			'delete_chat_title' => 'Hapus Chat',
+			'delete_chat_confirm_prefix' => 'Yakin mau hapus chat bareng ',
+			'delete_chat_confirm_suffix' => '?',
+			'chat_deleted_prefix' => 'Chat bareng ',
+			'chat_deleted_suffix' => ' dihapus',
+			'memories' => 'Memori',
+			'no_memories_pinned' => 'Belum ada memori yang disematkan.',
+			'delete_chat_room_confirm' => 'Yakin mau hapus chat ini?',
+			'pin_limit_error' => 'Maksimal cuma 9 memori. Lepas sematan yang lain dulu!',
+			'write_message' => 'Tulis pesan...',
+			'reply' => 'Balas',
+			'doc_title' => 'Dokumentasi Aplikasi',
+			'doc_category_legal' => 'Kebijakan Hukum & Privasi',
+			'doc_rule_1_title' => '1. Pengumpulan Data',
+			'doc_rule_1_desc' => 'Kami cuma ngumpulin data minimal yang dibutuhin buat fitur utama. Identitas anonim kamu nggak terhubung sama identitas aslimu di dunia nyata.',
+			'doc_rule_2_title' => '2. Enkripsi End-to-End',
+			'doc_rule_2_desc' => 'Semua pesan chat dienkripsi end-to-end. Kami nggak bisa baca pesan pribadimu sama sekali.',
+			'doc_rule_3_title' => '3. Data Sesi',
+			'doc_rule_3_desc' => 'Data sesi lokal disimpen secara aman di hapemu. Kalau kamu hapus data aplikasi, riwayat lokalmu bakal musnah permanen.',
+			'doc_rule_4_title' => '4. Layanan Pihak Ketiga',
+			'doc_rule_4_desc' => 'Kami nggak ngejual atau bagiin datamu sama pihak ketiga. Integrasi eksternal apa pun itu cuma buat keperluan operasional.',
+			'doc_rule_5_title' => '5. Tanggung Jawab Konten',
+			'doc_rule_5_desc' => 'Kamu bertanggung jawab penuh atas konten yang kamu posting. Amomimus nggak bertanggung jawab atas konten buatan pengguna.',
+			'doc_rule_6_title' => '6. Jaminan Anonimitas',
+			'doc_rule_6_desc' => 'Interaksi publikmu tetep anonim kecuali kamu secara sadar ngebongkar identitasmu lewat permintaan chat.',
+			'doc_rule_7_title' => '7. Penghapusan Akun',
+			'doc_rule_7_desc' => 'Kamu berhak hapus akunmu kapan aja. Tindakan ini permanen dan bakal ngehapus semua riwayat yang terkait.',
+			'doc_rule_8_title' => '8. Pelecehan & Kekerasan',
+			'doc_rule_8_desc' => 'Kami pake kebijakan zero-tolerance yang super ketat buat nindak pelecehan. Pelanggar bakal kena banned permanen.',
+			'doc_rule_9_title' => '9. Kekayaan Intelektual',
+			'doc_rule_9_desc' => 'Semua aset asli, termasuk stiker dan elemen UI, adalah hak kekayaan intelektual milik Amomimus.',
+			'doc_rule_10_title' => '10. Update Kebijakan',
+			'doc_rule_10_desc' => 'Kami berhak update ketentuan ini. Lanjut make aplikasi berarti kamu setuju sama aturan baru.',
+			'unpin_memories' => 'Lepas dari Memori',
+			'pin_memories' => 'Sematkan ke Memori',
+			'report' => 'Laporkan',
+			'show_less' => 'Tampilkan lebih sedikit',
+			'show_more' => 'Tampilkan lebih banyak',
+			'post_detail' => 'Detail Postingan',
+			'sticker_shop' => 'Toko Stiker',
+			'view' => 'Lihat',
+			'buy' => 'Beli',
+			'unlock_stickers' => 'Buka kunci stikermu di sini',
+			'includes_exclusive_items' => 'Termasuk {count} item eksklusif',
+			'stickers_inside' => '{count} {tier} stiker di dalamnya.',
+			'premium' => 'premium',
+			'already_own_batch' => 'Kamu udah punya batch ini.',
+			'not_enough_coins' => 'Koin nggak cukup.',
+			'emojis' => 'Emoji',
+			'my_stickers' => 'Stiker Saya',
+			'no_stickers_owned' => 'Belum ada stiker.',
+			'sticker' => 'Stiker',
+			'message_deleted' => 'Pesan dihapus',
+			'my_sticker_stash' => 'Koleksi Stiker Saya',
+			'stash_empty' => 'Koleksimu kosong.',
+			'visit_sticker_shop' => 'Kunjungi Toko Stiker buat nyari paket stiker!',
+			'stickers' => 'Stiker',
+			'own_these_stickers' => 'Kamu punya stiker ini.',
+			'chosen_amomus_prefix' => 'Amomus pilihanmu: ',
+			'character_not_chosen' => 'Karakter belum dipilih!',
+			'press_back_again' => 'Tekan kembali sekali lagi buat keluar',
+			'ex_blocked' => 'MANTAN BLOKIR',
+			'blocked_users' => 'Pengguna yang Diblokir',
+			'previously_blocked' => 'Pengguna yang Pernah Diblokir',
+			'no_blocked_users' => 'Kamu belum ngeblokir siapa pun.',
+			'splash_shutting_down' => 'MENUTUP...',
+			'splash_unplug' => 'cabut distopianya',
+			'splash_returning' => 'KEMBALI KE KENYATAAN',
+			'splash_no_signal' => 'TIDAK ADA SINYAL',
+			'splash_stand_by' => 'BERDIRI...',
+			'splash_embrace' => 'RANGKULAH KEBISINGAN',
+			'smileys_emotion' => 'Smiley & Emosi',
+			'people_body' => 'Orang & Tubuh',
+			'animals_nature' => 'Hewan & Alam',
+			'food_drink' => 'Makanan & Minuman',
+			'no_previous_blocks' => 'Nggak ada riwayat blokir.',
+			'unblock' => 'Buka Blokir',
+			'block_again' => 'Blokir Lagi',
+			'error_loading_account_data' => 'Gagal memuat data akun.',
+			'security_auth' => 'Keamanan & Autentikasi',
+			'favorite_character' => 'Karakter Favorit (2FA/Recovery)',
+			'edit_max_1_day' => 'Edit (Maks 1/hari)',
+			'forget_passcode' => 'Lupa Passcode',
+			'reset_passcode_hint' => 'Pake karakter favoritmu buat ngereset passcode.',
+			'reset_passcode' => 'Reset Passcode',
+			'share' => 'Bagikan',
+			'continue_btn' => 'Lanjut',
+			'validation_form' => 'Form Validasi',
+			_ => null,
+		};
+	}
+}

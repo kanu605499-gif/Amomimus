@@ -18,7 +18,7 @@ class UserIndicatorHelper {
 
   // Ghost colors for Feed Card Label
   static const Color ghostColorDark = Color(0xFFFFE082); // Bright pastel yellow for dark theme
-  static const Color ghostColorLight = Color(0xFFF57F17); // Deep amber for light theme
+  static const Color ghostColorLight = Color(0xFFFBC02D); // Softer yellow/amber for light theme
 
   // Noise colors for Feed Card Label
   static const Color noiseColorDark = Color(0xFFD500F9); // Neon purple for dark theme

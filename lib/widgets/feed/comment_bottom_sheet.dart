@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:amomimus/amomimusdark.dart';
-import 'package:amomimus/language/language_manager.dart';
+import 'package:amomimus/i18n/strings.g.dart';
 import 'package:amomimus/models/post_model.dart';
 import 'package:amomimus/models/comment_model.dart';
 import 'package:amomimus/models/user_model.dart';
@@ -67,7 +67,7 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            context.watch<LanguageManager>().getString('comments'),
+            Translations.of(context).comments,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -78,62 +78,70 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
           if (widget.model.comments.isEmpty)
             Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Text(context.watch<LanguageManager>().getString('no_comments')),
+              child: Text(Translations.of(context).no_comments),
             )
           else
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.model.comments.length,
-              itemBuilder: (context, index) {
-                final comment = widget.model.comments[index];
-                return ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-                  title: Text(
-                    "${comment.authorName} (${comment.authorId})",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: widget.isDarkCard ? Colors.white70 : Colors.black87,
-                      fontSize: 12,
-                    ),
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (comment.replyToName != null && comment.replyToText != null)
-                        Container(
-                          margin: const EdgeInsets.only(top: 4, bottom: 4),
-                          padding: const EdgeInsets.only(left: 8),
-                          decoration: const BoxDecoration(
-                            border: Border(left: BorderSide(color: Colors.grey, width: 2)),
-                          ),
-                          child: Text(
-                            "${context.watch<LanguageManager>().getString('replying_to')} ${comment.replyToName}:\n${comment.replyToText}",
-                            style: const TextStyle(fontSize: 11, color: Colors.grey),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+            Flexible(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.45,
+                ),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: widget.model.comments.length,
+                  itemBuilder: (context, index) {
+                    final comment = widget.model.comments[index];
+                    return ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+                      title: Text(
+                        "${comment.authorName} (${comment.authorId})",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: widget.isDarkCard ? Colors.white70 : Colors.black87,
+                          fontSize: 12,
                         ),
-                      Text(
-                        comment.text,
-                        style: TextStyle(color: widget.isDarkCard ? Colors.white : Colors.black),
                       ),
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProfileScreen(targetUserId: comment.authorId),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (comment.replyToName != null && comment.replyToText != null)
+                            Container(
+                              margin: const EdgeInsets.only(top: 4, bottom: 4),
+                              padding: const EdgeInsets.only(left: 8),
+                              decoration: const BoxDecoration(
+                                border: Border(left: BorderSide(color: Colors.grey, width: 2)),
+                              ),
+                              child: Text(
+                                "${Translations.of(context).replying_to} ${comment.replyToName}:\n${comment.replyToText}",
+                                style: const TextStyle(fontSize: 11, color: Colors.grey),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          Text(
+                            comment.text,
+                            style: TextStyle(color: widget.isDarkCard ? Colors.white : Colors.black),
+                          ),
+                        ],
                       ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(targetUserId: comment.authorId),
+                          ),
+                        );
+                      },
+                      onLongPress: () {
+                        setState(() {
+                          _replyTarget = comment;
+                        });
+                      },
                     );
                   },
-                  onLongPress: () {
-                    setState(() {
-                      _replyTarget = comment;
-                    });
-                  },
-                );
-              },
+                ),
+              ),
             ),
           const Divider(),
           if (_replyTarget != null)
@@ -146,7 +154,7 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
                 children: [
                   Expanded(
                     child: Text(
-                      "${context.watch<LanguageManager>().getString('replying_to')} ${_replyTarget!.authorName}:\n${_replyTarget!.text}",
+                      "${Translations.of(context).replying_to} ${_replyTarget!.authorName}:\n${_replyTarget!.text}",
                       style: TextStyle(
                         fontSize: 12,
                         color: widget.isDarkCard ? Colors.white70 : Colors.black54,
@@ -173,7 +181,7 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
                   controller: _commentController,
                   style: TextStyle(color: widget.isDarkCard ? Colors.white : Colors.black),
                   decoration: InputDecoration(
-                    hintText: context.watch<LanguageManager>().getString('add_comment'),
+                    hintText: Translations.of(context).add_comment,
                     hintStyle: TextStyle(
                       color: widget.isDarkCard ? Colors.white54 : Colors.black54,
                     ),

@@ -6,6 +6,7 @@ class UserModelSql {
   final String? email;
   final String? favoriteCharacter;
   final String? password;
+  final String? lastFavCharEditDate;
 
   UserModelSql({
     this.id,
@@ -13,6 +14,7 @@ class UserModelSql {
     this.email,
     this.favoriteCharacter,
     this.password,
+    this.lastFavCharEditDate,
   });
 
   factory UserModelSql.fromMap(Map<String, dynamic> map) => UserModelSql(
@@ -21,6 +23,7 @@ class UserModelSql {
     email: map['email'] as String?,
     favoriteCharacter: map['favorite_character'] as String?,
     password: map['password'] as String?,
+    lastFavCharEditDate: map['last_fav_char_edit_date'] as String?,
   );
 
   Map<String, dynamic> toMap() {
@@ -30,6 +33,7 @@ class UserModelSql {
       'email': email,
       'favorite_character': favoriteCharacter,
       'password': password,
+      'last_fav_char_edit_date': lastFavCharEditDate,
     };
   }
 
@@ -38,15 +42,14 @@ class UserModelSql {
   factory UserModelSql.fromJson(String source) =>
       UserModelSql.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  // 3. Ditambahkan copyWith agar mempermudah modifikasi/kloning data jika diperlukan
   UserModelSql copyWith({
     int? id,
     String? fullName,
     String? email,
     String? phoneNumber,
     String? favoriteCharacter,
-
     String? password,
+    String? lastFavCharEditDate,
   }) {
     return UserModelSql(
       id: id ?? this.id,
@@ -54,6 +57,7 @@ class UserModelSql {
       email: email ?? this.email,
       favoriteCharacter: favoriteCharacter ?? this.favoriteCharacter,
       password: password ?? this.password,
+      lastFavCharEditDate: lastFavCharEditDate ?? this.lastFavCharEditDate,
     );
   }
 }

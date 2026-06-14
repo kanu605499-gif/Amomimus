@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:amomimus/services/account_manager.dart';
 
 import '../database/preference_handler.dart';
-import '../database/preference_handler.dart';
+import '../widgets/custom_input_field.dart';
 
 void main() {
   runApp(const AmomimusApp2());
@@ -730,117 +730,6 @@ class _LoginScreenState extends State<LoginScreen>
           ),
         ],
       ),
-    );
-  }
-}
-
-class CustomInputField extends StatelessWidget {
-  final String label;
-  final String hintText;
-  final String? errorText;
-  final bool obscureText;
-  final Widget? suffixIcon;
-  final Widget? prefixIcon;
-  final TextEditingController? controller;
-  final ValueChanged<String>? onChanged;
-
-  const CustomInputField({
-    super.key,
-    required this.label,
-    this.errorText,
-    required this.hintText,
-    this.obscureText = false,
-    this.suffixIcon,
-    this.prefixIcon,
-    this.controller,
-    this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Builder(
-          builder: (context) {
-            final words = label.split(' ');
-            if (words.length == 1) {
-              return Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.2,
-                  color: Color(0xff121212),
-                ),
-              );
-            }
-            return RichText(
-              text: TextSpan(
-                text: '${words.first} ',
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.2,
-                  color: Color(0xff6c52a3),
-                ),
-                children: [
-                  TextSpan(
-                    text: words.skip(1).join(' '),
-                    style: const TextStyle(color: Color(0xff121212)),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: controller,
-          style: const TextStyle(color: Color(0xff121212)),
-          obscureText: obscureText,
-          onChanged: onChanged,
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: const TextStyle(
-              color: Color.fromARGB(255, 218, 218, 218),
-            ),
-            errorText: errorText,
-            errorStyle: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-              color: Colors.red,
-            ),
-            filled: true,
-            fillColor: const Color(0xfff8f6fc),
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Color(0xffe1dbec)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(
-                color: Color(0xff6c52a3),
-                width: 1.5,
-              ),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Colors.red, width: 1.5),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: Colors.red, width: 2),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

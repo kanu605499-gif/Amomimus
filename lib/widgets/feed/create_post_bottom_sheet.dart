@@ -1,6 +1,6 @@
+import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:amomimus/amomimusdark.dart';
-import 'package:amomimus/language/language_manager.dart';
 import 'package:amomimus/models/user_model.dart';
 import 'package:amomimus/services/feed_manager.dart';
 import 'package:amomimus/models/post_model.dart';
@@ -23,6 +23,7 @@ class _CreatePostForm extends StatefulWidget {
   final UserAccount currentUser;
 
   const _CreatePostForm({
+    super.key,
     required this.isDark,
     required this.currentUser,
   });
@@ -42,11 +43,16 @@ class _CreatePostFormState extends State<_CreatePostForm> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
+    final t = Translations.of(context);
+    final screenHeight = MediaQuery.of(context).size.height;
+    
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Container(
+        height: screenHeight / 3,
         decoration: BoxDecoration(
           color: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
           borderRadius: const BorderRadius.only(
@@ -55,34 +61,35 @@ class _CreatePostFormState extends State<_CreatePostForm> {
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 5,
-                decoration: BoxDecoration(
-                  color: widget.isDark ? Colors.white24 : Colors.black12,
-                  borderRadius: BorderRadius.circular(2.5),
-                ),
+        child: Column(
+          children: [
+            Container(
+              width: 40,
+              height: 5,
+              decoration: BoxDecoration(
+                color: widget.isDark ? Colors.white24 : Colors.black12,
+                borderRadius: BorderRadius.circular(2.5),
               ),
-              const SizedBox(height: 20),
-              Text(
-                context.watch<LanguageManager>().getString('create_post'),
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: widget.isDark
-                      ? AmomimusDarkTheme.textPrimary
-                      : const Color.fromARGB(255, 140, 113, 199),
-                ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              t.create_post,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: widget.isDark
+                    ? AmomimusDarkTheme.textPrimary
+                    : const Color.fromARGB(255, 140, 113, 199),
               ),
-              const SizedBox(height: 16),
-              TextField(
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: TextField(
                 controller: _postController,
-                maxLines: 5,
+                maxLines: null,
+                expands: true,
                 maxLength: 300,
+                textAlignVertical: TextAlignVertical.top,
                 style: TextStyle(
                   color: widget.isDark
                       ? AmomimusDarkTheme.textPrimary
@@ -90,7 +97,7 @@ class _CreatePostFormState extends State<_CreatePostForm> {
                   fontSize: 16,
                 ),
                 decoration: InputDecoration(
-                  hintText: context.watch<LanguageManager>().getString('whats_on_your_mind'),
+                  hintText: t.whats_on_your_mind,
                   hintStyle: TextStyle(
                     color: widget.isDark
                         ? AmomimusDarkTheme.textSecondary
@@ -98,60 +105,60 @@ class _CreatePostFormState extends State<_CreatePostForm> {
                     fontSize: 16,
                   ),
                   filled: false,
-                  contentPadding: const EdgeInsets.all(16),
+                  contentPadding: const EdgeInsets.all(8),
                   border: InputBorder.none,
                 ),
               ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_postController.text.trim().isNotEmpty) {
-                      AccountType accountType;
-                      switch (widget.currentUser.gender) {
-                        case 'Ami': accountType = AccountType.ami; break;
-                        case 'Amom': accountType = AccountType.amom; break;
-                        case 'Amo': accountType = AccountType.amo; break;
-                        default: accountType = AccountType.user; break;
-                      }
-                      
-                      final newPost = FeedModel(
-                        userName: widget.currentUser.anonymousUsername,
-                        id: "#AMM-${DateTime.now().millisecondsSinceEpoch % 100000}",
-                        type: accountType,
-                        content: _postController.text,
-                        timeStamp: "Just now",
-                        realAuthorId: widget.currentUser.amomimusId,
-                        realAuthorName: widget.currentUser.anonymousUsername,
-                      );
-                      Provider.of<FeedManager>(context, listen: false).addPost(newPost);
-                      
-                      _postController.clear();
-                      Navigator.pop(context);
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (_postController.text.trim().isNotEmpty) {
+                    AccountType accountType;
+                    switch (widget.currentUser.gender) {
+                      case 'Ami': accountType = AccountType.ami; break;
+                      case 'Amom': accountType = AccountType.amom; break;
+                      case 'Amo': accountType = AccountType.amo; break;
+                      default: accountType = AccountType.user; break;
                     }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AmomimusDarkTheme.primaryPurple,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 2,
+                    
+                    final newPost = FeedModel(
+                      userName: widget.currentUser.anonymousUsername,
+                      id: "#AMM-${DateTime.now().millisecondsSinceEpoch % 100000}",
+                      type: accountType,
+                      content: _postController.text,
+                      timeStamp: "Just now",
+                      realAuthorId: widget.currentUser.amomimusId,
+                      realAuthorName: widget.currentUser.anonymousUsername,
+                    );
+                    Provider.of<FeedManager>(context, listen: false).addPost(newPost);
+                    
+                    _postController.clear();
+                    Navigator.pop(context);
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AmomimusDarkTheme.primaryPurple,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text(
-                    context.watch<LanguageManager>().getString('send_post'),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  elevation: 2,
+                ),
+                child: Text(
+                  t.send_post,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
-            ],
-          ),
+            ),
+            const SizedBox(height: 10),
+          ],
         ),
       ),
     );
