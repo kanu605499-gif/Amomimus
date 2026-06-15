@@ -17,6 +17,7 @@ import 'package:amomimus/widgets/chat_request_dialog.dart';
 import 'package:amomimus/data/anonymous_names.dart';
 import 'comment_bottom_sheet.dart';
 import 'share_to_chat_bottom_sheet.dart';
+import '../effects/glitch_effect.dart';
 
 class FeedCard extends StatefulWidget {
   final FeedModel model;
@@ -156,29 +157,32 @@ class _FeedCardState extends State<FeedCard> {
                               ),
                             );
                           },
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                GenderHelpers.getTypeIcon(widget.model.type),
-                                color: GenderHelpers.getTypeColor(
-                                  widget.model.type,
+                          child: GlitchEffect(
+                            isActive: isExBlocked,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  GenderHelpers.getTypeIcon(widget.model.type),
+                                  color: GenderHelpers.getTypeColor(
+                                    widget.model.type,
+                                  ),
+                                  size: 24,
                                 ),
-                                size: 24,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                widget.model.id,
-                                style:
-                                    GenderHelpers.getTypeIdTextStyle(
-                                      widget.model.type,
-                                    ).copyWith(
-                                      color: GenderHelpers.getTypeColor(
+                                const SizedBox(width: 8),
+                                Text(
+                                  widget.model.id,
+                                  style:
+                                      GenderHelpers.getTypeIdTextStyle(
                                         widget.model.type,
+                                      ).copyWith(
+                                        color: GenderHelpers.getTypeColor(
+                                          widget.model.type,
+                                        ),
                                       ),
-                                    ),
-                              ),
-                            ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         const Spacer(),
