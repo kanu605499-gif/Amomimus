@@ -1,4 +1,4 @@
-package com.example.amomimus
+package com.diata.amomimus
 
 import io.flutter.embedding.android.FlutterActivity
 
