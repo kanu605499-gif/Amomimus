@@ -219,5 +219,8 @@
     "reset_passcode": "Reset Passcode",
     "share": "Bagikan",
     "continue_btn": "Lanjut",
-    "validation_form": "Form Validasi"
+    "validation_form": "Form Validasi",
+    "email_already_registered_title": "Pendaftaran Gagal",
+    "email_already_registered_desc": "Email ini sudah terdaftar. Apakah Anda ingin masuk sebagai gantinya?",
+    "go_to_login": "Masuk"
 }

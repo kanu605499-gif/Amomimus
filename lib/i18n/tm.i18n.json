@@ -216,5 +216,8 @@
   "edit_max_1_day": "Alter once per day",
   "forget_passcode": "Forgot the Dragon Claw Code?",
   "reset_passcode_hint": "Invoke your Patron Deity to unlock the door.",
-  "reset_passcode": "Restore Claw Code"
+  "reset_passcode": "Restore Claw Code",
+  "email_already_registered_title": "Ritual Failed",
+  "email_already_registered_desc": "This soul is already bound. Doth thou wish to awaken it instead?",
+  "go_to_login": "Awaken"
 }

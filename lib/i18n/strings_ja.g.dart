@@ -258,6 +258,9 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get reset_passcode_hint => 'お気に入りのキャラクターを使用してパスコードをリセットします。';
 	@override String get reset_passcode => 'パスコードをリセット';
 	@override String get share => '共有';
+	@override String get email_already_registered_title => '登録に失敗しました';
+	@override String get email_already_registered_desc => 'このメールアドレスは既に登録されています。代わりにログインしますか？';
+	@override String get go_to_login => 'ログインする';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -487,6 +490,9 @@ extension on TranslationsJa {
 			'reset_passcode_hint' => 'お気に入りのキャラクターを使用してパスコードをリセットします。',
 			'reset_passcode' => 'パスコードをリセット',
 			'share' => '共有',
+			'email_already_registered_title' => '登録に失敗しました',
+			'email_already_registered_desc' => 'このメールアドレスは既に登録されています。代わりにログインしますか？',
+			'go_to_login' => 'ログインする',
 			_ => null,
 		};
 	}

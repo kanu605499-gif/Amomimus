@@ -217,5 +217,8 @@
     "forget_passcode": "パスコードを忘れた場合",
     "reset_passcode_hint": "お気に入りのキャラクターを使用してパスコードをリセットします。",
     "reset_passcode": "パスコードをリセット",
-    "share": "共有"
+    "share": "共有",
+    "email_already_registered_title": "登録に失敗しました",
+    "email_already_registered_desc": "このメールアドレスは既に登録されています。代わりにログインしますか？",
+    "go_to_login": "ログインする"
 }

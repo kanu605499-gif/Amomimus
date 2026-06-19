@@ -257,6 +257,9 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get forget_passcode => 'Forgot the Dragon Claw Code?';
 	@override String get reset_passcode_hint => 'Invoke your Patron Deity to unlock the door.';
 	@override String get reset_passcode => 'Restore Claw Code';
+	@override String get email_already_registered_title => 'Ritual Failed';
+	@override String get email_already_registered_desc => 'This soul is already bound. Doth thou wish to awaken it instead?';
+	@override String get go_to_login => 'Awaken';
 }
 
 /// The flat map containing all translations for locale <tm>.
@@ -485,6 +488,9 @@ extension on TranslationsTm {
 			'forget_passcode' => 'Forgot the Dragon Claw Code?',
 			'reset_passcode_hint' => 'Invoke your Patron Deity to unlock the door.',
 			'reset_passcode' => 'Restore Claw Code',
+			'email_already_registered_title' => 'Ritual Failed',
+			'email_already_registered_desc' => 'This soul is already bound. Doth thou wish to awaken it instead?',
+			'go_to_login' => 'Awaken',
 			_ => null,
 		};
 	}

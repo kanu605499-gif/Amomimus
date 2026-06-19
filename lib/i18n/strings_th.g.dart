@@ -260,6 +260,9 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get share => 'แชร์';
 	@override String get continue_btn => 'ต่อไป';
 	@override String get validation_form => 'แบบฟอร์มตรวจสอบ';
+	@override String get email_already_registered_title => 'การลงทะเบียนล้มเหลว';
+	@override String get email_already_registered_desc => 'อีเมลนี้ได้รับการลงทะเบียนแล้ว คุณต้องการเข้าสู่ระบบแทนหรือไม่?';
+	@override String get go_to_login => 'เข้าสู่ระบบ';
 }
 
 /// The flat map containing all translations for locale <th>.
@@ -491,6 +494,9 @@ extension on TranslationsTh {
 			'share' => 'แชร์',
 			'continue_btn' => 'ต่อไป',
 			'validation_form' => 'แบบฟอร์มตรวจสอบ',
+			'email_already_registered_title' => 'การลงทะเบียนล้มเหลว',
+			'email_already_registered_desc' => 'อีเมลนี้ได้รับการลงทะเบียนแล้ว คุณต้องการเข้าสู่ระบบแทนหรือไม่?',
+			'go_to_login' => 'เข้าสู่ระบบ',
 			_ => null,
 		};
 	}

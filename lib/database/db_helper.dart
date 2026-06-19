@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'sqlite_service.dart';
 import 'models/user_register_sql.dart';
 
 class DBHelper {
@@ -7,115 +6,30 @@ class DBHelper {
   factory DBHelper() => _instance;
   DBHelper._internal();
 
-  static const String _usersKey = 'amomimus_users';
-
-  Future<SharedPreferences> get _prefs async => await SharedPreferences.getInstance();
-
   Future<List<UserModelSql>> getAllUsers() async {
-    final prefs = await _prefs;
-    final String? usersJson = prefs.getString(_usersKey);
-    
-    if (usersJson == null) {
-      return [];
-    }
-
-    try {
-      final List<dynamic> decodedList = jsonDecode(usersJson);
-      return decodedList.map((item) => UserModelSql.fromMap(item)).toList();
-    } catch (e) {
-      print('Error decoding users: $e');
-      return [];
-    }
+    final db = await SqliteService.instance.database;
+    final maps = await db.query('users');
+    return maps.map((e) => UserModelSql.fromMap(e)).toList();
   }
 
   Future<bool> registerUser(UserModelSql pengguna) async {
-    try {
-      print("==== DEBUG DB: Mencoba mendaftarkan email: ${pengguna.email} ====");
-      
-      final users = await getAllUsers();
-      
-      // Check if email already exists
-      if (users.any((u) => u.email == pengguna.email)) {
-        print("==== DEBUG DB: Registrasi GAGAL - Email sudah terdaftar ====");
-        return false;
-      }
-
-      // Assign an ID based on the current length + 1
-      final newUser = pengguna.copyWith(id: users.length + 1);
-      users.add(newUser);
-
-      final prefs = await _prefs;
-      final success = await prefs.setString(
-        _usersKey, 
-        jsonEncode(users.map((u) => u.toMap()).toList())
-      );
-
-      if (success) {
-        print("==== DEBUG DB: Registrasi BERHASIL dimasukkan ke SharedPreferences ====");
-        return true;
-      } else {
-        print("==== DEBUG DB: Registrasi GAGAL disimpan ====");
-        return false;
-      }
-    } catch (e) {
-      print("Error saat register: $e");
-      return false;
-    }
+    return await SqliteService.instance.registerCredential(pengguna);
   }
 
   Future<UserModelSql?> loginUser(String email, String password) async {
-    final users = await getAllUsers();
-    
-    print('==== DEBUG: ISI DATABASE USERS ====');
-    print(users.map((u) => u.toMap()).toList());
-    print('===================================');
-    print('Input Login -> Email: $email | Password: $password');
-
-    try {
-      return users.firstWhere(
-        (u) => u.email == email && u.password == password,
-      );
-    } catch (e) {
-      // firstWhere throws StateError if no element is found
-      return null;
-    }
+    return await SqliteService.instance.getCredential(email, password);
   }
 
   Future<int> deleteUser(String email) async {
-    final users = await getAllUsers();
-    final initialLength = users.length;
-    
-    users.removeWhere((u) => u.email == email);
-    
-    if (users.length < initialLength) {
-      final prefs = await _prefs;
-      await prefs.setString(
-        _usersKey, 
-        jsonEncode(users.map((u) => u.toMap()).toList())
-      );
-      return 1; // 1 row deleted
+    try {
+      await SqliteService.instance.deleteCredential(email);
+      return 1;
+    } catch (e) {
+      return 0;
     }
-    return 0; // 0 rows deleted
   }
 
   Future<bool> updateCredentials(UserModelSql updatedUser) async {
-    try {
-      final users = await getAllUsers();
-      final index = users.indexWhere((u) => u.email == updatedUser.email);
-      
-      if (index != -1) {
-        users[index] = updatedUser;
-        final prefs = await _prefs;
-        await prefs.setString(
-          _usersKey, 
-          jsonEncode(users.map((u) => u.toMap()).toList())
-        );
-        return true;
-      }
-      return false;
-    } catch (e) {
-      print("Error updating credentials: $e");
-      return false;
-    }
+    return await SqliteService.instance.updateCredential(updatedUser);
   }
 }

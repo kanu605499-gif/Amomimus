@@ -257,6 +257,9 @@ class TranslationsOe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get forget_passcode => 'Lost the Code?';
 	@override String get reset_passcode_hint => 'Speak thy hero to regain entry.';
 	@override String get reset_passcode => 'Restore Code';
+	@override String get email_already_registered_title => 'Registration Failed';
+	@override String get email_already_registered_desc => 'This ethereal thread is already bound. Wouldst thou like unto log in instead?';
+	@override String get go_to_login => 'Go to Login';
 }
 
 /// The flat map containing all translations for locale <oe>.
@@ -485,6 +488,9 @@ extension on TranslationsOe {
 			'forget_passcode' => 'Lost the Code?',
 			'reset_passcode_hint' => 'Speak thy hero to regain entry.',
 			'reset_passcode' => 'Restore Code',
+			'email_already_registered_title' => 'Registration Failed',
+			'email_already_registered_desc' => 'This ethereal thread is already bound. Wouldst thou like unto log in instead?',
+			'go_to_login' => 'Go to Login',
 			_ => null,
 		};
 	}

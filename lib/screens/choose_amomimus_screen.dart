@@ -9,6 +9,7 @@ import '../data/anonymous_names.dart';
 import '../services/account_manager.dart';
 import '../database_helper.dart'; // for UserAccount
 import 'package:amomimus/screens/feed_screen.dart';
+import 'package:amomimus/screens/login.dart';
 
 // =========================================================================
 // CHOOSE YOUR AMOMUS PAGE
@@ -101,12 +102,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
           (route) => false,
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Email already registered or failed to save!'),
-            backgroundColor: Colors.redAccent,
-          ),
-        );
+        _showAlreadyRegisteredDialog();
       }
     } finally {
       if (mounted) setState(() => _isRegistering = false);
@@ -169,6 +165,91 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             ),
             child: Text(
               t.proceed,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAlreadyRegisteredDialog() {
+    final t = Translations.of(context);
+    bool hasRedirected = false;
+
+    void redirect() {
+      if (hasRedirected || !mounted) return;
+      hasRedirected = true;
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const AmomimusApp2()),
+        (route) => false,
+      );
+    }
+
+    // Auto redirect to login after 3.5 seconds
+    Future.delayed(const Duration(milliseconds: 3500), redirect);
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: widget.isDarkMode ? const Color(0xff1e1b24) : const Color(0xfffdfbfe),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: widget.isDarkMode ? const Color(0xff3d344d) : const Color(0xffe1dbec),
+            width: 1.5,
+          ),
+        ),
+        title: Row(
+          children: [
+            const Icon(Icons.error_outline_rounded, color: Colors.redAccent),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                t.email_already_registered_title,
+                style: TextStyle(
+                  color: widget.isDarkMode ? Colors.white : const Color(0xff121212),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              t.email_already_registered_desc,
+              style: TextStyle(
+                color: widget.isDarkMode ? Colors.grey[400] : Colors.grey[700],
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Center(
+              child: SizedBox(
+                width: 24, 
+                height: 24, 
+                child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xff8c72c4))
+              )
+            )
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: redirect,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xff6c52a3),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              elevation: 0,
+            ),
+            child: Text(
+              t.go_to_login,
               style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),

@@ -219,5 +219,8 @@
     "reset_passcode": "รีเซ็ตรหัสผ่าน",
     "share": "แชร์",
     "continue_btn": "ต่อไป",
-    "validation_form": "แบบฟอร์มตรวจสอบ"
+    "validation_form": "แบบฟอร์มตรวจสอบ",
+    "email_already_registered_title": "การลงทะเบียนล้มเหลว",
+    "email_already_registered_desc": "อีเมลนี้ได้รับการลงทะเบียนแล้ว คุณต้องการเข้าสู่ระบบแทนหรือไม่?",
+    "go_to_login": "เข้าสู่ระบบ"
 }

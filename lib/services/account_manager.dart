@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../database_helper.dart';
+import '../database/sqlite_service.dart';
 import '../models/report_model.dart';
 import '../models/user_indicator_model.dart';
 import '../helpers/benevolent_calculator.dart';
@@ -313,6 +314,14 @@ class AccountManager extends ChangeNotifier {
       
       try {
         await DatabaseHelper.instance.updateUser(updatedUser);
+        // INSERT INTO REPORTS TABLE FOR OFFLINE SYNC/GOD POWER
+        await SqliteService.instance.addReport(
+          _currentUser?.amomimusId ?? 'anonymous', 
+          normalizedTargetId, 
+          category.toString(), 
+          1, 
+          isChatBubbleReport
+        );
       } catch (e) {
         print("==== DB UPDATE SKIPPED: $e ====");
       }

@@ -260,6 +260,9 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get share => 'Bagikan';
 	@override String get continue_btn => 'Lanjut';
 	@override String get validation_form => 'Form Validasi';
+	@override String get email_already_registered_title => 'Pendaftaran Gagal';
+	@override String get email_already_registered_desc => 'Email ini sudah terdaftar. Apakah Anda ingin masuk sebagai gantinya?';
+	@override String get go_to_login => 'Masuk';
 }
 
 /// The flat map containing all translations for locale <id>.
@@ -491,6 +494,9 @@ extension on TranslationsId {
 			'share' => 'Bagikan',
 			'continue_btn' => 'Lanjut',
 			'validation_form' => 'Form Validasi',
+			'email_already_registered_title' => 'Pendaftaran Gagal',
+			'email_already_registered_desc' => 'Email ini sudah terdaftar. Apakah Anda ingin masuk sebagai gantinya?',
+			'go_to_login' => 'Masuk',
 			_ => null,
 		};
 	}

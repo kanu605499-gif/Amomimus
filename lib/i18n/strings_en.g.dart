@@ -703,6 +703,15 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
 	/// en: 'Validation Form'
 	String get validation_form => 'Validation Form';
+
+	/// en: 'Registration Failed'
+	String get email_already_registered_title => 'Registration Failed';
+
+	/// en: 'This email is already registered. Would you like to log in instead?'
+	String get email_already_registered_desc => 'This email is already registered. Would you like to log in instead?';
+
+	/// en: 'Go to Login'
+	String get go_to_login => 'Go to Login';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -934,6 +943,9 @@ extension on Translations {
 			'share' => 'Share',
 			'continue_btn' => 'Continue',
 			'validation_form' => 'Validation Form',
+			'email_already_registered_title' => 'Registration Failed',
+			'email_already_registered_desc' => 'This email is already registered. Would you like to log in instead?',
+			'go_to_login' => 'Go to Login',
 			_ => null,
 		};
 	}

@@ -4,6 +4,7 @@ import 'package:amomimus/amomimusdark.dart';
 import 'package:amomimus/screens/register_screen.dart';
 import 'package:amomimus/screens/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:amomimus/services/account_manager.dart';
 
@@ -624,105 +625,110 @@ class _LoginScreenState extends State<LoginScreen>
                       ],
                     ),
                   ),
-                  const SizedBox(height: 30),
-                  const Divider(thickness: 1.5),
-                  const SizedBox(height: 10),
-                  Theme(
-                    data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                    child: ExpansionTile(
-                      tilePadding: EdgeInsets.zero,
-                      collapsedIconColor: Colors.grey[600],
-                      iconColor: const Color(0xff6c52a3),
-                      title: Text(
-                        'REGISTERED USERS (TESTING)',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.2,
+                  if (kDebugMode) ...[
+                    const SizedBox(height: 30),
+                    const Divider(thickness: 1.5),
+                    const SizedBox(height: 10),
+                    Theme(
+                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        tilePadding: EdgeInsets.zero,
+                        collapsedIconColor: Colors.grey[600],
+                        iconColor: const Color(0xff6c52a3),
+                        title: Text(
+                          'REGISTERED USERS (TESTING)',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
+                          ),
                         ),
-                      ),
-                      children: [
-                        const SizedBox(height: 15),
+                        children: [
+                          const SizedBox(height: 15),
 
-                  // SQLite List Field - Safely Managed Layout
-                  Consumer<AccountManager>(
-                    builder: (context, accountManager, child) {
-                      final daftarUser = accountManager.accounts;
-                      if (accountManager.isLoading) {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-
-                      if (daftarUser.isEmpty) {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Text('No users registered yet.'),
-                          ),
-                        );
-                      }
-
-                      return Column(
-                        children: daftarUser.map((user) {
-                          return Card(
-                            elevation: 1,
-                            margin: const EdgeInsets.symmetric(vertical: 6),
-                            color: const Color(0xfff8f6fc),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: const BorderSide(color: Color(0xffe1dbec)),
-                            ),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: const Color(0xff6c52a3),
-                                child: Text(
-                                  user.realUsername.isNotEmpty
-                                      ? user.realUsername
-                                            .substring(0, 1)
-                                            .toUpperCase()
-                                      : 'U',
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              title: Text(
-                                user.realUsername,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 4.0),
-                                child: Text(
-                                  'Email: ${user.email}\nAmomimus: ${user.anonymousUsername}',
-                                  style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 13,
+                          // SQLite List Field - Safely Managed Layout
+                          Consumer<AccountManager>(
+                            builder: (context, accountManager, child) {
+                              final daftarUser = accountManager.accounts;
+                              if (accountManager.isLoading) {
+                                return const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: CircularProgressIndicator(),
                                   ),
-                                ),
-                              ),
-                              trailing: IconButton(
-                                icon: const Icon(
-                                  Icons.delete_outline,
-                                  color: Colors.redAccent,
-                                ),
-                                onPressed: () =>
-                                    _showDeleteConfirmation(context, user.email, user.realUsername),
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
+                                );
+                              }
+
+                              if (daftarUser.isEmpty) {
+                                return const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Text('No users registered yet.'),
+                                  ),
+                                );
+                              }
+
+                              return Column(
+                                children: daftarUser.map((user) {
+                                  // HIDE GOOGLE PLAY TEST ACCOUNT FROM UI
+                                  if (user.email == 'kanu605499@gmail.com') return const SizedBox.shrink();
+                                  
+                                  return Card(
+                                    elevation: 1,
+                                    margin: const EdgeInsets.symmetric(vertical: 6),
+                                    color: const Color(0xfff8f6fc),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                      side: const BorderSide(color: Color(0xffe1dbec)),
+                                    ),
+                                    child: ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor: const Color(0xff6c52a3),
+                                        child: Text(
+                                          user.realUsername.isNotEmpty
+                                              ? user.realUsername
+                                                    .substring(0, 1)
+                                                    .toUpperCase()
+                                              : 'U',
+                                          style: const TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                      title: Text(
+                                        user.realUsername,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      subtitle: Padding(
+                                        padding: const EdgeInsets.only(top: 4.0),
+                                        child: Text(
+                                          'Email: ${user.email}\nAmomimus: ${user.anonymousUsername}',
+                                          style: TextStyle(
+                                            color: Colors.grey[700],
+                                            fontSize: 13,
+                                          ),
+                                        ),
+                                      ),
+                                      trailing: IconButton(
+                                        icon: const Icon(
+                                          Icons.delete_outline,
+                                          color: Colors.redAccent,
+                                        ),
+                                        onPressed: () =>
+                                            _showDeleteConfirmation(context, user.email, user.realUsername),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
             const SizedBox(height: 40),
                 ],
               ),

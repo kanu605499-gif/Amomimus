@@ -219,5 +219,8 @@
   "reset_passcode": "Reset Passcode",
   "share": "Share",
   "continue_btn": "Continue",
-  "validation_form": "Validation Form"
+  "validation_form": "Validation Form",
+  "email_already_registered_title": "Registration Failed",
+  "email_already_registered_desc": "This email is already registered. Would you like to log in instead?",
+  "go_to_login": "Go to Login"
 }

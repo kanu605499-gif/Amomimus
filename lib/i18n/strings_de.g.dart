@@ -102,7 +102,7 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get respectful => 'Respektvoll';
 	@override String get value_privacy_desc => 'Wir legen Wert auf Privatsphäre und Freundlichkeit. Bitte befolgen Sie beim Erkunden unsere Community-Regeln.';
 	@override String get app_version => 'App-Version:';
-  @override String get share_to_chat => 'Im Chat teilen';
+	@override String get share_to_chat => 'Im Chat teilen';
 	@override String get create_post => 'Einen Post erstellen';
 	@override String get whats_on_your_mind => 'Was geht dir durch den Kopf? (Anonym)';
 	@override String get send_post => 'Posten';
@@ -260,6 +260,9 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get share => 'Teilen';
 	@override String get continue_btn => 'Weiter';
 	@override String get validation_form => 'Validierungsformular';
+	@override String get email_already_registered_title => 'Registrierung Fehlgeschlagen';
+	@override String get email_already_registered_desc => 'Diese E-Mail ist bereits registriert. Möchten Sie sich stattdessen anmelden?';
+	@override String get go_to_login => 'Zum Login';
 }
 
 /// The flat map containing all translations for locale <de>.
@@ -333,7 +336,7 @@ extension on TranslationsDe {
 			'respectful' => 'Respektvoll',
 			'value_privacy_desc' => 'Wir legen Wert auf Privatsphäre und Freundlichkeit. Bitte befolgen Sie beim Erkunden unsere Community-Regeln.',
 			'app_version' => 'App-Version:',
-      'share_to_chat' => 'Im Chat teilen',
+			'share_to_chat' => 'Im Chat teilen',
 			'create_post' => 'Einen Post erstellen',
 			'whats_on_your_mind' => 'Was geht dir durch den Kopf? (Anonym)',
 			'send_post' => 'Posten',
@@ -491,6 +494,9 @@ extension on TranslationsDe {
 			'share' => 'Teilen',
 			'continue_btn' => 'Weiter',
 			'validation_form' => 'Validierungsformular',
+			'email_already_registered_title' => 'Registrierung Fehlgeschlagen',
+			'email_already_registered_desc' => 'Diese E-Mail ist bereits registriert. Möchten Sie sich stattdessen anmelden?',
+			'go_to_login' => 'Zum Login',
 			_ => null,
 		};
 	}

@@ -219,5 +219,8 @@
     "reset_passcode": "Passcode zurücksetzen",
     "share": "Teilen",
     "continue_btn": "Weiter",
-    "validation_form": "Validierungsformular"
+    "validation_form": "Validierungsformular",
+    "email_already_registered_title": "Registrierung Fehlgeschlagen",
+    "email_already_registered_desc": "Diese E-Mail ist bereits registriert. Möchten Sie sich stattdessen anmelden?",
+    "go_to_login": "Zum Login"
 }
