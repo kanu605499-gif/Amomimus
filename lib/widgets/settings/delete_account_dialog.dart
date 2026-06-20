@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/account_manager.dart';
+import '../../services/chatmodel.dart';
 import '../../amomimusdark.dart';
 import '../../database/models/user_register_sql.dart';
 import '../../screens/splash_screen.dart';
@@ -24,13 +25,17 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
   void _verifyAndDelete() async {
     final pass = _passcodeController.text.trim();
     final fav = _favCharController.text.trim();
-    
+
     if (pass.isEmpty || fav.isEmpty) {
-      setState(() => _errorText = "Passcode and favorite character are required.");
+      setState(
+        () => _errorText = "Passcode and favorite character are required.",
+      );
       return;
     }
 
-    if (pass != widget.credentials.password || fav.toLowerCase() != (widget.credentials.favoriteCharacter ?? '').toLowerCase()) {
+    if (pass != widget.credentials.password ||
+        fav.toLowerCase() !=
+            (widget.credentials.favoriteCharacter ?? '').toLowerCase()) {
       setState(() => _errorText = "Incorrect passcode or favorite character.");
       return;
     }
@@ -42,6 +47,10 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
 
     // Proceed with deletion
     final am = Provider.of<AccountManager>(context, listen: false);
+    final amomimusId = am.currentUser?.amomimusId;
+    if (amomimusId != null) {
+      Provider.of<ChatModel>(context, listen: false).clearAllChatsForUser(amomimusId);
+    }
     await am.deleteAccount(widget.credentials.email ?? '');
 
     if (mounted) {
@@ -57,18 +66,26 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
   @override
   Widget build(BuildContext context) {
     final isDark = Provider.of<AmomimusDarkTheme>(context).isDarkMode;
-    final textColor = isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
+    final textColor = isDark
+        ? AmomimusDarkTheme.policeLineYellow
+        : AmomimusDarkTheme.primaryPurple;
     final hintColor = textColor.withOpacity(0.6);
 
     return AlertDialog(
       backgroundColor: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
-      title: Text("Delete Account", style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
+      title: Text(
+        "Delete Account",
+        style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold),
+      ),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("This action is irreversible.", style: TextStyle(color: textColor)),
+            Text(
+              "This action is irreversible.",
+              style: TextStyle(color: textColor),
+            ),
             const SizedBox(height: 16),
             TextField(
               controller: _passcodeController,
@@ -77,7 +94,9 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
               decoration: InputDecoration(
                 labelText: "Passcode",
                 labelStyle: TextStyle(color: hintColor),
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: hintColor)),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: hintColor),
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -87,7 +106,9 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
               decoration: InputDecoration(
                 labelText: "Favorite Character",
                 labelStyle: TextStyle(color: hintColor),
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: hintColor)),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: hintColor),
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -97,14 +118,19 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
               decoration: InputDecoration(
                 labelText: "Reason for leaving (Optional)",
                 labelStyle: TextStyle(color: hintColor),
-                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: hintColor)),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: hintColor),
+                ),
               ),
               maxLines: 2,
             ),
             if (_errorText != null) ...[
               const SizedBox(height: 16),
-              Text(_errorText!, style: const TextStyle(color: Colors.redAccent, fontSize: 12)),
-            ]
+              Text(
+                _errorText!,
+                style: const TextStyle(color: Colors.redAccent, fontSize: 12),
+              ),
+            ],
           ],
         ),
       ),
@@ -116,10 +142,20 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog> {
         ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
           onPressed: _isLoading ? null : _verifyAndDelete,
-          child: _isLoading 
-            ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-            : const Text("Delete permanently", style: TextStyle(color: Colors.white)),
-        )
+          child: _isLoading
+              ? const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ),
+                )
+              : const Text(
+                  "Delete permanently",
+                  style: TextStyle(color: Colors.white),
+                ),
+        ),
       ],
     );
   }

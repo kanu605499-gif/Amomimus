@@ -87,7 +87,9 @@ class ProfileVaultSection extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const StickerInventoryScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => const StickerInventoryScreen(),
+                        ),
                       );
                     },
                     child: Container(
@@ -114,7 +116,9 @@ class ProfileVaultSection extends StatelessWidget {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 12,
-                              color: isDark ? Colors.grey[400] : Colors.grey[700],
+                              color: isDark
+                                  ? Colors.grey[400]
+                                  : Colors.grey[700],
                             ),
                           ),
                           const SizedBox(height: 4),

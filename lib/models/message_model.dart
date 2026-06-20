@@ -6,11 +6,17 @@ class ChatMessage {
   final String? roomId;
   final String text;
   final String senderId;
-  final String timeStamp;
+  String timeStamp;
   final bool isTyping;
   final String? senderName;
   final String? replyMessageId;
   final String? createdAt;
+  bool isSynced;
+  bool isPendingSlow;
+  bool showSuccess;
+  bool showResendOptions;
+  List<String> deletedBy;
+  int? sendOrder;
 
   ChatMessage({
     this.id,
@@ -22,6 +28,12 @@ class ChatMessage {
     this.senderName,
     this.replyMessageId,
     this.createdAt,
+    this.isSynced = true,
+    this.isPendingSlow = false,
+    this.showSuccess = false,
+    this.showResendOptions = false,
+    this.deletedBy = const [],
+    this.sendOrder,
   });
 
   /// Firestore-ready: converts this [ChatMessage] to a [Map].
@@ -35,6 +47,12 @@ class ChatMessage {
       'senderName': senderName,
       'replyMessageId': replyMessageId,
       'createdAt': createdAt ?? DateTime.now().toIso8601String(),
+      'isSynced': isSynced,
+      'isPendingSlow': isPendingSlow,
+      'showSuccess': showSuccess,
+      'showResendOptions': showResendOptions,
+      'deletedBy': deletedBy,
+      'sendOrder': sendOrder,
     };
   }
 
@@ -43,12 +61,19 @@ class ChatMessage {
     return ChatMessage(
       id: map['id'],
       roomId: map['roomId'],
-      text: map['text'],
-      senderId: map['senderId'],
-      timeStamp: map['timeStamp'],
+      text: map['text'] ?? '',
+      senderId: map['senderId'] ?? '',
+      timeStamp: map['timeStamp'] ?? '',
+      isTyping: map['isTyping'] ?? false,
       senderName: map['senderName'],
       replyMessageId: map['replyMessageId'],
       createdAt: map['createdAt'],
+      isSynced: map['isSynced'] ?? true,
+      isPendingSlow: map['isPendingSlow'] ?? false,
+      showSuccess: map['showSuccess'] ?? false,
+      showResendOptions: map['showResendOptions'] ?? false,
+      deletedBy: List<String>.from(map['deletedBy'] ?? []),
+      sendOrder: map['sendOrder'],
     );
   }
 

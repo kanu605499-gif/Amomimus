@@ -10,6 +10,7 @@ import 'package:amomimus/screens/sticker_shop_screen.dart';
 import 'package:amomimus/helpers/gender_helpers.dart';
 import 'package:amomimus/screens/splash_screen.dart';
 import 'package:amomimus/screens/app_documentation_screen.dart';
+import 'package:amomimus/screens/app_features_screen.dart';
 import 'right_options_panel.dart';
 
 class LeftDrawerMenu extends StatelessWidget {
@@ -157,6 +158,31 @@ class LeftDrawerMenu extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => const AppDocumentationScreen(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.stars_outlined,
+                    color: isDark
+                        ? AmomimusDarkTheme.textSecondary
+                        : Colors.grey,
+                  ),
+                  title: Text(
+                    t.app_features_title,
+                    style: TextStyle(
+                      color: isDark
+                          ? AmomimusDarkTheme.textPrimary
+                          : Colors.black,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context); // close drawer
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const AppFeaturesScreen(),
                       ),
                     );
                   },

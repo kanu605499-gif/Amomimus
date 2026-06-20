@@ -21,7 +21,10 @@ class CardBlurEffect extends StatelessWidget {
       curve: Curves.easeInOut,
       builder: (context, sigma, childWidget) {
         return ImageFiltered(
-          imageFilter: ImageFilter.blur(sigmaX: sigma.clamp(0.001, 10.0), sigmaY: sigma.clamp(0.001, 10.0)),
+          imageFilter: ImageFilter.blur(
+            sigmaX: sigma.clamp(0.001, 10.0),
+            sigmaY: sigma.clamp(0.001, 10.0),
+          ),
           child: childWidget,
         );
       },

@@ -61,10 +61,7 @@ class GenderHelpers {
           color: Color(0xFFFFD54F),
         );
       case AccountType.user:
-        return const TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
-        );
+        return const TextStyle(fontWeight: FontWeight.w500, fontSize: 14);
     }
   }
 

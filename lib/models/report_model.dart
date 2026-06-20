@@ -1,9 +1,5 @@
 /// Categories for user/chat reports in the Amomimus app.
-enum ReportCategory {
-  spamHarassment,
-  inappropriateContent,
-  hateSpeech,
-}
+enum ReportCategory { spamHarassment, inappropriateContent, hateSpeech }
 
 /// Helper for [ReportCategory] serialization and display labels.
 class ReportCategoryHelper {
@@ -57,8 +53,9 @@ class ReportModel {
   final String reportedUserId;
   final ReportCategory category;
   final String description;
-  final String? reportedMessageId; // null = user report, set = chat bubble report
-  final String? roomId;            // which chat room the message belongs to
+  final String?
+  reportedMessageId; // null = user report, set = chat bubble report
+  final String? roomId; // which chat room the message belongs to
   final String? createdAt;
 
   ReportModel({
@@ -95,7 +92,9 @@ class ReportModel {
       id: map['id'],
       reporterId: map['reporterId'],
       reportedUserId: map['reportedUserId'],
-      category: ReportCategoryHelper.fromValue(map['category'] ?? 'spam_harassment'),
+      category: ReportCategoryHelper.fromValue(
+        map['category'] ?? 'spam_harassment',
+      ),
       description: map['description'] ?? '',
       reportedMessageId: map['reportedMessageId'],
       roomId: map['roomId'],

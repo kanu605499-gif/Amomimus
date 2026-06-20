@@ -30,7 +30,10 @@ class ChatRequestManager extends ChangeNotifier {
 
   Future<void> _saveRequests() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_storageKey, jsonEncode(_requests.map((e) => e.toJson()).toList()));
+    await prefs.setString(
+      _storageKey,
+      jsonEncode(_requests.map((e) => e.toJson()).toList()),
+    );
   }
 
   void setCurrentUser(String userId) {
@@ -42,7 +45,13 @@ class ChatRequestManager extends ChangeNotifier {
 
   List<ChatRequest> get incomingRequests {
     if (_currentUserId == null) return [];
-    return _requests.where((r) => r.receiverId == _currentUserId && r.status == RequestStatus.pending).toList();
+    return _requests
+        .where(
+          (r) =>
+              r.receiverId == _currentUserId &&
+              r.status == RequestStatus.pending,
+        )
+        .toList();
   }
 
   List<ChatRequest> get outgoingRequests {
@@ -52,25 +61,27 @@ class ChatRequestManager extends ChangeNotifier {
 
   bool hasPendingRequestWith(String targetId) {
     if (_currentUserId == null) return false;
-    return _requests.any((r) => 
-      ((r.senderId == _currentUserId && r.receiverId == targetId) || 
-       (r.receiverId == _currentUserId && r.senderId == targetId)) && 
-      r.status == RequestStatus.pending
+    return _requests.any(
+      (r) =>
+          ((r.senderId == _currentUserId && r.receiverId == targetId) ||
+              (r.receiverId == _currentUserId && r.senderId == targetId)) &&
+          r.status == RequestStatus.pending,
     );
   }
 
   bool isChatAllowed(String targetId) {
     if (_currentUserId == null) return false;
-    return _requests.any((r) => 
-      ((r.senderId == _currentUserId && r.receiverId == targetId) || 
-       (r.receiverId == _currentUserId && r.senderId == targetId)) && 
-      r.status == RequestStatus.accepted
+    return _requests.any(
+      (r) =>
+          ((r.senderId == _currentUserId && r.receiverId == targetId) ||
+              (r.receiverId == _currentUserId && r.senderId == targetId)) &&
+          r.status == RequestStatus.accepted,
     );
   }
 
   void sendRequest(String targetId, String targetName, String senderName) {
     if (_currentUserId == null) return;
-    
+
     // Check if already requested
     if (hasPendingRequestWith(targetId) || isChatAllowed(targetId)) return;
 
@@ -108,9 +119,10 @@ class ChatRequestManager extends ChangeNotifier {
 
   void deleteRequestWith(String targetId) {
     if (_currentUserId == null) return;
-    _requests.removeWhere((r) => 
-      ((r.senderId == _currentUserId && r.receiverId == targetId) || 
-       (r.receiverId == _currentUserId && r.senderId == targetId))
+    _requests.removeWhere(
+      (r) =>
+          ((r.senderId == _currentUserId && r.receiverId == targetId) ||
+          (r.receiverId == _currentUserId && r.senderId == targetId)),
     );
     _saveRequests();
     notifyListeners();

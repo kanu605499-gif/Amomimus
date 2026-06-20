@@ -21,11 +21,7 @@ class SqliteService {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _createDB,
-    );
+    return await openDatabase(path, version: 1, onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version) async {
@@ -136,7 +132,7 @@ class SqliteService {
     }
     return null;
   }
-  
+
   Future<UserModelSql?> getCredentialByEmail(String email) async {
     final db = await instance.database;
     final maps = await db.query(
@@ -180,10 +176,11 @@ class SqliteService {
   Future<int> createAccount(UserAccount account) async {
     final db = await instance.database;
     final map = account.toMap();
-    
+
     // Remove relational fields from map to avoid sqlite errors
     map.remove('ownedStickers');
     map.remove('blockedUsers');
+    map.remove('blockedBy');
     map.remove('exBlockedUsers');
     map.remove('hiddenFeeds');
     map.remove('wishlistStickerBatches');
@@ -191,16 +188,45 @@ class SqliteService {
     map.remove('localAssignedPoints');
     map['is_synced'] = 0;
 
-    final id = await db.insert('accounts', map, conflictAlgorithm: ConflictAlgorithm.replace);
-    
+    final id = await db.insert(
+      'accounts',
+      map,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+
     // Insert relational items
-    await _syncListsToItemsTable(account.amomimusId, 'sticker', account.ownedStickers);
-    await _syncListsToItemsTable(account.amomimusId, 'owned_batch', account.ownedStickerBatches);
-    await _syncListsToItemsTable(account.amomimusId, 'wishlist_batch', account.wishlistStickerBatches);
-    await _syncListsToItemsTable(account.amomimusId, 'hidden_feed', account.hiddenFeeds);
-    
+    await _syncListsToItemsTable(
+      account.amomimusId,
+      'sticker',
+      account.ownedStickers,
+    );
+    await _syncListsToItemsTable(
+      account.amomimusId,
+      'owned_batch',
+      account.ownedStickerBatches,
+    );
+    await _syncListsToItemsTable(
+      account.amomimusId,
+      'wishlist_batch',
+      account.wishlistStickerBatches,
+    );
+    await _syncListsToItemsTable(
+      account.amomimusId,
+      'hidden_feed',
+      account.hiddenFeeds,
+    );
+    await _syncListsToItemsTable(
+      account.amomimusId,
+      'blocked_by',
+      account.blockedBy,
+    );
+
     // Insert blocks
-    await _syncBlocksTable(account.amomimusId, account.blockedUsers, account.exBlockedUsers);
+    await _syncBlocksTable(
+      account.amomimusId,
+      account.blockedUsers,
+      account.exBlockedUsers,
+    );
 
     return id;
   }
@@ -208,9 +234,10 @@ class SqliteService {
   Future<void> updateAccount(UserAccount account) async {
     final db = await instance.database;
     final map = account.toMap();
-    
+
     map.remove('ownedStickers');
     map.remove('blockedUsers');
+    map.remove('blockedBy');
     map.remove('exBlockedUsers');
     map.remove('hiddenFeeds');
     map.remove('wishlistStickerBatches');
@@ -226,27 +253,53 @@ class SqliteService {
     );
 
     // Update relational items (replacing old ones)
-    await _syncListsToItemsTable(account.amomimusId, 'sticker', account.ownedStickers);
-    await _syncListsToItemsTable(account.amomimusId, 'owned_batch', account.ownedStickerBatches);
-    await _syncListsToItemsTable(account.amomimusId, 'wishlist_batch', account.wishlistStickerBatches);
-    await _syncListsToItemsTable(account.amomimusId, 'hidden_feed', account.hiddenFeeds);
-    await _syncBlocksTable(account.amomimusId, account.blockedUsers, account.exBlockedUsers);
+    await _syncListsToItemsTable(
+      account.amomimusId,
+      'sticker',
+      account.ownedStickers,
+    );
+    await _syncListsToItemsTable(
+      account.amomimusId,
+      'owned_batch',
+      account.ownedStickerBatches,
+    );
+    await _syncListsToItemsTable(
+      account.amomimusId,
+      'wishlist_batch',
+      account.wishlistStickerBatches,
+    );
+    await _syncListsToItemsTable(
+      account.amomimusId,
+      'hidden_feed',
+      account.hiddenFeeds,
+    );
+    await _syncListsToItemsTable(
+      account.amomimusId,
+      'blocked_by',
+      account.blockedBy,
+    );
+    await _syncBlocksTable(
+      account.amomimusId,
+      account.blockedUsers,
+      account.exBlockedUsers,
+    );
   }
 
   Future<List<UserAccount>> getAllAccounts() async {
     final db = await instance.database;
     final maps = await db.query('accounts');
-    
+
     List<UserAccount> accounts = [];
     for (var map in maps) {
       final amomimusId = map['amomimusId'] as String;
-      
+
       // Fetch relational data
       final ownedStickers = await _getItems(amomimusId, 'sticker');
       final ownedBatches = await _getItems(amomimusId, 'owned_batch');
       final wishlistBatches = await _getItems(amomimusId, 'wishlist_batch');
       final hiddenFeeds = await _getItems(amomimusId, 'hidden_feed');
-      
+      final blockedBy = await _getItems(amomimusId, 'blocked_by');
+
       final blocksData = await _getBlocks(amomimusId);
       final blockedUsers = blocksData['blocked'] ?? [];
       final exBlockedUsers = blocksData['ex_blocked'] ?? [];
@@ -260,6 +313,7 @@ class SqliteService {
       mutableMap['wishlistStickerBatches'] = wishlistBatches;
       mutableMap['hiddenFeeds'] = hiddenFeeds;
       mutableMap['blockedUsers'] = blockedUsers;
+      mutableMap['blockedBy'] = blockedBy;
       mutableMap['exBlockedUsers'] = exBlockedUsers;
       mutableMap['localAssignedPoints'] = localPoints;
 
@@ -272,59 +326,101 @@ class SqliteService {
   Future<void> deleteAccount(String email, String amomimusId) async {
     final db = await instance.database;
     await db.delete('accounts', where: 'email = ?', whereArgs: [email]);
-    await db.delete('user_items', where: 'amomimusId = ?', whereArgs: [amomimusId]);
+    await db.delete(
+      'user_items',
+      where: 'amomimusId = ?',
+      whereArgs: [amomimusId],
+    );
     await db.delete('blocks', where: 'blocker_id = ?', whereArgs: [amomimusId]);
-    await db.delete('reports', where: 'reporter_id = ?', whereArgs: [amomimusId]);
+    await db.delete(
+      'reports',
+      where: 'reporter_id = ?',
+      whereArgs: [amomimusId],
+    );
   }
 
   // ==========================================
   // RELATIONAL HELPERS
   // ==========================================
 
-  Future<void> _syncListsToItemsTable(String amomimusId, String type, List<String> items) async {
+  Future<void> _syncListsToItemsTable(
+    String amomimusId,
+    String type,
+    List<String> items,
+  ) async {
     final db = await instance.database;
-    await db.delete('user_items', where: 'amomimusId = ? AND item_type = ?', whereArgs: [amomimusId, type]);
-    
+    await db.delete(
+      'user_items',
+      where: 'amomimusId = ? AND item_type = ?',
+      whereArgs: [amomimusId, type],
+    );
+
     for (var item in items) {
       await db.insert('user_items', {
         'amomimusId': amomimusId,
         'item_type': type,
         'item_id': item,
-        'is_synced': 0
+        'is_synced': 0,
       });
     }
   }
 
   Future<List<String>> _getItems(String amomimusId, String type) async {
     final db = await instance.database;
-    final maps = await db.query('user_items', where: 'amomimusId = ? AND item_type = ?', whereArgs: [amomimusId, type]);
+    final maps = await db.query(
+      'user_items',
+      where: 'amomimusId = ? AND item_type = ?',
+      whereArgs: [amomimusId, type],
+    );
     return maps.map((m) => m['item_id'] as String).toList();
   }
 
-  Future<void> _syncBlocksTable(String blockerId, List<String> blocked, List<String> exBlocked) async {
+  Future<void> _syncBlocksTable(
+    String blockerId,
+    List<String> blocked,
+    List<String> exBlocked,
+  ) async {
     final db = await instance.database;
     await db.delete('blocks', where: 'blocker_id = ?', whereArgs: [blockerId]);
-    
+
     for (var b in blocked) {
-      await db.insert('blocks', {'blocker_id': blockerId, 'blocked_id': b, 'status': 'blocked', 'timestamp': DateTime.now().toIso8601String(), 'is_synced': 0});
+      await db.insert('blocks', {
+        'blocker_id': blockerId,
+        'blocked_id': b,
+        'status': 'blocked',
+        'timestamp': DateTime.now().toIso8601String(),
+        'is_synced': 0,
+      });
     }
     for (var eb in exBlocked) {
-      await db.insert('blocks', {'blocker_id': blockerId, 'blocked_id': eb, 'status': 'ex_blocked', 'timestamp': DateTime.now().toIso8601String(), 'is_synced': 0});
+      await db.insert('blocks', {
+        'blocker_id': blockerId,
+        'blocked_id': eb,
+        'status': 'ex_blocked',
+        'timestamp': DateTime.now().toIso8601String(),
+        'is_synced': 0,
+      });
     }
   }
 
   Future<Map<String, List<String>>> _getBlocks(String blockerId) async {
     final db = await instance.database;
-    final maps = await db.query('blocks', where: 'blocker_id = ?', whereArgs: [blockerId]);
-    
+    final maps = await db.query(
+      'blocks',
+      where: 'blocker_id = ?',
+      whereArgs: [blockerId],
+    );
+
     List<String> blocked = [];
     List<String> exBlocked = [];
-    
+
     for (var m in maps) {
       if (m['status'] == 'blocked') {
         blocked.add(m['blocked_id'] as String);
       } else {
-        exBlocked.add(m['blocked_id'] as String); // Will contain targetId|timestamp if stored like that, or we handle timestamp separately
+        exBlocked.add(
+          m['blocked_id'] as String,
+        ); // Will contain targetId|timestamp if stored like that, or we handle timestamp separately
       }
     }
     return {'blocked': blocked, 'ex_blocked': exBlocked};
@@ -334,7 +430,13 @@ class SqliteService {
   // REPORTS / ADMIN GOD POWER
   // ==========================================
 
-  Future<void> addReport(String reporterId, String reportedId, String category, int points, bool isChatBubble) async {
+  Future<void> addReport(
+    String reporterId,
+    String reportedId,
+    String category,
+    int points,
+    bool isChatBubble,
+  ) async {
     final db = await instance.database;
     await db.insert('reports', {
       'reporter_id': reporterId,
@@ -343,20 +445,24 @@ class SqliteService {
       'points': points,
       'is_chat_bubble': isChatBubble ? 1 : 0,
       'timestamp': DateTime.now().toIso8601String(),
-      'is_synced': 0
+      'is_synced': 0,
     });
   }
 
   Future<Map<String, int>> _getLocalPoints(String reporterId) async {
     final db = await instance.database;
     // For localAssignedPoints, we aggregate points reported BY this user
-    final maps = await db.query('reports', where: 'reporter_id = ?', whereArgs: [reporterId]);
+    final maps = await db.query(
+      'reports',
+      where: 'reporter_id = ?',
+      whereArgs: [reporterId],
+    );
     Map<String, int> pointsMap = {};
     for (var m in maps) {
       final rId = m['reported_id'] as String;
       final pts = m['points'] as int;
       // In the old flow, local points were scaled up * 4. We can do that aggregation here
-      pointsMap[rId] = (pointsMap[rId] ?? 0) + (pts * 4); 
+      pointsMap[rId] = (pointsMap[rId] ?? 0) + (pts * 4);
     }
     return pointsMap;
   }

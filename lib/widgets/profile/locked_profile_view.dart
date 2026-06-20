@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../amomimusdark.dart';
+
 class LockedProfileView extends StatelessWidget {
   final bool isDark;
 
-  const LockedProfileView({
-    super.key,
-    required this.isDark,
-  });
+  const LockedProfileView({super.key, required this.isDark});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +16,8 @@ class LockedProfileView extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(40),
-      decoration: Provider.of<AmomimusDarkTheme>(context).cardDecoration.copyWith(
+      decoration: Provider.of<AmomimusDarkTheme>(context).cardDecoration
+          .copyWith(
             border: Border.all(
               color: isDark ? Colors.white12 : Colors.black12,
               width: 2,

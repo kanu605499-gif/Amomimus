@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../database_helper.dart';
 import '../database/sqlite_service.dart';
 import '../models/report_model.dart';
@@ -7,6 +9,7 @@ import '../models/user_indicator_model.dart';
 import '../helpers/benevolent_calculator.dart';
 import 'auth_service.dart';
 import '../database/models/user_register_sql.dart';
+
 class AccountManager extends ChangeNotifier {
   final AuthService authService;
 
@@ -31,14 +34,19 @@ class AccountManager extends ChangeNotifier {
       print("==== DB LOAD SKIPPED (possibly web): $e ====");
       _accounts = [];
     }
-    
+
     // Auto-select the first account if none is selected
     if (_accounts.isNotEmpty && _currentUser == null) {
       // By default, select the first demo account if available, else first dummy
-      _currentUser = _accounts.firstWhere((acc) => acc.isDemo, orElse: () => _accounts.first);
+      _currentUser = _accounts.firstWhere(
+        (acc) => acc.isDemo,
+        orElse: () => _accounts.first,
+      );
     } else if (_currentUser != null) {
       // Refresh current user object from the loaded list
-      final matchingAccounts = _accounts.where((acc) => acc.id == _currentUser!.id);
+      final matchingAccounts = _accounts.where(
+        (acc) => acc.id == _currentUser!.id,
+      );
       if (matchingAccounts.isNotEmpty) {
         _currentUser = matchingAccounts.first;
       } else {
@@ -50,18 +58,24 @@ class AccountManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> registerAndLogin(UserModelSql credentials, UserAccount newUser) async {
+  Future<bool> registerAndLogin(
+    UserModelSql credentials,
+    UserAccount newUser,
+  ) async {
     bool isSuccess = await authService.registerAccount(credentials, newUser);
     if (!isSuccess) return false;
 
     // We fetch updated accounts to sync the internal state
     await loadAccounts();
-    
+
     // Set the newly created user as the active user
-    final createdUser = _accounts.firstWhere((acc) => acc.email == newUser.email, orElse: () {
-      _accounts.add(newUser);
-      return newUser;
-    });
+    final createdUser = _accounts.firstWhere(
+      (acc) => acc.email == newUser.email,
+      orElse: () {
+        _accounts.add(newUser);
+        return newUser;
+      },
+    );
     switchAccount(createdUser);
     return true;
   }
@@ -74,7 +88,10 @@ class AccountManager extends ChangeNotifier {
     final user = await authService.login(email, password);
     if (user != null) {
       await loadAccounts();
-      final loggedInUser = _accounts.firstWhere((acc) => acc.email == email, orElse: () => user);
+      final loggedInUser = _accounts.firstWhere(
+        (acc) => acc.email == email,
+        orElse: () => user,
+      );
       switchAccount(loggedInUser);
       return true;
     }
@@ -92,7 +109,7 @@ class AccountManager extends ChangeNotifier {
     } catch (e) {
       print("==== DB DELETE SKIPPED: $e ====");
     }
-    
+
     await loadAccounts();
     if (_currentUser?.email == email) {
       if (_accounts.isNotEmpty) {
@@ -125,30 +142,35 @@ class AccountManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateCoins(int amountDelta, {bool updateTimestamp = false}) async {
+  Future<void> updateCoins(
+    int amountDelta, {
+    bool updateTimestamp = false,
+  }) async {
     if (_currentUser == null) return;
-    
+
     final newCoins = (_currentUser!.coins + amountDelta).clamp(0, 999999);
     UserAccount updatedUser = _currentUser!.copyWith(coins: newCoins);
-    
+
     if (updateTimestamp) {
-      updatedUser = updatedUser.copyWith(lastRedeemed: DateTime.now().toIso8601String());
+      updatedUser = updatedUser.copyWith(
+        lastRedeemed: DateTime.now().toIso8601String(),
+      );
     }
-    
+
     try {
       await DatabaseHelper.instance.updateUser(updatedUser);
     } catch (e) {
       print("==== DB UPDATE SKIPPED: $e ====");
     }
-    
+
     _currentUser = updatedUser;
-    
+
     // Update the list as well
     final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
     if (index != -1) {
       _accounts[index] = updatedUser;
     }
-    
+
     notifyListeners();
   }
 
@@ -156,8 +178,12 @@ class AccountManager extends ChangeNotifier {
     if (_currentUser == null) return;
     if (_currentUser!.blockedUsers.contains(targetAmomimusId)) return;
 
-    final updatedBlocked = List<String>.from(_currentUser!.blockedUsers)..add(targetAmomimusId);
-    final updatedExBlocked = List<String>.from(_currentUser!.exBlockedUsers)..removeWhere((e) => e.startsWith('$targetAmomimusId|') || e == targetAmomimusId);
+    final updatedBlocked = List<String>.from(_currentUser!.blockedUsers)
+      ..add(targetAmomimusId);
+    final updatedExBlocked = List<String>.from(_currentUser!.exBlockedUsers)
+      ..removeWhere(
+        (e) => e.startsWith('$targetAmomimusId|') || e == targetAmomimusId,
+      );
 
     final updatedUser = _currentUser!.copyWith(
       blockedUsers: updatedBlocked,
@@ -174,6 +200,22 @@ class AccountManager extends ChangeNotifier {
     final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
     if (index != -1) _accounts[index] = updatedUser;
 
+    // Also update the target account's blockedBy list
+    final targetAccount = getAccountById(targetAmomimusId);
+    if (targetAccount != null &&
+        !targetAccount.blockedBy.contains(_currentUser!.amomimusId)) {
+      final updatedBlockedBy = List<String>.from(targetAccount.blockedBy)
+        ..add(_currentUser!.amomimusId);
+      final updatedTarget = targetAccount.copyWith(blockedBy: updatedBlockedBy);
+      try {
+        await DatabaseHelper.instance.updateUser(updatedTarget);
+      } catch (e) {
+        print("==== DB UPDATE TARGET SKIPPED: $e ====");
+      }
+      final targetIdx = _accounts.indexWhere((acc) => acc.id == updatedTarget.id);
+      if (targetIdx != -1) _accounts[targetIdx] = updatedTarget;
+    }
+
     notifyListeners();
   }
 
@@ -181,12 +223,15 @@ class AccountManager extends ChangeNotifier {
     if (_currentUser == null) return;
     if (!_currentUser!.blockedUsers.contains(targetAmomimusId)) return;
 
-    final updatedBlocked = List<String>.from(_currentUser!.blockedUsers)..remove(targetAmomimusId);
+    final updatedBlocked = List<String>.from(_currentUser!.blockedUsers)
+      ..remove(targetAmomimusId);
     final updatedExBlocked = List<String>.from(_currentUser!.exBlockedUsers);
-    
+
     // Remove old entry if exists
-    updatedExBlocked.removeWhere((e) => e.startsWith('$targetAmomimusId|') || e == targetAmomimusId);
-    
+    updatedExBlocked.removeWhere(
+      (e) => e.startsWith('$targetAmomimusId|') || e == targetAmomimusId,
+    );
+
     // Add new entry with timestamp
     final timestamp = DateTime.now().toIso8601String();
     updatedExBlocked.add('$targetAmomimusId|$timestamp');
@@ -206,12 +251,39 @@ class AccountManager extends ChangeNotifier {
     final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
     if (index != -1) _accounts[index] = updatedUser;
 
+    // Also remove currentUser from target's blockedBy list
+    final targetAccount = getAccountById(targetAmomimusId);
+    if (targetAccount != null &&
+        targetAccount.blockedBy.contains(_currentUser!.amomimusId)) {
+      final updatedBlockedBy = List<String>.from(targetAccount.blockedBy)
+        ..remove(_currentUser!.amomimusId);
+      final updatedTarget = targetAccount.copyWith(blockedBy: updatedBlockedBy);
+      try {
+        await DatabaseHelper.instance.updateUser(updatedTarget);
+      } catch (e) {
+        print("==== DB UPDATE TARGET SKIPPED: $e ====");
+      }
+      final targetIdx = _accounts.indexWhere((acc) => acc.id == updatedTarget.id);
+      if (targetIdx != -1) _accounts[targetIdx] = updatedTarget;
+    }
+
     notifyListeners();
   }
 
-  bool isRecentlyUnblocked(String targetAmomimusId) {
+  bool isBlockedBy(String targetAmomimusId) {
     if (_currentUser == null) return false;
-    
+    final targetAccount = getAccountById(targetAmomimusId);
+    if (targetAccount == null) return false;
+    return targetAccount.blockedUsers.contains(_currentUser!.amomimusId);
+  }
+
+  bool isRecentlyUnblocked(String targetAmomimusId) {
+    return getUnblockTimeRemaining(targetAmomimusId) != null;
+  }
+
+  Duration? getUnblockTimeRemaining(String targetAmomimusId) {
+    if (_currentUser == null) return null;
+
     for (var entry in _currentUser!.exBlockedUsers) {
       if (entry.startsWith('$targetAmomimusId|')) {
         final parts = entry.split('|');
@@ -219,12 +291,32 @@ class AccountManager extends ChangeNotifier {
           final unblockDate = DateTime.tryParse(parts[1]);
           if (unblockDate != null) {
             final diff = DateTime.now().difference(unblockDate);
-            return diff.inDays <= 3;
+            if (diff.inHours < 72) {
+              return const Duration(hours: 72) - diff;
+            }
           }
         }
-      } else if (entry == targetAmomimusId) {
-        // Legacy entry without timestamp. Treat as expired.
-        return false;
+      }
+    }
+    return null;
+  }
+
+  bool isRecentlyUnblockedByTarget(String myAmomimusId, String targetAmomimusId) {
+    final targetAccount = getAccountById(targetAmomimusId);
+    if (targetAccount == null) return false;
+
+    for (var entry in targetAccount.exBlockedUsers) {
+      if (entry.startsWith('$myAmomimusId|')) {
+        final parts = entry.split('|');
+        if (parts.length == 2) {
+          final unblockDate = DateTime.tryParse(parts[1]);
+          if (unblockDate != null) {
+            final diff = DateTime.now().difference(unblockDate);
+            if (diff.inHours < 72) {
+              return true;
+            }
+          }
+        }
       }
     }
     return false;
@@ -265,12 +357,15 @@ class AccountManager extends ChangeNotifier {
 
   String getDisplayIndicator(String targetId, String globalIndicator) {
     if (_currentUser == null) return globalIndicator;
-    
+
     // Use max to prevent double-counting local points that are already in global points
     final localPoints = _currentUser!.localAssignedPoints[targetId] ?? 0;
     if (localPoints > 0) {
       final targetUser = getAccountById(targetId);
-      final effectivePoints = math.max(targetUser?.benevolentPoints ?? 0, localPoints);
+      final effectivePoints = math.max(
+        targetUser?.benevolentPoints ?? 0,
+        localPoints,
+      );
       return UserIndicatorHelper.fromBenevolentPoints(effectivePoints).name;
     }
     return globalIndicator;
@@ -278,213 +373,390 @@ class AccountManager extends ChangeNotifier {
 
   UserAccount? getAccountById(String id) {
     try {
-      return _accounts.firstWhere((acc) => acc.amomimusId == id || acc.id.toString() == id);
+      return _accounts.firstWhere(
+        (acc) => acc.amomimusId == id || acc.id.toString() == id,
+      );
     } catch (_) {
       return null;
     }
   }
 
-  Future<void> submitReport(String targetId, ReportCategory category, {bool isChatBubbleReport = false}) async {
+  // ══════════════════════════════════════════════════════════
+  // REPORT TOKEN SYSTEM (v2)
+  // ══════════════════════════════════════════════════════════
+
+  static const String _reportTokenKey = 'amomimus_report_tokens';
+
+  /// Loads the current report token state from SharedPreferences.
+  Future<Map<String, dynamic>> _loadReportTokens() async {
+    final prefs = await SharedPreferences.getInstance();
+    final data = prefs.getString(_reportTokenKey);
+    if (data == null) return {};
+    try {
+      return Map<String, dynamic>.from(jsonDecode(data));
+    } catch (_) {
+      return {};
+    }
+  }
+
+  /// Saves report token state to SharedPreferences.
+  Future<void> _saveReportTokens(Map<String, dynamic> tokens) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_reportTokenKey, jsonEncode(tokens));
+  }
+
+  /// Gets daily report counts by category for today.
+  Map<ReportCategory, int> _getDailyReportCounts(Map<String, dynamic> tokens) {
+    final today = DateTime.now().toIso8601String().split('T').first;
+    final storedDate = tokens['date'] as String?;
+
+    if (storedDate != today) return {}; // New day, reset counts
+
+    return {
+      ReportCategory.spamHarassment:
+          (tokens['spam_daily'] as int?) ?? 0,
+      ReportCategory.inappropriateContent:
+          (tokens['inappropriate_daily'] as int?) ?? 0,
+      ReportCategory.hateSpeech:
+          (tokens['hate_speech_daily'] as int?) ?? 0,
+    };
+  }
+
+  /// Gets weekly hate speech report count.
+  int _getWeeklyHateSpeechCount(Map<String, dynamic> tokens) {
+    final weeklyList = (tokens['hate_speech_weekly_dates'] as List<dynamic>?) ?? [];
+    final oneWeekAgo = DateTime.now().subtract(const Duration(days: 7));
+
+    int count = 0;
+    for (final dateStr in weeklyList) {
+      final date = DateTime.tryParse(dateStr.toString());
+      if (date != null && date.isAfter(oneWeekAgo)) count++;
+    }
+    return count;
+  }
+
+  /// Gets total daily reports across all categories.
+  int _getTotalDailyReports(Map<ReportCategory, int> dailyCounts) {
+    return dailyCounts.values.fold(0, (sum, count) => sum + count);
+  }
+
+  /// Checks if report is allowed and returns reason if blocked.
+  /// Returns null if allowed.
+  Future<String?> checkReportAllowed(ReportCategory category) async {
+    final tokens = await _loadReportTokens();
+    final dailyCounts = _getDailyReportCounts(tokens);
+    final weeklyHateSpeech = _getWeeklyHateSpeechCount(tokens);
+    final totalDaily = _getTotalDailyReports(dailyCounts);
+
+    return BenevolentCalculator.checkReportTokens(
+      category: category,
+      dailyReportsByCategory: dailyCounts,
+      weeklyHateSpeechCount: weeklyHateSpeech,
+      totalDailyReports: totalDaily,
+    );
+  }
+
+  /// Returns remaining report tokens for UI display.
+  Future<Map<String, int>> getRemainingReportTokens() async {
+    final tokens = await _loadReportTokens();
+    final dailyCounts = _getDailyReportCounts(tokens);
+    final weeklyHateSpeech = _getWeeklyHateSpeechCount(tokens);
+    final totalDaily = _getTotalDailyReports(dailyCounts);
+
+    return BenevolentCalculator.getRemainingTokens(
+      dailyReportsByCategory: dailyCounts,
+      weeklyHateSpeechCount: weeklyHateSpeech,
+      totalDailyReports: totalDaily,
+    );
+  }
+
+  /// Records a report token consumption.
+  Future<void> _consumeReportToken(ReportCategory category) async {
+    final tokens = await _loadReportTokens();
+    final today = DateTime.now().toIso8601String().split('T').first;
+    final storedDate = tokens['date'] as String?;
+
+    // Reset daily counts if new day
+    if (storedDate != today) {
+      tokens['date'] = today;
+      tokens['spam_daily'] = 0;
+      tokens['inappropriate_daily'] = 0;
+      tokens['hate_speech_daily'] = 0;
+    }
+
+    // Increment category count
+    switch (category) {
+      case ReportCategory.spamHarassment:
+        tokens['spam_daily'] = ((tokens['spam_daily'] as int?) ?? 0) + 1;
+        break;
+      case ReportCategory.inappropriateContent:
+        tokens['inappropriate_daily'] =
+            ((tokens['inappropriate_daily'] as int?) ?? 0) + 1;
+        break;
+      case ReportCategory.hateSpeech:
+        tokens['hate_speech_daily'] =
+            ((tokens['hate_speech_daily'] as int?) ?? 0) + 1;
+        // Also track weekly
+        final weeklyList =
+            List<String>.from((tokens['hate_speech_weekly_dates'] as List<dynamic>?) ?? []);
+        weeklyList.add(DateTime.now().toIso8601String());
+        // Prune entries older than 7 days
+        final oneWeekAgo = DateTime.now().subtract(const Duration(days: 7));
+        weeklyList.removeWhere((d) {
+          final date = DateTime.tryParse(d);
+          return date != null && date.isBefore(oneWeekAgo);
+        });
+        tokens['hate_speech_weekly_dates'] = weeklyList;
+        break;
+    }
+
+    await _saveReportTokens(tokens);
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // SUBMIT REPORT (v2 — with token system)
+  // ══════════════════════════════════════════════════════════
+
+  /// Submits a report against a target user.
+  /// Returns a String reason if blocked by token limits (meaning only local report was applied), or null on success.
+  Future<String?> submitReport(
+    String targetId,
+    ReportCategory category, {
+    bool isChatBubbleReport = false,
+  }) async {
+    // 1. Check token limits for GLOBAL submission
+    final blockReason = await checkReportAllowed(category);
+
+    // 2. Normalize target ID
     String normalizedTargetId = targetId;
     final match = RegExp(r'#(?:YOU|AMO|AMI|AMOM)-(\d+)').firstMatch(targetId);
     if (match != null) {
       int num = int.parse(match.group(1)!);
       if (num == 100) num = 110;
-      normalizedTargetId = '#AMM-$num';
+      normalizedTargetId = '#AMM-\$num';
     } else {
       normalizedTargetId = targetId.replaceAll(RegExp(r'#AM[OMI]+-'), '#AMM-');
     }
-    final userIndex = _accounts.indexWhere((acc) => acc.amomimusId == targetId || acc.amomimusId == normalizedTargetId || acc.id.toString() == targetId);
-    
+
+    // 3. ALWAYS update local perspective, so user can protect themselves even without tokens
+    if (_currentUser != null && _currentUser!.amomimusId != targetId) {
+      final newPointsMap = Map<String, int>.from(
+        _currentUser!.localAssignedPoints,
+      );
+      final currentLocalPoints = newPointsMap[targetId] ?? 0;
+
+      final localStatus = BenevolentCalculator.addReportToUser(
+        currentPoints: currentLocalPoints,
+        category: category,
+        isChatBubbleReport: isChatBubbleReport,
+        currentIndicator: 'cloudy',
+        pointMultiplier: 4.0,
+      );
+
+      newPointsMap[targetId] = localStatus.points;
+
+      final newReporter = _currentUser!.copyWith(
+        localAssignedPoints: newPointsMap,
+      );
+      _currentUser = newReporter;
+
+      try {
+        await DatabaseHelper.instance.updateUser(newReporter);
+      } catch (e) {
+        print("==== DB UPDATE SKIPPED: \$e ====");
+      }
+
+      final reporterIndex = _accounts.indexWhere(
+        (acc) => acc.id == newReporter.id,
+      );
+      if (reporterIndex != -1) {
+        _accounts[reporterIndex] = newReporter;
+      }
+    }
+
+    // 4. If global tokens are exhausted, return early here. 
+    // Local points are saved, but global target points remain unchanged.
+    if (blockReason != null) {
+      notifyListeners();
+      return blockReason;
+    }
+
+    // 5. Apply to global target user
+    final reporterPoints = _currentUser?.benevolentPoints ?? 0;
+    final userIndex = _accounts.indexWhere(
+      (acc) =>
+          acc.amomimusId == targetId ||
+          acc.amomimusId == normalizedTargetId ||
+          acc.id.toString() == targetId,
+    );
+
     if (userIndex != -1) {
       var user = _accounts[userIndex];
-      
+
+      final existingReportCount = user.reportedCount;
+
       final newStatus = BenevolentCalculator.addReportToUser(
         currentPoints: user.benevolentPoints,
         category: category,
         isChatBubbleReport: isChatBubbleReport,
         currentIndicator: user.indicator,
+        existingReportCount: existingReportCount,
+        reporterBenevolentPoints: reporterPoints,
       );
-      
+
       final updatedUser = user.copyWith(
         reportedCount: user.reportedCount + 1,
         benevolentPoints: newStatus.points,
         indicator: newStatus.indicator.name,
       );
-      
+
       try {
         await DatabaseHelper.instance.updateUser(updatedUser);
-        // INSERT INTO REPORTS TABLE FOR OFFLINE SYNC/GOD POWER
         await SqliteService.instance.addReport(
-          _currentUser?.amomimusId ?? 'anonymous', 
-          normalizedTargetId, 
-          category.toString(), 
-          1, 
-          isChatBubbleReport
+          _currentUser?.amomimusId ?? 'anonymous',
+          normalizedTargetId,
+          category.toString(),
+          1,
+          isChatBubbleReport,
         );
       } catch (e) {
-        print("==== DB UPDATE SKIPPED: $e ====");
+        print("==== DB UPDATE SKIPPED: \$e ====");
       }
-      
+
       _accounts[userIndex] = updatedUser;
-      
-      if (_currentUser?.id == updatedUser.id) {
-        _currentUser = updatedUser;
-      }
+
+      // Note: we don't update _currentUser here because we just updated it above for local perspective
     }
 
-    // ALWAYS update local perspective, even for dummy users (userIndex == -1)
-    if (_currentUser != null && _currentUser!.amomimusId != targetId) {
-      final newPointsMap = Map<String, int>.from(_currentUser!.localAssignedPoints);
-      final currentLocalPoints = newPointsMap[targetId] ?? 0;
-      
-      final localStatus = BenevolentCalculator.addReportToUser(
-        currentPoints: currentLocalPoints,
-        category: category,
-        isChatBubbleReport: isChatBubbleReport,
-        currentIndicator: 'cloudy', // we don't care about the string here for local math
-        pointMultiplier: 4.0, // Scale up local points so 5 hate speech = Ghost
-      );
-      
-      newPointsMap[targetId] = localStatus.points;
-      
-      final newReporter = _currentUser!.copyWith(localAssignedPoints: newPointsMap);
-      _currentUser = newReporter;
-      
-      try {
-        await DatabaseHelper.instance.updateUser(newReporter);
-      } catch (e) {
-        print("==== DB UPDATE SKIPPED: $e ====");
-      }
-      
-      final reporterIndex = _accounts.indexWhere((acc) => acc.id == newReporter.id);
-      if (reporterIndex != -1) {
-        _accounts[reporterIndex] = newReporter;
-      }
-    }
-    
+    // 6. Consume report token
+    await _consumeReportToken(category);
+
     notifyListeners();
+    return null; // Success
   }
-
 
   Future<void> hideFeed(String feedId) async {
     if (_currentUser == null) return;
-    
+
     if (!_currentUser!.hiddenFeeds.contains(feedId)) {
-      final updatedList = List<String>.from(_currentUser!.hiddenFeeds)..add(feedId);
+      final updatedList = List<String>.from(_currentUser!.hiddenFeeds)
+        ..add(feedId);
       final updatedUser = _currentUser!.copyWith(hiddenFeeds: updatedList);
-      
+
       try {
         await DatabaseHelper.instance.updateUser(updatedUser);
       } catch (e) {
         print("==== DB UPDATE SKIPPED: $e ====");
       }
-      
+
       _currentUser = updatedUser;
-      
+
       final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
       if (index != -1) {
         _accounts[index] = updatedUser;
       }
-      
+
       notifyListeners();
     }
   }
 
   Future<void> incrementChatRequestCount() async {
     if (_currentUser == null) return;
-    
+
     final today = DateTime.now().toIso8601String().split('T').first;
     final lastReqDate = _currentUser!.lastChatRequestDate?.split('T').first;
     int newCount = _currentUser!.dailyChatRequestsSent;
-    
+
     if (lastReqDate != today) {
       newCount = 1;
     } else {
       newCount += 1;
     }
-    
+
     final updatedUser = _currentUser!.copyWith(
       dailyChatRequestsSent: newCount,
       lastChatRequestDate: DateTime.now().toIso8601String(),
     );
-    
+
     try {
       await DatabaseHelper.instance.updateUser(updatedUser);
     } catch (e) {
       print("==== DB UPDATE SKIPPED: $e ====");
     }
-    
+
     _currentUser = updatedUser;
-    
+
     final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
     if (index != -1) {
       _accounts[index] = updatedUser;
     }
-    
+
     notifyListeners();
   }
 
   Future<void> toggleWishlistBatch(String batchId) async {
     if (_currentUser == null) return;
-    
+
     final currentList = List<String>.from(_currentUser!.wishlistStickerBatches);
     if (currentList.contains(batchId)) {
       currentList.remove(batchId);
     } else {
       currentList.add(batchId);
     }
-    
-    final updatedUser = _currentUser!.copyWith(wishlistStickerBatches: currentList);
-    
+
+    final updatedUser = _currentUser!.copyWith(
+      wishlistStickerBatches: currentList,
+    );
+
     try {
       await DatabaseHelper.instance.updateUser(updatedUser);
     } catch (e) {
       print("==== DB UPDATE SKIPPED: $e ====");
     }
-    
+
     _currentUser = updatedUser;
-    
+
     final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
     if (index != -1) {
       _accounts[index] = updatedUser;
     }
-    
+
     notifyListeners();
   }
 
   Future<bool> purchaseStickerBatch(String batchId, int cost) async {
     if (_currentUser == null) return false;
-    
+
     if (_currentUser!.coins < cost) {
       return false; // Not enough coins
     }
-    
+
     if (_currentUser!.ownedStickerBatches.contains(batchId)) {
       return false; // Already owned
     }
 
     final newCoins = _currentUser!.coins - cost;
-    final updatedList = List<String>.from(_currentUser!.ownedStickerBatches)..add(batchId);
-    
+    final updatedList = List<String>.from(_currentUser!.ownedStickerBatches)
+      ..add(batchId);
+
     final updatedUser = _currentUser!.copyWith(
       coins: newCoins,
       ownedStickerBatches: updatedList,
     );
-    
+
     try {
       await DatabaseHelper.instance.updateUser(updatedUser);
     } catch (e) {
       print("==== DB UPDATE SKIPPED: $e ====");
     }
-    
+
     _currentUser = updatedUser;
-    
+
     final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
     if (index != -1) {
       _accounts[index] = updatedUser;
     }
-    
+
     notifyListeners();
     return true;
   }

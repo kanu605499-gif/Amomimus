@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../amomimusdark.dart';
+
 class ChatRequestDialog extends StatelessWidget {
   final VoidCallback onConfirm;
   final String targetUserName;
@@ -10,7 +11,7 @@ class ChatRequestDialog extends StatelessWidget {
   final String myTemporaryName;
 
   const ChatRequestDialog({
-    super.key, 
+    super.key,
     required this.onConfirm,
     required this.targetUserName,
     required this.myRegisteredName,
@@ -22,11 +23,9 @@ class ChatRequestDialog extends StatelessWidget {
     // ignore: unused_local_variable
     final t = Translations.of(context);
     final isDark = Provider.of<AmomimusDarkTheme>(context).isDarkMode;
-    
+
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       backgroundColor: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -36,7 +35,9 @@ class ChatRequestDialog extends StatelessWidget {
             Icon(
               Icons.chat_bubble_outline,
               size: 48,
-              color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+              color: isDark
+                  ? AmomimusDarkTheme.policeLineYellow
+                  : AmomimusDarkTheme.primaryPurple,
             ),
             const SizedBox(height: 16),
             Text(
@@ -44,7 +45,9 @@ class ChatRequestDialog extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: isDark ? AmomimusDarkTheme.primaryPurple : AmomimusDarkTheme.policeLineYellow,
+                color: isDark
+                    ? AmomimusDarkTheme.primaryPurple
+                    : AmomimusDarkTheme.policeLineYellow,
               ),
               textAlign: TextAlign.center,
             ),
@@ -54,7 +57,9 @@ class ChatRequestDialog extends StatelessWidget {
               text: TextSpan(
                 style: TextStyle(
                   fontSize: 14,
-                  color: isDark ? AmomimusDarkTheme.textSecondary : Colors.black54,
+                  color: isDark
+                      ? AmomimusDarkTheme.textSecondary
+                      : Colors.black54,
                   height: 1.5,
                 ),
                 children: [
@@ -63,7 +68,9 @@ class ChatRequestDialog extends StatelessWidget {
                     text: myRegisteredName,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                      color: isDark
+                          ? AmomimusDarkTheme.policeLineYellow
+                          : AmomimusDarkTheme.primaryPurple,
                     ),
                   ),
                   TextSpan(text: t.chat_request_desc2),
@@ -71,7 +78,9 @@ class ChatRequestDialog extends StatelessWidget {
                     text: myTemporaryName,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: isDark ? AmomimusDarkTheme.primaryPurple : AmomimusDarkTheme.policeLineYellow,
+                      color: isDark
+                          ? AmomimusDarkTheme.primaryPurple
+                          : AmomimusDarkTheme.policeLineYellow,
                     ),
                   ),
                   TextSpan(text: t.chat_request_desc3),
@@ -86,7 +95,10 @@ class ChatRequestDialog extends StatelessWidget {
                   child: TextButton(
                     onPressed: () => Navigator.of(context).pop(),
                     style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                     ),
                     child: Text(
                       t.cancel,
@@ -106,12 +118,19 @@ class ChatRequestDialog extends StatelessWidget {
                       onConfirm();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-                      foregroundColor: isDark ? AmomimusDarkTheme.primaryPurple : Colors.white,
+                      backgroundColor: isDark
+                          ? AmomimusDarkTheme.policeLineYellow
+                          : AmomimusDarkTheme.primaryPurple,
+                      foregroundColor: isDark
+                          ? Colors.black87
+                          : Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                     ),
                     child: Text(
                       t.send_request,

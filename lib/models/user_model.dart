@@ -23,16 +23,18 @@ class UserAccount {
   final int totalResonatesReceived;
   final List<String> ownedStickers;
   final List<String> blockedUsers;
+  final List<String> blockedBy; // NEW: Users who blocked this user
   final List<String> exBlockedUsers; // For historical blocked users
   final List<String> hiddenFeeds;
   final List<String> wishlistStickerBatches; // NEW WISHLIST DB FIELD
-  final List<String> ownedStickerBatches;    // TRACKS PURCHASED PACKS
+  final List<String> ownedStickerBatches; // TRACKS PURCHASED PACKS
 
   final Map<String, int> localAssignedPoints; // Maps amomimusId -> local points
 
   // Indicator system fields
-  final int benevolentPoints;    // 0–100 (percentage); 0-59 = CLOUDY, 60-89 = GHOST, 90-100 = NOISE
-  final String indicator;        // 'cloudy', 'ghost', or 'noise' (noise = admin-only)
+  final int
+  benevolentPoints; // 0–100 (percentage); 0-59 = CLOUDY, 60-89 = GHOST, 90-100 = NOISE
+  final String indicator; // 'cloudy', 'ghost', or 'noise' (noise = admin-only)
 
   UserAccount({
     this.id,
@@ -54,6 +56,7 @@ class UserAccount {
     this.totalResonatesReceived = 0,
     this.ownedStickers = const [],
     this.blockedUsers = const [],
+    this.blockedBy = const [],
     this.exBlockedUsers = const [],
     this.hiddenFeeds = const [],
     this.wishlistStickerBatches = const [],
@@ -74,7 +77,7 @@ class UserAccount {
       amomimusId: map['amomimusId'],
       gender: map['gender'],
       registrationDate: map['registrationDate'],
-      isDemo: map['isDemo'] == 1 || map['isDemo'] == true,
+      isDemo: map['isDemo'] == 1 || map['isDemo'] == true || (map['amomimusId'] as String? ?? '').startsWith('#AMM-'),
       bio: map['bio'] ?? "No bio yet",
       coins: map['coins'] ?? 1240,
       reportedCount: map['reportedCount'] ?? 0,
@@ -83,31 +86,30 @@ class UserAccount {
       lastChatRequestDate: map['lastChatRequestDate'],
       dateOfBirth: map['dateOfBirth'],
       totalResonatesReceived: map['totalResonatesReceived'] ?? 0,
-      ownedStickers: (map['ownedStickers'] as List?)
+      ownedStickers:
+          (map['ownedStickers'] as List?)?.map((e) => e as String).toList() ??
+          [],
+      blockedUsers:
+          (map['blockedUsers'] as List?)?.map((e) => e as String).toList() ??
+          [],
+      blockedBy:
+          (map['blockedBy'] as List?)?.map((e) => e as String).toList() ?? [],
+      exBlockedUsers:
+          (map['exBlockedUsers'] as List?)?.map((e) => e as String).toList() ??
+          [],
+      hiddenFeeds:
+          (map['hiddenFeeds'] as List?)?.map((e) => e as String).toList() ?? [],
+      wishlistStickerBatches:
+          (map['wishlistStickerBatches'] as List?)
               ?.map((e) => e as String)
               .toList() ??
           [],
-      blockedUsers: (map['blockedUsers'] as List?)
+      ownedStickerBatches:
+          (map['ownedStickerBatches'] as List?)
               ?.map((e) => e as String)
               .toList() ??
           [],
-      exBlockedUsers: (map['exBlockedUsers'] as List?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
-      hiddenFeeds: (map['hiddenFeeds'] as List?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
-      wishlistStickerBatches: (map['wishlistStickerBatches'] as List?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
-      ownedStickerBatches: (map['ownedStickerBatches'] as List?)
-              ?.map((e) => e as String)
-              .toList() ??
-          [],
-      localAssignedPoints: map['localAssignedPoints'] != null 
+      localAssignedPoints: map['localAssignedPoints'] != null
           ? Map<String, int>.from(map['localAssignedPoints'] as Map)
           : {},
       benevolentPoints: map['benevolentPoints'] ?? 0,
@@ -137,6 +139,7 @@ class UserAccount {
       'totalResonatesReceived': totalResonatesReceived,
       'ownedStickers': ownedStickers,
       'blockedUsers': blockedUsers,
+      'blockedBy': blockedBy,
       'exBlockedUsers': exBlockedUsers,
       'hiddenFeeds': hiddenFeeds,
       'wishlistStickerBatches': wishlistStickerBatches,
@@ -167,6 +170,7 @@ class UserAccount {
     int? totalResonatesReceived,
     List<String>? ownedStickers,
     List<String>? blockedUsers,
+    List<String>? blockedBy,
     List<String>? exBlockedUsers,
     List<String>? hiddenFeeds,
     List<String>? wishlistStickerBatches,
@@ -197,9 +201,11 @@ class UserAccount {
           totalResonatesReceived ?? this.totalResonatesReceived,
       ownedStickers: ownedStickers ?? this.ownedStickers,
       blockedUsers: blockedUsers ?? this.blockedUsers,
+      blockedBy: blockedBy ?? this.blockedBy,
       exBlockedUsers: exBlockedUsers ?? this.exBlockedUsers,
       hiddenFeeds: hiddenFeeds ?? this.hiddenFeeds,
-      wishlistStickerBatches: wishlistStickerBatches ?? this.wishlistStickerBatches,
+      wishlistStickerBatches:
+          wishlistStickerBatches ?? this.wishlistStickerBatches,
       ownedStickerBatches: ownedStickerBatches ?? this.ownedStickerBatches,
       localAssignedPoints: localAssignedPoints ?? this.localAssignedPoints,
       benevolentPoints: benevolentPoints ?? this.benevolentPoints,

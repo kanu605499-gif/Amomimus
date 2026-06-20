@@ -6,7 +6,11 @@ import 'package:amomimus/services/feed_manager.dart';
 import 'package:amomimus/models/post_model.dart';
 import 'package:provider/provider.dart';
 
-void showCreatePostBottomSheet(BuildContext context, bool isDark, UserAccount currentUser) {
+void showCreatePostBottomSheet(
+  BuildContext context,
+  bool isDark,
+  UserAccount currentUser,
+) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -46,7 +50,7 @@ class _CreatePostFormState extends State<_CreatePostForm> {
     // ignore: unused_local_variable
     final t = Translations.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
-    
+
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -119,23 +123,34 @@ class _CreatePostFormState extends State<_CreatePostForm> {
                   if (_postController.text.trim().isNotEmpty) {
                     AccountType accountType;
                     switch (widget.currentUser.gender) {
-                      case 'Ami': accountType = AccountType.ami; break;
-                      case 'Amom': accountType = AccountType.amom; break;
-                      case 'Amo': accountType = AccountType.amo; break;
-                      default: accountType = AccountType.user; break;
+                      case 'Ami':
+                        accountType = AccountType.ami;
+                        break;
+                      case 'Amom':
+                        accountType = AccountType.amom;
+                        break;
+                      case 'Amo':
+                        accountType = AccountType.amo;
+                        break;
+                      default:
+                        accountType = AccountType.user;
+                        break;
                     }
-                    
+
                     final newPost = FeedModel(
                       userName: widget.currentUser.anonymousUsername,
                       id: "#AMM-${DateTime.now().millisecondsSinceEpoch % 100000}",
                       type: accountType,
                       content: _postController.text,
-                      timeStamp: "Just now",
+                      timeStamp: DateTime.now().toIso8601String(),
                       realAuthorId: widget.currentUser.amomimusId,
                       realAuthorName: widget.currentUser.anonymousUsername,
                     );
-                    Provider.of<FeedManager>(context, listen: false).addPost(newPost);
-                    
+                    Provider.of<FeedManager>(
+                      context,
+                      listen: false,
+                    ).addPost(newPost);
+
                     _postController.clear();
                     Navigator.pop(context);
                   }

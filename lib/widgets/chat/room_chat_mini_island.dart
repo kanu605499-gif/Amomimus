@@ -8,6 +8,8 @@ import '../../services/chatmodel.dart';
 import '../../services/account_manager.dart';
 import '../../services/chat_request_manager.dart';
 import '../report_dialog.dart';
+import 'package:amomimus/utils/jelly_dialog.dart';
+import '../../screens/fake_pdf_screen.dart';
 
 class RoomChatMiniIsland extends StatelessWidget {
   final bool isExpanded;
@@ -16,7 +18,6 @@ class RoomChatMiniIsland extends StatelessWidget {
   final Color dynamicHeaderColor;
   final IconData dynamicHeaderIcon;
   final UserAccount targetAccount;
-  final ChatPreview activeChat; 
   final String targetUsername;
 
   const RoomChatMiniIsland({
@@ -27,7 +28,6 @@ class RoomChatMiniIsland extends StatelessWidget {
     required this.dynamicHeaderColor,
     required this.dynamicHeaderIcon,
     required this.targetAccount,
-    required this.activeChat,
     required this.targetUsername,
   });
 
@@ -49,7 +49,7 @@ class RoomChatMiniIsland extends StatelessWidget {
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
         height: 46,
-        width: isExpanded ? 160 : 46, // reduced width
+        width: isExpanded ? 192 : 46,
         decoration: BoxDecoration(
           color: islandBg,
           borderRadius: BorderRadius.circular(25),
@@ -73,14 +73,14 @@ class RoomChatMiniIsland extends StatelessWidget {
                 : CrossFadeState.showFirst,
             layoutBuilder:
                 (topChild, topChildKey, bottomChild, bottomChildKey) {
-              return Stack(
-                alignment: Alignment.center,
-                children: [
-                  Positioned(key: bottomChildKey, child: bottomChild),
-                  Positioned(key: topChildKey, child: topChild),
-                ],
-              );
-            },
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(key: bottomChildKey, child: bottomChild),
+                      Positioned(key: topChildKey, child: topChild),
+                    ],
+                  );
+                },
             firstChild: SizedBox(
               height: 44,
               width: 44,
@@ -93,7 +93,7 @@ class RoomChatMiniIsland extends StatelessWidget {
               ),
             ),
             secondChild: Container(
-              width: 160,
+              width: 192,
               height: 44,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: FittedBox(
@@ -115,11 +115,7 @@ class RoomChatMiniIsland extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Container(
-                      height: 18,
-                      width: 1,
-                      color: dynamicOutlineColor,
-                    ),
+                    Container(height: 18, width: 1, color: dynamicOutlineColor),
                     const SizedBox(width: 4),
                     // Theme Toggle
                     IconButton(
@@ -133,20 +129,44 @@ class RoomChatMiniIsland extends StatelessWidget {
                           ? AmomimusDarkTheme.policeLineYellow
                           : AmomimusDarkTheme.primaryPurple,
                       constraints: const BoxConstraints(),
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 4,
+                      ),
                       onPressed: () => themeProvider.toggleTheme(),
+                    ),
+                    // Search / Document Button
+                    IconButton(
+                      icon: const Icon(Icons.search, size: 20),
+                      color: themeProvider.isDarkMode ? Colors.white70 : Colors.black54,
+                      constraints: const BoxConstraints(),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 4,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) =>
+                                const FakePdfScreen(),
+                            transitionDuration: Duration.zero,
+                            reverseTransitionDuration: Duration.zero,
+                          ),
+                        );
+                      },
                     ),
                     // Report Button
                     IconButton(
-                      icon: const Icon(
-                        Icons.report_problem_outlined,
-                        size: 20,
-                      ),
+                      icon: const Icon(Icons.report_problem_outlined, size: 20),
                       color: Colors.orangeAccent,
                       constraints: const BoxConstraints(),
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 4,
+                      ),
                       onPressed: () {
-                        showDialog(
+                        showJellyDialog(
                           context: context,
                           builder: (context) => ReportDialog(
                             targetId: targetUsername,
@@ -160,29 +180,67 @@ class RoomChatMiniIsland extends StatelessWidget {
                       icon: const Icon(Icons.delete_outline, size: 20),
                       color: Colors.redAccent,
                       constraints: const BoxConstraints(),
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 4,
+                      ),
                       onPressed: () {
-                        showDialog(
+                        showJellyDialog(
                           context: context,
                           builder: (BuildContext dialogContext) {
-                            final isDark = Provider.of<AmomimusDarkTheme>(context, listen: false).isDarkMode;
+                            final isDark = Provider.of<AmomimusDarkTheme>(
+                              context,
+                              listen: false,
+                            ).isDarkMode;
                             return AlertDialog(
-                              backgroundColor: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
-                              title: Text(t.delete_chat_title, style: TextStyle(color: isDark ? Colors.white : Colors.black)),
-                              content: Text(t.delete_chat_room_confirm, style: TextStyle(color: isDark ? Colors.white70 : Colors.black87)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              backgroundColor: isDark
+                                  ? AmomimusDarkTheme.surfaceDark
+                                  : Colors.white,
+                              title: Text(
+                                t.delete_chat_title,
+                                style: const TextStyle(
+                                  color: AmomimusDarkTheme.primaryPurple,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              content: Text(
+                                t.delete_chat_room_confirm,
+                                style: TextStyle(
+                                  color: isDark
+                                      ? Colors.white70
+                                      : Colors.black87,
+                                ),
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.pop(dialogContext),
-                                  child: Text(t.cancel, style: const TextStyle(color: Colors.grey)),
+                                  child: Text(
+                                    t.cancel,
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(dialogContext); // close dialog
-                                    context.read<ChatModel>().deleteChat(targetUsername);
-                                    context.read<ChatRequestManager>().deleteRequestWith(targetUsername);
+                                    Navigator.pop(
+                                      dialogContext,
+                                    ); // close dialog
+                                    context.read<ChatModel>().deleteChatForUser(
+                                      targetUsername,
+                                    );
+                                    context
+                                        .read<ChatRequestManager>()
+                                        .deleteRequestWith(targetUsername);
                                     Navigator.pop(context); // exit room
                                   },
-                                  child: Text(t.delete, style: const TextStyle(color: Colors.redAccent)),
+                                  child: Text(
+                                    t.delete,
+                                    style: const TextStyle(
+                                      color: Colors.redAccent,
+                                    ),
+                                  ),
                                 ),
                               ],
                             );

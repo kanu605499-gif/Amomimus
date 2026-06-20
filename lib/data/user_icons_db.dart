@@ -210,10 +210,10 @@ class UserIconsDB {
 
   /// Returns all icons combined across all genders.
   static List<UserIconModel> get allIcons => [
-        ...amoIcons,
-        ...amiIcons,
-        ...amomIcons,
-      ];
+    ...amoIcons,
+    ...amiIcons,
+    ...amomIcons,
+  ];
 
   /// Returns the list of icons for a given [gender] string ('Amo', 'Ami', 'Amom').
   static List<UserIconModel> getIconsByGender(String gender) {

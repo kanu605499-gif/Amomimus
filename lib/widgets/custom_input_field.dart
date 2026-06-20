@@ -9,7 +9,7 @@ class CustomInputField extends StatefulWidget {
   final Widget? prefixIcon;
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
-  
+
   // Register screen specific
   final FormFieldValidator<String>? validator;
   final TextInputType? keyboardType;
@@ -43,8 +43,10 @@ class _CustomInputFieldState extends State<CustomInputField> {
 
   @override
   Widget build(BuildContext context) {
-    bool finalObscureText = widget.isPassword ? _internalObscureText : widget.obscureText;
-    
+    bool finalObscureText = widget.isPassword
+        ? _internalObscureText
+        : widget.obscureText;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -90,7 +92,9 @@ class _CustomInputFieldState extends State<CustomInputField> {
           textCapitalization: widget.textCapitalization,
           obscureText: finalObscureText,
           onChanged: widget.onChanged,
-          autovalidateMode: widget.validator != null ? AutovalidateMode.onUserInteraction : null,
+          autovalidateMode: widget.validator != null
+              ? AutovalidateMode.onUserInteraction
+              : null,
           decoration: InputDecoration(
             hintText: widget.hintText,
             hintStyle: const TextStyle(color: Color(0xffdadada), fontSize: 14),
@@ -104,21 +108,23 @@ class _CustomInputFieldState extends State<CustomInputField> {
             fillColor: const Color(0xfff8f6fc),
             contentPadding: const EdgeInsets.all(16),
             prefixIcon: widget.prefixIcon,
-            suffixIcon: widget.suffixIcon ?? (widget.isPassword
-                ? IconButton(
-                    icon: Icon(
-                      _internalObscureText
-                          ? Icons.visibility_off_rounded
-                          : Icons.visibility_rounded,
-                      color: const Color(0xff9e9bc2),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _internalObscureText = !_internalObscureText;
-                      });
-                    },
-                  )
-                : null),
+            suffixIcon:
+                widget.suffixIcon ??
+                (widget.isPassword
+                    ? IconButton(
+                        icon: Icon(
+                          _internalObscureText
+                              ? Icons.visibility_off_rounded
+                              : Icons.visibility_rounded,
+                          color: const Color(0xff9e9bc2),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _internalObscureText = !_internalObscureText;
+                          });
+                        },
+                      )
+                    : null),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
               borderSide: const BorderSide(color: Color(0xffe1dbec)),

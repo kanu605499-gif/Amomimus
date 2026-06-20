@@ -22,7 +22,10 @@ class ProfileIndicatorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
     final t = Translations.of(context);
-    final displayIndicator = context.read<AccountManager>().getDisplayIndicator(user.amomimusId, user.indicator);
+    final displayIndicator = context.read<AccountManager>().getDisplayIndicator(
+      user.amomimusId,
+      user.indicator,
+    );
     UserIndicator indicator = UserIndicatorHelper.fromValue(displayIndicator);
     String indicatorLabel = UserIndicatorHelper.getLabel(indicator);
     Color indicatorColor = UserIndicatorHelper.getColor(indicator);
@@ -59,7 +62,7 @@ class ProfileIndicatorCard extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Content
           Padding(
             padding: const EdgeInsets.all(20),

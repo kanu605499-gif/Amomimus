@@ -22,7 +22,9 @@ class NotificationManager extends ChangeNotifier {
     if (data != null && data.isNotEmpty) {
       try {
         final List<dynamic> decoded = jsonDecode(data);
-        _notifications = decoded.map((json) => NotificationModel.fromJson(json)).toList();
+        _notifications = decoded
+            .map((json) => NotificationModel.fromJson(json))
+            .toList();
       } catch (e) {
         print('Error decoding notifications: \$e');
         _notifications = [];
@@ -37,7 +39,10 @@ class NotificationManager extends ChangeNotifier {
 
   Future<void> _saveNotifications() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_notificationsKey, jsonEncode(_notifications.map((e) => e.toJson()).toList()));
+    await prefs.setString(
+      _notificationsKey,
+      jsonEncode(_notifications.map((e) => e.toJson()).toList()),
+    );
   }
 
   Future<void> addNotification(NotificationModel notification) async {
@@ -47,12 +52,16 @@ class NotificationManager extends ChangeNotifier {
   }
 
   List<NotificationModel> getNotificationsForUser(String userId) {
-    return _notifications.where((n) => n.targetUserId == userId).toList()
-      ..sort((a, b) => DateTime.parse(b.createdAt).compareTo(DateTime.parse(a.createdAt)));
+    return _notifications.where((n) => n.targetUserId == userId).toList()..sort(
+      (a, b) =>
+          DateTime.parse(b.createdAt).compareTo(DateTime.parse(a.createdAt)),
+    );
   }
 
   int getUnreadCountForUser(String userId) {
-    return _notifications.where((n) => n.targetUserId == userId && !n.isRead).length;
+    return _notifications
+        .where((n) => n.targetUserId == userId && !n.isRead)
+        .length;
   }
 
   Future<void> markAllAsReadForUser(String userId) async {

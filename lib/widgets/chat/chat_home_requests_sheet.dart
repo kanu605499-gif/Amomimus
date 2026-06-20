@@ -89,10 +89,7 @@ void showRequestsBottomSheet(
                   senderAccount.anonymousUsername.isNotEmpty
                       ? senderAccount.anonymousUsername
                       : req.senderName,
-                  style: TextStyle(
-                    color: textCol,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(color: textCol, fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(
                   'ID: ${req.senderId}',

@@ -4,42 +4,89 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/message_model.dart';
 import '../models/chat_room_model.dart';
+import '../models/chat_preview_model.dart';
+import '../widgets/chat/delayed_sync_dialog.dart';
 
-// UI Adapter
-class ChatPreview {
-  final String name;
-  final String username;
-  final String initialLastMessage;
-  final String initialTime;
-  final bool isOnline;
-  final List<ChatMessage> messages;
-  int unreadCount;
+import '../utils/utc_time_manager.dart';
+import 'package:amomimus/utils/jelly_dialog.dart';
 
-  ChatPreview({
-    required this.name,
-    required this.username,
-    required this.initialLastMessage,
-    required this.initialTime,
-    required this.isOnline,
-    required this.messages,
-    required this.unreadCount,
-  });
-
-  String get lastMessage =>
-      messages.isNotEmpty ? messages.last.text : initialLastMessage;
-  String get time =>
-      messages.isNotEmpty ? messages.last.timeStamp : initialTime;
-}
+// Re-export so files that import chatmodel.dart still find ChatPreview
+export '../models/chat_preview_model.dart';
 
 class ChatModel extends ChangeNotifier {
   List<ChatSession> _sessions = [];
   String? _currentUserId;
   String? _currentUserName;
 
+  String? get currentUserId => _currentUserId;
+
   static const String _storageKey = 'amomimus_global_chats';
 
   ChatModel() {
     loadChats();
+  }
+
+  String _getCurrentTimeStr() {
+    final now = DateTime.now();
+    final hourVal = now.hour % 12 == 0 ? 12 : now.hour % 12;
+    final period = now.hour >= 12 ? 'PM' : 'AM';
+    return "$hourVal:${now.minute.toString().padLeft(2, '0')} $period";
+  }
+
+  void _checkExpirations() {
+    bool changed = false;
+    final now = UTCTimeManager.nowUTC();
+
+    for (int i = 0; i < _sessions.length; i++) {
+      final session = _sessions[i];
+      if (session.roomExpiresAt != null) {
+        final expireDate = DateTime.parse(session.roomExpiresAt!);
+        if (now.isAfter(expireDate)) {
+          // It's expired! We need to reset the chat.
+          // Keep only pinned messages
+          final remainingMessages = session.messages
+              .where((m) => session.pinnedMessageIds.contains(m.id))
+              .toList();
+
+          // Only trigger a change if it actually had non-pinned messages or indicator wasn't visible for both
+          final hasIndicatorForUser1 = session.resetIndicatorVisibleFor.contains(session.user1Id);
+          final hasIndicatorForUser2 = session.resetIndicatorVisibleFor.contains(session.user2Id);
+          if (session.messages.length != remainingMessages.length ||
+              !hasIndicatorForUser1 ||
+              !hasIndicatorForUser2) {
+            _sessions[i] = ChatSession(
+              id: session.id,
+              user1Id: session.user1Id,
+              user1Name: session.user1Name,
+              user2Id: session.user2Id,
+              user2Name: session.user2Name,
+              messages: remainingMessages,
+              unreadCounts: session.unreadCounts,
+              pinnedMessageIds: session.pinnedMessageIds,
+              createdAt: session.createdAt,
+              roomStartedAt:
+                  null, // Reset the timer, it will start again on next read
+              roomExpiresAt: null,
+              seenResetAnimationBy: const [], // Reset glitch seen status for both
+              resetIndicatorVisibleFor: [session.user1Id, session.user2Id], // Show hidden text for both
+              roomDeletedBy: const [],
+              chatLogs: List<ChatLogEntry>.from(session.chatLogs)
+                ..add(ChatLogEntry(
+                  text: 'room_expired',
+                  actorId: 'system',
+                  timeStamp: _getCurrentTimeStr(),
+                )),
+            );
+            changed = true;
+          }
+        }
+      }
+    }
+
+    if (changed) {
+      notifyListeners();
+      _saveChats();
+    }
   }
 
   Future<void> loadChats() async {
@@ -49,6 +96,7 @@ class ChatModel extends ChangeNotifier {
       try {
         final List decoded = jsonDecode(data);
         _sessions = decoded.map((e) => ChatSession.fromJson(e)).toList();
+        _checkExpirations();
       } catch (e) {
         _sessions = [];
       }
@@ -90,45 +138,84 @@ class ChatModel extends ChangeNotifier {
         .where(
           (s) =>
               (s.user1Id == _currentUserId || s.user2Id == _currentUserId) &&
-              s.messages.isNotEmpty,
+              !s.roomDeletedBy.contains(_currentUserId) &&
+              (s.messages
+                      .where((m) => !m.deletedBy.contains(_currentUserId))
+                      .isNotEmpty ||
+                  s.resetIndicatorVisibleFor.contains(_currentUserId) ||
+                  (s.roomStartedAt != null &&
+                      s.roomExpiresAt != null &&
+                      !UTCTimeManager.nowUTC().isAfter(DateTime.tryParse(s.roomExpiresAt!) ?? DateTime.now()))),
         )
         .map((s) {
           final isUser1 = s.user1Id == _currentUserId;
           final targetId = isUser1 ? s.user2Id : s.user1Id;
           final targetName = isUser1 ? s.user2Name : s.user1Name;
 
+          final hasSeenAnim = s.seenResetAnimationBy.contains(_currentUserId);
+          final showIndicator = s.resetIndicatorVisibleFor.contains(_currentUserId);
+
+          // If there's a cheat detection, we show a special warning
+          String displayLastMsg = "";
+          if (s.cheatDetectedUserId != null) {
+            if (s.cheatDetectedUserId == _currentUserId) {
+              displayLastMsg = "cheat_detected_warning";
+            } else {
+              displayLastMsg = "cheat_partner_warning";
+            }
+          } else if (showIndicator && !hasSeenAnim) {
+            // Mask the real message if they haven't seen the reset animation yet
+            displayLastMsg = "room_chat_resetted";
+          } else if (showIndicator && s.messages.isEmpty) {
+            displayLastMsg = "room_chat_resetted";
+          }
+
           return ChatPreview(
             name: targetName,
             username: targetId,
-            initialLastMessage: "",
+            initialLastMessage: displayLastMsg,
             initialTime: "",
             isOnline: true,
-            messages: s.messages,
+            messages: s.messages
+                .where((m) => !m.deletedBy.contains(_currentUserId))
+                .toList(),
+            allMessages: s.messages,
             unreadCount: s.unreadCounts[_currentUserId!] ?? 0,
+            roomStartedAt: s.roomStartedAt,
+            roomExpiresAt: s.roomExpiresAt,
+            hasSeenResetAnimation: hasSeenAnim,
+            isResetIndicatorVisible: showIndicator,
+            cheatDetectedUserId: s.cheatDetectedUserId,
           );
         })
         .toList();
 
     // Sort by latest message timestamp (descending)
     list.sort((a, b) {
-      final msgA = a.messages.last;
-      final msgB = b.messages.last;
-      
-      final timeA = int.tryParse(msgA.id?.split('_').first ?? '0') ?? 0;
-      final timeB = int.tryParse(msgB.id?.split('_').first ?? '0') ?? 0;
-      
+      final timeA = a.messages.isNotEmpty
+          ? (int.tryParse(a.messages.last.id?.split('_').first ?? '0') ?? 0)
+          : 0;
+      final timeB = b.messages.isNotEmpty
+          ? (int.tryParse(b.messages.last.id?.split('_').first ?? '0') ?? 0)
+          : 0;
+
       return timeB.compareTo(timeA);
     });
 
     return list;
   }
 
-  bool get hasUnreadMessages {
+  bool hasUnreadMessages(List<String> blockedUsers, [List<String> blockedBy = const []]) {
     if (_currentUserId == null) return false;
+    final visibleUsernames = chatList.map((c) => c.username).toSet();
     return _sessions.any((s) {
       if (s.user1Id != _currentUserId && s.user2Id != _currentUserId) {
         return false;
       }
+      final targetId = s.user1Id == _currentUserId ? s.user2Id : s.user1Id;
+      if (blockedUsers.contains(targetId)) return false;
+      if (blockedBy.contains(targetId)) return false;
+      if (!visibleUsernames.contains(targetId)) return false;
       return (s.unreadCounts[_currentUserId!] ?? 0) > 0;
     });
   }
@@ -164,6 +251,13 @@ class ChatModel extends ChangeNotifier {
         user2Name: targetName,
         messages: [],
         unreadCounts: {_currentUserId!: 0, targetUserId: 0},
+        chatLogs: [
+          ChatLogEntry(
+            text: 'room_created',
+            actorId: 'system',
+            timeStamp: _getCurrentTimeStr(),
+          )
+        ],
       );
       _sessions.add(session);
       // Don't persist empty sessions — only save when a message is actually sent
@@ -176,8 +270,16 @@ class ChatModel extends ChangeNotifier {
       initialLastMessage: "",
       initialTime: "",
       isOnline: true,
-      messages: session.messages,
+      messages: session.messages
+          .where((m) => !m.deletedBy.contains(_currentUserId))
+          .toList(),
+      allMessages: session.messages,
       unreadCount: session.unreadCounts[_currentUserId!] ?? 0,
+      roomStartedAt: session.roomStartedAt,
+      roomExpiresAt: session.roomExpiresAt,
+      hasSeenResetAnimation: session.seenResetAnimationBy.contains(_currentUserId),
+      isResetIndicatorVisible: session.resetIndicatorVisibleFor.contains(_currentUserId),
+      cheatDetectedUserId: session.cheatDetectedUserId,
     );
   }
 
@@ -187,6 +289,8 @@ class ChatModel extends ChangeNotifier {
     String? senderName,
     String? targetName,
     String? replyMessageId,
+    BuildContext? context,
+    String sourceType = 'chat',
   }) {
     if (_currentUserId == null) return;
 
@@ -205,8 +309,21 @@ class ChatModel extends ChangeNotifier {
         user2Name: targetName ?? targetUserId,
         messages: [],
         unreadCounts: {_currentUserId!: 0, targetUserId: 0},
+        chatLogs: [
+          ChatLogEntry(
+            text: 'room_created',
+            actorId: 'system',
+            timeStamp: _getCurrentTimeStr(),
+          )
+        ],
       );
       _sessions.add(session);
+    }
+
+    if (_runCheatDetection(chatId)) {
+      notifyListeners();
+      _saveChats();
+      return;
     }
 
     final now = DateTime.now();
@@ -214,37 +331,392 @@ class ChatModel extends ChangeNotifier {
     final period = now.hour >= 12 ? 'PM' : 'AM';
     final timeStr = "$hourVal:${now.minute.toString().padLeft(2, '0')} $period";
 
-    session.messages.add(
-      ChatMessage(
-        id: '${DateTime.now().millisecondsSinceEpoch}_$_currentUserId',
-        text: text,
-        senderId: _currentUserId!,
-        senderName: senderName,
-        timeStamp: timeStr,
-        replyMessageId: replyMessageId,
-      ),
+    final newMessage = ChatMessage(
+      id: '${now.millisecondsSinceEpoch}_$_currentUserId',
+      roomId: targetUserId,
+      text: text,
+      senderId: _currentUserId!,
+      timeStamp: timeStr,
+      senderName: senderName ?? _currentUserName ?? 'You',
+      replyMessageId: replyMessageId,
+      isSynced: false,
+      isPendingSlow: false,
+      showSuccess: false,
     );
 
-    session.unreadCounts[targetUserId] =
-        (session.unreadCounts[targetUserId] ?? 0) + 1;
+    session.messages.add(newMessage);
 
-    notifyListeners();
+    // Remove the reset indicator and show room again because a new message is sent
+    final index = _sessions.indexWhere((s) => s.id == chatId);
+    if (index != -1) {
+      final updatedIndicators = List<String>.from(session.resetIndicatorVisibleFor)
+        ..remove(_currentUserId);
+      _sessions[index] = ChatSession(
+        id: session.id,
+        user1Id: session.user1Id,
+        user1Name: session.user1Name,
+        user2Id: session.user2Id,
+        user2Name: session.user2Name,
+        messages: session.messages,
+        unreadCounts: session.unreadCounts,
+        pinnedMessageIds: session.pinnedMessageIds,
+        createdAt: session.createdAt,
+        roomStartedAt: session.roomStartedAt,
+        roomExpiresAt: session.roomExpiresAt,
+        seenResetAnimationBy: session.seenResetAnimationBy,
+        resetIndicatorVisibleFor: updatedIndicators,
+        cheatDetectedUserId: session.cheatDetectedUserId,
+        roomDeletedBy: const [], // Re-appear room for both users
+        chatLogs: session.chatLogs,
+      );
+    }
+
     _saveChats();
+    notifyListeners();
+
+    // After 2 seconds, if still pending, mark as slow so UI shows "Message is pending..."
+    Future.delayed(const Duration(seconds: 2), () {
+      if (!newMessage.isSynced) {
+        newMessage.isPendingSlow = true;
+        notifyListeners();
+      }
+    });
+
+    // Hybrid Sync Simulation
+    _simulateSync(newMessage, context, sourceType);
   }
 
-  void markAsRead(String targetUserId) {
-    if (_currentUserId == null) return;
+  void _simulateSync(
+    ChatMessage message,
+    BuildContext? context,
+    String sourceType, {
+    bool forceFail = false,
+  }) async {
+    bool dialogShown = false;
+    bool dialogDismissed = false;
 
+    // Timer for 7 seconds to show dialog if still pending
+    Future.delayed(const Duration(seconds: 7), () {
+      if (!message.isSynced &&
+          !message.showResendOptions &&
+          context != null &&
+          context.mounted) {
+        dialogShown = true;
+        showJellyDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (ctx) => DelayedSyncDialog(sourceType: sourceType),
+        ).then((_) {
+          // Track when dialog is dismissed
+          dialogDismissed = true;
+        });
+      }
+    });
+
+    final bool willFail =
+        forceFail || message.text.toLowerCase().contains('fail');
+
+    if (!willFail) {
+      // Simulate network delay 9 seconds
+      Future.delayed(const Duration(seconds: 9), () {
+        if (message.showResendOptions) return; // if already failed
+
+        message.isSynced = true;
+        
+        if (_currentUserId != null && message.roomId != null) {
+          final chatId = _getChatId(_currentUserId!, message.roomId!);
+          final sessionIndex = _sessions.indexWhere((s) => s.id == chatId);
+          if (sessionIndex != -1) {
+            final session = _sessions[sessionIndex];
+            session.unreadCounts[message.roomId!] =
+                (session.unreadCounts[message.roomId!] ?? 0) + 1;
+          }
+        }
+
+        if (message.isPendingSlow) {
+          message.isPendingSlow = false;
+          message.showSuccess = true;
+          notifyListeners();
+
+          // Revert success message after 3 seconds
+          Future.delayed(const Duration(seconds: 3), () {
+            message.showSuccess = false;
+            notifyListeners();
+          });
+        } else {
+          notifyListeners();
+        }
+
+        // Only pop if dialog was shown AND hasn't already been dismissed
+        if (dialogShown &&
+            !dialogDismissed &&
+            context != null &&
+            context.mounted) {
+          Navigator.of(context).pop();
+        }
+        _saveChats();
+      });
+    } else {
+      // Hard fail limit: 15 seconds
+      Future.delayed(const Duration(seconds: 15), () {
+        if (!message.isSynced) {
+          message.showResendOptions = true;
+          notifyListeners();
+
+          if (dialogShown &&
+              !dialogDismissed &&
+              context != null &&
+              context.mounted) {
+            Navigator.of(context).pop();
+          }
+          _saveChats();
+        }
+      });
+    }
+  }
+
+  void deleteSelectedMessages(String targetUserId, List<String> messageIds) {
+    if (_currentUserId == null) return;
     final chatId = _getChatId(_currentUserId!, targetUserId);
     final session = _sessions.cast<ChatSession?>().firstWhere(
       (s) => s?.id == chatId,
       orElse: () => null,
     );
+    if (session == null) return;
 
-    if (session != null && (session.unreadCounts[_currentUserId!] ?? 0) > 0) {
-      session.unreadCounts[_currentUserId!] = 0;
+    // Remove pending messages completely, mark synced messages as deleted by current user
+    final messagesToRemove = <ChatMessage>[];
+    for (var msg in session.messages) {
+      if (messageIds.contains(msg.id)) {
+        if (!msg.isSynced) {
+          // If not synced, remove entirely
+          messagesToRemove.add(msg);
+        } else {
+          // If synced, mark as deleted by this user
+          if (!msg.deletedBy.contains(_currentUserId!)) {
+            msg.deletedBy = List.from(msg.deletedBy)..add(_currentUserId!);
+          }
+        }
+      }
+    }
+
+    if (messagesToRemove.isNotEmpty) {
+      session.messages.removeWhere((msg) => messagesToRemove.contains(msg));
+    }
+
+    _saveChats();
+    notifyListeners();
+  }
+
+  void deleteChatForUser(String targetUserId) {
+    if (_currentUserId == null) return;
+    final chatId = _getChatId(_currentUserId!, targetUserId);
+    final index = _sessions.indexWhere((s) => s.id == chatId);
+    if (index == -1) return;
+
+    final session = _sessions[index];
+    
+    // Keep only pinned messages (memories) and discard the rest
+    final pinnedIds = session.pinnedMessageIds;
+    final remainingMessages = session.messages
+        .where((m) => pinnedIds.contains(m.id))
+        .toList();
+
+    // Mark the remaining pinned messages as deleted by both participants
+    // so they are hidden from the main chat bubble feed for both
+    for (var msg in remainingMessages) {
+      if (!msg.deletedBy.contains(session.user1Id)) {
+        msg.deletedBy = List.from(msg.deletedBy)..add(session.user1Id);
+      }
+      if (!msg.deletedBy.contains(session.user2Id)) {
+        msg.deletedBy = List.from(msg.deletedBy)..add(session.user2Id);
+      }
+    }
+
+    // Clear unread counts for current user
+    final updatedUnread = Map<String, int>.from(session.unreadCounts);
+    updatedUnread[_currentUserId!] = 0;
+
+    // Remove current user from resetIndicatorVisibleFor
+    final updatedIndicators = List<String>.from(session.resetIndicatorVisibleFor)
+      ..remove(_currentUserId);
+
+    _sessions[index] = ChatSession(
+      id: session.id,
+      user1Id: session.user1Id,
+      user1Name: session.user1Name,
+      user2Id: session.user2Id,
+      user2Name: session.user2Name,
+      messages: remainingMessages,
+      unreadCounts: updatedUnread,
+      pinnedMessageIds: session.pinnedMessageIds,
+      createdAt: session.createdAt,
+      roomStartedAt: session.roomStartedAt,
+      roomExpiresAt: session.roomExpiresAt,
+      seenResetAnimationBy: session.seenResetAnimationBy,
+      resetIndicatorVisibleFor: updatedIndicators,
+      cheatDetectedUserId: session.cheatDetectedUserId,
+      roomDeletedBy: [session.user1Id, session.user2Id], // Divorced: hide room for both users
+      chatLogs: List<ChatLogEntry>.from(session.chatLogs)
+        ..add(ChatLogEntry(
+          text: 'delete_room',
+          actorId: _currentUserId!,
+          timeStamp: _getCurrentTimeStr(),
+        )),
+    );
+
+    _saveChats();
+    notifyListeners();
+  }
+
+  Future<void> resendSelectedMessages(
+    String targetUserId,
+    List<String> messageIds,
+    BuildContext? context,
+  ) async {
+    if (_currentUserId == null) return;
+    final chatId = _getChatId(_currentUserId!, targetUserId);
+    final session = _sessions.cast<ChatSession?>().firstWhere(
+      (s) => s?.id == chatId,
+      orElse: () => null,
+    );
+    if (session == null) return;
+
+    // Process sequentially as per user request
+    int orderIndex = 1;
+    for (final msgId in messageIds) {
+      final msgIndex = session.messages.indexWhere((m) => m.id == msgId);
+      if (msgIndex != -1) {
+        final message = session.messages[msgIndex];
+
+        if (!message.isSynced) {
+          // Reset UI state
+          message.showResendOptions = false;
+          message.isPendingSlow = false;
+          message.showSuccess = false;
+          message.sendOrder = orderIndex++;
+
+          final now = DateTime.now();
+          final hourVal = now.hour % 12 == 0 ? 12 : now.hour % 12;
+          final period = now.hour >= 12 ? 'PM' : 'AM';
+          message.timeStamp =
+              "$hourVal:${now.minute.toString().padLeft(2, '0')} $period"; // Update timestamp to now
+
+          // Move the message to the end of the list since it's the newest now
+          session.messages.removeAt(msgIndex);
+          session.messages.add(message);
+
+          notifyListeners();
+
+          // Add 2 second delay for slow pending
+          Future.delayed(const Duration(seconds: 2), () {
+            if (!message.isSynced && !message.showResendOptions) {
+              message.isPendingSlow = true;
+              notifyListeners();
+            }
+          });
+
+          // Wait 3 seconds to simulate sequential processing logic requested by user
+          await Future.delayed(const Duration(seconds: 3));
+
+          // Re-trigger sync simulation
+          _simulateSync(message, context, 'chat');
+        }
+      }
+    }
+  }
+
+  void markAsRead(String targetUserId) {
+    if (_currentUserId == null) return;
+    final chatId = _getChatId(_currentUserId!, targetUserId);
+    final index = _sessions.indexWhere((s) => s.id == chatId);
+    if (index == -1) return;
+
+    final session = _sessions[index];
+    bool changed = false;
+    Map<String, int> updatedUnread = session.unreadCounts;
+
+    // Clear unread counts
+    if ((session.unreadCounts[_currentUserId!] ?? 0) > 0) {
+      updatedUnread = Map<String, int>.from(session.unreadCounts);
+      updatedUnread[_currentUserId!] = 0;
+      changed = true;
+    }
+
+    final hasDeleted = session.roomDeletedBy.contains(_currentUserId!);
+    final shouldStartTimer = session.roomStartedAt == null &&
+        session.messages.any((m) => m.senderId != _currentUserId);
+
+    if (changed || shouldStartTimer || hasDeleted) {
+      final nowUtc = UTCTimeManager.nowUTC();
+      final expireUtc = UTCTimeManager.calculateExpirationDate(nowUtc);
+      final updatedRoomDeletedBy = List<String>.from(session.roomDeletedBy)
+        ..remove(_currentUserId!);
+
+      _sessions[index] = ChatSession(
+        id: session.id,
+        user1Id: session.user1Id,
+        user1Name: session.user1Name,
+        user2Id: session.user2Id,
+        user2Name: session.user2Name,
+        messages: session.messages,
+        unreadCounts: updatedUnread,
+        pinnedMessageIds: session.pinnedMessageIds,
+        createdAt: session.createdAt,
+        roomStartedAt: shouldStartTimer ? nowUtc.toIso8601String() : session.roomStartedAt,
+        roomExpiresAt: shouldStartTimer ? expireUtc.toIso8601String() : session.roomExpiresAt,
+        seenResetAnimationBy: session.seenResetAnimationBy,
+        resetIndicatorVisibleFor: session.resetIndicatorVisibleFor,
+        cheatDetectedUserId: session.cheatDetectedUserId,
+        roomDeletedBy: updatedRoomDeletedBy,
+        chatLogs: session.chatLogs,
+      );
+      changed = true;
+    }
+
+    // Anti-cheat verification on read
+    if (_runCheatDetection(chatId)) {
+      changed = true;
+    }
+
+    if (changed) {
       notifyListeners();
       _saveChats();
+    }
+  }
+
+  /// Mark animation as seen
+  void markResetAnimationSeen(String targetUserId) {
+    if (_currentUserId == null) return;
+    final chatId = _getChatId(_currentUserId!, targetUserId);
+    final index = _sessions.indexWhere((s) => s.id == chatId);
+
+    if (index != -1) {
+      final session = _sessions[index];
+      if (!session.seenResetAnimationBy.contains(_currentUserId!)) {
+        final updatedSeen = List<String>.from(session.seenResetAnimationBy)
+          ..add(_currentUserId!);
+        _sessions[index] = ChatSession(
+          id: session.id,
+          user1Id: session.user1Id,
+          user1Name: session.user1Name,
+          user2Id: session.user2Id,
+          user2Name: session.user2Name,
+          messages: session.messages,
+          unreadCounts: session.unreadCounts,
+          pinnedMessageIds: session.pinnedMessageIds,
+          createdAt: session.createdAt,
+          roomStartedAt: session.roomStartedAt,
+          roomExpiresAt: session.roomExpiresAt,
+          seenResetAnimationBy: updatedSeen,
+          resetIndicatorVisibleFor: session.resetIndicatorVisibleFor,
+          cheatDetectedUserId: session.cheatDetectedUserId,
+          roomDeletedBy: session.roomDeletedBy,
+          chatLogs: session.chatLogs,
+        );
+        notifyListeners();
+        _saveChats();
+      }
     }
   }
 
@@ -253,6 +725,12 @@ class ChatModel extends ChangeNotifier {
 
     final chatId = _getChatId(_currentUserId!, targetUserId);
     _sessions.removeWhere((s) => s.id == chatId);
+    notifyListeners();
+    _saveChats();
+  }
+
+  void clearAllChatsForUser(String userId) {
+    _sessions.removeWhere((s) => s.user1Id == userId || s.user2Id == userId);
     notifyListeners();
     _saveChats();
   }
@@ -306,6 +784,18 @@ class ChatModel extends ChangeNotifier {
           unreadCounts: session.unreadCounts,
           pinnedMessageIds: updatedPins,
           createdAt: session.createdAt,
+          roomStartedAt: session.roomStartedAt,
+          roomExpiresAt: session.roomExpiresAt,
+          seenResetAnimationBy: session.seenResetAnimationBy,
+          resetIndicatorVisibleFor: session.resetIndicatorVisibleFor,
+          cheatDetectedUserId: session.cheatDetectedUserId,
+          roomDeletedBy: session.roomDeletedBy,
+          chatLogs: List<ChatLogEntry>.from(session.chatLogs)
+            ..add(ChatLogEntry(
+              text: 'pin',
+              actorId: _currentUserId!,
+              timeStamp: _getCurrentTimeStr(),
+            )),
         );
         notifyListeners();
         _saveChats();
@@ -339,6 +829,18 @@ class ChatModel extends ChangeNotifier {
           unreadCounts: session.unreadCounts,
           pinnedMessageIds: updatedPins,
           createdAt: session.createdAt,
+          roomStartedAt: session.roomStartedAt,
+          roomExpiresAt: session.roomExpiresAt,
+          seenResetAnimationBy: session.seenResetAnimationBy,
+          resetIndicatorVisibleFor: session.resetIndicatorVisibleFor,
+          cheatDetectedUserId: session.cheatDetectedUserId,
+          roomDeletedBy: session.roomDeletedBy,
+          chatLogs: List<ChatLogEntry>.from(session.chatLogs)
+            ..add(ChatLogEntry(
+              text: 'unpin',
+              actorId: _currentUserId!,
+              timeStamp: _getCurrentTimeStr(),
+            )),
         );
         notifyListeners();
         _saveChats();
@@ -358,5 +860,178 @@ class ChatModel extends ChangeNotifier {
     return session.messages
         .where((m) => session.pinnedMessageIds.contains(m.id))
         .toList();
+  }
+
+  /// Meminta penghapusan memori. Ini akan langsung menyinkronkan antar klien.
+  void deleteMemory(String targetUserId, String messageId) {
+    if (_currentUserId == null) return;
+    final chatId = _getChatId(_currentUserId!, targetUserId);
+    final index = _sessions.indexWhere((s) => s.id == chatId);
+    if (index != -1) {
+      final session = _sessions[index];
+      if (session.pinnedMessageIds.contains(messageId)) {
+        final updatedPins = List<String>.from(session.pinnedMessageIds)
+          ..remove(messageId);
+
+        _sessions[index] = ChatSession(
+          id: session.id,
+          user1Id: session.user1Id,
+          user1Name: session.user1Name,
+          user2Id: session.user2Id,
+          user2Name: session.user2Name,
+          messages: session.messages,
+          unreadCounts: session.unreadCounts,
+          pinnedMessageIds: updatedPins,
+          createdAt: session.createdAt,
+          roomStartedAt: session.roomStartedAt,
+          roomExpiresAt: session.roomExpiresAt,
+          seenResetAnimationBy: session.seenResetAnimationBy,
+          resetIndicatorVisibleFor: session.resetIndicatorVisibleFor,
+          cheatDetectedUserId: session.cheatDetectedUserId,
+          roomDeletedBy: session.roomDeletedBy,
+          chatLogs: List<ChatLogEntry>.from(session.chatLogs)
+            ..add(ChatLogEntry(
+              text: 'erase',
+              actorId: _currentUserId!,
+              timeStamp: _getCurrentTimeStr(),
+            )),
+        );
+        notifyListeners();
+        _saveChats();
+      }
+    }
+  }
+
+  /// Performs a double verification API simulation and checks for manually altered device time.
+  bool _runCheatDetection(String chatId) {
+    if (_currentUserId == null) return false;
+    final index = _sessions.indexWhere((s) => s.id == chatId);
+    if (index == -1) return false;
+
+    final session = _sessions[index];
+    if (session.messages.isEmpty) return false;
+
+    // Check 1: Time manipulation check
+    // If the device's UTC time is strangely earlier than the latest message's timestamp
+    // (We assume a tolerance of 1 hour for minor sync issues)
+    final latestMsg = session.messages.last;
+    final latestTime = DateTime.tryParse(latestMsg.timeStamp) ?? DateTime(2000);
+    final nowUtc = UTCTimeManager.nowUTC();
+
+    bool cheatDetected = false;
+    if (latestTime.difference(nowUtc).inHours > 1) {
+      cheatDetected = true;
+    }
+
+    // Check 2: Server Verification Check (Simulated)
+    // If we have a roomExpiresAt, and our current server time (mocked as nowUtc) is past the expiry
+    if (!cheatDetected && session.roomExpiresAt != null) {
+      final expiryTime =
+          DateTime.tryParse(session.roomExpiresAt!) ?? DateTime(2000);
+      if (nowUtc.isAfter(expiryTime)) {
+        // Force destruction if not already marked
+        // Force destruction if not already marked for either user
+        final hasIndicatorForUser1 = session.resetIndicatorVisibleFor.contains(session.user1Id);
+        final hasIndicatorForUser2 = session.resetIndicatorVisibleFor.contains(session.user2Id);
+        if (!hasIndicatorForUser1 || !hasIndicatorForUser2) {
+          final remainingMessages = session.messages
+              .where((m) => session.pinnedMessageIds.contains(m.id))
+              .toList();
+          _sessions[index] = ChatSession(
+            id: session.id,
+            user1Id: session.user1Id,
+            user1Name: session.user1Name,
+            user2Id: session.user2Id,
+            user2Name: session.user2Name,
+            messages: remainingMessages, // keep pinned messages only
+            unreadCounts: session.unreadCounts,
+            pinnedMessageIds: session.pinnedMessageIds,
+            createdAt: session.createdAt,
+            roomStartedAt: session.roomStartedAt,
+            roomExpiresAt: session.roomExpiresAt,
+            seenResetAnimationBy: const [], // Reset glitch seen status for both
+            resetIndicatorVisibleFor: [session.user1Id, session.user2Id], // Show hidden text for both
+            cheatDetectedUserId: session.cheatDetectedUserId,
+            roomDeletedBy: const [],
+            chatLogs: session.chatLogs,
+          );
+          return true;
+        }
+      }
+    }
+
+    if (cheatDetected && session.cheatDetectedUserId == null) {
+      // Execute the "Clean Up Job" forced destruction
+      final remainingMessages = session.messages
+          .where((m) => session.pinnedMessageIds.contains(m.id))
+          .toList();
+      _sessions[index] = ChatSession(
+        id: session.id,
+        user1Id: session.user1Id,
+        user1Name: session.user1Name,
+        user2Id: session.user2Id,
+        user2Name: session.user2Name,
+        messages: remainingMessages, // keep pinned messages only
+        unreadCounts: session.unreadCounts,
+        pinnedMessageIds: session.pinnedMessageIds,
+        createdAt: session.createdAt,
+        roomStartedAt: session.roomStartedAt,
+        roomExpiresAt: session.roomExpiresAt,
+        seenResetAnimationBy: const [], // Reset glitch seen status for both
+        resetIndicatorVisibleFor: [session.user1Id, session.user2Id], // Show hidden text for both
+        cheatDetectedUserId: _currentUserId, // we mark the cheater
+        roomDeletedBy: const [],
+        chatLogs: session.chatLogs,
+      );
+      return true;
+    }
+
+    return false;
+  }
+
+  /// Wipes a room due to a block event, keeping only pinned messages, and triggers red glitch.
+  void wipeRoomDueToBlock(String targetAmomimusId) {
+    if (_currentUserId == null) return;
+
+    final chatId = _getChatId(_currentUserId!, targetAmomimusId);
+    final index = _sessions.indexWhere((s) => s.id == chatId);
+    if (index == -1) return;
+
+    final session = _sessions[index];
+    final remainingMessages = session.messages
+        .where((m) => session.pinnedMessageIds.contains(m.id))
+        .toList();
+
+    _sessions[index] = ChatSession(
+      id: session.id,
+      user1Id: session.user1Id,
+      user1Name: session.user1Name,
+      user2Id: session.user2Id,
+      user2Name: session.user2Name,
+      messages: remainingMessages,
+      unreadCounts: session.unreadCounts,
+      pinnedMessageIds: session.pinnedMessageIds,
+      createdAt: session.createdAt,
+      roomStartedAt: session.roomStartedAt,
+      roomExpiresAt: session.roomExpiresAt,
+      seenResetAnimationBy: const [], // Neither has seen the new block glitch yet
+      resetIndicatorVisibleFor: [session.user1Id, session.user2Id], // Indicator is visible for both so blocked user can see it
+      cheatDetectedUserId: "BLOCKED_RED", // Special flag for Red Glitch
+      roomDeletedBy: const [],
+      chatLogs: session.chatLogs,
+    );
+    notifyListeners();
+    _saveChats();
+  }
+
+  List<ChatLogEntry> getChatLogs(String targetUserId) {
+    if (_currentUserId == null) return [];
+    final chatId = _getChatId(_currentUserId!, targetUserId);
+    final session = _sessions.cast<ChatSession?>().firstWhere(
+      (s) => s?.id == chatId,
+      orElse: () => null,
+    );
+    if (session == null) return [];
+    return session.chatLogs;
   }
 }

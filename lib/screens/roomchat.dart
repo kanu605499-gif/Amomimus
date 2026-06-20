@@ -15,11 +15,19 @@ import '../services/chatmodel.dart';
 import '../widgets/report_dialog.dart';
 
 import 'profile_screen.dart';
+import 'feed_screen.dart' hide AmomimusWaveClipper;
 import 'package:amomimus/i18n/strings.g.dart';
 import '../widgets/chat/chat_message_bubble.dart';
 import '../widgets/chat/chat_input_bar.dart';
 import 'fake_pdf_screen.dart';
 import '../widgets/chat/room_chat_large_profile.dart';
+import '../widgets/chat/floating_countdown_capsule.dart';
+import '../widgets/chat/room_chat_mini_island.dart';
+import '../widgets/chat/selection_action_bar.dart';
+import '../widgets/effects/glitch_effect.dart';
+import '../widgets/chat/amomimus_wave_clipper.dart';
+import 'package:amomimus/utils/jelly_dialog.dart';
+
 void main() {
   runApp(
     MultiProvider(
@@ -55,6 +63,39 @@ class _AmomimusApp6State extends State<AmomimusApp6>
   bool _isProfileMenuExpanded = false;
 
   late AnimationController _waveController;
+
+  bool _showResetGlitch = false;
+  bool _hasTriggeredRead = false;
+
+  bool _isSelectionMode = false;
+  List<String> _selectedMessageIds = [];
+
+  void _toggleSelection(String messageId) {
+    setState(() {
+      if (_selectedMessageIds.contains(messageId)) {
+        _selectedMessageIds.remove(messageId);
+        if (_selectedMessageIds.isEmpty) {
+          _isSelectionMode = false;
+        }
+      } else {
+        _selectedMessageIds.add(messageId);
+      }
+    });
+  }
+
+  void _enterSelectionMode(String messageId) {
+    setState(() {
+      _isSelectionMode = true;
+      _selectedMessageIds = [messageId];
+    });
+  }
+
+  void _clearSelection() {
+    setState(() {
+      _isSelectionMode = false;
+      _selectedMessageIds.clear();
+    });
+  }
 
   @override
   void initState() {
@@ -157,13 +198,13 @@ class _AmomimusApp6State extends State<AmomimusApp6>
   ) {
     final themeProvider = context.read<AmomimusDarkTheme>();
     final isDark = themeProvider.isDarkMode;
-    final currentBg = isDark ? AmomimusDarkTheme.backgroundDark : Colors.white;
+    final currentBg = isDark ? AmomimusDarkTheme.backgroundDark : Colors.grey[100];
     final textColor = isDark ? Colors.white : Colors.black87;
     final textSecondary = isDark
         ? AmomimusDarkTheme.textSecondary
         : Colors.black54;
 
-    showDialog(
+    showJellyDialog(
       context: context,
       builder: (dialogContext) {
         return Dialog(
@@ -268,7 +309,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                             decoration: BoxDecoration(
                               color: isDark
                                   ? Colors.black.withValues(alpha: 0.2)
-                                  : Colors.grey.withValues(alpha: 0.1),
+                                  : themeColor.withValues(alpha: 0.06),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
                                 color: themeColor.withValues(alpha: 0.3),
@@ -360,15 +401,307 @@ class _AmomimusApp6State extends State<AmomimusApp6>
     );
   }
 
+  void _showChatLogPopup(
+    BuildContext context,
+    String targetUsername,
+    Color themeColor,
+  ) {
+    final themeProvider = context.read<AmomimusDarkTheme>();
+    final isDark = themeProvider.isDarkMode;
+    final currentBg = isDark ? AmomimusDarkTheme.backgroundDark : Colors.grey[100];
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final textSecondary = isDark
+        ? AmomimusDarkTheme.textSecondary
+        : Colors.black54;
+
+    final accountManager = context.read<AccountManager>();
+    final currentUserId = accountManager.currentUser?.amomimusId;
+    final currentUserName = accountManager.currentUser?.anonymousUsername ?? 'Anda';
+
+    // Find the partner target account
+    final targetAccount = accountManager.accounts.firstWhere(
+      (acc) => acc.amomimusId == targetUsername,
+      orElse: () => UserAccount(
+        email: '',
+        realUsername: '',
+        anonymousUsername: '',
+        amomimusId: '',
+        gender: 'Amo',
+        registrationDate: '',
+        isDemo: false,
+      ),
+    );
+    final partnerName = targetAccount.anonymousUsername.isNotEmpty
+        ? targetAccount.anonymousUsername
+        : (widget.name ?? 'Partner');
+
+    showJellyDialog(
+      context: context,
+      builder: (dialogContext) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 24,
+          ),
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: currentBg,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(
+                color: themeColor.withValues(alpha: 0.5),
+                width: 1.5,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: isDark ? 0.4 : 0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.history, color: themeColor),
+                        const SizedBox(width: 8),
+                        Text(
+                          t.chat_log_title,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: textColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.close, color: textSecondary),
+                      onPressed: () => Navigator.pop(dialogContext),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Consumer<ChatModel>(
+                  builder: (ctx, chatModel, child) {
+                    final logs = chatModel.getChatLogs(targetUsername);
+
+                    if (logs.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 40),
+                        child: Center(
+                          child: Text(
+                            t.chat_log_empty,
+                            style: TextStyle(
+                              color: textSecondary,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    return ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: MediaQuery.of(context).size.height * 0.5,
+                      ),
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: logs.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        itemBuilder: (ctx, index) {
+                          final entry = logs[index];
+
+                          // Resolve Actor Display Name
+                          String actorName = t.chat_log_system;
+                          if (entry.actorId == currentUserId) {
+                            actorName = currentUserName;
+                          } else if (entry.actorId != 'system') {
+                            actorName = partnerName;
+                          }
+
+                          // Format the entry action description
+                          String description = "";
+                          switch (entry.text) {
+                            case 'room_created':
+                              description = t.chat_log_room_created;
+                              break;
+                            case 'room_expired':
+                              description = t.chat_log_room_expired;
+                              break;
+                            case 'delete_room':
+                              description = t.chat_log_delete_room(actor: actorName);
+                              break;
+                            case 'pin':
+                              description = t.chat_log_pin(actor: actorName);
+                              break;
+                            case 'unpin':
+                              description = t.chat_log_unpin(actor: actorName);
+                              break;
+                            case 'erase':
+                              description = t.chat_log_erase(actor: actorName);
+                              break;
+                            default:
+                              description = "$actorName: ${entry.text}";
+                          }
+
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  description,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: textColor,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Text(
+                                entry.timeStamp,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  color: textSecondary,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final themeProvider = context.watch<AmomimusDarkTheme>();
+    final themeProvider = Provider.of<AmomimusDarkTheme>(context);
+    final accountManager = Provider.of<AccountManager>(context);
+
+    final isRecentlyUnblocked = widget.username != null
+        ? accountManager.isRecentlyUnblocked(widget.username!)
+        : false;
+
+    // Build the dynamic header style based on user indicator
+    UserAccount? targetAccount;
     final chatModel = context.watch<ChatModel>();
     final activeChat = chatModel.getChatByUsername(
       widget.username ?? '@partner_dev',
       targetName: widget.name ?? 'Unknown',
     );
-    final messages = activeChat.messages;
+    final currentUserId = accountManager.currentUser?.amomimusId;
+    final messages = activeChat.messages
+        .where((m) => currentUserId == null || !m.deletedBy.contains(currentUserId))
+        .toList();
+
+    if (!_hasTriggeredRead && widget.username != null) {
+      _hasTriggeredRead = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<ChatModel>().markAsRead(widget.username!);
+      });
+    }
+
+    final iAmBlocker = accountManager.currentUser?.blockedUsers.contains(widget.username) == true;
+    final iAmBlocked = accountManager.isBlockedBy(widget.username!);
+    
+    // Play glitch if blocked, or if blocker hasn't seen it
+    final shouldPlayGlitch = iAmBlocked || (iAmBlocker && !activeChat.hasSeenResetAnimation);
+
+    if (shouldPlayGlitch && !_showResetGlitch) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _showResetGlitch = true;
+          });
+          
+          context.read<ChatModel>().markResetAnimationSeen(
+            widget.username!,
+          );
+
+          final activeUserId = context
+              .read<AccountManager>()
+              .currentUser
+              ?.amomimusId;
+          final isCheater =
+              activeChat.cheatDetectedUserId != null &&
+              activeChat.cheatDetectedUserId == activeUserId;
+
+          Future.delayed(const Duration(seconds: 2), () {
+            if (mounted) {
+              setState(() {
+                _showResetGlitch = false;
+              });
+
+              bool iAmBlocker = accountManager.currentUser?.blockedUsers.contains(widget.username) == true;
+              bool iAmBlocked = accountManager.isBlockedBy(widget.username!);
+
+              if (isCheater) {
+                showJellyDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (dialogContext) => AlertDialog(
+                    backgroundColor: themeProvider.isDarkMode
+                        ? AmomimusDarkTheme.surfaceDark
+                        : Colors.white,
+                    title: const Text("⚠️ Warning"),
+                    content: Text(
+                      Translations.of(context).cheat_detected_warning,
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(dialogContext); // Close dialog
+                          if (Navigator.canPop(context)) {
+                            Navigator.pop(context); // Pop roomchat, back to list
+                          }
+                        },
+                        child: const Text(
+                          "OK",
+                          style: TextStyle(color: Colors.redAccent),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              } else if (iAmBlocker) {
+                context.read<ChatModel>().deleteChatForUser(widget.username!);
+                if (Navigator.canPop(context)) {
+                  Navigator.pop(context); // Kick back to chat list
+                }
+              } else if (iAmBlocked) {
+                context.read<ChatModel>().deleteChatForUser(widget.username!);
+                // Kick to feed screen
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => const AmomimusApp5()),
+                  (route) => false,
+                );
+              } else {
+                if (Navigator.canPop(context)) {
+                  Navigator.pop(context); // Kick back to chat list
+                }
+              }
+            }
+          });
+        }
+      });
+    }
 
     final currentBg = themeProvider.isDarkMode
         ? AmomimusDarkTheme.backgroundDark
@@ -385,8 +718,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
     // Get the target user's gender for dynamic styling
-    final accountManager = context.watch<AccountManager>();
-    final targetAccount = accountManager.accounts.firstWhere(
+    targetAccount = accountManager.accounts.firstWhere(
       (acc) => acc.amomimusId == widget.username,
       orElse: () => UserAccount(
         email: '',
@@ -401,239 +733,6 @@ class _AmomimusApp6State extends State<AmomimusApp6>
     final targetGender = targetAccount.gender;
     final dynamicHeaderIcon = GenderHelpers.getGenderIcon(targetGender);
     final dynamicHeaderColor = GenderHelpers.getGenderColor(targetGender);
-
-    Widget expandableMiniIsland() {
-      final Color dynamicOutlineColor = themeProvider.isDarkMode
-          ? Colors.white.withValues(alpha: 0.2)
-          : Colors.black87.withValues(alpha: 0.15);
-
-      final Color islandBg = themeProvider.isDarkMode
-          ? Colors.black54
-          : const Color.fromARGB(221, 255, 255, 255);
-
-      return GestureDetector(
-        onTap: () {
-          setState(() {
-            _isIslandExpanded = !_isIslandExpanded;
-          });
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 250),
-          curve: Curves.easeInOut,
-          height: 46,
-          width: _isIslandExpanded ? 180 : 46,
-          decoration: BoxDecoration(
-            color: islandBg,
-            borderRadius: BorderRadius.circular(25),
-            border: Border.all(color: dynamicOutlineColor, width: 1.2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(
-                  alpha: themeProvider.isDarkMode ? 0.2 : 0.05,
-                ),
-                blurRadius: 12,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(25),
-            child: AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
-              crossFadeState: _isIslandExpanded
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
-              layoutBuilder:
-                  (topChild, topChildKey, bottomChild, bottomChildKey) {
-                    return Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Positioned(key: bottomChildKey, child: bottomChild),
-                        Positioned(key: topChildKey, child: topChild),
-                      ],
-                    );
-                  },
-              firstChild: SizedBox(
-                height: 44,
-                width: 44,
-                child: Center(
-                  child: Icon(
-                    dynamicHeaderIcon,
-                    color: dynamicHeaderColor,
-                    size: 22,
-                  ),
-                ),
-              ),
-              secondChild: Container(
-                width: 180,
-                height: 44,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.center,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Stack(
-                        children: [
-                          Container(
-                            width: 32,
-                            height: 32,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Icon(
-                              dynamicHeaderIcon,
-                              color: dynamicHeaderColor,
-                              size: 20,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 12),
-                      Container(
-                        height: 18,
-                        width: 1,
-                        color: dynamicOutlineColor,
-                      ),
-                      const SizedBox(width: 4),
-                      IconButton(
-                        icon: Icon(
-                          themeProvider.isDarkMode
-                              ? Icons.wb_sunny_rounded
-                              : Icons.nightlight_round,
-                          size: 20,
-                        ),
-                        color: themeProvider.isDarkMode
-                            ? AmomimusDarkTheme.policeLineYellow
-                            : AmomimusDarkTheme.primaryPurple,
-                        constraints: const BoxConstraints(),
-                        padding: const EdgeInsets.all(4),
-                        onPressed: () =>
-                            context.read<AmomimusDarkTheme>().toggleTheme(),
-                      ),
-                      const SizedBox(width: 4),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.report_problem_outlined,
-                          size: 20,
-                        ),
-                        color: Colors.orangeAccent,
-                        constraints: const BoxConstraints(),
-                        padding: const EdgeInsets.all(4),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => ReportDialog(
-                              targetId: widget.username ?? '',
-                              isUserReport: true,
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(width: 4),
-                      IconButton(
-                        icon: const Icon(Icons.delete_outline, size: 20),
-                        color: Colors.redAccent,
-                        constraints: const BoxConstraints(),
-                        padding: const EdgeInsets.all(4),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext dialogContext) {
-                              final isDark = Provider.of<AmomimusDarkTheme>(
-                                context,
-                                listen: false,
-                              ).isDarkMode;
-                              return AlertDialog(
-                                backgroundColor: isDark
-                                    ? AmomimusDarkTheme.surfaceDark
-                                    : Colors.white,
-                                title: Text(
-                                  Translations.of(context).delete_chat_title,
-                                  style: TextStyle(
-                                    color: isDark ? Colors.white : Colors.black,
-                                  ),
-                                ),
-                                content: Text(
-                                  Translations.of(
-                                    context,
-                                  ).delete_chat_room_confirm,
-                                  style: TextStyle(
-                                    color: isDark
-                                        ? Colors.white70
-                                        : Colors.black87,
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(dialogContext),
-                                    child: Text(
-                                      Translations.of(context).cancel,
-                                      style: const TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(
-                                        dialogContext,
-                                      ); // close dialog
-                                      context.read<ChatModel>().deleteChat(
-                                        widget.username ?? '',
-                                      );
-                                      context
-                                          .read<ChatRequestManager>()
-                                          .deleteRequestWith(
-                                            widget.username ?? '',
-                                          );
-                                      Navigator.pop(context); // exit room
-                                    },
-                                    child: Text(
-                                      Translations.of(context).delete,
-                                      style: const TextStyle(
-                                        color: Colors.redAccent,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      const SizedBox(width: 4),
-                      IconButton(
-                        icon: Icon(Icons.search, size: 20),
-                        color: themeProvider.isDarkMode
-                            ? AmomimusDarkTheme.textSecondary
-                            : Colors.black54,
-                        constraints: const BoxConstraints(),
-                        padding: const EdgeInsets.all(4),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) =>
-                                      const FakePdfScreen(),
-                              transitionDuration: Duration.zero,
-                              reverseTransitionDuration: Duration.zero,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
 
     return Theme(
       data: AmomimusDarkTheme.themeData,
@@ -727,6 +826,18 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                                       context,
                                       index,
                                     ) {
+                                      final allPending = _selectedMessageIds
+                                          .every((id) {
+                                            final m = messages.firstWhere(
+                                              (m) => m.id == id,
+                                              orElse: () => ChatMessage(
+                                                text: '',
+                                                senderId: '',
+                                                timeStamp: '',
+                                              ),
+                                            );
+                                            return m.showResendOptions;
+                                          });
                                       if (index == 0) {
                                         return Container(
                                           margin: const EdgeInsets.only(
@@ -749,7 +860,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                                                 currentTextSecondary,
                                             currentText: currentText,
                                             currentBg: currentBg,
-                                            targetAccount: targetAccount,
+                                            targetAccount: targetAccount!,
                                             activeChat: activeChat,
                                             onToggleProfileMenu: () {
                                               setState(() {
@@ -759,13 +870,15 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                                             },
                                             onShowMemoriesPopup:
                                                 _showMemoriesPopup,
+                                            onShowChatLogPopup:
+                                                _showChatLogPopup,
                                           ),
                                         );
                                       }
                                       final msg = messages[index - 1];
                                       final repliedMsg =
                                           msg.replyMessageId != null
-                                          ? messages.firstWhere(
+                                          ? activeChat.allMessages.firstWhere(
                                               (m) => m.id == msg.replyMessageId,
                                               orElse: () => ChatMessage(
                                                 text: Translations.of(
@@ -784,6 +897,11 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                                         child: MessageBubble(
                                           message: msg,
                                           repliedMessage: repliedMsg,
+                                          onReply: () {
+                                            setState(() {
+                                              _replyingToMessage = msg;
+                                            });
+                                          },
                                           isPinned: context
                                               .watch<ChatModel>()
                                               .isPinned(
@@ -792,59 +910,41 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                                                 msg.id ?? '',
                                               ),
                                           onTogglePin: () {
-                                            final cm = context
-                                                .read<ChatModel>();
-                                            final target =
-                                                widget.username ??
-                                                '@partner_dev';
-                                            final msgId = msg.id ?? '';
-                                            if (cm.isPinned(target, msgId)) {
-                                              cm.unpinMessage(target, msgId);
-                                            } else {
-                                              final success = cm.pinMessage(
+                                            if (msg.id != null) {
+                                              final target =
+                                                  widget.username ??
+                                                  '@partner_dev';
+                                              final cm = context
+                                                  .read<ChatModel>();
+                                              if (cm.isPinned(
                                                 target,
-                                                msgId,
-                                              );
-                                              if (!success) {
-                                                ScaffoldMessenger.of(
-                                                  context,
-                                                ).showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                      Translations.of(
-                                                        context,
-                                                      ).pin_limit_error,
-                                                    ),
-                                                    backgroundColor:
-                                                        Colors.redAccent,
-                                                  ),
+                                                msg.id!,
+                                              )) {
+                                                cm.unpinMessage(
+                                                  target,
+                                                  msg.id!,
                                                 );
+                                              } else {
+                                                cm.pinMessage(target, msg.id!);
                                               }
                                             }
                                           },
-                                          onReply: () {
-                                            setState(() {
-                                              _replyingToMessage = msg;
-                                            });
-                                          },
-                                          onReplyTapped: () {
-                                            if (msg.replyMessageId != null) {
-                                              final targetIndex = messages
-                                                  .indexWhere(
-                                                    (m) =>
-                                                        m.id ==
-                                                        msg.replyMessageId,
-                                                  );
-                                              if (targetIndex != -1) {
-                                                _scrollController.scrollToIndex(
-                                                  targetIndex + 1,
-                                                  preferPosition:
-                                                      AutoScrollPosition.middle,
-                                                  duration: const Duration(
-                                                    milliseconds: 500,
-                                                  ),
-                                                );
-                                              }
+                                          isSelectionMode: _isSelectionMode,
+                                          isSelected: _selectedMessageIds
+                                              .contains(msg.id),
+                                          selectionIndex:
+                                              _selectedMessageIds.indexOf(
+                                                msg.id ?? '',
+                                              ) +
+                                              1,
+                                          showSelectionNumbers: allPending,
+                                          onSelectionTap: () => msg.id != null
+                                              ? _toggleSelection(msg.id!)
+                                              : null,
+                                          onLongPress: () {
+                                            if (!_isSelectionMode &&
+                                                msg.id != null) {
+                                              _enterSelectionMode(msg.id!);
                                             }
                                           },
                                         ),
@@ -883,11 +983,54 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                         margin: EdgeInsets.only(
                           top: statusBarHeight + 10,
                           right: 14 * (1 - _headerProgress),
-                        ), // Add right margin when at top right
-                        child: expandableMiniIsland(),
+                        ),
+                        child: AnimatedCrossFade(
+                          duration: const Duration(milliseconds: 300),
+                          crossFadeState: _isSelectionMode
+                              ? CrossFadeState.showSecond
+                              : CrossFadeState.showFirst,
+                          firstChild: RoomChatMiniIsland(
+                            isExpanded: _isIslandExpanded,
+                            onToggle: () {
+                              setState(() {
+                                _isIslandExpanded = !_isIslandExpanded;
+                              });
+                            },
+                            themeProvider: themeProvider,
+                            dynamicHeaderColor: dynamicHeaderColor,
+                            dynamicHeaderIcon: dynamicHeaderIcon,
+                            targetAccount: targetAccount!,
+                            targetUsername: widget.username ?? '',
+                          ),
+                          secondChild: SelectionActionBar(
+                            selectedMessageIds: _selectedMessageIds,
+                            messages: messages,
+                            targetUsername: widget.username ?? '@partner_dev',
+                            onClearSelection: _clearSelection,
+                          ),
+                        ),
                       ),
                     ),
                   ),
+                  if (activeChat.roomStartedAt != null &&
+                      !activeChat.isResetIndicatorVisible)
+                    FloatingCountdownCapsule(
+                      startedAt:
+                          DateTime.tryParse(activeChat.roomStartedAt ?? '') ??
+                          DateTime.now(),
+                      expiresAt:
+                          DateTime.tryParse(activeChat.roomExpiresAt ?? '') ??
+                          DateTime.now(),
+                      isRecentlyUnblocked: isRecentlyUnblocked,
+                      showResetGlitch: _showResetGlitch,
+                    ),
+                  if (_showResetGlitch)
+                    const Positioned.fill(
+                      child: GlitchEffect(
+                        isRedHorror: true,
+                        child: SizedBox.expand(),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -896,33 +1039,4 @@ class _AmomimusApp6State extends State<AmomimusApp6>
       ),
     );
   }
-}
-
-class AmomimusWaveClipper extends CustomClipper<Path> {
-  final double animationValue;
-  final double offset;
-  AmomimusWaveClipper(this.animationValue, this.offset);
-
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    double angle = (animationValue * 2 * pi) + (offset * pi);
-    double waveSin = sin(angle);
-    double waveCos = cos(angle);
-    double startY = 55 + (waveSin * 22);
-    double endY = 45 + (waveCos * 18);
-
-    path.moveTo(0, size.height);
-    path.lineTo(0, startY);
-    double controlX = (size.width * 0.35) + (waveCos * 30);
-    double controlY = 85 + (waveSin * 25);
-    path.quadraticBezierTo(controlX, controlY, size.width, endY);
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant AmomimusWaveClipper oldClipper) => true;
 }

@@ -15,7 +15,10 @@ class LocalAuthService implements AuthService {
   }
 
   @override
-  Future<bool> registerAccount(UserModelSql credentials, UserAccount profile) async {
+  Future<bool> registerAccount(
+    UserModelSql credentials,
+    UserAccount profile,
+  ) async {
     // 1. Save login credentials to SharedPreferences (DBHelper)
     final bool isSuccess = await _dbHelper.registerUser(credentials);
     if (!isSuccess) return false;
@@ -26,9 +29,9 @@ class LocalAuthService implements AuthService {
       return true;
     } catch (e) {
       print("==== DB REGISTER PROFILE SKIPPED: $e ====");
-      // For web/environments where sqflite might fail, we still consider it a success locally 
+      // For web/environments where sqflite might fail, we still consider it a success locally
       // since the login credentials were saved.
-      return true; 
+      return true;
     }
   }
 

@@ -263,6 +263,53 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get email_already_registered_title => 'Pendaftaran Gagal';
 	@override String get email_already_registered_desc => 'Email ini sudah terdaftar. Apakah Anda ingin masuk sebagai gantinya?';
 	@override String get go_to_login => 'Masuk';
+	@override String get delayed_sync_msg => 'Waduh! Sepertinya server kita lagi malu-malu nih sama HP kamu. Jangan khawatir, pesanmu udah aman tersimpan dan bakal langsung dikirim pas server kita tersinkronisasi!';
+	@override String get delayed_sync_title => 'Sinkronisasi Tertunda';
+	@override String get delayed_sync_feed_msg => 'Waduh! Sepertinya server kita lagi malu-malu nih sama HP kamu. Jangan khawatir, postinganmu udah aman tersimpan dan bakal langsung diterbitkan pas server kita tersinkronisasi!';
+	@override String get delayed_sync_feed_title => 'Postingan Tertunda';
+	@override String get message_is_pending => 'Pesan sedang tertunda...';
+	@override String get message_successfully_sent => 'Pesan berhasil dikirim';
+	@override String get room_chat_resetted => 'Ada pesan baru';
+	@override String get started_at => 'Dimulai pada:';
+	@override String get end_at => 'Berakhir pada:';
+	@override String get resend => 'Kirim Ulang';
+	@override String get delete_selected => 'Hapus Pilihan';
+	@override String get failed_to_send => 'Gagal terkirim';
+	@override String get resend_confirm_title => 'Konfirmasi Kirim Ulang';
+	@override String get resend_confirm_desc => 'Apakah urutan resend Anda sudah sesuai? Pesan akan dikirim secara sekuensial.';
+	@override String get delete_confirm_desc => 'Apakah Anda yakin ingin menghapus pesan ini?';
+	@override String get cheat_detected_warning => 'Anda terindikasi melakukan perubahan manual terhadap sistem jam HP Anda. Room chat telah di-reset untuk keamanan.';
+	@override String get cheat_partner_warning => 'Partner Anda terindikasi melakukan perubahan waktu sistem.';
+	@override String get copy => 'Copy';
+	@override String get copied_to_clipboard => 'Copied to clipboard';
+	@override String get app_features_title => 'Fitur Aplikasi';
+	@override String get system_features_title => 'Fitur Sistem';
+	@override String get feature_1_title => 'Dynamic Persona Theming';
+	@override String get feature_1_desc => 'Tema antarmuka beradaptasi mengikuti gender profil yang digunakan (Amo, Amom, atau Ami), menghadirkan penyesuaian visual yang tersinkronisasi untuk setiap sesi peran.';
+	@override String get feature_2_title => 'Interactive Mini Island';
+	@override String get feature_2_desc => 'Panel notifikasi portabel yang dirancang untuk mempermudah kenyamanan interaksi pengguna. Sistem ini melayang di area obrolan dan dapat melebur secara dinamis menjadi bilah navigasi atas (App Bar).';
+	@override String get feature_3_title => 'Glitch & Ex-Blocked';
+	@override String get feature_3_desc => 'Dirancang untuk memberikan dampak psikologis terhadap fitur blokir dan pelaporan. Interaksi dengan pengguna yang memiliki riwayat diblokir akan memicu peringatan distorsi visual, menanamkan kehati-hatian secara alamiah.';
+	@override String get feature_4_title => 'Memories & Activity Log';
+	@override String get feature_4_desc => 'Menyediakan utilitas pencatatan komprehensif. Anda dapat menyematkan pesan krusial ke dalam Memories, sementara Chat Log secara otonom mendokumentasikan riwayat dan kronologi aktivitas di dalam ruangan.';
+	@override String get feature_5_title => 'Floating Countdown Capsule';
+	@override String get feature_5_desc => 'Modul pelacak waktu interaktif yang berfungsi memastikan pengguna awas terhadap sisa durasi obrolan. Dapat diseret (drag & drop) secara bebas agar tidak menutupi area baca pesan.';
+	@override String get system_1_title => 'Hybrid Sync Engine';
+	@override String get system_1_desc => 'Arsitektur pengiriman pesan ditenagai oleh mesin simulasi asinkron yang cerdas. Mengatur siklus pesan dari penundaan (pending), sukses terkirim, hingga penanganan kegagalan dengan sangat realistis.';
+	@override String get system_2_title => 'Secret "Human" Cheat Detection';
+	@override String get system_2_desc => 'Protokol keamanan tak kasat mata yang menjaga sportivitas obrolan. Memindai pola perilaku atau percakapan terlarang secara pasif, lalu memberikan teguran bagi pelanggar tanpa membebani performa aplikasi.';
+	@override String get system_3_title => 'State Persistence Core';
+	@override String get system_3_desc => 'Seluruh preferensi status, log, dan interaksi dikelola melalui metode hybrid local yang dikombinasikan dengan integrasi API. Sistem memastikan data penting obrolan tetap utuh saat aplikasi ditutup dan dibuka kembali.';
+	@override String get chat_log_title => 'Chat Log';
+	@override String get chat_log_empty => 'Belum ada log chat.';
+	@override String get chat_log_system => 'Sistem';
+	@override String get chat_log_room_created => 'Obrolan dimulai';
+	@override String get chat_log_room_expired => 'Countdown reset: Ruang obrolan telah dibersihkan';
+	@override String chat_log_delete_room({required Object actor}) => '${actor} menghapus ruang obrolan ini';
+	@override String chat_log_pin({required Object actor}) => '${actor} menyematkan pesan ke Memories';
+	@override String chat_log_unpin({required Object actor}) => '${actor} melepas sematan pesan dari Memories';
+	@override String chat_log_erase({required Object actor}) => '${actor} menghapus pesan dari Memories secara permanen';
+	@override String get reloading_whispers => 'Memuat Ulang Beberapa Bisikan...';
 }
 
 /// The flat map containing all translations for locale <id>.
@@ -497,6 +544,53 @@ extension on TranslationsId {
 			'email_already_registered_title' => 'Pendaftaran Gagal',
 			'email_already_registered_desc' => 'Email ini sudah terdaftar. Apakah Anda ingin masuk sebagai gantinya?',
 			'go_to_login' => 'Masuk',
+			'delayed_sync_msg' => 'Waduh! Sepertinya server kita lagi malu-malu nih sama HP kamu. Jangan khawatir, pesanmu udah aman tersimpan dan bakal langsung dikirim pas server kita tersinkronisasi!',
+			'delayed_sync_title' => 'Sinkronisasi Tertunda',
+			'delayed_sync_feed_msg' => 'Waduh! Sepertinya server kita lagi malu-malu nih sama HP kamu. Jangan khawatir, postinganmu udah aman tersimpan dan bakal langsung diterbitkan pas server kita tersinkronisasi!',
+			'delayed_sync_feed_title' => 'Postingan Tertunda',
+			'message_is_pending' => 'Pesan sedang tertunda...',
+			'message_successfully_sent' => 'Pesan berhasil dikirim',
+			'room_chat_resetted' => 'Ada pesan baru',
+			'started_at' => 'Dimulai pada:',
+			'end_at' => 'Berakhir pada:',
+			'resend' => 'Kirim Ulang',
+			'delete_selected' => 'Hapus Pilihan',
+			'failed_to_send' => 'Gagal terkirim',
+			'resend_confirm_title' => 'Konfirmasi Kirim Ulang',
+			'resend_confirm_desc' => 'Apakah urutan resend Anda sudah sesuai? Pesan akan dikirim secara sekuensial.',
+			'delete_confirm_desc' => 'Apakah Anda yakin ingin menghapus pesan ini?',
+			'cheat_detected_warning' => 'Anda terindikasi melakukan perubahan manual terhadap sistem jam HP Anda. Room chat telah di-reset untuk keamanan.',
+			'cheat_partner_warning' => 'Partner Anda terindikasi melakukan perubahan waktu sistem.',
+			'copy' => 'Copy',
+			'copied_to_clipboard' => 'Copied to clipboard',
+			'app_features_title' => 'Fitur Aplikasi',
+			'system_features_title' => 'Fitur Sistem',
+			'feature_1_title' => 'Dynamic Persona Theming',
+			'feature_1_desc' => 'Tema antarmuka beradaptasi mengikuti gender profil yang digunakan (Amo, Amom, atau Ami), menghadirkan penyesuaian visual yang tersinkronisasi untuk setiap sesi peran.',
+			'feature_2_title' => 'Interactive Mini Island',
+			'feature_2_desc' => 'Panel notifikasi portabel yang dirancang untuk mempermudah kenyamanan interaksi pengguna. Sistem ini melayang di area obrolan dan dapat melebur secara dinamis menjadi bilah navigasi atas (App Bar).',
+			'feature_3_title' => 'Glitch & Ex-Blocked',
+			'feature_3_desc' => 'Dirancang untuk memberikan dampak psikologis terhadap fitur blokir dan pelaporan. Interaksi dengan pengguna yang memiliki riwayat diblokir akan memicu peringatan distorsi visual, menanamkan kehati-hatian secara alamiah.',
+			'feature_4_title' => 'Memories & Activity Log',
+			'feature_4_desc' => 'Menyediakan utilitas pencatatan komprehensif. Anda dapat menyematkan pesan krusial ke dalam Memories, sementara Chat Log secara otonom mendokumentasikan riwayat dan kronologi aktivitas di dalam ruangan.',
+			'feature_5_title' => 'Floating Countdown Capsule',
+			'feature_5_desc' => 'Modul pelacak waktu interaktif yang berfungsi memastikan pengguna awas terhadap sisa durasi obrolan. Dapat diseret (drag & drop) secara bebas agar tidak menutupi area baca pesan.',
+			'system_1_title' => 'Hybrid Sync Engine',
+			'system_1_desc' => 'Arsitektur pengiriman pesan ditenagai oleh mesin simulasi asinkron yang cerdas. Mengatur siklus pesan dari penundaan (pending), sukses terkirim, hingga penanganan kegagalan dengan sangat realistis.',
+			'system_2_title' => 'Secret "Human" Cheat Detection',
+			'system_2_desc' => 'Protokol keamanan tak kasat mata yang menjaga sportivitas obrolan. Memindai pola perilaku atau percakapan terlarang secara pasif, lalu memberikan teguran bagi pelanggar tanpa membebani performa aplikasi.',
+			'system_3_title' => 'State Persistence Core',
+			'system_3_desc' => 'Seluruh preferensi status, log, dan interaksi dikelola melalui metode hybrid local yang dikombinasikan dengan integrasi API. Sistem memastikan data penting obrolan tetap utuh saat aplikasi ditutup dan dibuka kembali.',
+			'chat_log_title' => 'Chat Log',
+			'chat_log_empty' => 'Belum ada log chat.',
+			'chat_log_system' => 'Sistem',
+			'chat_log_room_created' => 'Obrolan dimulai',
+			'chat_log_room_expired' => 'Countdown reset: Ruang obrolan telah dibersihkan',
+			'chat_log_delete_room' => ({required Object actor}) => '${actor} menghapus ruang obrolan ini',
+			'chat_log_pin' => ({required Object actor}) => '${actor} menyematkan pesan ke Memories',
+			'chat_log_unpin' => ({required Object actor}) => '${actor} melepas sematan pesan dari Memories',
+			'chat_log_erase' => ({required Object actor}) => '${actor} menghapus pesan dari Memories secara permanen',
+			'reloading_whispers' => 'Memuat Ulang Beberapa Bisikan...',
 			_ => null,
 		};
 	}

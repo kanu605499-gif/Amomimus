@@ -48,7 +48,10 @@ class FeedManager extends ChangeNotifier {
 
   Future<void> _saveFeeds() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_feedsKey, jsonEncode(_feeds.map((e) => e.toJson()).toList()));
+    await prefs.setString(
+      _feedsKey,
+      jsonEncode(_feeds.map((e) => e.toJson()).toList()),
+    );
   }
 
   Future<void> addPost(FeedModel post) async {

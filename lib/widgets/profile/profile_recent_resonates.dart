@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../amomimusdark.dart';
 import '../../models/post_model.dart';
 import '../../services/feed_manager.dart';
+import 'package:amomimus/utils/jelly_dialog.dart';
 
 class ProfileRecentResonates extends StatelessWidget {
   final dynamic user;
@@ -41,221 +42,298 @@ class ProfileRecentResonates extends StatelessWidget {
               maxChildSize: 0.95,
               builder: (context, scrollController) {
                 return Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(24),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(2),
-                      ),
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? AmomimusDarkTheme.backgroundDark
+                        : Colors.white,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(24),
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        t.all_resonates,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? Colors.white : const Color(0xffb388ff),
+                      Center(
+                        child: Container(
+                          width: 40,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(2),
+                          ),
                         ),
                       ),
-                      if (isSelectionMode && selectedFeedIds.isNotEmpty)
-                        IconButton(
-                          icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (dialogContext) => AlertDialog(
-                                backgroundColor: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
-                                surfaceTintColor: Colors.transparent,
-                                title: Row(
-                                  children: [
-                                    const Icon(Icons.delete_outline, color: Colors.redAccent),
-                                    const SizedBox(width: 8),
-                                    Text(
-                                      t.delete_post_title,
-                                      style: TextStyle(
-                                        color: isDark ? AmomimusDarkTheme.policeLineYellow : const Color(0xff684ca3),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                content: Text(
-                                  t.delete_post_confirm,
-                                  style: TextStyle(
-                                    color: isDark ? Colors.white70 : Colors.black87,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(dialogContext),
-                                    child: Text(
-                                      t.cancel,
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      final feedManager = Provider.of<FeedManager>(context, listen: false);
-                                      for (final id in selectedFeedIds) {
-                                        feedManager.deletePostById(id);
-                                      }
-                                      Navigator.pop(dialogContext);
-                                      Navigator.pop(context);
-                                    },
-                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-                                    child: Text(
-                                      t.delete,
-                                      style: const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: userFeeds.isEmpty
-                        ? Center(
-                            child: Text(
-                              t.no_resonates_yet,
-                              style: TextStyle(
-                                color: isDark
-                                    ? Colors.grey[400]
-                                    : Colors.grey[600],
-                              ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            t.all_resonates,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: isDark
+                                  ? Colors.white
+                                  : const Color(0xffb388ff),
                             ),
-                          )
-                        : ListView.builder(
-                            controller: scrollController,
-                            itemCount: userFeeds.length,
-                            itemBuilder: (context, index) {
-                              final feed = userFeeds[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  if (isSelectionMode) {
-                                    setState(() {
-                                      if (selectedFeedIds.contains(feed.id)) {
-                                        selectedFeedIds.remove(feed.id);
-                                        if (selectedFeedIds.isEmpty) {
-                                          isSelectionMode = false;
-                                        }
-                                      } else {
-                                        selectedFeedIds.add(feed.id);
-                                      }
-                                    });
-                                  }
-                                },
-                                onLongPress: () {
-                                  if (!isOtherUser) {
-                                    setState(() {
-                                      isSelectionMode = true;
-                                      if (!selectedFeedIds.contains(feed.id)) {
-                                        selectedFeedIds.add(feed.id);
-                                      }
-                                    });
-                                  }
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.only(bottom: 12),
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: Provider.of<AmomimusDarkTheme>(context).cardDecoration.copyWith(
-                                    border: isSelectionMode && selectedFeedIds.contains(feed.id)
-                                        ? Border.all(color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple, width: 2)
-                                        : null,
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      if (isSelectionMode)
-                                        Padding(
-                                          padding: const EdgeInsets.only(right: 12, top: 4),
-                                          child: Icon(
-                                            selectedFeedIds.contains(feed.id)
-                                                ? Icons.check_circle
-                                                : Icons.radio_button_unchecked,
-                                            color: selectedFeedIds.contains(feed.id)
-                                                ? (isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple)
-                                                : Colors.grey,
-                                            size: 20,
+                          ),
+                          if (isSelectionMode && selectedFeedIds.isNotEmpty)
+                            IconButton(
+                              icon: const Icon(
+                                Icons.delete_outline,
+                                color: Colors.redAccent,
+                              ),
+                              onPressed: () {
+                                showJellyDialog(
+                                  context: context,
+                                  builder: (dialogContext) => AlertDialog(
+                                    backgroundColor: isDark
+                                        ? AmomimusDarkTheme.surfaceDark
+                                        : Colors.white,
+                                    surfaceTintColor: Colors.transparent,
+                                    title: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.delete_outline,
+                                          color: Colors.redAccent,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          t.delete_post_title,
+                                          style: TextStyle(
+                                            color: isDark
+                                                ? AmomimusDarkTheme
+                                                      .policeLineYellow
+                                                : const Color(0xff684ca3),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20,
                                           ),
                                         ),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              feed.content,
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: isDark ? Colors.white : Colors.black87,
+                                      ],
+                                    ),
+                                    content: Text(
+                                      t.delete_post_confirm,
+                                      style: TextStyle(
+                                        color: isDark
+                                            ? Colors.white70
+                                            : Colors.black87,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.pop(dialogContext),
+                                        child: Text(
+                                          t.cancel,
+                                          style: TextStyle(color: Colors.grey),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          final feedManager =
+                                              Provider.of<FeedManager>(
+                                                context,
+                                                listen: false,
+                                              );
+                                          for (final id in selectedFeedIds) {
+                                            feedManager.deletePostById(id);
+                                          }
+                                          Navigator.pop(dialogContext);
+                                          Navigator.pop(context);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.redAccent,
+                                        ),
+                                        child: Text(
+                                          t.delete,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: userFeeds.isEmpty
+                            ? Center(
+                                child: Text(
+                                  t.no_resonates_yet,
+                                  style: TextStyle(
+                                    color: isDark
+                                        ? Colors.grey[400]
+                                        : Colors.grey[600],
+                                  ),
+                                ),
+                              )
+                            : ListView.builder(
+                                controller: scrollController,
+                                itemCount: userFeeds.length,
+                                itemBuilder: (context, index) {
+                                  final feed = userFeeds[index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      if (isSelectionMode) {
+                                        setState(() {
+                                          if (selectedFeedIds.contains(
+                                            feed.id,
+                                          )) {
+                                            selectedFeedIds.remove(feed.id);
+                                            if (selectedFeedIds.isEmpty) {
+                                              isSelectionMode = false;
+                                            }
+                                          } else {
+                                            selectedFeedIds.add(feed.id);
+                                          }
+                                        });
+                                      }
+                                    },
+                                    onLongPress: () {
+                                      if (!isOtherUser) {
+                                        setState(() {
+                                          isSelectionMode = true;
+                                          if (!selectedFeedIds.contains(
+                                            feed.id,
+                                          )) {
+                                            selectedFeedIds.add(feed.id);
+                                          }
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(bottom: 12),
+                                      padding: const EdgeInsets.all(16),
+                                      decoration:
+                                          Provider.of<AmomimusDarkTheme>(
+                                            context,
+                                          ).cardDecoration.copyWith(
+                                            border:
+                                                isSelectionMode &&
+                                                    selectedFeedIds.contains(
+                                                      feed.id,
+                                                    )
+                                                ? Border.all(
+                                                    color: isDark
+                                                        ? AmomimusDarkTheme
+                                                              .policeLineYellow
+                                                        : AmomimusDarkTheme
+                                                              .primaryPurple,
+                                                    width: 2,
+                                                  )
+                                                : null,
+                                          ),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          if (isSelectionMode)
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                right: 12,
+                                                top: 4,
+                                              ),
+                                              child: Icon(
+                                                selectedFeedIds.contains(
+                                                      feed.id,
+                                                    )
+                                                    ? Icons.check_circle
+                                                    : Icons
+                                                          .radio_button_unchecked,
+                                                color:
+                                                    selectedFeedIds.contains(
+                                                      feed.id,
+                                                    )
+                                                    ? (isDark
+                                                          ? AmomimusDarkTheme
+                                                                .policeLineYellow
+                                                          : AmomimusDarkTheme
+                                                                .primaryPurple)
+                                                    : Colors.grey,
+                                                size: 20,
                                               ),
                                             ),
-                                            const SizedBox(height: 12),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  feed.timeStamp,
+                                                  feed.content,
                                                   style: TextStyle(
-                                                    fontSize: 12,
-                                                    color: isDark ? Colors.grey[400] : Colors.grey[500],
+                                                    fontSize: 14,
+                                                    color: isDark
+                                                        ? Colors.white
+                                                        : Colors.black87,
                                                   ),
                                                 ),
+                                                const SizedBox(height: 12),
                                                 Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
-                                                    Icon(
-                                                      Icons.favorite_border,
-                                                      size: 14,
-                                                      color: isDark ? Colors.grey[400] : Colors.grey[600],
-                                                    ),
-                                                    const SizedBox(width: 4),
                                                     Text(
-                                                      feed.resonatedBy.length.toString(),
+                                                      feed.timeStamp,
                                                       style: TextStyle(
                                                         fontSize: 12,
-                                                        color: isDark ? Colors.grey[400] : Colors.grey[600],
+                                                        color: isDark
+                                                            ? Colors.grey[400]
+                                                            : Colors.grey[500],
                                                       ),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.favorite_border,
+                                                          size: 14,
+                                                          color: isDark
+                                                              ? Colors.grey[400]
+                                                              : Colors
+                                                                    .grey[600],
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        Text(
+                                                          feed
+                                                              .resonatedBy
+                                                              .length
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: isDark
+                                                                ? Colors
+                                                                      .grey[400]
+                                                                : Colors
+                                                                      .grey[600],
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ],
                                                 ),
                                               ],
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
+                                    ),
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              },
             );
-          },
-        );
           },
         );
       },

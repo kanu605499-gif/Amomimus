@@ -11,7 +11,12 @@ import 'package:amomimus/services/notification_manager.dart';
 import 'package:amomimus/data/anonymous_names.dart';
 import 'package:amomimus/screens/profile_screen.dart';
 
-void showCommentsSheet(BuildContext context, FeedModel model, bool isDarkCard, UserAccount? currentUser) {
+void showCommentsSheet(
+  BuildContext context,
+  FeedModel model,
+  bool isDarkCard,
+  UserAccount? currentUser,
+) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -93,35 +98,53 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
                   itemBuilder: (context, index) {
                     final comment = widget.model.comments[index];
                     return ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 0,
+                        vertical: 4,
+                      ),
                       title: Text(
                         "${comment.authorName} (${comment.authorId})",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: widget.isDarkCard ? Colors.white70 : Colors.black87,
+                          color: widget.isDarkCard
+                              ? Colors.white70
+                              : Colors.black87,
                           fontSize: 12,
                         ),
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (comment.replyToName != null && comment.replyToText != null)
+                          if (comment.replyToName != null &&
+                              comment.replyToText != null)
                             Container(
                               margin: const EdgeInsets.only(top: 4, bottom: 4),
                               padding: const EdgeInsets.only(left: 8),
                               decoration: const BoxDecoration(
-                                border: Border(left: BorderSide(color: Colors.grey, width: 2)),
+                                border: Border(
+                                  left: BorderSide(
+                                    color: Colors.grey,
+                                    width: 2,
+                                  ),
+                                ),
                               ),
                               child: Text(
                                 "${Translations.of(context).replying_to} ${comment.replyToName}:\n${comment.replyToText}",
-                                style: const TextStyle(fontSize: 11, color: Colors.grey),
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  color: Colors.grey,
+                                ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           Text(
                             comment.text,
-                            style: TextStyle(color: widget.isDarkCard ? Colors.white : Colors.black),
+                            style: TextStyle(
+                              color: widget.isDarkCard
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                         ],
                       ),
@@ -129,7 +152,8 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProfileScreen(targetUserId: comment.authorId),
+                            builder: (context) =>
+                                ProfileScreen(targetUserId: comment.authorId),
                           ),
                         );
                       },
@@ -157,7 +181,9 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
                       "${Translations.of(context).replying_to} ${_replyTarget!.authorName}:\n${_replyTarget!.text}",
                       style: TextStyle(
                         fontSize: 12,
-                        color: widget.isDarkCard ? Colors.white70 : Colors.black54,
+                        color: widget.isDarkCard
+                            ? Colors.white70
+                            : Colors.black54,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -179,52 +205,74 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
               Expanded(
                 child: TextField(
                   controller: _commentController,
-                  style: TextStyle(color: widget.isDarkCard ? Colors.white : Colors.black),
+                  style: TextStyle(
+                    color: widget.isDarkCard ? Colors.white : Colors.black,
+                  ),
                   decoration: InputDecoration(
                     hintText: Translations.of(context).add_comment,
                     hintStyle: TextStyle(
-                      color: widget.isDarkCard ? Colors.white54 : Colors.black54,
+                      color: widget.isDarkCard
+                          ? Colors.white54
+                          : Colors.black54,
                     ),
                     border: InputBorder.none,
                   ),
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.send, color: AmomimusDarkTheme.primaryPurple),
+                icon: const Icon(
+                  Icons.send,
+                  color: AmomimusDarkTheme.primaryPurple,
+                ),
                 onPressed: () {
-                  if (_commentController.text.trim().isNotEmpty && widget.currentUser != null) {
-                    final generatedName = AnonymousNames.getConsistentNameForPost(
-                      widget.currentUser!.amomimusId,
-                      widget.model.id,
-                    );
+                  if (_commentController.text.trim().isNotEmpty &&
+                      widget.currentUser != null) {
+                    final generatedName =
+                        AnonymousNames.getConsistentNameForPost(
+                          widget.currentUser!.amomimusId,
+                          widget.model.id,
+                        );
                     final newComment = CommentModel(
                       authorId: widget.currentUser!.amomimusId,
                       authorName: generatedName,
                       text: _commentController.text,
-                      timeStamp: "Just now",
+                      timeStamp: DateTime.now().toIso8601String(),
                       replyToName: _replyTarget?.authorName,
                       replyToText: _replyTarget?.text,
                     );
-                    Provider.of<FeedManager>(context, listen: false).addComment(widget.model.id, newComment);
+                    Provider.of<FeedManager>(
+                      context,
+                      listen: false,
+                    ).addComment(widget.model.id, newComment);
 
-                    final notifManager = Provider.of<NotificationManager>(context, listen: false);
-                    if (_replyTarget != null && _replyTarget?.authorId != widget.currentUser!.amomimusId) {
-                      notifManager.addNotification(NotificationModel(
-                        targetUserId: _replyTarget!.authorId,
-                        actorName: generatedName,
-                        type: NotificationType.reply,
-                        feedId: widget.model.id,
-                        message: "replied to your comment",
-                      ));
+                    final notifManager = Provider.of<NotificationManager>(
+                      context,
+                      listen: false,
+                    );
+                    if (_replyTarget != null &&
+                        _replyTarget?.authorId !=
+                            widget.currentUser!.amomimusId) {
+                      notifManager.addNotification(
+                        NotificationModel(
+                          targetUserId: _replyTarget!.authorId,
+                          actorName: generatedName,
+                          type: NotificationType.reply,
+                          feedId: widget.model.id,
+                          message: "replied to your comment",
+                        ),
+                      );
                     } else if (widget.model.realAuthorId != null &&
-                        widget.model.realAuthorId != widget.currentUser!.amomimusId) {
-                      notifManager.addNotification(NotificationModel(
-                        targetUserId: widget.model.realAuthorId!,
-                        actorName: generatedName,
-                        type: NotificationType.comment,
-                        feedId: widget.model.id,
-                        message: "commented on your post",
-                      ));
+                        widget.model.realAuthorId !=
+                            widget.currentUser!.amomimusId) {
+                      notifManager.addNotification(
+                        NotificationModel(
+                          targetUserId: widget.model.realAuthorId!,
+                          actorName: generatedName,
+                          type: NotificationType.comment,
+                          feedId: widget.model.id,
+                          message: "commented on your post",
+                        ),
+                      );
                     }
 
                     _commentController.clear();
@@ -233,7 +281,7 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
                     });
                   }
                 },
-              )
+              ),
             ],
           ),
           const SizedBox(height: 10),

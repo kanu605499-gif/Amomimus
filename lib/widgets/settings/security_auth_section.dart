@@ -49,7 +49,8 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
 
     if (favInput.isEmpty || newPass.isEmpty) return;
 
-    if (favInput.toLowerCase() != (widget.credentials.favoriteCharacter ?? '').toLowerCase()) {
+    if (favInput.toLowerCase() !=
+        (widget.credentials.favoriteCharacter ?? '').toLowerCase()) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Incorrect favorite character.")),
       );
@@ -78,10 +79,14 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
     // ignore: unused_local_variable
     final t = Translations.of(context);
     final isDark = Provider.of<AmomimusDarkTheme>(context).isDarkMode;
-    final textColor = isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
+    final textColor = isDark
+        ? AmomimusDarkTheme.policeLineYellow
+        : AmomimusDarkTheme.primaryPurple;
     final cardColor = isDark ? AmomimusDarkTheme.backgroundDark : Colors.white;
     final buttonStyle = ElevatedButton.styleFrom(
-      backgroundColor: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+      backgroundColor: isDark
+          ? AmomimusDarkTheme.policeLineYellow
+          : AmomimusDarkTheme.primaryPurple,
       foregroundColor: isDark ? Colors.black : Colors.white,
     );
 
@@ -92,35 +97,49 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
           children: [
             Icon(Icons.security, color: textColor, size: 24),
             const SizedBox(width: 8),
-            Text(t.security_auth, style: TextStyle(color: textColor, fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              t.security_auth,
+              style: TextStyle(
+                color: textColor,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 12),
-        
+
         // Favorite Character View/Edit
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: cardColor, 
+            color: cardColor,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: textColor.withOpacity(0.4), width: 1),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(t.favorite_character, style: TextStyle(color: textColor, fontWeight: FontWeight.bold)),
+              Text(
+                t.favorite_character,
+                style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 8),
               if (!_isEditingFavChar) ...[
-                Text(widget.credentials.favoriteCharacter ?? "None", style: TextStyle(color: textColor.withOpacity(0.8))),
+                Text(
+                  widget.credentials.favoriteCharacter ?? "None",
+                  style: TextStyle(color: textColor.withOpacity(0.8)),
+                ),
                 const SizedBox(height: 8),
                 ElevatedButton(
                   style: buttonStyle,
                   onPressed: () {
-                    _favCharController.text = widget.credentials.favoriteCharacter ?? "";
+                    _favCharController.text =
+                        widget.credentials.favoriteCharacter ?? "";
                     setState(() => _isEditingFavChar = true);
                   },
                   child: Text(t.edit_max_1_day),
-                )
+                ),
               ] else ...[
                 TextField(
                   controller: _favCharController,
@@ -128,26 +147,41 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
                   decoration: InputDecoration(
                     labelText: "New Favorite Character",
                     labelStyle: TextStyle(color: textColor.withOpacity(0.7)),
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: textColor)),
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: textColor, width: 2)),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: textColor),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: textColor, width: 2),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
                     TextButton(
-                      onPressed: () => setState(() => _isEditingFavChar = false),
-                      style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
+                      onPressed: () =>
+                          setState(() => _isEditingFavChar = false),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.redAccent,
+                      ),
                       child: const Text("Cancel"),
                     ),
                     ElevatedButton(
                       style: buttonStyle,
                       onPressed: _isLoading ? null : _saveFavChar,
-                      child: _isLoading ? SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: isDark ? Colors.black : Colors.white)) : const Text("Save"),
+                      child: _isLoading
+                          ? SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                color: isDark ? Colors.black : Colors.white,
+                              ),
+                            )
+                          : const Text("Save"),
                     ),
                   ],
-                )
-              ]
+                ),
+              ],
             ],
           ),
         ),
@@ -158,17 +192,26 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: cardColor, 
+            color: cardColor,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: textColor.withOpacity(0.4), width: 1),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(t.forget_passcode, style: TextStyle(color: textColor, fontWeight: FontWeight.bold)),
+              Text(
+                t.forget_passcode,
+                style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 8),
               if (!_isResettingPasscode) ...[
-                Text(t.reset_passcode_hint, style: TextStyle(color: textColor.withOpacity(0.8), fontSize: 12)),
+                Text(
+                  t.reset_passcode_hint,
+                  style: TextStyle(
+                    color: textColor.withOpacity(0.8),
+                    fontSize: 12,
+                  ),
+                ),
                 const SizedBox(height: 8),
                 ElevatedButton(
                   style: buttonStyle,
@@ -178,7 +221,7 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
                     setState(() => _isResettingPasscode = true);
                   },
                   child: Text(t.reset_passcode),
-                )
+                ),
               ] else ...[
                 TextField(
                   controller: _favCharController,
@@ -186,8 +229,12 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
                   decoration: InputDecoration(
                     labelText: "Favorite Character",
                     labelStyle: TextStyle(color: textColor.withOpacity(0.7)),
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: textColor)),
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: textColor, width: 2)),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: textColor),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: textColor, width: 2),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -198,26 +245,41 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
                   decoration: InputDecoration(
                     labelText: "New Passcode",
                     labelStyle: TextStyle(color: textColor.withOpacity(0.7)),
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: textColor)),
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: textColor, width: 2)),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: textColor),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: textColor, width: 2),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
                     TextButton(
-                      onPressed: () => setState(() => _isResettingPasscode = false),
-                      style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
+                      onPressed: () =>
+                          setState(() => _isResettingPasscode = false),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.redAccent,
+                      ),
                       child: const Text("Cancel"),
                     ),
                     ElevatedButton(
                       style: buttonStyle,
                       onPressed: _isLoading ? null : _resetPasscode,
-                      child: _isLoading ? SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: isDark ? Colors.black : Colors.white)) : const Text("Reset"),
+                      child: _isLoading
+                          ? SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                color: isDark ? Colors.black : Colors.white,
+                              ),
+                            )
+                          : const Text("Reset"),
                     ),
                   ],
-                )
-              ]
+                ),
+              ],
             ],
           ),
         ),

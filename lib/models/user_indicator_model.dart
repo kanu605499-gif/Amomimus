@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 /// The three behavioral indicator types in the Amomimus app.
 ///
-/// - **cloudy** (grey)  — Neutral user (benevolent points 0–49)
-/// - **ghost** (yellow)  — Amoral / nonchalant user (benevolent points 50–79)
-/// - **noise** (purple)  — Immoral / toxic user (benevolent points 80–100)
+/// v2 Thresholds:
+/// - **cloudy** (grey)  — Neutral user (benevolent points 0–69)
+/// - **ghost** (yellow)  — Amoral / nonchalant user (benevolent points 70–89)
+/// - **noise** (purple)  — Immoral / toxic user (benevolent points 90–100)
 enum UserIndicator { cloudy, ghost, noise }
 
 /// UI and logic helpers for [UserIndicator].
@@ -13,16 +14,24 @@ class UserIndicatorHelper {
 
   // ── Colors ──────────────────────────────────────────────
   static const Color cloudyColor = Color(0xFFBDBDBD); // grey
-  static const Color ghostColor = Color(0xFFFFD54F);  // yellow
-  static const Color noiseColor = Color(0xFFB388FF);  // purple
+  static const Color ghostColor = Color(0xFFFFD54F); // yellow
+  static const Color noiseColor = Color(0xFFB388FF); // purple
 
   // Ghost colors for Feed Card Label
-  static const Color ghostColorDark = Color(0xFFFFE082); // Bright pastel yellow for dark theme
-  static const Color ghostColorLight = Color(0xFFFBC02D); // Softer yellow/amber for light theme
+  static const Color ghostColorDark = Color(
+    0xFFFFE082,
+  ); // Bright pastel yellow for dark theme
+  static const Color ghostColorLight = Color(
+    0xFFFBC02D,
+  ); // Softer yellow/amber for light theme
 
   // Noise colors for Feed Card Label
-  static const Color noiseColorDark = Color(0xFFD500F9); // Neon purple for dark theme
-  static const Color noiseColorLight = Color(0xFF6200EA); // Deep purple for light theme
+  static const Color noiseColorDark = Color(
+    0xFFD500F9,
+  ); // Neon purple for dark theme
+  static const Color noiseColorLight = Color(
+    0xFF6200EA,
+  ); // Deep purple for light theme
 
   /// Returns the standard theme [Color] for the given [indicator].
   static Color getColor(UserIndicator indicator) {
@@ -37,7 +46,10 @@ class UserIndicatorHelper {
   }
 
   /// Returns the Feed Card Label [Color] for the given [indicator].
-  static Color getFeedCardLabelColor(UserIndicator indicator, {bool isDarkTheme = true}) {
+  static Color getFeedCardLabelColor(
+    UserIndicator indicator, {
+    bool isDarkTheme = true,
+  }) {
     switch (indicator) {
       case UserIndicator.cloudy:
         return cloudyColor;
@@ -109,14 +121,15 @@ class UserIndicatorHelper {
 
   /// Determines the indicator from benevolent points alone.
   ///
-  /// - 0–59 → CLOUDY
-  /// - 60–89 → GHOST
+  /// v2 Thresholds (raised to prevent easy tier climbing at scale):
+  /// - 0–69  → CLOUDY
+  /// - 70–89 → GHOST
   /// - 90–100 → NOISE
   static UserIndicator fromBenevolentPoints(int points) {
     final clamped = points.clamp(0, 100);
     if (clamped >= 90) {
       return UserIndicator.noise;
-    } else if (clamped >= 60) {
+    } else if (clamped >= 70) {
       return UserIndicator.ghost;
     }
     return UserIndicator.cloudy;

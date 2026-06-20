@@ -44,7 +44,8 @@ class StickerBatchModel {
       name: map['name'],
       category: map['category'] ?? 'general',
       price: map['price'] ?? 100,
-      stickers: (map['stickers'] as List<dynamic>?)
+      stickers:
+          (map['stickers'] as List<dynamic>?)
               ?.map((s) => StickerModel.fromMap(s as Map<String, dynamic>))
               .toList() ??
           [],
@@ -67,9 +68,24 @@ class StickerBatchModel {
       timesBought: 500,
       createdAt: '2026-06-10T00:00:00Z',
       stickers: [
-        StickerModel(id: 's1', name: 'Temperance', imageAsset: 'assets/stickers/temperance.png', tier: 'epic'),
-        StickerModel(id: 's4', name: 'Hermit', imageAsset: 'assets/stickers/hermit.png', tier: 'epic'),
-        StickerModel(id: 's10', name: 'Chariot', imageAsset: 'assets/stickers/chariot.png', tier: 'epic'),
+        StickerModel(
+          id: 's1',
+          name: 'Temperance',
+          imageAsset: 'assets/stickers/temperance.png',
+          tier: 'epic',
+        ),
+        StickerModel(
+          id: 's4',
+          name: 'Hermit',
+          imageAsset: 'assets/stickers/hermit.png',
+          tier: 'epic',
+        ),
+        StickerModel(
+          id: 's10',
+          name: 'Chariot',
+          imageAsset: 'assets/stickers/chariot.png',
+          tier: 'epic',
+        ),
       ],
     ),
     StickerBatchModel(
@@ -82,9 +98,24 @@ class StickerBatchModel {
       timesBought: 1200,
       createdAt: '2026-06-05T00:00:00Z',
       stickers: [
-        StickerModel(id: 's2', name: 'The Fool', imageAsset: 'assets/stickers/fool.png', tier: 'epic'),
-        StickerModel(id: 's8', name: 'The Tower', imageAsset: 'assets/stickers/tower.png', tier: 'epic'),
-        StickerModel(id: 's12', name: 'Death', imageAsset: 'assets/stickers/death.png', tier: 'epic'),
+        StickerModel(
+          id: 's2',
+          name: 'The Fool',
+          imageAsset: 'assets/stickers/fool.png',
+          tier: 'epic',
+        ),
+        StickerModel(
+          id: 's8',
+          name: 'The Tower',
+          imageAsset: 'assets/stickers/tower.png',
+          tier: 'epic',
+        ),
+        StickerModel(
+          id: 's12',
+          name: 'Death',
+          imageAsset: 'assets/stickers/death.png',
+          tier: 'epic',
+        ),
       ],
     ),
   ];

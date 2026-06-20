@@ -263,6 +263,53 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get email_already_registered_title => 'Registrierung Fehlgeschlagen';
 	@override String get email_already_registered_desc => 'Diese E-Mail ist bereits registriert. Möchten Sie sich stattdessen anmelden?';
 	@override String get go_to_login => 'Zum Login';
+	@override String get delayed_sync_msg => 'Hoppla! Es scheint, dass unser Server im Moment ein wenig schüchtern gegenüber Ihrem Telefon ist. Keine Sorge, Ihre Nachricht ist sicher gespeichert und wir werden sie so schnell wie möglich zustellen, wenn unser Server synchronisiert ist!';
+	@override String get delayed_sync_title => 'Delayed Sync';
+	@override String get delayed_sync_feed_msg => 'Hoppla! Es scheint, dass unser Server im Moment ein wenig schüchtern gegenüber Ihrem Telefon ist. Keine Sorge, Ihr Beitrag ist sicher gespeichert und wir werden ihn so schnell wie möglich veröffentlichen, wenn unser Server synchronisiert ist!';
+	@override String get delayed_sync_feed_title => 'Delayed Post';
+	@override String get message_is_pending => 'Nachricht steht aus...';
+	@override String get message_successfully_sent => 'Nachricht erfolgreich gesendet';
+	@override String get room_chat_resetted => 'Sie haben eine neue Nachricht';
+	@override String get started_at => 'Gestartet am:';
+	@override String get end_at => 'Endet am:';
+	@override String get resend => 'Erneut senden';
+	@override String get delete_selected => 'Auswahl löschen';
+	@override String get failed_to_send => 'Senden fehlgeschlagen';
+	@override String get resend_confirm_title => 'Bestätigung erneut senden';
+	@override String get resend_confirm_desc => 'Ist Ihre Sendereihenfolge korrekt? Nachrichten werden nacheinander gesendet.';
+	@override String get delete_confirm_desc => 'Möchten Sie diese Nachricht wirklich löschen?';
+	@override String get cheat_detected_warning => 'Es wird vermutet, dass Sie die Systemzeit Ihres Telefons manuell geändert haben. Der Chatroom wurde aus Sicherheitsgründen zurückgesetzt.';
+	@override String get cheat_partner_warning => 'Es wird vermutet, dass Ihr Partner seine Systemzeit geändert hat.';
+	@override String get copy => 'Copy';
+	@override String get copied_to_clipboard => 'Copied to clipboard';
+	@override String get app_features_title => 'App-Funktionen';
+	@override String get system_features_title => 'Systemfunktionen';
+	@override String get feature_1_title => 'Dynamic Persona Theming';
+	@override String get feature_1_desc => 'Das Schnittstellendesign passt sich dem Geschlecht Ihres Profils an (Amo, Amom oder Ami) und bietet so eine synchronisierte visuelle Anpassung für jede Rollensitzung.';
+	@override String get feature_2_title => 'Interactive Mini Island';
+	@override String get feature_2_desc => 'Ein tragbares Benachrichtigungsfeld, das den Interaktionskomfort für Benutzer erleichtert. Es schwebt im Chatbereich und verschmilzt dynamisch mit der oberen Navigationsleiste (App Bar).';
+	@override String get feature_3_title => 'Glitch & Ex-Blocked';
+	@override String get feature_3_desc => 'Entwickelt, um den Blockier- und Meldefunktionen ein psychologisches Gewicht zu verleihen. Interaktionen mit einem zuvor blockierten Benutzer lösen eine visuelle Verzerrungswarnung aus, die natürliche Vorsicht vermittelt.';
+	@override String get feature_4_title => 'Memories & Activity Log';
+	@override String get feature_4_desc => 'Bietet umfassende Protokollierungswerkzeuge. Sie können wichtige Nachrichten in Memories anheften, während das Chat-Protokoll autonom den Verlauf und die Aktivitätschronologie des Raums dokumentiert.';
+	@override String get feature_5_title => 'Floating Countdown Capsule';
+	@override String get feature_5_desc => 'Ein interaktives Zeitverfolgungsmodul, das sicherstellt, dass die Benutzer die verbleibende Chat-Dauer im Auge behalten. Es kann frei per Drag & Drop verschoben werden, um den Lesebereich für Nachrichten nicht zu blockieren.';
+	@override String get system_1_title => 'Hybrid Sync Engine';
+	@override String get system_1_desc => 'Die Nachrichtenarchitektur wird von einer intelligenten asynchronen Simulationsmaschine angetrieben. Es verwaltet den Nachrichtenlebenszyklus von anstehenden, erfolgreichen bis hin zu Fehlerbehebungen mit hohem Realismus.';
+	@override String get system_2_title => 'Secret "Human" Cheat Detection';
+	@override String get system_2_desc => 'Ein unsichtbares Sicherheitsprotokoll, das die Chat-Sportlichkeit aufrechterhält. Es scannt passiv auf verbotene Verhaltensmuster und verwarnt Übertreter, ohne die App-Leistung zu beeinträchtigen.';
+	@override String get system_3_title => 'State Persistence Core';
+	@override String get system_3_desc => 'Alle Statuspräferenzen, Protokolle und Interaktionen werden über eine hybride lokale Methode kombiniert mit API-Integration verwaltet. Dies stellt sicher, dass kritische Chatdaten über Sitzungen hinweg intakt bleiben.';
+	@override String get chat_log_title => 'Chat Log';
+	@override String get chat_log_empty => 'Noch kein Chat-Protokoll.';
+	@override String get chat_log_system => 'System';
+	@override String get chat_log_room_created => 'Chat gestartet';
+	@override String get chat_log_room_expired => 'Countdown zurückgesetzt: Chatraum geleert';
+	@override String chat_log_delete_room({required Object actor}) => '${actor} hat diesen Chatraum gelöscht';
+	@override String chat_log_pin({required Object actor}) => '${actor} hat eine Nachricht an Memories angeheftet';
+	@override String chat_log_unpin({required Object actor}) => '${actor} hat eine Nachricht von Memories losgelöst';
+	@override String chat_log_erase({required Object actor}) => '${actor} hat eine Nachricht dauerhaft aus Memories gelöscht';
+	@override String get reloading_whispers => 'Einige Flüstern Werden Neu Geladen...';
 }
 
 /// The flat map containing all translations for locale <de>.
@@ -497,6 +544,53 @@ extension on TranslationsDe {
 			'email_already_registered_title' => 'Registrierung Fehlgeschlagen',
 			'email_already_registered_desc' => 'Diese E-Mail ist bereits registriert. Möchten Sie sich stattdessen anmelden?',
 			'go_to_login' => 'Zum Login',
+			'delayed_sync_msg' => 'Hoppla! Es scheint, dass unser Server im Moment ein wenig schüchtern gegenüber Ihrem Telefon ist. Keine Sorge, Ihre Nachricht ist sicher gespeichert und wir werden sie so schnell wie möglich zustellen, wenn unser Server synchronisiert ist!',
+			'delayed_sync_title' => 'Delayed Sync',
+			'delayed_sync_feed_msg' => 'Hoppla! Es scheint, dass unser Server im Moment ein wenig schüchtern gegenüber Ihrem Telefon ist. Keine Sorge, Ihr Beitrag ist sicher gespeichert und wir werden ihn so schnell wie möglich veröffentlichen, wenn unser Server synchronisiert ist!',
+			'delayed_sync_feed_title' => 'Delayed Post',
+			'message_is_pending' => 'Nachricht steht aus...',
+			'message_successfully_sent' => 'Nachricht erfolgreich gesendet',
+			'room_chat_resetted' => 'Sie haben eine neue Nachricht',
+			'started_at' => 'Gestartet am:',
+			'end_at' => 'Endet am:',
+			'resend' => 'Erneut senden',
+			'delete_selected' => 'Auswahl löschen',
+			'failed_to_send' => 'Senden fehlgeschlagen',
+			'resend_confirm_title' => 'Bestätigung erneut senden',
+			'resend_confirm_desc' => 'Ist Ihre Sendereihenfolge korrekt? Nachrichten werden nacheinander gesendet.',
+			'delete_confirm_desc' => 'Möchten Sie diese Nachricht wirklich löschen?',
+			'cheat_detected_warning' => 'Es wird vermutet, dass Sie die Systemzeit Ihres Telefons manuell geändert haben. Der Chatroom wurde aus Sicherheitsgründen zurückgesetzt.',
+			'cheat_partner_warning' => 'Es wird vermutet, dass Ihr Partner seine Systemzeit geändert hat.',
+			'copy' => 'Copy',
+			'copied_to_clipboard' => 'Copied to clipboard',
+			'app_features_title' => 'App-Funktionen',
+			'system_features_title' => 'Systemfunktionen',
+			'feature_1_title' => 'Dynamic Persona Theming',
+			'feature_1_desc' => 'Das Schnittstellendesign passt sich dem Geschlecht Ihres Profils an (Amo, Amom oder Ami) und bietet so eine synchronisierte visuelle Anpassung für jede Rollensitzung.',
+			'feature_2_title' => 'Interactive Mini Island',
+			'feature_2_desc' => 'Ein tragbares Benachrichtigungsfeld, das den Interaktionskomfort für Benutzer erleichtert. Es schwebt im Chatbereich und verschmilzt dynamisch mit der oberen Navigationsleiste (App Bar).',
+			'feature_3_title' => 'Glitch & Ex-Blocked',
+			'feature_3_desc' => 'Entwickelt, um den Blockier- und Meldefunktionen ein psychologisches Gewicht zu verleihen. Interaktionen mit einem zuvor blockierten Benutzer lösen eine visuelle Verzerrungswarnung aus, die natürliche Vorsicht vermittelt.',
+			'feature_4_title' => 'Memories & Activity Log',
+			'feature_4_desc' => 'Bietet umfassende Protokollierungswerkzeuge. Sie können wichtige Nachrichten in Memories anheften, während das Chat-Protokoll autonom den Verlauf und die Aktivitätschronologie des Raums dokumentiert.',
+			'feature_5_title' => 'Floating Countdown Capsule',
+			'feature_5_desc' => 'Ein interaktives Zeitverfolgungsmodul, das sicherstellt, dass die Benutzer die verbleibende Chat-Dauer im Auge behalten. Es kann frei per Drag & Drop verschoben werden, um den Lesebereich für Nachrichten nicht zu blockieren.',
+			'system_1_title' => 'Hybrid Sync Engine',
+			'system_1_desc' => 'Die Nachrichtenarchitektur wird von einer intelligenten asynchronen Simulationsmaschine angetrieben. Es verwaltet den Nachrichtenlebenszyklus von anstehenden, erfolgreichen bis hin zu Fehlerbehebungen mit hohem Realismus.',
+			'system_2_title' => 'Secret "Human" Cheat Detection',
+			'system_2_desc' => 'Ein unsichtbares Sicherheitsprotokoll, das die Chat-Sportlichkeit aufrechterhält. Es scannt passiv auf verbotene Verhaltensmuster und verwarnt Übertreter, ohne die App-Leistung zu beeinträchtigen.',
+			'system_3_title' => 'State Persistence Core',
+			'system_3_desc' => 'Alle Statuspräferenzen, Protokolle und Interaktionen werden über eine hybride lokale Methode kombiniert mit API-Integration verwaltet. Dies stellt sicher, dass kritische Chatdaten über Sitzungen hinweg intakt bleiben.',
+			'chat_log_title' => 'Chat Log',
+			'chat_log_empty' => 'Noch kein Chat-Protokoll.',
+			'chat_log_system' => 'System',
+			'chat_log_room_created' => 'Chat gestartet',
+			'chat_log_room_expired' => 'Countdown zurückgesetzt: Chatraum geleert',
+			'chat_log_delete_room' => ({required Object actor}) => '${actor} hat diesen Chatraum gelöscht',
+			'chat_log_pin' => ({required Object actor}) => '${actor} hat eine Nachricht an Memories angeheftet',
+			'chat_log_unpin' => ({required Object actor}) => '${actor} hat eine Nachricht von Memories losgelöst',
+			'chat_log_erase' => ({required Object actor}) => '${actor} hat eine Nachricht dauerhaft aus Memories gelöscht',
+			'reloading_whispers' => 'Einige Flüstern Werden Neu Geladen...',
 			_ => null,
 		};
 	}

@@ -176,16 +176,18 @@ class _LoginScreenState extends State<LoginScreen>
   void _handleGoogleLogin() {}
 
   // Extracted Dialog to prevent Context/Navigator collision mutations
-  void _showDeleteConfirmation(BuildContext context, String userEmail, String userName) async {
+  void _showDeleteConfirmation(
+    BuildContext context,
+    String userEmail,
+    String userName,
+  ) async {
     // 1. Show the dialog and await the user choice (returns true if deleted)
     final shouldRefresh = await showDialog<bool>(
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: const Text('Delete User'),
-          content: Text(
-            'Are you sure you want to remove $userName?',
-          ),
+          content: Text('Are you sure you want to remove $userName?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext, false),
@@ -196,7 +198,10 @@ class _LoginScreenState extends State<LoginScreen>
                 if (userEmail.isNotEmpty) {
                   // Delete from AccountManager (Hybrid Architecture)
                   if (dialogContext.mounted) {
-                    final accountManager = Provider.of<AccountManager>(dialogContext, listen: false);
+                    final accountManager = Provider.of<AccountManager>(
+                      dialogContext,
+                      listen: false,
+                    );
                     await accountManager.deleteAccount(userEmail);
                   }
 
@@ -343,6 +348,9 @@ class _LoginScreenState extends State<LoginScreen>
           // Main Body
           SafeArea(
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -385,7 +393,9 @@ class _LoginScreenState extends State<LoginScreen>
                                     borderRadius: BorderRadius.circular(8),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black.withValues(alpha: 0.15),
+                                        color: Colors.black.withValues(
+                                          alpha: 0.15,
+                                        ),
                                         blurRadius: 8,
                                         offset: const Offset(0, 4),
                                       ),
@@ -600,37 +610,14 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                   ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 4,
-                          height: 4,
-                          decoration: const BoxDecoration(
-                            color: Color(0xff6c52a3),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'PRIVACY FIRST',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   if (kDebugMode) ...[
                     const SizedBox(height: 30),
                     const Divider(thickness: 1.5),
                     const SizedBox(height: 10),
                     Theme(
-                      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                      data: Theme.of(
+                        context,
+                      ).copyWith(dividerColor: Colors.transparent),
                       child: ExpansionTile(
                         tilePadding: EdgeInsets.zero,
                         collapsedIconColor: Colors.grey[600],
@@ -673,26 +660,35 @@ class _LoginScreenState extends State<LoginScreen>
                               return Column(
                                 children: daftarUser.map((user) {
                                   // HIDE GOOGLE PLAY TEST ACCOUNT FROM UI
-                                  if (user.email == 'kanu605499@gmail.com') return const SizedBox.shrink();
-                                  
+                                  if (user.email == 'kanu605499@gmail.com')
+                                    return const SizedBox.shrink();
+
                                   return Card(
                                     elevation: 1,
-                                    margin: const EdgeInsets.symmetric(vertical: 6),
+                                    margin: const EdgeInsets.symmetric(
+                                      vertical: 6,
+                                    ),
                                     color: const Color(0xfff8f6fc),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
-                                      side: const BorderSide(color: Color(0xffe1dbec)),
+                                      side: const BorderSide(
+                                        color: Color(0xffe1dbec),
+                                      ),
                                     ),
                                     child: ListTile(
                                       leading: CircleAvatar(
-                                        backgroundColor: const Color(0xff6c52a3),
+                                        backgroundColor: const Color(
+                                          0xff6c52a3,
+                                        ),
                                         child: Text(
                                           user.realUsername.isNotEmpty
                                               ? user.realUsername
                                                     .substring(0, 1)
                                                     .toUpperCase()
                                               : 'U',
-                                          style: const TextStyle(color: Colors.white),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                       title: Text(
@@ -702,7 +698,9 @@ class _LoginScreenState extends State<LoginScreen>
                                         ),
                                       ),
                                       subtitle: Padding(
-                                        padding: const EdgeInsets.only(top: 4.0),
+                                        padding: const EdgeInsets.only(
+                                          top: 4.0,
+                                        ),
                                         child: Text(
                                           'Email: ${user.email}\nAmomimus: ${user.anonymousUsername}',
                                           style: TextStyle(
@@ -717,7 +715,11 @@ class _LoginScreenState extends State<LoginScreen>
                                           color: Colors.redAccent,
                                         ),
                                         onPressed: () =>
-                                            _showDeleteConfirmation(context, user.email, user.realUsername),
+                                            _showDeleteConfirmation(
+                                              context,
+                                              user.email,
+                                              user.realUsername,
+                                            ),
                                       ),
                                     ),
                                   );
@@ -729,7 +731,7 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ),
                   ],
-            const SizedBox(height: 40),
+                  const SizedBox(height: 40),
                 ],
               ),
             ),

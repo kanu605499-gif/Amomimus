@@ -28,7 +28,9 @@ class UserStickerInventory {
     return UserStickerInventory(
       userId: map['userId'],
       unlockedStickerIds: List<String>.from(map['unlockedStickerIds'] ?? []),
-      recentlyUsedStickerIds: List<String>.from(map['recentlyUsedStickerIds'] ?? []),
+      recentlyUsedStickerIds: List<String>.from(
+        map['recentlyUsedStickerIds'] ?? [],
+      ),
       lastSyncedAt: map['lastSyncedAt'],
     );
   }
@@ -43,7 +45,8 @@ class UserStickerInventory {
     return UserStickerInventory(
       userId: userId ?? this.userId,
       unlockedStickerIds: unlockedStickerIds ?? this.unlockedStickerIds,
-      recentlyUsedStickerIds: recentlyUsedStickerIds ?? this.recentlyUsedStickerIds,
+      recentlyUsedStickerIds:
+          recentlyUsedStickerIds ?? this.recentlyUsedStickerIds,
       lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
     );
   }

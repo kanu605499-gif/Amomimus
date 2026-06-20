@@ -50,7 +50,9 @@ class ProfileHeaderInfo extends StatelessWidget {
                 color: Colors.green, // Active indicator
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
+                  color: isDark
+                      ? AmomimusDarkTheme.backgroundDark
+                      : Colors.white,
                   width: 3,
                 ),
               ),
@@ -59,21 +61,32 @@ class ProfileHeaderInfo extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         GlitchEffect(
-          isActive: !isLocked && Provider.of<AccountManager>(context).isRecentlyUnblocked(user.amomimusId),
+          isActive:
+              !isLocked &&
+              Provider.of<AccountManager>(
+                context,
+              ).isRecentlyUnblocked(user.amomimusId),
           child: Text(
             isLocked
                 ? user.amomimusId
-                : (!isOtherUser && user.customUsername != null && user.customUsername!.isNotEmpty)
-                    ? user.customUsername!
-                    : user.anonymousUsername,
+                : (!isOtherUser &&
+                      user.customUsername != null &&
+                      user.customUsername!.isNotEmpty)
+                ? user.customUsername!
+                : user.anonymousUsername,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+              color: isDark
+                  ? AmomimusDarkTheme.policeLineYellow
+                  : AmomimusDarkTheme.primaryPurple,
             ),
           ),
         ),
-        if (!isLocked && !isOtherUser && user.customUsername != null && user.customUsername!.isNotEmpty) ...[
+        if (!isLocked &&
+            !isOtherUser &&
+            user.customUsername != null &&
+            user.customUsername!.isNotEmpty) ...[
           const SizedBox(height: 4),
           Text(
             "${t.public_name}: ${user.anonymousUsername}",

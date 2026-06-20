@@ -128,7 +128,8 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                     children: [
                       TextButton(
                         onPressed: () => Navigator.pop(dialogContext),
-                        child: Text(Translations.of(context).cancel,
+                        child: Text(
+                          Translations.of(context).cancel,
                           style: TextStyle(
                             color: Color(0xff9e9bc2),
                             fontWeight: FontWeight.w600,
@@ -166,7 +167,8 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                             );
                           }
                         },
-                        child: Text(Translations.of(context).continue_btn,
+                        child: Text(
+                          Translations.of(context).continue_btn,
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ),
                       ),

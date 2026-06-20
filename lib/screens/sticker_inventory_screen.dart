@@ -27,11 +27,15 @@ class StickerInventoryScreen extends StatelessWidget {
         title: Text(
           Translations.of(context).my_sticker_stash,
           style: TextStyle(
-            color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+            color: isDark
+                ? AmomimusDarkTheme.policeLineYellow
+                : AmomimusDarkTheme.primaryPurple,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
+        backgroundColor: isDark
+            ? AmomimusDarkTheme.backgroundDark
+            : Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
@@ -84,14 +88,22 @@ class StickerInventoryScreen extends StatelessWidget {
                   onTap: () => _openPack(context, batch, isDark),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
+                      color: isDark
+                          ? AmomimusDarkTheme.surfaceDark
+                          : Colors.white,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isDark ? AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.5) : Colors.grey[300]!,
+                        color: isDark
+                            ? AmomimusDarkTheme.primaryPurple.withValues(
+                                alpha: 0.5,
+                              )
+                            : Colors.grey[300]!,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
+                          color: Colors.black.withValues(
+                            alpha: isDark ? 0.2 : 0.05,
+                          ),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -111,15 +123,22 @@ class StickerInventoryScreen extends StatelessWidget {
                                     alignment: Alignment.bottomCenter,
                                   )
                                 : Container(
-                                    color: isDark ? Colors.grey[800] : Colors.grey[200],
+                                    color: isDark
+                                        ? Colors.grey[800]
+                                        : Colors.grey[200],
                                     child: const Icon(Icons.style),
                                   ),
                           ),
                           Expanded(
                             flex: 2,
                             child: Container(
-                              color: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                              color: isDark
+                                  ? AmomimusDarkTheme.surfaceDark
+                                  : Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0,
+                                vertical: 8.0,
+                              ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -129,7 +148,9 @@ class StickerInventoryScreen extends StatelessWidget {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15,
-                                      color: isDark ? AmomimusDarkTheme.policeLineYellow : const Color(0xFF8C72C4),
+                                      color: isDark
+                                          ? AmomimusDarkTheme.policeLineYellow
+                                          : const Color(0xFF8C72C4),
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -139,7 +160,9 @@ class StickerInventoryScreen extends StatelessWidget {
                                     "${batch.stickers.length} ${Translations.of(context).stickers}",
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: isDark ? Colors.grey[400] : Colors.grey[600],
+                                      color: isDark
+                                          ? Colors.grey[400]
+                                          : Colors.grey[600],
                                     ),
                                   ),
                                 ],
@@ -188,7 +211,9 @@ class StickerInventoryScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                  color: isDark
+                      ? AmomimusDarkTheme.policeLineYellow
+                      : AmomimusDarkTheme.primaryPurple,
                 ),
               ),
               const SizedBox(height: 8),
@@ -196,7 +221,9 @@ class StickerInventoryScreen extends StatelessWidget {
                 t.own_these_stickers,
                 style: TextStyle(
                   fontSize: 14,
-                  color: isDark ? AmomimusDarkTheme.textSecondary : Colors.grey[600],
+                  color: isDark
+                      ? AmomimusDarkTheme.textSecondary
+                      : Colors.grey[600],
                 ),
               ),
               const SizedBox(height: 24),
@@ -219,15 +246,19 @@ class StickerInventoryScreen extends StatelessWidget {
                         color: isDark ? const Color(0xFF1E1E28) : Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                          color: isDark
+                              ? AmomimusDarkTheme.policeLineYellow
+                              : AmomimusDarkTheme.primaryPurple,
                           width: 2.0,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: isDark ? 0.5 : 0.1),
+                            color: Colors.black.withValues(
+                              alpha: isDark ? 0.5 : 0.1,
+                            ),
                             blurRadius: 6,
                             offset: const Offset(2, 4),
-                          )
+                          ),
                         ],
                       ),
                       child: Padding(
@@ -235,9 +266,12 @@ class StickerInventoryScreen extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: isDark 
-                                  ? AmomimusDarkTheme.policeLineYellow.withValues(alpha: 0.4) 
-                                  : AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.4),
+                              color: isDark
+                                  ? AmomimusDarkTheme.policeLineYellow
+                                        .withValues(alpha: 0.4)
+                                  : AmomimusDarkTheme.primaryPurple.withValues(
+                                      alpha: 0.4,
+                                    ),
                               width: 1.0,
                             ),
                             borderRadius: BorderRadius.circular(8),
@@ -248,17 +282,25 @@ class StickerInventoryScreen extends StatelessWidget {
                               Align(
                                 alignment: Alignment.topLeft,
                                 child: Padding(
-                                  padding: const EdgeInsets.only(left: 6.0, top: 4.0),
+                                  padding: const EdgeInsets.only(
+                                    left: 6.0,
+                                    top: 4.0,
+                                  ),
                                   child: Icon(
                                     Icons.star_border,
                                     size: 14,
-                                    color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                                    color: isDark
+                                        ? AmomimusDarkTheme.policeLineYellow
+                                        : AmomimusDarkTheme.primaryPurple,
                                   ),
                                 ),
                               ),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0,
+                                    vertical: 4.0,
+                                  ),
                                   child: sticker.imageAsset.contains('/')
                                       ? Image.asset(
                                           sticker.imageAsset,
@@ -267,19 +309,28 @@ class StickerInventoryScreen extends StatelessWidget {
                                       : Icon(
                                           Icons.star,
                                           size: 40,
-                                          color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                                          color: isDark
+                                              ? AmomimusDarkTheme
+                                                    .policeLineYellow
+                                              : AmomimusDarkTheme.primaryPurple,
                                         ),
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0, left: 4, right: 4),
+                                padding: const EdgeInsets.only(
+                                  bottom: 8.0,
+                                  left: 4,
+                                  right: 4,
+                                ),
                                 child: Text(
                                   sticker.name,
                                   style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.bold,
                                     letterSpacing: 0.5,
-                                    color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                                    color: isDark
+                                        ? AmomimusDarkTheme.policeLineYellow
+                                        : AmomimusDarkTheme.primaryPurple,
                                   ),
                                   textAlign: TextAlign.center,
                                   maxLines: 2,

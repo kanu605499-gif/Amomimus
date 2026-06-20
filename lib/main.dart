@@ -15,11 +15,22 @@ import 'package:amomimus/services/feed_manager.dart';
 import 'package:amomimus/services/chat_request_manager.dart';
 import 'package:amomimus/services/notification_manager.dart';
 
+import 'package:flutter/services.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+    ),
+  );
+
   await initializeDateFormatting('id_ID', null);
   await PreferenceHandler.init();
-  
+
   final savedLang = PreferenceHandler.language;
   if (savedLang != null) {
     LocaleSettings.setLocaleRaw(savedLang);
@@ -34,14 +45,21 @@ void main() async {
           ChangeNotifierProvider(create: (context) => AmomimusDarkTheme()),
           Provider<AuthService>(create: (_) => LocalAuthService()),
           ChangeNotifierProxyProvider<AuthService, AccountManager>(
-            create: (context) => AccountManager(authService: context.read<AuthService>())..loadAccounts(),
-            update: (context, authService, previous) => previous ?? AccountManager(authService: authService)..loadAccounts(),
+            create: (context) =>
+                AccountManager(authService: context.read<AuthService>())
+                  ..loadAccounts(),
+            update: (context, authService, previous) =>
+                previous ?? AccountManager(authService: authService)
+                  ..loadAccounts(),
           ),
           ChangeNotifierProxyProvider<AccountManager, ChatModel>(
             create: (context) => ChatModel(),
             update: (context, auth, chatModel) {
               if (auth.currentUser != null) {
-                chatModel!.setCurrentUser(auth.currentUser!.amomimusId, auth.currentUser!.anonymousUsername);
+                chatModel!.setCurrentUser(
+                  auth.currentUser!.amomimusId,
+                  auth.currentUser!.anonymousUsername,
+                );
               }
               return chatModel!;
             },
@@ -55,8 +73,12 @@ void main() async {
               return reqModel!;
             },
           ),
-          ChangeNotifierProvider(create: (context) => FeedManager()..loadFeeds()),
-          ChangeNotifierProvider(create: (context) => NotificationManager()..loadNotifications()),
+          ChangeNotifierProvider(
+            create: (context) => FeedManager()..loadFeeds(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => NotificationManager()..loadNotifications(),
+          ),
         ],
         child: const MyApp(),
       ),
@@ -69,8 +91,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     // FIXED: Wrap MaterialApp in a Consumer to guarantee responsive UI updates
     return Consumer<AmomimusDarkTheme>(
       builder: (context, themeProvider, child) {

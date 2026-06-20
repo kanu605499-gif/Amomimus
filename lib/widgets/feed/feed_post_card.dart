@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:amomimus/amomimusdark.dart';
 import 'package:amomimus/i18n/strings.g.dart';
 import 'package:amomimus/models/post_model.dart';
+import 'package:amomimus/screens/roomchat.dart';
+import 'package:amomimus/services/chatmodel.dart';
 import 'package:amomimus/services/account_manager.dart';
 import 'package:amomimus/services/feed_manager.dart';
 import 'package:amomimus/screens/profile_screen.dart';
@@ -18,6 +20,8 @@ import 'package:amomimus/data/anonymous_names.dart';
 import 'comment_bottom_sheet.dart';
 import 'share_to_chat_bottom_sheet.dart';
 import '../effects/glitch_effect.dart';
+import 'package:amomimus/utils/jelly_dialog.dart';
+import 'package:amomimus/utils/utc_time_manager.dart';
 
 class FeedCard extends StatefulWidget {
   final FeedModel model;
@@ -187,7 +191,7 @@ class _FeedCardState extends State<FeedCard> {
                         ),
                         const Spacer(),
                         Text(
-                          widget.model.timeStamp,
+                          UTCTimeManager.formatTimeAgo(widget.model.timeStamp),
                           style: TextStyle(
                             fontSize: 12,
                             color: isDarkCard
@@ -265,10 +269,13 @@ class _FeedCardState extends State<FeedCard> {
                                   return;
                                 }
                                 if (chatReqMgr.isChatAllowed(targetId)) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                        "You are already connected via chat.",
+                                  context.read<ChatModel>().markAsRead(targetId);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AmomimusApp6(
+                                        username: targetId,
+                                        name: widget.model.userName,
                                       ),
                                     ),
                                   );
@@ -281,7 +288,7 @@ class _FeedCardState extends State<FeedCard> {
                                       widget.model.id,
                                     );
 
-                                await showDialog(
+                                await showJellyDialog(
                                   context: context,
                                   builder: (context) => ChatRequestDialog(
                                     targetUserName: widget.model.userName,
@@ -391,10 +398,10 @@ class _FeedCardState extends State<FeedCard> {
                                   );
                                   return;
                                 }
-                                await showDialog(
+                                await showJellyDialog(
                                   context: context,
                                   builder: (context) =>
-                                      ReportDialog(targetId: widget.model.id),
+                                      ReportDialog(targetId: targetId),
                                 );
                                 if (mounted) setState(() {});
                               }

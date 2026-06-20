@@ -7,6 +7,7 @@ import '../widgets/settings/blocked_users_section.dart';
 import '../widgets/settings/security_auth_section.dart';
 import '../widgets/settings/delete_account_dialog.dart';
 import 'package:amomimus/i18n/strings.g.dart';
+import 'package:amomimus/utils/jelly_dialog.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -41,7 +42,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _showDeleteAccountDialog() {
     if (_credentials == null) return;
-    showDialog(
+    showJellyDialog(
       context: context,
       builder: (_) => DeleteAccountDialog(credentials: _credentials!),
     );
@@ -53,7 +54,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final t = Translations.of(context);
     final isDark = Provider.of<AmomimusDarkTheme>(context).isDarkMode;
     final bgColor = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
-    final textColor = isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
+    final textColor = isDark
+        ? AmomimusDarkTheme.policeLineYellow
+        : AmomimusDarkTheme.primaryPurple;
 
     final am = Provider.of<AccountManager>(context);
     final currentUser = am.currentUser;
@@ -74,7 +77,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (currentUser == null || _credentials == null) {
       return Scaffold(
         backgroundColor: bgColor,
-        body: Center(child: Text(t.error_loading_account_data, style: TextStyle(color: textColor))),
+        body: Center(
+          child: Text(
+            t.error_loading_account_data,
+            style: TextStyle(color: textColor),
+          ),
+        ),
       );
     }
 
@@ -85,7 +93,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         elevation: 0,
         automaticallyImplyLeading: false, // remove back arrow
         iconTheme: IconThemeData(color: textColor),
-        title: Text(t.privacy_settings, style: TextStyle(color: textColor, fontWeight: FontWeight.bold, fontSize: 24)),
+        title: Text(
+          t.privacy_settings,
+          style: TextStyle(
+            color: textColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -94,7 +109,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             // 1. Blocked Users
             BlockedUsersSection(currentUser: currentUser),
-            
+
             const SizedBox(height: 32),
             Divider(color: textColor.withOpacity(0.3)),
             const SizedBox(height: 32),
@@ -107,7 +122,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 32),
 
             // 3. Danger Zone
-            Text(t.danger_zone, style: const TextStyle(color: Colors.redAccent, fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              t.danger_zone,
+              style: const TextStyle(
+                color: Colors.redAccent,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 8),
             Container(
               width: double.infinity,
@@ -121,14 +143,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   Text(
                     t.delete_account_warning,
-                    style: TextStyle(color: textColor.withValues(alpha: 0.8), fontSize: 13),
+                    style: TextStyle(
+                      color: textColor.withValues(alpha: 0.8),
+                      fontSize: 13,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                    ),
                     onPressed: _showDeleteAccountDialog,
-                    child: Text(t.delete_account, style: const TextStyle(color: Colors.white)),
-                  )
+                    child: Text(
+                      t.delete_account,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
                 ],
               ),
             ),

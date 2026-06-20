@@ -5,7 +5,7 @@ class FakePdfScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // To make it look like a real PDF reader app, we use a light grey background 
+    // To make it look like a real PDF reader app, we use a light grey background
     // for the "reader" behind the "page" itself.
     return Scaffold(
       backgroundColor: Colors.white,

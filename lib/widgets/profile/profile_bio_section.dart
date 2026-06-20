@@ -31,8 +31,10 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
   void initState() {
     super.initState();
     if (!widget.isOtherUser) {
-      
-      _bioController.text = widget.user.bio == t.no_bio_yet || widget.user.bio == "No bio yet" ? "" : widget.user.bio;
+      _bioController.text =
+          widget.user.bio == t.no_bio_yet || widget.user.bio == "No bio yet"
+          ? ""
+          : widget.user.bio;
     }
   }
 
@@ -69,7 +71,9 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                     t.bio,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: widget.isDark ? Colors.grey[400] : Colors.grey[700],
+                      color: widget.isDark
+                          ? Colors.grey[400]
+                          : Colors.grey[700],
                     ),
                   ),
                 ],
@@ -107,14 +111,18 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                     Icon(
                       Icons.person_outline,
                       size: 18,
-                      color: widget.isDark ? Colors.grey[400] : Colors.grey[600],
+                      color: widget.isDark
+                          ? Colors.grey[400]
+                          : Colors.grey[600],
                     ),
                     const SizedBox(width: 8),
                     Text(
                       t.bio,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: widget.isDark ? Colors.grey[400] : Colors.grey[700],
+                        color: widget.isDark
+                            ? Colors.grey[400]
+                            : Colors.grey[700],
                       ),
                     ),
                   ],
@@ -135,12 +143,16 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                           },
                           style: TextStyle(
                             fontSize: 14,
-                            color: widget.isDark ? Colors.white : Colors.black87,
+                            color: widget.isDark
+                                ? Colors.white
+                                : Colors.black87,
                           ),
                           decoration: InputDecoration(
                             hintText: t.write_bio,
                             hintStyle: TextStyle(
-                              color: widget.isDark ? Colors.grey[600] : Colors.grey[400],
+                              color: widget.isDark
+                                  ? Colors.grey[600]
+                                  : Colors.grey[400],
                             ),
                             counterText: '',
                             border: InputBorder.none,
@@ -217,16 +229,22 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
             margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: widget.isDark ? AmomimusDarkTheme.surfaceDark : const Color(0xFFFFF8E1),
+              color: widget.isDark
+                  ? AmomimusDarkTheme.surfaceDark
+                  : const Color(0xFFFFF8E1),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: widget.isDark ? AmomimusDarkTheme.policeLineYellow.withValues(alpha: 0.5) : Colors.amber.shade300,
+                color: widget.isDark
+                    ? AmomimusDarkTheme.policeLineYellow.withValues(alpha: 0.5)
+                    : Colors.amber.shade300,
                 width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
                   color: widget.isDark
-                      ? AmomimusDarkTheme.policeLineYellow.withValues(alpha: 0.1)
+                      ? AmomimusDarkTheme.policeLineYellow.withValues(
+                          alpha: 0.1,
+                        )
                       : Colors.amber.withValues(alpha: 0.2),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
@@ -241,14 +259,18 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                     Icon(
                       Icons.payments_outlined,
                       size: 18,
-                      color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : Colors.amber.shade800,
+                      color: widget.isDark
+                          ? AmomimusDarkTheme.policeLineYellow
+                          : Colors.amber.shade800,
                     ),
                     const SizedBox(width: 8),
                     Text(
                       t.coins_redemption,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : Colors.amber.shade900,
+                        color: widget.isDark
+                            ? AmomimusDarkTheme.policeLineYellow
+                            : Colors.amber.shade900,
                       ),
                     ),
                   ],
@@ -260,15 +282,25 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                     String countdownText = "";
 
                     if (widget.user.lastRedeemed != null) {
-                      final lastRedeemedDate = DateTime.tryParse(widget.user.lastRedeemed!);
+                      final lastRedeemedDate = DateTime.tryParse(
+                        widget.user.lastRedeemed!,
+                      );
                       if (lastRedeemedDate != null) {
-                        final difference = DateTime.now().difference(lastRedeemedDate);
-                        final remaining = const Duration(minutes: 30) - difference;
+                        final difference = DateTime.now().difference(
+                          lastRedeemedDate,
+                        );
+                        final remaining =
+                            const Duration(minutes: 30) - difference;
 
                         if (remaining.inSeconds > 0) {
                           canRedeem = false;
-                          final m = remaining.inMinutes.toString().padLeft(2, '0');
-                          final s = (remaining.inSeconds % 60).toString().padLeft(2, '0');
+                          final m = remaining.inMinutes.toString().padLeft(
+                            2,
+                            '0',
+                          );
+                          final s = (remaining.inSeconds % 60)
+                              .toString()
+                              .padLeft(2, '0');
                           countdownText = "$m:$s";
                         }
                       }
@@ -295,7 +327,9 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                         width: double.infinity,
                         height: 50,
                         decoration: BoxDecoration(
-                          color: canRedeem ? const Color(0xFFFFD54F) : Colors.grey[400],
+                          color: canRedeem
+                              ? const Color(0xFFFFD54F)
+                              : Colors.grey[400],
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(

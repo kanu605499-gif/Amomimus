@@ -31,11 +31,15 @@ class PlasticBoxEffect extends StatelessWidget {
                   end: Alignment.bottomRight,
                   stops: const [0.0, 0.15, 0.25, 0.8, 1.0],
                   colors: [
-                    Colors.white.withValues(alpha: 0.5), // Strong highlight corner
+                    Colors.white.withValues(
+                      alpha: 0.5,
+                    ), // Strong highlight corner
                     Colors.white.withValues(alpha: 0.1), // Fade
-                    Colors.transparent,            // Flat plastic
-                    Colors.transparent,            // Flat plastic
-                    Colors.black.withValues(alpha: 0.1), // Slight shadow on opposite corner
+                    Colors.transparent, // Flat plastic
+                    Colors.transparent, // Flat plastic
+                    Colors.black.withValues(
+                      alpha: 0.1,
+                    ), // Slight shadow on opposite corner
                   ],
                 ),
               ),

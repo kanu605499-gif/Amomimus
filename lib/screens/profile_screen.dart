@@ -19,6 +19,7 @@ import '../widgets/profile/profile_recent_resonates.dart';
 import '../widgets/profile/profile_indicator_card.dart';
 import 'fake_pdf_screen.dart';
 import 'settings_screen.dart';
+import 'package:amomimus/utils/jelly_dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String? targetUserId;
@@ -67,8 +68,6 @@ class _ProfileScreenState extends State<ProfileScreen>
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -93,25 +92,35 @@ class _ProfileScreenState extends State<ProfileScreen>
       }
 
       String normalizedTargetId = widget.targetUserId!;
-      final match = RegExp(r'#(?:YOU|AMO|AMI|AMOM)-(\d+)').firstMatch(widget.targetUserId!);
+      final match = RegExp(
+        r'#(?:YOU|AMO|AMI|AMOM)-(\d+)',
+      ).firstMatch(widget.targetUserId!);
       if (match != null) {
         int num = int.parse(match.group(1)!);
         if (num == 100) num = 110;
         normalizedTargetId = '#AMM-$num';
       } else {
-        normalizedTargetId = widget.targetUserId!.replaceAll(RegExp(r'#AM[OMI]+-'), '#AMM-');
+        normalizedTargetId = widget.targetUserId!.replaceAll(
+          RegExp(r'#AM[OMI]+-'),
+          '#AMM-',
+        );
       }
 
       try {
         user = accountManager.accounts.firstWhere(
-          (acc) => acc.amomimusId == widget.targetUserId || acc.amomimusId == normalizedTargetId,
+          (acc) =>
+              acc.amomimusId == widget.targetUserId ||
+              acc.amomimusId == normalizedTargetId,
         );
       } catch (e) {
         if (widget.feedModel != null) {
           String gender = "Amo";
           if (widget.feedModel!.type == AccountType.ami) gender = "Ami";
           if (widget.feedModel!.type == AccountType.amom) gender = "Amom";
-          user = UserAccount.empty().copyWith(amomimusId: widget.targetUserId, gender: gender);
+          user = UserAccount.empty().copyWith(
+            amomimusId: widget.targetUserId,
+            gender: gender,
+          );
         } else {
           // Fallback to current user if not found
           user = accountManager.currentUser;
@@ -126,8 +135,6 @@ class _ProfileScreenState extends State<ProfileScreen>
         body: Center(child: Text(t.no_active_user)),
       );
     }
-
-
 
     return Scaffold(
       backgroundColor: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
@@ -152,13 +159,16 @@ class _ProfileScreenState extends State<ProfileScreen>
           IconButton(
             icon: Icon(
               Icons.search,
-              color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+              color: isDark
+                  ? AmomimusDarkTheme.policeLineYellow
+                  : AmomimusDarkTheme.primaryPurple,
             ),
             onPressed: () {
               Navigator.push(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const FakePdfScreen(),
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const FakePdfScreen(),
                   transitionDuration: Duration.zero,
                   reverseTransitionDuration: Duration.zero,
                 ),
@@ -169,7 +179,9 @@ class _ProfileScreenState extends State<ProfileScreen>
             IconButton(
               icon: Icon(
                 Icons.settings,
-                color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                color: isDark
+                    ? AmomimusDarkTheme.policeLineYellow
+                    : AmomimusDarkTheme.primaryPurple,
               ),
               onPressed: () {
                 Navigator.push(
@@ -185,7 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 color: Colors.redAccent,
               ),
               onPressed: () {
-                showDialog(
+                showJellyDialog(
                   context: context,
                   builder: (context) => ReportDialog(
                     targetId: user.amomimusId,

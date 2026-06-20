@@ -3,10 +3,14 @@ import 'package:provider/provider.dart';
 import '../amomimusdark.dart';
 import '../models/report_model.dart';
 import '../services/account_manager.dart';
+import '../services/chat_request_manager.dart';
+import '../services/chatmodel.dart';
+import '../utils/jelly_dialog.dart';
 
 class ReportDialog extends StatefulWidget {
   final String targetId; // can be a messageId or userId
-  final bool isUserReport; // true if reporting user profile, false if reporting message
+  final bool
+  isUserReport; // true if reporting user profile, false if reporting message
 
   const ReportDialog({
     super.key,
@@ -35,27 +39,61 @@ class _ReportDialogState extends State<ReportDialog> {
       // Should not happen as checkbox is disabled if comment is empty
       return;
     }
-    
+
     final accountManager = context.read<AccountManager>();
-    
+
     // Process the report to update points and indicators
-    await accountManager.submitReport(
+    final blockReason = await accountManager.submitReport(
       widget.targetId,
       _selectedCategory,
       isChatBubbleReport: !widget.isUserReport,
     );
-    
+
+    if (blockReason != null) {
+      if (mounted) {
+        // Token limit reached — inform user that only local perspective was updated
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              blockReason == 'daily_limit_reached'
+                  ? 'Daily global limit reached. Applying locally.'
+                  : blockReason == 'category_limit_reached'
+                      ? 'Global token for this category exhausted. Applying locally.'
+                      : blockReason == 'weekly_hate_speech_limit'
+                          ? 'Weekly hate speech limit reached. Applying locally.'
+                          : 'Global limit reached. Applying locally.',
+              style: const TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.orange,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+
     if (_banUser) {
       // Block the user locally. We assume targetId for isUserReport is the realAuthorId/userId.
       accountManager.blockUser(widget.targetId);
+      if (mounted) {
+        Provider.of<ChatModel>(
+          context,
+          listen: false,
+        ).wipeRoomDueToBlock(widget.targetId);
+        Provider.of<ChatRequestManager>(
+          context,
+          listen: false,
+        ).deleteRequestWith(widget.targetId);
+      }
     }
-    
+
+    if (!mounted) return;
+
     final amomimusTheme = context.read<AmomimusDarkTheme>();
     final isDark = amomimusTheme.isDarkMode;
     final bgColor = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
     final textColor = isDark ? Colors.white : Colors.black87;
 
-    await showDialog(
+    await showJellyDialog(
       context: context,
       builder: (ctx) => Dialog(
         backgroundColor: bgColor,
@@ -65,17 +103,29 @@ class _ReportDialogState extends State<ReportDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.check_circle_outline, color: Colors.green, size: 54),
+              const Icon(
+                Icons.check_circle_outline,
+                color: Colors.green,
+                size: 54,
+              ),
               const SizedBox(height: 16),
               Text(
                 "Report Submitted",
-                style: TextStyle(color: textColor, fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
-                _banUser ? "The report was sent and the user is now blocked." : "Thank you for making Amomimus a safer place.",
+                _banUser
+                    ? "The report was sent and the user is now blocked."
+                    : "Thank you for making Amomimus a safer place.",
                 textAlign: TextAlign.center,
-                style: TextStyle(color: isDark ? Colors.white70 : Colors.black54),
+                style: TextStyle(
+                  color: isDark ? Colors.white70 : Colors.black54,
+                ),
               ),
               const SizedBox(height: 24),
               SizedBox(
@@ -83,12 +133,19 @@ class _ReportDialogState extends State<ReportDialog> {
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(ctx),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                    backgroundColor: isDark
+                        ? AmomimusDarkTheme.policeLineYellow
+                        : AmomimusDarkTheme.primaryPurple,
                     foregroundColor: isDark ? Colors.black : Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  child: const Text("Close", style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
@@ -110,7 +167,9 @@ class _ReportDialogState extends State<ReportDialog> {
     final bgColor = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
     final textColor = isDark ? Colors.white : Colors.black87;
     final textSecondaryColor = isDark ? Colors.white70 : Colors.black54;
-    final accentColor = isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
+    final accentColor = isDark
+        ? AmomimusDarkTheme.policeLineYellow
+        : AmomimusDarkTheme.primaryPurple;
     final borderColor = isDark ? Colors.white24 : Colors.black12;
 
     return Dialog(
@@ -124,7 +183,11 @@ class _ReportDialogState extends State<ReportDialog> {
           children: [
             Row(
               children: [
-                Icon(Icons.warning_amber_rounded, color: Colors.redAccent, size: 28),
+                Icon(
+                  Icons.warning_amber_rounded,
+                  color: Colors.redAccent,
+                  size: 28,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   widget.isUserReport ? "Report User" : "Report Message",
@@ -177,7 +240,9 @@ class _ReportDialogState extends State<ReportDialog> {
               style: TextStyle(color: textColor),
               decoration: InputDecoration(
                 hintText: "Please provide details...",
-                hintStyle: TextStyle(color: textSecondaryColor.withValues(alpha: 0.5)),
+                hintStyle: TextStyle(
+                  color: textSecondaryColor.withValues(alpha: 0.5),
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: borderColor),
@@ -195,15 +260,16 @@ class _ReportDialogState extends State<ReportDialog> {
             ),
             const SizedBox(height: 16),
             Theme(
-              data: ThemeData(
-                unselectedWidgetColor: textSecondaryColor,
-              ),
+              data: ThemeData(unselectedWidgetColor: textSecondaryColor),
               child: CheckboxListTile(
                 contentPadding: EdgeInsets.zero,
                 activeColor: accentColor,
                 title: Text(
                   "Block / Ban User",
-                  style: TextStyle(color: textColor, fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    color: textColor,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 subtitle: Text(
                   "You must provide a comment to enable this.",

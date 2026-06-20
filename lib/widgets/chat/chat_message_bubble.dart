@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../amomimusdark.dart';
@@ -8,6 +9,7 @@ import '../../i18n/strings.g.dart';
 import '../../services/account_manager.dart';
 import '../../widgets/report_dialog.dart';
 import 'chat_shared_post.dart';
+import 'package:amomimus/utils/jelly_dialog.dart';
 
 class MessageBubble extends StatefulWidget {
   final ChatMessage message;
@@ -16,6 +18,12 @@ class MessageBubble extends StatefulWidget {
   final bool isPinned;
   final VoidCallback? onTogglePin;
   final VoidCallback? onReplyTapped;
+  final bool isSelectionMode;
+  final bool isSelected;
+  final int selectionIndex;
+  final bool showSelectionNumbers;
+  final VoidCallback? onSelectionTap;
+  final VoidCallback? onLongPress;
 
   const MessageBubble({
     super.key,
@@ -25,6 +33,12 @@ class MessageBubble extends StatefulWidget {
     this.isPinned = false,
     this.onTogglePin,
     this.onReplyTapped,
+    this.isSelectionMode = false,
+    this.isSelected = false,
+    this.selectionIndex = 0,
+    this.showSelectionNumbers = false,
+    this.onSelectionTap,
+    this.onLongPress,
   });
 
   @override
@@ -33,6 +47,9 @@ class MessageBubble extends StatefulWidget {
 
 class _MessageBubbleState extends State<MessageBubble> {
   bool _isExpanded = false;
+  bool _showSuccessIcon = false;
+  double _dragOffset = 0.0;
+  bool _isDragging = false;
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +69,18 @@ class _MessageBubbleState extends State<MessageBubble> {
 
     // Check if text is long enough to need collapsing
     final bool isSticker = widget.message.text.startsWith('[STICKER]:');
-    final String stickerAsset = isSticker ? widget.message.text.substring(10) : '';
+    final String stickerAsset = isSticker
+        ? widget.message.text.substring(10)
+        : '';
 
     final bool isSharedPost = widget.message.text.startsWith('[SHARED_POST]:');
-    final String sharedPostId = isSharedPost ? widget.message.text.substring(14) : '';
+    final String sharedPostId = isSharedPost
+        ? widget.message.text.substring(14)
+        : '';
     final feedManager = context.read<FeedManager>();
-    final sharedPost = isSharedPost ? feedManager.getPostById(sharedPostId) : null;
+    final sharedPost = isSharedPost
+        ? feedManager.getPostById(sharedPostId)
+        : null;
 
     final textPainter = TextPainter(
       text: TextSpan(
@@ -75,7 +98,7 @@ class _MessageBubbleState extends State<MessageBubble> {
     )..layout(maxWidth: MediaQuery.of(context).size.width * 0.62 - 32);
     final bool isOverflowing = textPainter.didExceedMaxLines;
 
-    return Padding(
+    final bubbleContent = Padding(
       padding: const EdgeInsets.symmetric(vertical: 13.0, horizontal: 11.0),
       child: Row(
         mainAxisAlignment: isUserMessage
@@ -84,88 +107,154 @@ class _MessageBubbleState extends State<MessageBubble> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (isUserMessage) ...[
-            Text(
-              widget.message.timeStamp,
-              style: TextStyle(
-                fontSize: 9,
-                color: textSecondaryColor.withValues(alpha: 0.6),
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                if (!widget.message.isSynced)
+                  Icon(
+                    widget.message.showResendOptions
+                        ? Icons.error_outline
+                        : Icons.hourglass_empty,
+                    size: 10,
+                    color: widget.message.showResendOptions
+                        ? Colors.redAccent
+                        : textSecondaryColor.withValues(alpha: 0.6),
+                  )
+                else if (_showSuccessIcon)
+                  const Icon(Icons.check_circle, size: 10, color: Colors.green)
+                else
+                  const SizedBox.shrink(),
+                const SizedBox(height: 2),
+                Text(
+                  widget.message.timeStamp,
+                  style: TextStyle(
+                    fontSize: 9,
+                    color: widget.message.showResendOptions
+                        ? Colors.redAccent
+                        : textSecondaryColor.withValues(alpha: 0.6),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(width: 8),
           ],
           GestureDetector(
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: isDark
-                    ? AmomimusDarkTheme.backgroundDark
-                    : Colors.white,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                builder: (sheetContext) {
-                  return SafeArea(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          leading: Icon(Icons.reply, color: customBorderColor),
-                          title: Text(
-                            t.reply,
-                            style: TextStyle(color: textColor),
-                          ),
-                          onTap: () {
-                            Navigator.pop(sheetContext);
-                            if (widget.onReply != null) widget.onReply!();
-                          },
+            onLongPress: widget.onLongPress,
+            onTap: widget.isSelectionMode
+                ? widget.onSelectionTap
+                : () {
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: isDark
+                          ? AmomimusDarkTheme.backgroundDark
+                          : Colors.white,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
                         ),
-                        ListTile(
-                          leading: Icon(
-                            widget.isPinned
-                                ? Icons.cloud
-                                : Icons.cloud_outlined,
-                            color: customBorderColor,
-                          ),
-                          title: Text(
-                            widget.isPinned
-                                ? t.unpin_memories
-                                : t.pin_memories,
-                            style: TextStyle(color: textColor),
-                          ),
-                          onTap: () {
-                            Navigator.pop(sheetContext);
-                            if (widget.onTogglePin != null) {
-                              widget.onTogglePin!();
-                            }
-                          },
-                        ),
-                        if (!isUserMessage)
-                          ListTile(
-                            leading: const Icon(
-                              Icons.report_gmailerrorred,
-                              color: Colors.redAccent,
-                            ),
-                            title: Text(
-                              t.report,
-                              style: const TextStyle(color: Colors.redAccent),
-                            ),
-                            onTap: () {
-                              Navigator.pop(sheetContext);
-                              showDialog(
-                                context: context,
-                                builder: (context) => ReportDialog(
-                                  targetId: widget.message.id ?? '',
-                                  isUserReport: false,
+                      ),
+                      builder: (sheetContext) {
+                        return SafeArea(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ListTile(
+                                leading: Icon(
+                                  Icons.reply,
+                                  color: customBorderColor,
                                 ),
-                              );
-                            },
+                                title: Text(
+                                  t.reply,
+                                  style: TextStyle(color: textColor),
+                                ),
+                                onTap: () {
+                                  Navigator.pop(sheetContext);
+                                  if (widget.onReply != null) widget.onReply!();
+                                },
+                              ),
+                              if (RegExp(
+                                    r'(https?:\/\/[^\s]+|[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})',
+                                  ).hasMatch(widget.message.text) &&
+                                  !isSticker &&
+                                  !isSharedPost)
+                                ListTile(
+                                  leading: Icon(
+                                    Icons.copy,
+                                    color: customBorderColor,
+                                  ),
+                                  title: Text(
+                                    t.copy,
+                                    style: TextStyle(color: textColor),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(sheetContext);
+                                    Clipboard.setData(
+                                      ClipboardData(text: widget.message.text),
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          t.copied_to_clipboard,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        backgroundColor: Colors.green,
+                                        duration: const Duration(seconds: 2),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ListTile(
+                                leading: Icon(
+                                  widget.isPinned
+                                      ? Icons.cloud
+                                      : Icons.cloud_outlined,
+                                  color: customBorderColor,
+                                ),
+                                title: Text(
+                                  widget.isPinned
+                                      ? t.unpin_memories
+                                      : t.pin_memories,
+                                  style: TextStyle(color: textColor),
+                                ),
+                                onTap: () {
+                                  Navigator.pop(sheetContext);
+                                  if (widget.onTogglePin != null) {
+                                    widget.onTogglePin!();
+                                  }
+                                },
+                              ),
+                              if (!isUserMessage)
+                                ListTile(
+                                  leading: const Icon(
+                                    Icons.report_gmailerrorred,
+                                    color: Colors.redAccent,
+                                  ),
+                                  title: Text(
+                                    t.report,
+                                    style: const TextStyle(
+                                      color: Colors.redAccent,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.pop(sheetContext);
+                                    showJellyDialog(
+                                      context: context,
+                                      builder: (context) => ReportDialog(
+                                        targetId: widget.message.senderId,
+                                        isUserReport: false,
+                                      ),
+                                    );
+                                  },
+                                ),
+                            ],
                           ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
+                        );
+                      },
+                    );
+                  },
             child: ConstrainedBox(
               constraints: BoxConstraints(
                 maxWidth: MediaQuery.of(context).size.width * 0.62,
@@ -194,11 +283,14 @@ class _MessageBubbleState extends State<MessageBubble> {
                       ),
                     ),
                   Container(
-                    padding: (isSticker || isSharedPost) 
-                        ? EdgeInsets.zero 
-                        : const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    decoration: (isSticker || isSharedPost) 
-                        ? null 
+                    padding: (isSticker || isSharedPost)
+                        ? EdgeInsets.zero
+                        : const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                    decoration: (isSticker || isSharedPost)
+                        ? null
                         : BoxDecoration(
                             color: bubbleColor,
                             borderRadius: BorderRadius.only(
@@ -224,23 +316,34 @@ class _MessageBubbleState extends State<MessageBubble> {
                             onTap: () {
                               if (widget.onReplyTapped != null) {
                                 widget.onReplyTapped!();
-                              } else if (widget.repliedMessage!.text.length > 100) {
-                                showDialog(
+                              } else if (widget.repliedMessage!.text.length >
+                                  100) {
+                                showJellyDialog(
                                   context: context,
                                   builder: (dialogContext) => AlertDialog(
                                     backgroundColor: bubbleColor,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20),
                                       side: BorderSide(
-                                        color: customBorderColor.withValues(alpha: 0.1),
+                                        color: customBorderColor.withValues(
+                                          alpha: 0.1,
+                                        ),
                                         width: 1.85,
                                       ),
                                     ),
-                                    content: Text(
-                                      widget.repliedMessage!.text,
-                                      style: TextStyle(
-                                        color: textColor,
-                                        fontSize: 14,
+                                    content: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxHeight: MediaQuery.of(context).size.height * 0.5,
+                                      ),
+                                      child: SingleChildScrollView(
+                                        physics: const BouncingScrollPhysics(),
+                                        child: Text(
+                                          widget.repliedMessage!.text,
+                                          style: TextStyle(
+                                            color: textColor,
+                                            fontSize: 14,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -259,7 +362,9 @@ class _MessageBubbleState extends State<MessageBubble> {
                                     : const Color.fromARGB(255, 255, 255, 255),
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: customBorderColor.withValues(alpha: 0.9),
+                                  color: customBorderColor.withValues(
+                                    alpha: 0.9,
+                                  ),
                                 ),
                                 boxShadow: [
                                   BoxShadow(
@@ -284,10 +389,16 @@ class _MessageBubbleState extends State<MessageBubble> {
                                     ),
                                   ),
                                   const SizedBox(height: 2),
-                                  if (widget.repliedMessage!.text.startsWith('[STICKER]:'))
+                                  if (widget.repliedMessage!.text.startsWith(
+                                    '[STICKER]:',
+                                  ))
                                     Row(
                                       children: [
-                                        Icon(Icons.sticky_note_2, size: 12, color: textSecondaryColor),
+                                        Icon(
+                                          Icons.sticky_note_2,
+                                          size: 12,
+                                          color: textSecondaryColor,
+                                        ),
                                         const SizedBox(width: 4),
                                         Text(
                                           t.sticker,
@@ -299,7 +410,8 @@ class _MessageBubbleState extends State<MessageBubble> {
                                         ),
                                         const SizedBox(width: 8),
                                         Image.asset(
-                                          widget.repliedMessage!.text.replaceFirst('[STICKER]:', ''),
+                                          widget.repliedMessage!.text
+                                              .replaceFirst('[STICKER]:', ''),
                                           height: 20,
                                           width: 20,
                                         ),
@@ -340,11 +452,16 @@ class _MessageBubbleState extends State<MessageBubble> {
                             decoration: BoxDecoration(
                               color: bubbleColor,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: customBorderColor.withValues(alpha: 0.5)),
+                              border: Border.all(
+                                color: customBorderColor.withValues(alpha: 0.5),
+                              ),
                             ),
                             child: Text(
                               'Post is no longer available.',
-                              style: TextStyle(color: textSecondaryColor, fontStyle: FontStyle.italic),
+                              style: TextStyle(
+                                color: textSecondaryColor,
+                                fontStyle: FontStyle.italic,
+                              ),
                             ),
                           )
                         else
@@ -427,6 +544,98 @@ class _MessageBubbleState extends State<MessageBubble> {
               ),
             ),
           ],
+        ],
+      ),
+    );
+
+    if (widget.isSelectionMode) {
+      final checkbox = GestureDetector(
+        onTap: widget.onSelectionTap,
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: widget.isSelected ? customBorderColor : Colors.transparent,
+            border: Border.all(
+              color: widget.isSelected ? customBorderColor : Colors.grey,
+              width: 2,
+            ),
+          ),
+          width: 24,
+          height: 24,
+          child: widget.isSelected
+              ? const Icon(Icons.check, size: 16, color: Colors.white)
+              : null,
+        ),
+      );
+
+      final mainWidget = AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutCubic,
+        child: Row(
+          mainAxisAlignment: isUserMessage
+              ? MainAxisAlignment.end
+              : MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: isUserMessage
+              ? [Flexible(child: bubbleContent), checkbox]
+              : [checkbox, Flexible(child: bubbleContent)],
+        ),
+      );
+
+      return _buildSwipeableBubble(mainWidget, textSecondaryColor);
+    }
+
+    return _buildSwipeableBubble(bubbleContent, textSecondaryColor);
+  }
+
+  Widget _buildSwipeableBubble(Widget child, Color textSecondaryColor) {
+    return GestureDetector(
+      onHorizontalDragUpdate: (details) {
+        setState(() {
+          _dragOffset += details.primaryDelta!;
+          if (_dragOffset < -80) _dragOffset = -80;
+          if (_dragOffset > 0) _dragOffset = 0;
+          _isDragging = true;
+        });
+      },
+      onHorizontalDragEnd: (details) {
+        setState(() {
+          _isDragging = false;
+          _dragOffset = 0.0;
+        });
+      },
+      onHorizontalDragCancel: () {
+        setState(() {
+          _isDragging = false;
+          _dragOffset = 0.0;
+        });
+      },
+      child: Stack(
+        alignment: Alignment.centerRight,
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            right: 16,
+            child: Opacity(
+              opacity: (_dragOffset / -80).clamp(0.0, 1.0),
+              child: Text(
+                widget.message.timeStamp,
+                style: TextStyle(
+                  color: textSecondaryColor,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ),
+          AnimatedContainer(
+            duration: _isDragging
+                ? Duration.zero
+                : const Duration(milliseconds: 250),
+            curve: Curves.easeOutCubic,
+            transform: Matrix4.translationValues(_dragOffset, 0, 0),
+            child: child,
+          ),
         ],
       ),
     );

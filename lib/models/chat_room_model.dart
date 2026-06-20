@@ -13,6 +13,13 @@ class ChatSession {
   final Map<String, int> unreadCounts;
   final List<String> pinnedMessageIds; // Memories — max 9
   final String? createdAt;
+  final String? roomStartedAt;
+  final String? roomExpiresAt;
+  final List<String> seenResetAnimationBy;
+  final List<String> resetIndicatorVisibleFor;
+  final String? cheatDetectedUserId;
+  final List<String> roomDeletedBy;
+  final List<ChatLogEntry> chatLogs;
 
   /// Convenience getter: returns participant IDs as a list.
   List<String> get participants => [user1Id, user2Id];
@@ -27,6 +34,13 @@ class ChatSession {
     required this.unreadCounts,
     this.pinnedMessageIds = const [],
     this.createdAt,
+    this.roomStartedAt,
+    this.roomExpiresAt,
+    this.seenResetAnimationBy = const [],
+    this.resetIndicatorVisibleFor = const [],
+    this.cheatDetectedUserId,
+    this.roomDeletedBy = const [],
+    this.chatLogs = const [],
   });
 
   /// Firestore-ready: converts this [ChatSession] to a [Map].
@@ -42,6 +56,13 @@ class ChatSession {
       'unreadCounts': unreadCounts,
       'pinnedMessageIds': pinnedMessageIds,
       'createdAt': createdAt ?? DateTime.now().toIso8601String(),
+      'roomStartedAt': roomStartedAt,
+      'roomExpiresAt': roomExpiresAt,
+      'seenResetAnimationBy': seenResetAnimationBy,
+      'resetIndicatorVisibleFor': resetIndicatorVisibleFor,
+      'cheatDetectedUserId': cheatDetectedUserId,
+      'roomDeletedBy': roomDeletedBy,
+      'chatLogs': chatLogs.map((l) => l.toMap()).toList(),
     };
   }
 
@@ -57,11 +78,38 @@ class ChatSession {
           .map((m) => ChatMessage.fromMap(m))
           .toList(),
       unreadCounts: Map<String, int>.from(map['unreadCounts']),
-      pinnedMessageIds: (map['pinnedMessageIds'] as List?)
+      pinnedMessageIds:
+          (map['pinnedMessageIds'] as List?)
               ?.map((e) => e as String)
               .toList() ??
           [],
       createdAt: map['createdAt'],
+      roomStartedAt: map['roomStartedAt'],
+      roomExpiresAt: map['roomExpiresAt'],
+      seenResetAnimationBy:
+          (map['seenResetAnimationBy'] as List?)
+              ?.map((e) => e as String)
+              .toList() ??
+          (map['hasSeenResetAnimation'] == 1 || map['hasSeenResetAnimation'] == true
+              ? [map['user1Id'] as String, map['user2Id'] as String]
+              : []),
+      resetIndicatorVisibleFor:
+          (map['resetIndicatorVisibleFor'] as List?)
+              ?.map((e) => e as String)
+              .toList() ??
+          (map['isResetIndicatorVisible'] == 1 || map['isResetIndicatorVisible'] == true
+              ? [map['user1Id'] as String, map['user2Id'] as String]
+              : []),
+      cheatDetectedUserId: map['cheatDetectedUserId'],
+      roomDeletedBy:
+          (map['roomDeletedBy'] as List?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
+      chatLogs: (map['chatLogs'] as List?)
+          ?.map((e) => ChatLogEntry.fromMap(Map<String, dynamic>.from(e)))
+          .toList() ??
+          [],
     );
   }
 
@@ -69,4 +117,33 @@ class ChatSession {
   Map<String, dynamic> toJson() => toMap();
   factory ChatSession.fromJson(Map<String, dynamic> json) =>
       ChatSession.fromMap(json);
+}
+
+/// Structured chat log entry class
+class ChatLogEntry {
+  final String text; // e.g. 'room_created', 'pin', 'unpin', 'erase', 'delete_room', 'room_expired'
+  final String actorId; // ID of the user performing the action, or 'system'
+  final String timeStamp; // Localized/device formatted time
+
+  ChatLogEntry({
+    required this.text,
+    required this.actorId,
+    required this.timeStamp,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'text': text,
+      'actorId': actorId,
+      'timeStamp': timeStamp,
+    };
+  }
+
+  factory ChatLogEntry.fromMap(Map<String, dynamic> map) {
+    return ChatLogEntry(
+      text: map['text'] ?? '',
+      actorId: map['actorId'] ?? '',
+      timeStamp: map['timeStamp'] ?? '',
+    );
+  }
 }

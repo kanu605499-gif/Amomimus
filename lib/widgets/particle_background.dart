@@ -15,20 +15,26 @@ class ParticlePainter extends CustomPainter {
   final double particleSize;
   final double speedMultiplier;
 
-  ParticlePainter(this.particles, this.progress, this.color, this.particleSize, this.speedMultiplier);
+  ParticlePainter(
+    this.particles,
+    this.progress,
+    this.color,
+    this.particleSize,
+    this.speedMultiplier,
+  );
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..color = color.withValues(alpha: 0.6)
       ..style = PaintingStyle.fill;
-    
+
     final double time = DateTime.now().millisecondsSinceEpoch / 2000.0;
-    
+
     for (var p in particles) {
       double currentY = (p.y - (time * p.speed * speedMultiplier)) % 1.0;
       if (currentY < 0) currentY += 1.0; // Wrap around safely
-      
+
       canvas.drawCircle(
         Offset(p.x * size.width, currentY * size.height),
         particleSize, // Particle radius
@@ -59,14 +65,18 @@ class ParticleBackground extends StatefulWidget {
   State<ParticleBackground> createState() => _ParticleBackgroundState();
 }
 
-class _ParticleBackgroundState extends State<ParticleBackground> with SingleTickerProviderStateMixin {
+class _ParticleBackgroundState extends State<ParticleBackground>
+    with SingleTickerProviderStateMixin {
   late AnimationController _particleController;
   final List<Particle> particles = [];
 
   @override
   void initState() {
     super.initState();
-    _particleController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
+    _particleController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
     _initParticles();
   }
 
@@ -81,11 +91,13 @@ class _ParticleBackgroundState extends State<ParticleBackground> with SingleTick
   void _initParticles() {
     particles.clear();
     for (int i = 0; i < widget.maxParticles; i++) {
-      particles.add(Particle(
-        x: math.Random().nextDouble(),
-        y: math.Random().nextDouble(),
-        speed: 0.2 + math.Random().nextDouble() * 0.5,
-      ));
+      particles.add(
+        Particle(
+          x: math.Random().nextDouble(),
+          y: math.Random().nextDouble(),
+          speed: 0.2 + math.Random().nextDouble() * 0.5,
+        ),
+      );
     }
   }
 
@@ -101,7 +113,13 @@ class _ParticleBackgroundState extends State<ParticleBackground> with SingleTick
       animation: _particleController,
       builder: (context, child) {
         return CustomPaint(
-          painter: ParticlePainter(particles, _particleController.value, widget.particleColor, widget.particleSize, widget.speedMultiplier),
+          painter: ParticlePainter(
+            particles,
+            _particleController.value,
+            widget.particleColor,
+            widget.particleSize,
+            widget.speedMultiplier,
+          ),
           child: Container(),
         );
       },

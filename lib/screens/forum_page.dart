@@ -41,11 +41,13 @@ class _ForumPageState extends State<ForumPage> {
     final t = Translations.of(context);
     final amomimusTheme = Provider.of<AmomimusDarkTheme>(context);
     final isDark = amomimusTheme.isDarkMode;
-    
-    final currentScaffoldBg =
-        isDark ? AmomimusDarkTheme.backgroundDark : Colors.white;
-    final currentTextPrimary =
-        isDark ? AmomimusDarkTheme.textPrimary : Colors.black;
+
+    final currentScaffoldBg = isDark
+        ? AmomimusDarkTheme.backgroundDark
+        : Colors.white;
+    final currentTextPrimary = isDark
+        ? AmomimusDarkTheme.textPrimary
+        : Colors.black;
 
     return Scaffold(
       backgroundColor: currentScaffoldBg,
@@ -57,7 +59,9 @@ class _ForumPageState extends State<ForumPage> {
         title: Text(
           t.post_detail,
           style: TextStyle(
-            color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+            color: isDark
+                ? AmomimusDarkTheme.policeLineYellow
+                : AmomimusDarkTheme.primaryPurple,
             fontWeight: FontWeight.bold,
             fontSize: 24,
           ),
@@ -66,13 +70,16 @@ class _ForumPageState extends State<ForumPage> {
           IconButton(
             icon: Icon(
               Icons.search,
-              color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+              color: isDark
+                  ? AmomimusDarkTheme.policeLineYellow
+                  : AmomimusDarkTheme.primaryPurple,
             ),
             onPressed: () {
               Navigator.push(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => const FakePdfScreen(),
+                  pageBuilder: (context, animation, secondaryAnimation) =>
+                      const FakePdfScreen(),
                   transitionDuration: Duration.zero,
                   reverseTransitionDuration: Duration.zero,
                 ),
@@ -85,7 +92,9 @@ class _ForumPageState extends State<ForumPage> {
         builder: (context, feedManager, child) {
           FeedModel? feedModel;
           try {
-            feedModel = feedManager.feeds.firstWhere((f) => f.id == widget.feedId);
+            feedModel = feedManager.feeds.firstWhere(
+              (f) => f.id == widget.feedId,
+            );
           } catch (e) {
             feedModel = null;
           }
@@ -108,10 +117,7 @@ class _ForumPageState extends State<ForumPage> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      FeedCard(
-                        model: currentFeed,
-                        feedIndex: feedIndex,
-                      ),
+                      FeedCard(model: currentFeed, feedIndex: feedIndex),
                       const Divider(),
                       if (currentFeed.comments.isEmpty)
                         Padding(
@@ -128,48 +134,73 @@ class _ForumPageState extends State<ForumPage> {
                           itemCount: currentFeed.comments.length,
                           itemBuilder: (context, index) {
                             final comment = currentFeed.comments[index];
-                            
+
                             // Deterministic Avatar Generation
-                            final iconData = AnonymousNames.getConsistentIconForPost(comment.authorId, widget.feedId);
-                            final iconColorValue = AnonymousNames.getConsistentColorForPost(comment.authorId, widget.feedId);
+                            final iconData =
+                                AnonymousNames.getConsistentIconForPost(
+                                  comment.authorId,
+                                  widget.feedId,
+                                );
+                            final iconColorValue =
+                                AnonymousNames.getConsistentColorForPost(
+                                  comment.authorId,
+                                  widget.feedId,
+                                );
                             final iconColor = Color(iconColorValue);
-                            
+
                             return ListTile(
                               leading: CircleAvatar(
-                                backgroundColor: iconColor.withValues(alpha: 0.2),
-                                child: Icon(
-                                  iconData,
-                                  color: iconColor,
+                                backgroundColor: iconColor.withValues(
+                                  alpha: 0.2,
                                 ),
+                                child: Icon(iconData, color: iconColor),
                               ),
                               title: Text(
-                                "${comment.authorName} (${comment.authorId})", 
+                                "${comment.authorName} (${comment.authorId})",
                                 style: TextStyle(
-                                  fontWeight: FontWeight.bold, 
-                                  color: isDark ? Colors.white70 : Colors.black87, 
+                                  fontWeight: FontWeight.bold,
+                                  color: isDark
+                                      ? Colors.white70
+                                      : Colors.black87,
                                   fontSize: 12,
                                 ),
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (comment.replyToName != null && comment.replyToText != null)
+                                  if (comment.replyToName != null &&
+                                      comment.replyToText != null)
                                     Container(
-                                      margin: const EdgeInsets.only(top: 4, bottom: 4),
+                                      margin: const EdgeInsets.only(
+                                        top: 4,
+                                        bottom: 4,
+                                      ),
                                       padding: const EdgeInsets.only(left: 8),
                                       decoration: const BoxDecoration(
-                                        border: Border(left: BorderSide(color: Colors.grey, width: 2)),
+                                        border: Border(
+                                          left: BorderSide(
+                                            color: Colors.grey,
+                                            width: 2,
+                                          ),
+                                        ),
                                       ),
                                       child: Text(
                                         "${t.replying_to} ${comment.replyToName}:\n${comment.replyToText}",
-                                        style: const TextStyle(fontSize: 11, color: Colors.grey),
+                                        style: const TextStyle(
+                                          fontSize: 11,
+                                          color: Colors.grey,
+                                        ),
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   Text(
-                                    comment.text, 
-                                    style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                                    comment.text,
+                                    style: TextStyle(
+                                      color: isDark
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -177,7 +208,9 @@ class _ForumPageState extends State<ForumPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ProfileScreen(targetUserId: comment.authorId),
+                                    builder: (context) => ProfileScreen(
+                                      targetUserId: comment.authorId,
+                                    ),
                                   ),
                                 );
                               },
@@ -230,7 +263,9 @@ class _ForumPageState extends State<ForumPage> {
                               child: Text(
                                 "${t.replying_to} ${_replyTarget!.authorName}",
                                 style: TextStyle(
-                                  color: isDark ? Colors.white70 : Colors.black87,
+                                  color: isDark
+                                      ? Colors.white70
+                                      : Colors.black87,
                                   fontSize: 12,
                                 ),
                                 maxLines: 1,
@@ -254,7 +289,9 @@ class _ForumPageState extends State<ForumPage> {
                           child: TextField(
                             focusNode: _focusNode,
                             controller: _commentController,
-                            style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                            style: TextStyle(
+                              color: isDark ? Colors.white : Colors.black,
+                            ),
                             decoration: InputDecoration(
                               hintText: t.write_message,
                               hintStyle: const TextStyle(color: Colors.grey),
@@ -263,48 +300,79 @@ class _ForumPageState extends State<ForumPage> {
                                 borderSide: BorderSide.none,
                               ),
                               filled: true,
-                              fillColor: isDark ? Colors.grey[850] : Colors.grey[100],
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              fillColor: isDark
+                                  ? Colors.grey[850]
+                                  : Colors.grey[100],
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
                             ),
                           ),
                         ),
                         const SizedBox(width: 8),
                         IconButton(
-                          icon: const Icon(Icons.send, color: AmomimusDarkTheme.primaryPurple),
+                          icon: const Icon(
+                            Icons.send,
+                            color: AmomimusDarkTheme.primaryPurple,
+                          ),
                           onPressed: () {
-                            final currentUser = Provider.of<AccountManager>(context, listen: false).currentUser;
-                            if (_commentController.text.trim().isNotEmpty && currentUser != null) {
-                              final generatedName = AnonymousNames.getConsistentNameForPost(currentUser.amomimusId, currentFeed.id);
+                            final currentUser = Provider.of<AccountManager>(
+                              context,
+                              listen: false,
+                            ).currentUser;
+                            if (_commentController.text.trim().isNotEmpty &&
+                                currentUser != null) {
+                              final generatedName =
+                                  AnonymousNames.getConsistentNameForPost(
+                                    currentUser.amomimusId,
+                                    currentFeed.id,
+                                  );
                               final newComment = CommentModel(
                                 authorId: currentUser.amomimusId,
                                 authorName: generatedName,
                                 text: _commentController.text,
-                                timeStamp: "Just now",
+                                timeStamp: DateTime.now().toIso8601String(),
                                 replyToName: _replyTarget?.authorName,
                                 replyToText: _replyTarget?.text,
                               );
-                              
-                              Provider.of<FeedManager>(context, listen: false).addComment(currentFeed.id, newComment);
-                              
-                              final notifManager = Provider.of<NotificationManager>(context, listen: false);
-                              if (_replyTarget != null && _replyTarget?.authorId != currentUser.amomimusId) {
-                                notifManager.addNotification(NotificationModel(
-                                  targetUserId: _replyTarget!.authorId,
-                                  actorName: generatedName,
-                                  type: NotificationType.reply,
-                                  feedId: currentFeed.id,
-                                  message: "replied to your comment",
-                                ));
-                              } else if (currentFeed.realAuthorId != null && currentFeed.realAuthorId != currentUser.amomimusId) {
-                                notifManager.addNotification(NotificationModel(
-                                  targetUserId: currentFeed.realAuthorId!,
-                                  actorName: generatedName,
-                                  type: NotificationType.comment,
-                                  feedId: currentFeed.id,
-                                  message: "commented on your post",
-                                ));
+
+                              Provider.of<FeedManager>(
+                                context,
+                                listen: false,
+                              ).addComment(currentFeed.id, newComment);
+
+                              final notifManager =
+                                  Provider.of<NotificationManager>(
+                                    context,
+                                    listen: false,
+                                  );
+                              if (_replyTarget != null &&
+                                  _replyTarget?.authorId !=
+                                      currentUser.amomimusId) {
+                                notifManager.addNotification(
+                                  NotificationModel(
+                                    targetUserId: _replyTarget!.authorId,
+                                    actorName: generatedName,
+                                    type: NotificationType.reply,
+                                    feedId: currentFeed.id,
+                                    message: "replied to your comment",
+                                  ),
+                                );
+                              } else if (currentFeed.realAuthorId != null &&
+                                  currentFeed.realAuthorId !=
+                                      currentUser.amomimusId) {
+                                notifManager.addNotification(
+                                  NotificationModel(
+                                    targetUserId: currentFeed.realAuthorId!,
+                                    actorName: generatedName,
+                                    type: NotificationType.comment,
+                                    feedId: currentFeed.id,
+                                    message: "commented on your post",
+                                  ),
+                                );
                               }
-                              
+
                               _commentController.clear();
                               setState(() {
                                 _replyTarget = null;

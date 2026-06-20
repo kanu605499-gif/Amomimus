@@ -18,21 +18,21 @@ class BreathingEffect extends StatefulWidget {
   State<BreathingEffect> createState() => _BreathingEffectState();
 }
 
-class _BreathingEffectState extends State<BreathingEffect> with SingleTickerProviderStateMixin {
+class _BreathingEffectState extends State<BreathingEffect>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    )..repeat(reverse: true);
+    _controller = AnimationController(vsync: this, duration: widget.duration)
+      ..repeat(reverse: true);
 
-    _opacityAnimation = Tween<double>(begin: widget.minOpacity, end: widget.maxOpacity).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOutSine),
-    );
+    _opacityAnimation =
+        Tween<double>(begin: widget.minOpacity, end: widget.maxOpacity).animate(
+          CurvedAnimation(parent: _controller, curve: Curves.easeInOutSine),
+        );
   }
 
   @override
@@ -43,9 +43,6 @@ class _BreathingEffectState extends State<BreathingEffect> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: _opacityAnimation,
-      child: widget.child,
-    );
+    return FadeTransition(opacity: _opacityAnimation, child: widget.child);
   }
 }

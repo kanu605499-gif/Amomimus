@@ -261,6 +261,53 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get email_already_registered_title => '登録に失敗しました';
 	@override String get email_already_registered_desc => 'このメールアドレスは既に登録されています。代わりにログインしますか？';
 	@override String get go_to_login => 'ログインする';
+	@override String get delayed_sync_msg => 'おっと！今、私たちのサーバーがあなたのスマホに対して少し照れているようです。ご心配なく。メッセージは安全に保存されており、サーバーが同期され次第、すぐにお届けします！';
+	@override String get delayed_sync_title => 'Delayed Sync';
+	@override String get delayed_sync_feed_msg => 'おっと！今、私たちのサーバーがあなたのスマホに対して少し照れているようです。ご心配なく。投稿は安全に保存されており、サーバーが同期され次第、すぐに公開します！';
+	@override String get delayed_sync_feed_title => 'Delayed Post';
+	@override String get message_is_pending => 'メッセージは保留中です...';
+	@override String get message_successfully_sent => 'メッセージが正常に送信されました';
+	@override String get room_chat_resetted => '新しいメッセージがあります';
+	@override String get started_at => '開始:';
+	@override String get end_at => '終了:';
+	@override String get resend => '再送信';
+	@override String get delete_selected => '選択を削除';
+	@override String get failed_to_send => '送信に失敗しました';
+	@override String get resend_confirm_title => '再送信の確認';
+	@override String get resend_confirm_desc => '再送信の順序は正しいですか？メッセージは順番に送信されます。';
+	@override String get delete_confirm_desc => 'このメッセージを削除してもよろしいですか？';
+	@override String get cheat_detected_warning => '携帯電話のシステム時間を手動で変更した疑いがあります。セキュリティのため、チャットルームはリセットされました。';
+	@override String get cheat_partner_warning => 'パートナーがシステム時間を変更した疑いがあります。';
+	@override String get copy => 'Copy';
+	@override String get copied_to_clipboard => 'Copied to clipboard';
+	@override String get app_features_title => 'アプリの機能';
+	@override String get system_features_title => 'システムの機能';
+	@override String get feature_1_title => 'Dynamic Persona Theming';
+	@override String get feature_1_desc => 'インターフェースのテーマは、プロフィールに使用される性別（Amo、Amom、またはAmi）に適応し、各役割セッションに同期した視覚的なカスタマイズを提供します。';
+	@override String get feature_2_title => 'Interactive Mini Island';
+	@override String get feature_2_desc => 'ユーザーのインタラクションの快適さを容易にするために設計されたポータブル通知パネル。チャットエリアに浮かび、動的に上部のナビゲーションバー（App Bar）に融合します。';
+	@override String get feature_3_title => 'Glitch & Ex-Blocked';
+	@override String get feature_3_desc => 'ブロックとレポート機能に心理的な影響を与えるように設計されています。以前ブロックされたユーザーとのインタラクションは、視覚的な歪みの警告を引き起こし、自然な注意を促します。';
+	@override String get feature_4_title => 'Memories & Activity Log';
+	@override String get feature_4_desc => '包括的なロギングユーティリティを提供します。重要なメッセージをMemoriesにピン留めでき、Chat Logは自律的にルームの履歴とアクティビティの時系列を記録します。';
+	@override String get feature_5_title => 'Floating Countdown Capsule';
+	@override String get feature_5_desc => 'ユーザーがチャットの残り時間を認識できるようにするインタラクティブな時間追跡モジュール。メッセージの読み取り領域を遮らないように自由にドラッグアンドドロップできます。';
+	@override String get system_1_title => 'Hybrid Sync Engine';
+	@override String get system_1_desc => 'メッセージングアーキテクチャは、インテリジェントな非同期シミュレーションエンジンを利用しています。保留中、成功、失敗の処理に至るまで、メッセージのライフサイクルを非常にリアルに管理します。';
+	@override String get system_2_title => 'Secret "Human" Cheat Detection';
+	@override String get system_2_desc => 'チャットのスポーツマンシップを維持する目に見えないセキュリティプロトコル。禁止された会話パターンをパッシブにスキャンし、アプリのパフォーマンスに負担をかけることなく違反者を警告します。';
+	@override String get system_3_title => 'State Persistence Core';
+	@override String get system_3_desc => 'すべてのステータス設定、ログ、およびインタラクションは、API統合と組み合わせたハイブリッドローカルメソッドを介して管理されます。アプリが閉じられて再度開かれたときに、チャットの重要なデータがそのまま残ることを保証します。';
+	@override String get chat_log_title => 'Chat Log';
+	@override String get chat_log_empty => 'チャットログはまだありません。';
+	@override String get chat_log_system => 'システム';
+	@override String get chat_log_room_created => 'チャットが開始されました';
+	@override String get chat_log_room_expired => 'カウントダウンリセット：チャットルームがクリアされました';
+	@override String chat_log_delete_room({required Object actor}) => '${actor}がこのチャットルームを削除しました';
+	@override String chat_log_pin({required Object actor}) => '${actor}がメッセージをMemoriesにピン留めしました';
+	@override String chat_log_unpin({required Object actor}) => '${actor}がMemoriesからメッセージのピン留めを解除しました';
+	@override String chat_log_erase({required Object actor}) => '${actor}がMemoriesからメッセージを完全に消去しました';
+	@override String get reloading_whispers => 'いくつかのささやきを再読み込み中...';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -493,6 +540,53 @@ extension on TranslationsJa {
 			'email_already_registered_title' => '登録に失敗しました',
 			'email_already_registered_desc' => 'このメールアドレスは既に登録されています。代わりにログインしますか？',
 			'go_to_login' => 'ログインする',
+			'delayed_sync_msg' => 'おっと！今、私たちのサーバーがあなたのスマホに対して少し照れているようです。ご心配なく。メッセージは安全に保存されており、サーバーが同期され次第、すぐにお届けします！',
+			'delayed_sync_title' => 'Delayed Sync',
+			'delayed_sync_feed_msg' => 'おっと！今、私たちのサーバーがあなたのスマホに対して少し照れているようです。ご心配なく。投稿は安全に保存されており、サーバーが同期され次第、すぐに公開します！',
+			'delayed_sync_feed_title' => 'Delayed Post',
+			'message_is_pending' => 'メッセージは保留中です...',
+			'message_successfully_sent' => 'メッセージが正常に送信されました',
+			'room_chat_resetted' => '新しいメッセージがあります',
+			'started_at' => '開始:',
+			'end_at' => '終了:',
+			'resend' => '再送信',
+			'delete_selected' => '選択を削除',
+			'failed_to_send' => '送信に失敗しました',
+			'resend_confirm_title' => '再送信の確認',
+			'resend_confirm_desc' => '再送信の順序は正しいですか？メッセージは順番に送信されます。',
+			'delete_confirm_desc' => 'このメッセージを削除してもよろしいですか？',
+			'cheat_detected_warning' => '携帯電話のシステム時間を手動で変更した疑いがあります。セキュリティのため、チャットルームはリセットされました。',
+			'cheat_partner_warning' => 'パートナーがシステム時間を変更した疑いがあります。',
+			'copy' => 'Copy',
+			'copied_to_clipboard' => 'Copied to clipboard',
+			'app_features_title' => 'アプリの機能',
+			'system_features_title' => 'システムの機能',
+			'feature_1_title' => 'Dynamic Persona Theming',
+			'feature_1_desc' => 'インターフェースのテーマは、プロフィールに使用される性別（Amo、Amom、またはAmi）に適応し、各役割セッションに同期した視覚的なカスタマイズを提供します。',
+			'feature_2_title' => 'Interactive Mini Island',
+			'feature_2_desc' => 'ユーザーのインタラクションの快適さを容易にするために設計されたポータブル通知パネル。チャットエリアに浮かび、動的に上部のナビゲーションバー（App Bar）に融合します。',
+			'feature_3_title' => 'Glitch & Ex-Blocked',
+			'feature_3_desc' => 'ブロックとレポート機能に心理的な影響を与えるように設計されています。以前ブロックされたユーザーとのインタラクションは、視覚的な歪みの警告を引き起こし、自然な注意を促します。',
+			'feature_4_title' => 'Memories & Activity Log',
+			'feature_4_desc' => '包括的なロギングユーティリティを提供します。重要なメッセージをMemoriesにピン留めでき、Chat Logは自律的にルームの履歴とアクティビティの時系列を記録します。',
+			'feature_5_title' => 'Floating Countdown Capsule',
+			'feature_5_desc' => 'ユーザーがチャットの残り時間を認識できるようにするインタラクティブな時間追跡モジュール。メッセージの読み取り領域を遮らないように自由にドラッグアンドドロップできます。',
+			'system_1_title' => 'Hybrid Sync Engine',
+			'system_1_desc' => 'メッセージングアーキテクチャは、インテリジェントな非同期シミュレーションエンジンを利用しています。保留中、成功、失敗の処理に至るまで、メッセージのライフサイクルを非常にリアルに管理します。',
+			'system_2_title' => 'Secret "Human" Cheat Detection',
+			'system_2_desc' => 'チャットのスポーツマンシップを維持する目に見えないセキュリティプロトコル。禁止された会話パターンをパッシブにスキャンし、アプリのパフォーマンスに負担をかけることなく違反者を警告します。',
+			'system_3_title' => 'State Persistence Core',
+			'system_3_desc' => 'すべてのステータス設定、ログ、およびインタラクションは、API統合と組み合わせたハイブリッドローカルメソッドを介して管理されます。アプリが閉じられて再度開かれたときに、チャットの重要なデータがそのまま残ることを保証します。',
+			'chat_log_title' => 'Chat Log',
+			'chat_log_empty' => 'チャットログはまだありません。',
+			'chat_log_system' => 'システム',
+			'chat_log_room_created' => 'チャットが開始されました',
+			'chat_log_room_expired' => 'カウントダウンリセット：チャットルームがクリアされました',
+			'chat_log_delete_room' => ({required Object actor}) => '${actor}がこのチャットルームを削除しました',
+			'chat_log_pin' => ({required Object actor}) => '${actor}がメッセージをMemoriesにピン留めしました',
+			'chat_log_unpin' => ({required Object actor}) => '${actor}がMemoriesからメッセージのピン留めを解除しました',
+			'chat_log_erase' => ({required Object actor}) => '${actor}がMemoriesからメッセージを完全に消去しました',
+			'reloading_whispers' => 'いくつかのささやきを再読み込み中...',
 			_ => null,
 		};
 	}

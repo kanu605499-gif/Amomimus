@@ -65,7 +65,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onPressed: _finishOnboarding,
                 child: Text(
                   t.skip,
-                  style: const TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 16),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),
@@ -130,13 +134,17 @@ class _Slide1WelcomeIcons extends StatefulWidget {
   State<_Slide1WelcomeIcons> createState() => _Slide1WelcomeIconsState();
 }
 
-class _Slide1WelcomeIconsState extends State<_Slide1WelcomeIcons> with SingleTickerProviderStateMixin {
+class _Slide1WelcomeIconsState extends State<_Slide1WelcomeIcons>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 3000))..repeat();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3000),
+    )..repeat();
   }
 
   @override
@@ -162,59 +170,87 @@ class _Slide1WelcomeIconsState extends State<_Slide1WelcomeIcons> with SingleTic
                 _buildAnimatedBox(
                   icon: Icons.diamond_outlined,
                   iconColor: const Color(0xFFB388FF), // Vivid pastel purple
-                  bgColor: const Color.fromARGB(255, 250, 246, 255), // Login screen purple bg
+                  bgColor: const Color.fromARGB(
+                    255,
+                    250,
+                    246,
+                    255,
+                  ), // Login screen purple bg
                   delay: 0.0,
                 ),
                 const SizedBox(width: 15),
                 _buildAnimatedBox(
                   icon: Icons.android_outlined,
                   iconColor: const Color(0xFFFFCA28), // Visible amber yellow
-                  bgColor: const Color.fromARGB(255, 255, 251, 240), // Login screen yellow bg
+                  bgColor: const Color.fromARGB(
+                    255,
+                    255,
+                    251,
+                    240,
+                  ), // Login screen yellow bg
                   delay: 2.0,
                 ),
                 const SizedBox(width: 15),
                 _buildAnimatedBox(
                   icon: Icons.water_outlined,
                   iconColor: const Color(0xFFBDBDBD), // Visible grey
-                  bgColor: const Color.fromARGB(255, 248, 248, 248), // Login screen grey bg
+                  bgColor: const Color.fromARGB(
+                    255,
+                    248,
+                    248,
+                    248,
+                  ), // Login screen grey bg
                   delay: 4.0,
                 ),
               ],
             ),
             const SizedBox(height: 60),
             Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: RichText(
-              textAlign: TextAlign.center,
-              text: TextSpan(
-                text: t.welcome_to,
-                style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.black),
-                children: const [
-                  TextSpan(
-                    text: "Amomimus",
-                    style: TextStyle(color: Color(0xff684ca3)),
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: t.welcome_to,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
                   ),
-                  TextSpan(text: "!"),
-                ],
+                  children: const [
+                    TextSpan(
+                      text: "Amomimus",
+                      style: TextStyle(color: Color(0xff684ca3)),
+                    ),
+                    TextSpan(text: "!"),
+                  ],
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Text(
-              t.safe_space_desc,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, color: Colors.black54, height: 1.5),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Text(
+                t.safe_space_desc,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                  height: 1.5,
+                ),
+              ),
             ),
-          ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildAnimatedBox({required IconData icon, required Color iconColor, required Color bgColor, required double delay}) {
+  Widget _buildAnimatedBox({
+    required IconData icon,
+    required Color iconColor,
+    required Color bgColor,
+    required double delay,
+  }) {
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -228,9 +264,7 @@ class _Slide1WelcomeIconsState extends State<_Slide1WelcomeIcons> with SingleTic
               color: bgColor,
               borderRadius: BorderRadius.circular(18),
             ),
-            child: Center(
-              child: Icon(icon, size: 36, color: iconColor),
-            ),
+            child: Center(child: Icon(icon, size: 36, color: iconColor)),
           ),
         );
       },
@@ -245,16 +279,21 @@ class _Slide2IdentityProtection extends StatefulWidget {
   final bool fromDrawer;
   const _Slide2IdentityProtection({required this.fromDrawer});
   @override
-  State<_Slide2IdentityProtection> createState() => _Slide2IdentityProtectionState();
+  State<_Slide2IdentityProtection> createState() =>
+      _Slide2IdentityProtectionState();
 }
 
-class _Slide2IdentityProtectionState extends State<_Slide2IdentityProtection> with SingleTickerProviderStateMixin {
+class _Slide2IdentityProtectionState extends State<_Slide2IdentityProtection>
+    with SingleTickerProviderStateMixin {
   late AnimationController _fadeController;
 
   @override
   void initState() {
     super.initState();
-    _fadeController = AnimationController(vsync: this, duration: const Duration(milliseconds: 600))..repeat(reverse: true);
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    )..repeat(reverse: true);
   }
 
   @override
@@ -281,12 +320,13 @@ class _Slide2IdentityProtectionState extends State<_Slide2IdentityProtection> wi
                 builder: (context, child) {
                   // Heartbeat scale effect
                   final scale = 1.0 + (_fadeController.value * 0.15);
-                  return Transform.scale(
-                    scale: scale,
-                    child: child,
-                  );
+                  return Transform.scale(scale: scale, child: child);
                 },
-                child: const Icon(Icons.shield_outlined, size: 120, color: Color(0xFFFFD54F)),
+                child: const Icon(
+                  Icons.shield_outlined,
+                  size: 120,
+                  color: Color(0xFFFFD54F),
+                ),
               ),
               const SizedBox(height: 40),
               RichText(
@@ -332,13 +372,14 @@ class _Slide3TheIndicators extends StatefulWidget {
   State<_Slide3TheIndicators> createState() => _Slide3TheIndicatorsState();
 }
 
-class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerProviderStateMixin {
+class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators>
+    with TickerProviderStateMixin {
   late AnimationController _particleController;
   late AnimationController _sequenceController;
-  
+
   Color _particleColor = UserIndicatorHelper.cloudyColor;
   String _currentIndicator = "CLOUDY";
-  
+
   List<_Particle> particles = [];
   final int maxParticles = 50;
 
@@ -346,10 +387,16 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerP
   void initState() {
     super.initState();
     // Particle continuous animation
-    _particleController = AnimationController(vsync: this, duration: const Duration(seconds: 2))..repeat();
-    
+    _particleController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat();
+
     // Sequence to cycle between Cloudy -> Ghost -> Noise
-    _sequenceController = AnimationController(vsync: this, duration: const Duration(seconds: 9))..repeat();
+    _sequenceController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 9),
+    )..repeat();
     _sequenceController.addListener(_updateSequence);
 
     _initParticles();
@@ -357,11 +404,13 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerP
 
   void _initParticles() {
     for (int i = 0; i < maxParticles; i++) {
-      particles.add(_Particle(
-        x: math.Random().nextDouble(),
-        y: math.Random().nextDouble(),
-        speed: 0.2 + math.Random().nextDouble() * 0.5,
-      ));
+      particles.add(
+        _Particle(
+          x: math.Random().nextDouble(),
+          y: math.Random().nextDouble(),
+          speed: 0.2 + math.Random().nextDouble() * 0.5,
+        ),
+      );
     }
   }
 
@@ -411,45 +460,60 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerP
             animation: _particleController,
             builder: (context, child) {
               return CustomPaint(
-                painter: _ParticlePainter(particles, _particleController.value, _particleColor),
+                painter: _ParticlePainter(
+                  particles,
+                  _particleController.value,
+                  _particleColor,
+                ),
                 size: Size.infinite,
               );
             },
           ),
-          
+
           // Content
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                padding: const EdgeInsets.only(bottom: 20, left: 40, right: 40),
-                child: Text(
-                  t.intro_indicators,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: 0.5,
+                  padding: const EdgeInsets.only(
+                    bottom: 20,
+                    left: 40,
+                    right: 40,
+                  ),
+                  child: Text(
+                    t.intro_indicators,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      letterSpacing: 0.5,
+                    ),
                   ),
                 ),
-              ), 
                 const SizedBox(height: 10),
                 AnimatedSwitcher(
                   duration: const Duration(milliseconds: 600),
-                  transitionBuilder: (Widget child, Animation<double> animation) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(0.0, 0.5),
-                        end: Offset.zero,
-                      ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOutCubic)),
-                      child: FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      ),
-                    );
-                  },
+                  transitionBuilder:
+                      (Widget child, Animation<double> animation) {
+                        return SlideTransition(
+                          position:
+                              Tween<Offset>(
+                                begin: const Offset(0.0, 0.5),
+                                end: Offset.zero,
+                              ).animate(
+                                CurvedAnimation(
+                                  parent: animation,
+                                  curve: Curves.easeOutCubic,
+                                ),
+                              ),
+                          child: FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          ),
+                        );
+                      },
                   child: Text(
                     _currentIndicator,
                     key: ValueKey<String>(_currentIndicator),
@@ -479,9 +543,21 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerP
       return RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
-          style: const TextStyle(color: Colors.white70, fontSize: 15, height: 1.5, letterSpacing: 0.3),
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 15,
+            height: 1.5,
+            letterSpacing: 0.3,
+          ),
           children: [
-            TextSpan(text: t.neutral, style: const TextStyle(color: UserIndicatorHelper.cloudyColor, fontWeight: FontWeight.bold, fontSize: 16)),
+            TextSpan(
+              text: t.neutral,
+              style: const TextStyle(
+                color: UserIndicatorHelper.cloudyColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
             TextSpan(text: t.users_participate_normally),
           ],
         ),
@@ -490,9 +566,21 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerP
       return RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
-          style: const TextStyle(color: Colors.white70, fontSize: 15, height: 1.5, letterSpacing: 0.3),
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 15,
+            height: 1.5,
+            letterSpacing: 0.3,
+          ),
           children: [
-            TextSpan(text: t.amoral, style: const TextStyle(color: UserIndicatorHelper.ghostColor, fontWeight: FontWeight.bold, fontSize: 16)),
+            TextSpan(
+              text: t.amoral,
+              style: const TextStyle(
+                color: UserIndicatorHelper.ghostColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
             TextSpan(text: t.users_nonchalant),
           ],
         ),
@@ -501,9 +589,21 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators> with TickerP
       return RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
-          style: const TextStyle(color: Colors.white70, fontSize: 15, height: 1.5, letterSpacing: 0.3),
+          style: const TextStyle(
+            color: Colors.white70,
+            fontSize: 15,
+            height: 1.5,
+            letterSpacing: 0.3,
+          ),
           children: [
-            TextSpan(text: t.toxic, style: const TextStyle(color: UserIndicatorHelper.noiseColor, fontWeight: FontWeight.bold, fontSize: 16)),
+            TextSpan(
+              text: t.toxic,
+              style: const TextStyle(
+                color: UserIndicatorHelper.noiseColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
             TextSpan(text: t.users_flagged),
           ],
         ),
@@ -528,14 +628,16 @@ class _ParticlePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color.withValues(alpha: 0.6)..style = PaintingStyle.fill;
-    
+    final paint = Paint()
+      ..color = color.withValues(alpha: 0.6)
+      ..style = PaintingStyle.fill;
+
     final double time = DateTime.now().millisecondsSinceEpoch / 2000.0;
-    
+
     for (var p in particles) {
       double currentY = (p.y - (time * p.speed)) % 1.0;
       if (currentY < 0) currentY += 1.0; // Wrap around safely
-      
+
       canvas.drawCircle(
         Offset(p.x * size.width, currentY * size.height),
         3.0, // Particle radius
@@ -555,16 +657,21 @@ class _Slide4SafeAndRespectful extends StatefulWidget {
   final bool fromDrawer;
   const _Slide4SafeAndRespectful({required this.fromDrawer});
   @override
-  State<_Slide4SafeAndRespectful> createState() => _Slide4SafeAndRespectfulState();
+  State<_Slide4SafeAndRespectful> createState() =>
+      _Slide4SafeAndRespectfulState();
 }
 
-class _Slide4SafeAndRespectfulState extends State<_Slide4SafeAndRespectful> with SingleTickerProviderStateMixin {
+class _Slide4SafeAndRespectfulState extends State<_Slide4SafeAndRespectful>
+    with SingleTickerProviderStateMixin {
   late AnimationController _danceController;
 
   @override
   void initState() {
     super.initState();
-    _danceController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1500))..repeat();
+    _danceController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat();
   }
 
   @override
@@ -587,20 +694,26 @@ class _Slide4SafeAndRespectfulState extends State<_Slide4SafeAndRespectful> with
             AnimatedBuilder(
               animation: _danceController,
               builder: (context, child) {
-                final angle = math.sin(_danceController.value * math.pi * 2) * 0.2;
-                return Transform.rotate(
-                  angle: angle,
-                  child: child,
-                );
+                final angle =
+                    math.sin(_danceController.value * math.pi * 2) * 0.2;
+                return Transform.rotate(angle: angle, child: child);
               },
-              child: const Icon(Icons.handshake_outlined, size: 100, color: Color(0xFFFFD54F)),
+              child: const Icon(
+                Icons.handshake_outlined,
+                size: 100,
+                color: Color(0xFFFFD54F),
+              ),
             ),
             const SizedBox(height: 40),
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
                 text: t.safe_and,
-                style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w600, color: Colors.black87),
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
                 children: [
                   TextSpan(
                     text: t.respectful,
@@ -621,4 +734,5 @@ class _Slide4SafeAndRespectfulState extends State<_Slide4SafeAndRespectful> with
     );
   }
 }
+
 // End of Onboarding Screen

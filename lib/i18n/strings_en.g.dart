@@ -712,6 +712,147 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
 	/// en: 'Go to Login'
 	String get go_to_login => 'Go to Login';
+
+	/// en: 'Whoops! It seems our server is being a bit shy to your phone right now. Don't worry, your message is saved securely and we'll deliver it ASAP when our server synchronized!'
+	String get delayed_sync_msg => 'Whoops! It seems our server is being a bit shy to your phone right now. Don\'t worry, your message is saved securely and we\'ll deliver it ASAP when our server synchronized!';
+
+	/// en: 'Delayed Sync'
+	String get delayed_sync_title => 'Delayed Sync';
+
+	/// en: 'Whoops! It seems our server is being a bit shy to your phone right now. Don't worry, your post is saved securely and we'll publish it ASAP when our server synchronized!'
+	String get delayed_sync_feed_msg => 'Whoops! It seems our server is being a bit shy to your phone right now. Don\'t worry, your post is saved securely and we\'ll publish it ASAP when our server synchronized!';
+
+	/// en: 'Delayed Post'
+	String get delayed_sync_feed_title => 'Delayed Post';
+
+	/// en: 'Message is pending...'
+	String get message_is_pending => 'Message is pending...';
+
+	/// en: 'Message successfully sent'
+	String get message_successfully_sent => 'Message successfully sent';
+
+	/// en: 'You got a new message'
+	String get room_chat_resetted => 'You got a new message';
+
+	/// en: 'Started at:'
+	String get started_at => 'Started at:';
+
+	/// en: 'End at:'
+	String get end_at => 'End at:';
+
+	/// en: 'Resend'
+	String get resend => 'Resend';
+
+	/// en: 'Delete Selected'
+	String get delete_selected => 'Delete Selected';
+
+	/// en: 'Failed to send'
+	String get failed_to_send => 'Failed to send';
+
+	/// en: 'Resend Confirmation'
+	String get resend_confirm_title => 'Resend Confirmation';
+
+	/// en: 'Is your resend order correct? Messages will be sent sequentially.'
+	String get resend_confirm_desc => 'Is your resend order correct? Messages will be sent sequentially.';
+
+	/// en: 'Are you sure you want to delete this message?'
+	String get delete_confirm_desc => 'Are you sure you want to delete this message?';
+
+	/// en: 'You are suspected of manually changing your phone's system time. The chat room has been reset for security.'
+	String get cheat_detected_warning => 'You are suspected of manually changing your phone\'s system time. The chat room has been reset for security.';
+
+	/// en: 'Your partner is suspected of changing their system time.'
+	String get cheat_partner_warning => 'Your partner is suspected of changing their system time.';
+
+	/// en: 'Copy'
+	String get copy => 'Copy';
+
+	/// en: 'Copied to clipboard'
+	String get copied_to_clipboard => 'Copied to clipboard';
+
+	/// en: 'App Features'
+	String get app_features_title => 'App Features';
+
+	/// en: 'System Features'
+	String get system_features_title => 'System Features';
+
+	/// en: 'Dynamic Persona Theming'
+	String get feature_1_title => 'Dynamic Persona Theming';
+
+	/// en: 'The interface theme adapts to your profile's gender (Amo, Amom, or Ami), delivering a synchronized visual customization for every role session.'
+	String get feature_1_desc => 'The interface theme adapts to your profile\'s gender (Amo, Amom, or Ami), delivering a synchronized visual customization for every role session.';
+
+	/// en: 'Interactive Mini Island'
+	String get feature_2_title => 'Interactive Mini Island';
+
+	/// en: 'A portable notification panel designed for interaction comfort. It floats in the chat area and dynamically morphs into the top navigation bar.'
+	String get feature_2_desc => 'A portable notification panel designed for interaction comfort. It floats in the chat area and dynamically morphs into the top navigation bar.';
+
+	/// en: 'Glitch & Ex-Blocked'
+	String get feature_3_title => 'Glitch & Ex-Blocked';
+
+	/// en: 'Designed to give psychological weight to blocking and reporting. Interactions with an ex-blocked user trigger a visual distortion warning, instilling natural caution.'
+	String get feature_3_desc => 'Designed to give psychological weight to blocking and reporting. Interactions with an ex-blocked user trigger a visual distortion warning, instilling natural caution.';
+
+	/// en: 'Memories & Activity Log'
+	String get feature_4_title => 'Memories & Activity Log';
+
+	/// en: 'Provides comprehensive logging utilities. You can pin crucial messages to Memories, while the Chat Log autonomously documents the room's history and activity chronology.'
+	String get feature_4_desc => 'Provides comprehensive logging utilities. You can pin crucial messages to Memories, while the Chat Log autonomously documents the room\'s history and activity chronology.';
+
+	/// en: 'Floating Countdown Capsule'
+	String get feature_5_title => 'Floating Countdown Capsule';
+
+	/// en: 'An interactive time tracker module ensuring users remain aware of the chat duration. It can be freely dragged and dropped to avoid blocking the reading area.'
+	String get feature_5_desc => 'An interactive time tracker module ensuring users remain aware of the chat duration. It can be freely dragged and dropped to avoid blocking the reading area.';
+
+	/// en: 'Hybrid Sync Engine'
+	String get system_1_title => 'Hybrid Sync Engine';
+
+	/// en: 'The messaging architecture is powered by an intelligent asynchronous simulation engine. It manages message lifecycles from pending, success, to failure handling with high realism.'
+	String get system_1_desc => 'The messaging architecture is powered by an intelligent asynchronous simulation engine. It manages message lifecycles from pending, success, to failure handling with high realism.';
+
+	/// en: 'Secret "Human" Cheat Detection'
+	String get system_2_title => 'Secret "Human" Cheat Detection';
+
+	/// en: 'An invisible security protocol maintaining chat sportsmanship. It passively scans for forbidden behavioral patterns and reprimands violators without burdening app performance.'
+	String get system_2_desc => 'An invisible security protocol maintaining chat sportsmanship. It passively scans for forbidden behavioral patterns and reprimands violators without burdening app performance.';
+
+	/// en: 'State Persistence Core'
+	String get system_3_title => 'State Persistence Core';
+
+	/// en: 'All status preferences, logs, and interactions are managed via a hybrid local method combined with API integration. Ensuring critical chat data remains intact across sessions.'
+	String get system_3_desc => 'All status preferences, logs, and interactions are managed via a hybrid local method combined with API integration. Ensuring critical chat data remains intact across sessions.';
+
+	/// en: 'Chat Log'
+	String get chat_log_title => 'Chat Log';
+
+	/// en: 'No chat log yet.'
+	String get chat_log_empty => 'No chat log yet.';
+
+	/// en: 'System'
+	String get chat_log_system => 'System';
+
+	/// en: 'Chat started'
+	String get chat_log_room_created => 'Chat started';
+
+	/// en: 'Countdown reset: Chat room cleared'
+	String get chat_log_room_expired => 'Countdown reset: Chat room cleared';
+
+	/// en: '${actor} deleted this chat room'
+	String chat_log_delete_room({required Object actor}) => '${actor} deleted this chat room';
+
+	/// en: '${actor} pinned a message to Memories'
+	String chat_log_pin({required Object actor}) => '${actor} pinned a message to Memories';
+
+	/// en: '${actor} unpinned a message from Memories'
+	String chat_log_unpin({required Object actor}) => '${actor} unpinned a message from Memories';
+
+	/// en: '${actor} permanently erased a message from Memories'
+	String chat_log_erase({required Object actor}) => '${actor} permanently erased a message from Memories';
+
+	/// en: 'Reloading Some Whispers...'
+	String get reloading_whispers => 'Reloading Some Whispers...';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -946,6 +1087,53 @@ extension on Translations {
 			'email_already_registered_title' => 'Registration Failed',
 			'email_already_registered_desc' => 'This email is already registered. Would you like to log in instead?',
 			'go_to_login' => 'Go to Login',
+			'delayed_sync_msg' => 'Whoops! It seems our server is being a bit shy to your phone right now. Don\'t worry, your message is saved securely and we\'ll deliver it ASAP when our server synchronized!',
+			'delayed_sync_title' => 'Delayed Sync',
+			'delayed_sync_feed_msg' => 'Whoops! It seems our server is being a bit shy to your phone right now. Don\'t worry, your post is saved securely and we\'ll publish it ASAP when our server synchronized!',
+			'delayed_sync_feed_title' => 'Delayed Post',
+			'message_is_pending' => 'Message is pending...',
+			'message_successfully_sent' => 'Message successfully sent',
+			'room_chat_resetted' => 'You got a new message',
+			'started_at' => 'Started at:',
+			'end_at' => 'End at:',
+			'resend' => 'Resend',
+			'delete_selected' => 'Delete Selected',
+			'failed_to_send' => 'Failed to send',
+			'resend_confirm_title' => 'Resend Confirmation',
+			'resend_confirm_desc' => 'Is your resend order correct? Messages will be sent sequentially.',
+			'delete_confirm_desc' => 'Are you sure you want to delete this message?',
+			'cheat_detected_warning' => 'You are suspected of manually changing your phone\'s system time. The chat room has been reset for security.',
+			'cheat_partner_warning' => 'Your partner is suspected of changing their system time.',
+			'copy' => 'Copy',
+			'copied_to_clipboard' => 'Copied to clipboard',
+			'app_features_title' => 'App Features',
+			'system_features_title' => 'System Features',
+			'feature_1_title' => 'Dynamic Persona Theming',
+			'feature_1_desc' => 'The interface theme adapts to your profile\'s gender (Amo, Amom, or Ami), delivering a synchronized visual customization for every role session.',
+			'feature_2_title' => 'Interactive Mini Island',
+			'feature_2_desc' => 'A portable notification panel designed for interaction comfort. It floats in the chat area and dynamically morphs into the top navigation bar.',
+			'feature_3_title' => 'Glitch & Ex-Blocked',
+			'feature_3_desc' => 'Designed to give psychological weight to blocking and reporting. Interactions with an ex-blocked user trigger a visual distortion warning, instilling natural caution.',
+			'feature_4_title' => 'Memories & Activity Log',
+			'feature_4_desc' => 'Provides comprehensive logging utilities. You can pin crucial messages to Memories, while the Chat Log autonomously documents the room\'s history and activity chronology.',
+			'feature_5_title' => 'Floating Countdown Capsule',
+			'feature_5_desc' => 'An interactive time tracker module ensuring users remain aware of the chat duration. It can be freely dragged and dropped to avoid blocking the reading area.',
+			'system_1_title' => 'Hybrid Sync Engine',
+			'system_1_desc' => 'The messaging architecture is powered by an intelligent asynchronous simulation engine. It manages message lifecycles from pending, success, to failure handling with high realism.',
+			'system_2_title' => 'Secret "Human" Cheat Detection',
+			'system_2_desc' => 'An invisible security protocol maintaining chat sportsmanship. It passively scans for forbidden behavioral patterns and reprimands violators without burdening app performance.',
+			'system_3_title' => 'State Persistence Core',
+			'system_3_desc' => 'All status preferences, logs, and interactions are managed via a hybrid local method combined with API integration. Ensuring critical chat data remains intact across sessions.',
+			'chat_log_title' => 'Chat Log',
+			'chat_log_empty' => 'No chat log yet.',
+			'chat_log_system' => 'System',
+			'chat_log_room_created' => 'Chat started',
+			'chat_log_room_expired' => 'Countdown reset: Chat room cleared',
+			'chat_log_delete_room' => ({required Object actor}) => '${actor} deleted this chat room',
+			'chat_log_pin' => ({required Object actor}) => '${actor} pinned a message to Memories',
+			'chat_log_unpin' => ({required Object actor}) => '${actor} unpinned a message from Memories',
+			'chat_log_erase' => ({required Object actor}) => '${actor} permanently erased a message from Memories',
+			'reloading_whispers' => 'Reloading Some Whispers...',
 			_ => null,
 		};
 	}

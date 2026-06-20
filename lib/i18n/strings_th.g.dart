@@ -263,6 +263,53 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get email_already_registered_title => 'การลงทะเบียนล้มเหลว';
 	@override String get email_already_registered_desc => 'อีเมลนี้ได้รับการลงทะเบียนแล้ว คุณต้องการเข้าสู่ระบบแทนหรือไม่?';
 	@override String get go_to_login => 'เข้าสู่ระบบ';
+	@override String get delayed_sync_msg => 'อุ๊ย! ดูเหมือนเซิร์ฟเวอร์ของเราจะเขินโทรศัพท์ของคุณนิดหน่อย ไม่ต้องกังวล ข้อความของคุณถูกบันทึกไว้อย่างปลอดภัยแล้ว และเราจะส่งให้เร็วที่สุดเมื่อเซิร์ฟเวอร์ซิงโครไนซ์แล้ว!';
+	@override String get delayed_sync_title => 'Delayed Sync';
+	@override String get delayed_sync_feed_msg => 'อุ๊ย! ดูเหมือนเซิร์ฟเวอร์ของเราจะเขินโทรศัพท์ของคุณนิดหน่อย ไม่ต้องกังวล โพสต์ของคุณถูกบันทึกไว้อย่างปลอดภัยแล้ว และเราจะเผยแพร่ให้เร็วที่สุดเมื่อเซิร์ฟเวอร์ซิงโครไนซ์แล้ว!';
+	@override String get delayed_sync_feed_title => 'Delayed Post';
+	@override String get message_is_pending => 'ข้อความกำลังรอการดำเนินการ...';
+	@override String get message_successfully_sent => 'ส่งข้อความสำเร็จแล้ว';
+	@override String get room_chat_resetted => 'คุณมีข้อความใหม่';
+	@override String get started_at => 'เริ่มเมื่อ:';
+	@override String get end_at => 'สิ้นสุดเมื่อ:';
+	@override String get resend => 'ส่งใหม่';
+	@override String get delete_selected => 'ลบที่เลือก';
+	@override String get failed_to_send => 'ส่งไม่สำเร็จ';
+	@override String get resend_confirm_title => 'ยืนยันการส่งอีกครั้ง';
+	@override String get resend_confirm_desc => 'ลำดับการส่งซ้ำของคุณถูกต้องหรือไม่? ข้อความจะถูกส่งตามลำดับ';
+	@override String get delete_confirm_desc => 'แน่ใจหรือไม่ว่าต้องการลบข้อความนี้?';
+	@override String get cheat_detected_warning => 'คุณถูกสงสัยว่าเปลี่ยนเวลาของระบบโทรศัพท์ด้วยตนเอง ห้องสนทนาถูกรีเซ็ตเพื่อความปลอดภัย';
+	@override String get cheat_partner_warning => 'คู่สนทนาของคุณถูกสงสัยว่าเปลี่ยนเวลาของระบบ';
+	@override String get copy => 'Copy';
+	@override String get copied_to_clipboard => 'Copied to clipboard';
+	@override String get app_features_title => 'คุณสมบัติแอป';
+	@override String get system_features_title => 'คุณสมบัติระบบ';
+	@override String get feature_1_title => 'Dynamic Persona Theming';
+	@override String get feature_1_desc => 'ธีมของอินเทอร์เฟซจะปรับเปลี่ยนตามเพศโปรไฟล์ของคุณ (Amo, Amom หรือ Ami) ทำให้เกิดการปรับแต่งภาพที่ซิงโครไนซ์สำหรับทุกช่วงบทบาท';
+	@override String get feature_2_title => 'Interactive Mini Island';
+	@override String get feature_2_desc => 'แผงการแจ้งเตือนแบบพกพาที่ออกแบบมาเพื่ออำนวยความสะดวกในการโต้ตอบของผู้ใช้ มันลอยอยู่ในพื้นที่แชทและผสานเข้ากับแถบนำทางด้านบน (App Bar) แบบไดนามิก';
+	@override String get feature_3_title => 'Glitch & Ex-Blocked';
+	@override String get feature_3_desc => 'ออกแบบมาเพื่อให้ผลกระทบทางจิตวิทยาแก่คุณสมบัติการบล็อกและการรายงาน การโต้ตอบกับผู้ใช้ที่เคยถูกบล็อกจะทำให้เกิดคำเตือนความผิดเพี้ยนทางภาพเพื่อสร้างความระมัดระวังตามธรรมชาติ';
+	@override String get feature_4_title => 'Memories & Activity Log';
+	@override String get feature_4_desc => 'จัดเตรียมยูทิลิตี้การบันทึกที่ครอบคลุม คุณสามารถปักหมุดข้อความที่สำคัญลงใน Memories ได้ ในขณะที่ Chat Log จะบันทึกประวัติและลำดับเหตุการณ์ของห้องโดยอัตโนมัติ';
+	@override String get feature_5_title => 'Floating Countdown Capsule';
+	@override String get feature_5_desc => 'โมดูลตัวติดตามเวลาแบบอินเทอร์แอกทีฟที่ช่วยให้ผู้ใช้รับรู้ถึงระยะเวลาแชทที่เหลืออยู่ สามารถลากและวางได้อย่างอิสระเพื่อไม่ให้บดบังพื้นที่อ่านข้อความ';
+	@override String get system_1_title => 'Hybrid Sync Engine';
+	@override String get system_1_desc => 'สถาปัตยกรรมการส่งข้อความขับเคลื่อนโดยกลไกการจำลองแบบอะซิงโครนัสอัจฉริยะ โดยจัดการวงจรชีวิตของข้อความตั้งแต่รอดำเนินการ สำเร็จ ไปจนถึงการจัดการความล้มเหลวด้วยความสมจริงสูง';
+	@override String get system_2_title => 'Secret "Human" Cheat Detection';
+	@override String get system_2_desc => 'โปรโตคอลความปลอดภัยที่มองไม่เห็นซึ่งรักษาน้ำใจนักกีฬาในการแชท จะสแกนหารูปแบบพฤติกรรมที่ต้องห้ามแบบพาสซีฟ และตำหนิผู้ฝ่าฝืนโดยไม่เป็นภาระต่อประสิทธิภาพของแอป';
+	@override String get system_3_title => 'State Persistence Core';
+	@override String get system_3_desc => 'การตั้งค่าสถานะ บันทึก และการโต้ตอบทั้งหมดได้รับการจัดการผ่านวิธีการโลคัลไฮบริดที่รวมกับการรวม API เพื่อให้มั่นใจว่าข้อมูลแชทที่สำคัญจะยังคงอยู่เหมือนเดิมในทุกช่วงเวลา';
+	@override String get chat_log_title => 'Chat Log';
+	@override String get chat_log_empty => 'ยังไม่มีบันทึกการแชท';
+	@override String get chat_log_system => 'ระบบ';
+	@override String get chat_log_room_created => 'เริ่มแชท';
+	@override String get chat_log_room_expired => 'รีเซ็ตการนับถอยหลัง: ล้างห้องแชทแล้ว';
+	@override String chat_log_delete_room({required Object actor}) => '${actor} ลบห้องแชทนี้';
+	@override String chat_log_pin({required Object actor}) => '${actor} ปักหมุดข้อความไปยัง Memories';
+	@override String chat_log_unpin({required Object actor}) => '${actor} เลิกปักหมุดข้อความจาก Memories';
+	@override String chat_log_erase({required Object actor}) => '${actor} ลบข้อความออกจาก Memories อย่างถาวร';
+	@override String get reloading_whispers => 'กำลังโหลดเสียงกระซิบใหม่...';
 }
 
 /// The flat map containing all translations for locale <th>.
@@ -497,6 +544,53 @@ extension on TranslationsTh {
 			'email_already_registered_title' => 'การลงทะเบียนล้มเหลว',
 			'email_already_registered_desc' => 'อีเมลนี้ได้รับการลงทะเบียนแล้ว คุณต้องการเข้าสู่ระบบแทนหรือไม่?',
 			'go_to_login' => 'เข้าสู่ระบบ',
+			'delayed_sync_msg' => 'อุ๊ย! ดูเหมือนเซิร์ฟเวอร์ของเราจะเขินโทรศัพท์ของคุณนิดหน่อย ไม่ต้องกังวล ข้อความของคุณถูกบันทึกไว้อย่างปลอดภัยแล้ว และเราจะส่งให้เร็วที่สุดเมื่อเซิร์ฟเวอร์ซิงโครไนซ์แล้ว!',
+			'delayed_sync_title' => 'Delayed Sync',
+			'delayed_sync_feed_msg' => 'อุ๊ย! ดูเหมือนเซิร์ฟเวอร์ของเราจะเขินโทรศัพท์ของคุณนิดหน่อย ไม่ต้องกังวล โพสต์ของคุณถูกบันทึกไว้อย่างปลอดภัยแล้ว และเราจะเผยแพร่ให้เร็วที่สุดเมื่อเซิร์ฟเวอร์ซิงโครไนซ์แล้ว!',
+			'delayed_sync_feed_title' => 'Delayed Post',
+			'message_is_pending' => 'ข้อความกำลังรอการดำเนินการ...',
+			'message_successfully_sent' => 'ส่งข้อความสำเร็จแล้ว',
+			'room_chat_resetted' => 'คุณมีข้อความใหม่',
+			'started_at' => 'เริ่มเมื่อ:',
+			'end_at' => 'สิ้นสุดเมื่อ:',
+			'resend' => 'ส่งใหม่',
+			'delete_selected' => 'ลบที่เลือก',
+			'failed_to_send' => 'ส่งไม่สำเร็จ',
+			'resend_confirm_title' => 'ยืนยันการส่งอีกครั้ง',
+			'resend_confirm_desc' => 'ลำดับการส่งซ้ำของคุณถูกต้องหรือไม่? ข้อความจะถูกส่งตามลำดับ',
+			'delete_confirm_desc' => 'แน่ใจหรือไม่ว่าต้องการลบข้อความนี้?',
+			'cheat_detected_warning' => 'คุณถูกสงสัยว่าเปลี่ยนเวลาของระบบโทรศัพท์ด้วยตนเอง ห้องสนทนาถูกรีเซ็ตเพื่อความปลอดภัย',
+			'cheat_partner_warning' => 'คู่สนทนาของคุณถูกสงสัยว่าเปลี่ยนเวลาของระบบ',
+			'copy' => 'Copy',
+			'copied_to_clipboard' => 'Copied to clipboard',
+			'app_features_title' => 'คุณสมบัติแอป',
+			'system_features_title' => 'คุณสมบัติระบบ',
+			'feature_1_title' => 'Dynamic Persona Theming',
+			'feature_1_desc' => 'ธีมของอินเทอร์เฟซจะปรับเปลี่ยนตามเพศโปรไฟล์ของคุณ (Amo, Amom หรือ Ami) ทำให้เกิดการปรับแต่งภาพที่ซิงโครไนซ์สำหรับทุกช่วงบทบาท',
+			'feature_2_title' => 'Interactive Mini Island',
+			'feature_2_desc' => 'แผงการแจ้งเตือนแบบพกพาที่ออกแบบมาเพื่ออำนวยความสะดวกในการโต้ตอบของผู้ใช้ มันลอยอยู่ในพื้นที่แชทและผสานเข้ากับแถบนำทางด้านบน (App Bar) แบบไดนามิก',
+			'feature_3_title' => 'Glitch & Ex-Blocked',
+			'feature_3_desc' => 'ออกแบบมาเพื่อให้ผลกระทบทางจิตวิทยาแก่คุณสมบัติการบล็อกและการรายงาน การโต้ตอบกับผู้ใช้ที่เคยถูกบล็อกจะทำให้เกิดคำเตือนความผิดเพี้ยนทางภาพเพื่อสร้างความระมัดระวังตามธรรมชาติ',
+			'feature_4_title' => 'Memories & Activity Log',
+			'feature_4_desc' => 'จัดเตรียมยูทิลิตี้การบันทึกที่ครอบคลุม คุณสามารถปักหมุดข้อความที่สำคัญลงใน Memories ได้ ในขณะที่ Chat Log จะบันทึกประวัติและลำดับเหตุการณ์ของห้องโดยอัตโนมัติ',
+			'feature_5_title' => 'Floating Countdown Capsule',
+			'feature_5_desc' => 'โมดูลตัวติดตามเวลาแบบอินเทอร์แอกทีฟที่ช่วยให้ผู้ใช้รับรู้ถึงระยะเวลาแชทที่เหลืออยู่ สามารถลากและวางได้อย่างอิสระเพื่อไม่ให้บดบังพื้นที่อ่านข้อความ',
+			'system_1_title' => 'Hybrid Sync Engine',
+			'system_1_desc' => 'สถาปัตยกรรมการส่งข้อความขับเคลื่อนโดยกลไกการจำลองแบบอะซิงโครนัสอัจฉริยะ โดยจัดการวงจรชีวิตของข้อความตั้งแต่รอดำเนินการ สำเร็จ ไปจนถึงการจัดการความล้มเหลวด้วยความสมจริงสูง',
+			'system_2_title' => 'Secret "Human" Cheat Detection',
+			'system_2_desc' => 'โปรโตคอลความปลอดภัยที่มองไม่เห็นซึ่งรักษาน้ำใจนักกีฬาในการแชท จะสแกนหารูปแบบพฤติกรรมที่ต้องห้ามแบบพาสซีฟ และตำหนิผู้ฝ่าฝืนโดยไม่เป็นภาระต่อประสิทธิภาพของแอป',
+			'system_3_title' => 'State Persistence Core',
+			'system_3_desc' => 'การตั้งค่าสถานะ บันทึก และการโต้ตอบทั้งหมดได้รับการจัดการผ่านวิธีการโลคัลไฮบริดที่รวมกับการรวม API เพื่อให้มั่นใจว่าข้อมูลแชทที่สำคัญจะยังคงอยู่เหมือนเดิมในทุกช่วงเวลา',
+			'chat_log_title' => 'Chat Log',
+			'chat_log_empty' => 'ยังไม่มีบันทึกการแชท',
+			'chat_log_system' => 'ระบบ',
+			'chat_log_room_created' => 'เริ่มแชท',
+			'chat_log_room_expired' => 'รีเซ็ตการนับถอยหลัง: ล้างห้องแชทแล้ว',
+			'chat_log_delete_room' => ({required Object actor}) => '${actor} ลบห้องแชทนี้',
+			'chat_log_pin' => ({required Object actor}) => '${actor} ปักหมุดข้อความไปยัง Memories',
+			'chat_log_unpin' => ({required Object actor}) => '${actor} เลิกปักหมุดข้อความจาก Memories',
+			'chat_log_erase' => ({required Object actor}) => '${actor} ลบข้อความออกจาก Memories อย่างถาวร',
+			'reloading_whispers' => 'กำลังโหลดเสียงกระซิบใหม่...',
 			_ => null,
 		};
 	}

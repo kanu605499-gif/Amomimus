@@ -78,7 +78,30 @@ class _AmomimusApp7State extends State<AmomimusApp7>
     final t = Translations.of(context);
     final themeProvider = context.watch<AmomimusDarkTheme>();
     final chatModel = context.watch<ChatModel>();
-    final chatList = chatModel.chatList;
+    final accountManager = context.watch<AccountManager>();
+    final blockedUsers = accountManager.currentUser?.blockedUsers ?? [];
+    final blockedBy = accountManager.currentUser?.blockedBy ?? [];
+
+    final myAmomimusId = accountManager.currentUser?.amomimusId ?? '';
+
+    final rawChatList = chatModel.chatList;
+    final chatList = rawChatList
+        .where(
+          (c) =>
+              !blockedUsers.contains(c.username) &&
+              (!blockedBy.contains(c.username) || !c.hasSeenResetAnimation),
+        )
+        .toList();
+
+    // Filter chat list so the unblocked user (Ex-Blocked) doesn't see the empty room trigger.
+    // They will only see the room once the unblocker sends a real message (for replying).
+    final filteredChatList = chatList.where((chat) {
+      if (myAmomimusId.isEmpty) return true;
+      if (accountManager.isRecentlyUnblockedByTarget(myAmomimusId, chat.username)) {
+        return chat.messages.isNotEmpty;
+      }
+      return true;
+    }).toList();
     final currentBg = themeProvider.isDarkMode
         ? AmomimusDarkTheme.backgroundDark
         : Colors.white;
@@ -191,7 +214,15 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                                         final accountManager = context
                                             .read<AccountManager>();
                                         final accounts = accountManager.accounts
+                                            .where((acc) => !acc.isDemo)
                                             .toList();
+                                        
+                                        accounts.sort((a, b) {
+                                          if (a.id == accountManager.currentUser?.id) return -1;
+                                          if (b.id == accountManager.currentUser?.id) return 1;
+                                          return 0;
+                                        });
+
                                         final isDark = themeProvider.isDarkMode;
 
                                         showModalBottomSheet(
@@ -551,9 +582,9 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                     ),
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate((context, index) {
-                        final chat = chatList[index];
+                        final chat = filteredChatList[index];
                         return ChatListTileWidget(chat: chat);
-                      }, childCount: chatList.length),
+                      }, childCount: filteredChatList.length),
                     ),
                   ),
                 ],

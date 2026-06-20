@@ -19,7 +19,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   late AnimationController _scanlineController;
   late AnimationController _glitchController;
   Timer? _noiseTimer;
@@ -27,17 +28,17 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   List<double> _noiseBars = [];
   bool _showColorBars = false;
   final AudioPlayer _audioPlayer = AudioPlayer();
-  
+
   String _currentCaption = "";
   List<String> _captions = [];
-  
+
   final Random _random = Random();
 
   @override
   void initState() {
     super.initState();
     _audioPlayer.play(AssetSource('audio/splash_sound.mp3'));
-    
+
     if (widget.isShutdown) {
       _currentCaption = "shutting_down";
       _captions = ["shutting_down", "unplug_dystopia", "returning_to_reality"];
@@ -61,8 +62,8 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
           _glitchOffset = (_random.nextDouble() - 0.5) * 15; // -7.5 to +7.5
           _noiseBars = List.generate(8, (_) => _random.nextDouble());
           // Randomly flash the RGB SMPTE color bars
-          _showColorBars = _random.nextDouble() > 0.85; 
-          
+          _showColorBars = _random.nextDouble() > 0.85;
+
           // Glitch the caption text occasionally
           if (_random.nextDouble() > 0.8) {
             _currentCaption = _captions[_random.nextInt(_captions.length)];
@@ -84,7 +85,9 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   }
 
   Future<void> _checkSession() async {
-    await Future.delayed(const Duration(milliseconds: 3500)); // Enjoy the TV static
+    await Future.delayed(
+      const Duration(milliseconds: 3500),
+    ); // Enjoy the TV static
 
     if (!mounted) return;
 
@@ -95,7 +98,8 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => const AmomimusApp2(),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const AmomimusApp2(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: animation, child: child);
           },
@@ -123,10 +127,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => nextScreen,
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: animation,
-              child: child,
-            );
+            return FadeTransition(opacity: animation, child: child);
           },
           transitionDuration: const Duration(milliseconds: 800),
         ),
@@ -138,22 +139,30 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     final t = Translations.of(context);
     String translatedCaption = _currentCaption;
     switch (_currentCaption) {
-      case 'shutting_down': translatedCaption = t.splash_shutting_down; break;
-      case 'unplug_dystopia': translatedCaption = t.splash_unplug; break;
-      case 'returning_to_reality': translatedCaption = t.splash_returning; break;
-      case 'no_signal': translatedCaption = t.splash_no_signal; break;
-      case 'stand_by': translatedCaption = t.splash_stand_by; break;
-      case 'embrace_the_noise': translatedCaption = t.splash_embrace; break;
+      case 'shutting_down':
+        translatedCaption = t.splash_shutting_down;
+        break;
+      case 'unplug_dystopia':
+        translatedCaption = t.splash_unplug;
+        break;
+      case 'returning_to_reality':
+        translatedCaption = t.splash_returning;
+        break;
+      case 'no_signal':
+        translatedCaption = t.splash_no_signal;
+        break;
+      case 'stand_by':
+        translatedCaption = t.splash_stand_by;
+        break;
+      case 'embrace_the_noise':
+        translatedCaption = t.splash_embrace;
+        break;
     }
-    
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          Icons.tv_off_rounded,
-          size: 100,
-          color: color,
-        ),
+        Icon(Icons.tv_off_rounded, size: 100, color: color),
         const SizedBox(height: 16),
         Text(
           "AMOMIMUS",
@@ -191,12 +200,21 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
               // Caption area with dark translucent backdrop
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.black.withValues(alpha: 0.45),
                   border: Border(
-                    left: BorderSide(color: color.withValues(alpha: 0.3), width: 1),
-                    right: BorderSide(color: color.withValues(alpha: 0.3), width: 1),
+                    left: BorderSide(
+                      color: color.withValues(alpha: 0.3),
+                      width: 1,
+                    ),
+                    right: BorderSide(
+                      color: color.withValues(alpha: 0.3),
+                      width: 1,
+                    ),
                   ),
                 ),
                 child: Text(
@@ -272,20 +290,22 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         fit: StackFit.expand,
         children: [
           // Background subtle noise pattern
-          Container(color: isDark ? const Color(0xFF111111) : const Color(0xFFF5F5F5)),
-          
+          Container(
+            color: isDark ? const Color(0xFF111111) : const Color(0xFFF5F5F5),
+          ),
+
           // SMPTE RGB Color Bars Error Screen (Flashes randomly)
           if (_showColorBars)
             Opacity(
               opacity: 0.15, // Subtle background flash
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: colorBars.map((color) => Expanded(
-                  child: Container(color: color),
-                )).toList(),
+                children: colorBars
+                    .map((color) => Expanded(child: Container(color: color)))
+                    .toList(),
               ),
             ),
-          
+
           // Glitchy Main Logo
           Center(
             child: AnimatedBuilder(
@@ -297,18 +317,27 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                     // Chromatic Aberration - Red
                     Transform.translate(
                       offset: Offset(_glitchOffset * 1.5, _glitchOffset * 0.3),
-                      child: _buildLogo(Colors.redAccent.withValues(alpha: 0.8)),
+                      child: _buildLogo(
+                        Colors.redAccent.withValues(alpha: 0.8),
+                      ),
                     ),
                     // Chromatic Aberration - Cyan
                     Transform.translate(
-                      offset: Offset(-_glitchOffset * 1.5, -_glitchOffset * 0.3),
-                      child: _buildLogo(Colors.cyanAccent.withValues(alpha: 0.8)),
+                      offset: Offset(
+                        -_glitchOffset * 1.5,
+                        -_glitchOffset * 0.3,
+                      ),
+                      child: _buildLogo(
+                        Colors.cyanAccent.withValues(alpha: 0.8),
+                      ),
                     ),
                     // Main Logo
                     _buildLogo(
-                      widget.isShutdown 
-                          ? Colors.redAccent 
-                          : (isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple)
+                      widget.isShutdown
+                          ? Colors.redAccent
+                          : (isDark
+                                ? AmomimusDarkTheme.policeLineYellow
+                                : AmomimusDarkTheme.primaryPurple),
                     ),
                   ],
                 );
@@ -319,20 +348,35 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
           // Random RGB TV Static Bars (VHS Tracking)
           ..._noiseBars.map((pos) {
             // Mix of white and RGB colors for the static lines
-            final colors = isDark 
-                ? [Colors.redAccent, Colors.greenAccent, Colors.blueAccent, Colors.white]
-                : [Colors.redAccent, Colors.red, Colors.deepOrangeAccent, AmomimusDarkTheme.primaryPurple];
+            final colors = isDark
+                ? [
+                    Colors.redAccent,
+                    Colors.greenAccent,
+                    Colors.blueAccent,
+                    Colors.white,
+                  ]
+                : [
+                    Colors.redAccent,
+                    Colors.red,
+                    Colors.deepOrangeAccent,
+                    AmomimusDarkTheme.primaryPurple,
+                  ];
             final rgbColor = colors[_random.nextInt(colors.length)];
-            
+
             return Positioned(
               top: MediaQuery.of(context).size.height * pos,
               left: 0,
               right: 0,
               height: _random.nextDouble() * 12 + 2,
               child: Transform.translate(
-                offset: Offset((_random.nextDouble() - 0.5) * 20, 0), // Horizontal tearing
+                offset: Offset(
+                  (_random.nextDouble() - 0.5) * 20,
+                  0,
+                ), // Horizontal tearing
                 child: Container(
-                  color: rgbColor.withValues(alpha: _random.nextDouble() * 0.25),
+                  color: rgbColor.withValues(
+                    alpha: _random.nextDouble() * 0.25,
+                  ),
                 ),
               ),
             );
@@ -344,7 +388,12 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
               animation: _scanlineController,
               builder: (context, child) {
                 return Transform.translate(
-                  offset: Offset(0, MediaQuery.of(context).size.height * _scanlineController.value - 30),
+                  offset: Offset(
+                    0,
+                    MediaQuery.of(context).size.height *
+                            _scanlineController.value -
+                        30,
+                  ),
                   child: Align(
                     alignment: Alignment.topCenter,
                     child: Container(
@@ -356,7 +405,11 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                           end: Alignment.bottomCenter,
                           colors: [
                             Colors.transparent,
-                            isDark ? Colors.white.withValues(alpha: 0.15) : AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.15),
+                            isDark
+                                ? Colors.white.withValues(alpha: 0.15)
+                                : AmomimusDarkTheme.primaryPurple.withValues(
+                                    alpha: 0.15,
+                                  ),
                             Colors.transparent,
                           ],
                         ),
@@ -367,14 +420,16 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
               },
             ),
           ),
-          
+
           // CRT TV Vignette (Dark edges for dark mode, subtle shadow for light mode)
           Container(
             decoration: BoxDecoration(
               gradient: RadialGradient(
                 colors: [
                   Colors.transparent,
-                  isDark ? Colors.black.withValues(alpha: 0.95) : Colors.black.withValues(alpha: 0.2),
+                  isDark
+                      ? Colors.black.withValues(alpha: 0.95)
+                      : Colors.black.withValues(alpha: 0.2),
                 ],
                 radius: 1.0,
               ),

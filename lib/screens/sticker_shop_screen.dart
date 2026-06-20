@@ -16,13 +16,14 @@ class StickerShopScreen extends StatefulWidget {
   State<StickerShopScreen> createState() => _StickerShopScreenState();
 }
 
-class _StickerShopScreenState extends State<StickerShopScreen> with SingleTickerProviderStateMixin {
+class _StickerShopScreenState extends State<StickerShopScreen>
+    with SingleTickerProviderStateMixin {
   late List<StickerBatchModel> allMockBatches;
 
   Offset _dragOffset = Offset.zero;
   bool _isSwipingAway = false;
   double _angle = 0;
-  
+
   late AnimationController _hintController;
 
   @override
@@ -33,7 +34,7 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-    
+
     _hintController.addListener(() {
       if (!_isSwipingAway && _dragOffset == Offset.zero && mounted) {
         setState(() {
@@ -45,14 +46,14 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
 
     _startHintLoop();
   }
-  
+
   void _startHintLoop() async {
     while (mounted) {
       // User requested 2.1 seconds delay
       await Future.delayed(const Duration(milliseconds: 2100));
       if (!mounted) break;
       if (_isSwipingAway || _dragOffset != Offset.zero) continue;
-      
+
       try {
         await _hintController.forward(from: 0.0);
         await _hintController.reverse();
@@ -82,7 +83,7 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
 
   void _onPanEnd(DragEndDetails details) {
     if (_isSwipingAway) return;
-    
+
     // Swipe threshold
     if (_dragOffset.dx.abs() > 100) {
       setState(() {
@@ -90,7 +91,7 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
         // Move far off screen in the direction of the swipe
         _dragOffset = Offset(_dragOffset.dx.sign * 600, _dragOffset.dy);
       });
-      
+
       // Wait for the animation to finish, then cycle the deck
       Future.delayed(const Duration(milliseconds: 300), () {
         if (!mounted) return;
@@ -113,23 +114,40 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
 
   static IconData _getIconForAsset(String asset) {
     switch (asset) {
-      case 'thumb_up': return Icons.thumb_up;
-      case 'local_fire_department': return Icons.local_fire_department;
-      case 'favorite': return Icons.favorite;
-      case 'sentiment_very_satisfied': return Icons.sentiment_very_satisfied;
-      case 'workspace_premium': return Icons.workspace_premium;
-      case 'diamond': return Icons.diamond;
-      case 'ghost': return Icons.smart_toy_outlined;
-      case 'rocket_launch': return Icons.rocket_launch;
-      case 'star': return Icons.star;
-      case 'sentiment_dissatisfied': return Icons.sentiment_dissatisfied;
-      case 'mood_bad': return Icons.mood_bad;
-      case 'bolt': return Icons.bolt;
-      default: return Icons.star;
+      case 'thumb_up':
+        return Icons.thumb_up;
+      case 'local_fire_department':
+        return Icons.local_fire_department;
+      case 'favorite':
+        return Icons.favorite;
+      case 'sentiment_very_satisfied':
+        return Icons.sentiment_very_satisfied;
+      case 'workspace_premium':
+        return Icons.workspace_premium;
+      case 'diamond':
+        return Icons.diamond;
+      case 'ghost':
+        return Icons.smart_toy_outlined;
+      case 'rocket_launch':
+        return Icons.rocket_launch;
+      case 'star':
+        return Icons.star;
+      case 'sentiment_dissatisfied':
+        return Icons.sentiment_dissatisfied;
+      case 'mood_bad':
+        return Icons.mood_bad;
+      case 'bolt':
+        return Icons.bolt;
+      default:
+        return Icons.star;
     }
   }
 
-  void _showPurchaseSheet(BuildContext context, StickerBatchModel batch, bool isDark) {
+  void _showPurchaseSheet(
+    BuildContext context,
+    StickerBatchModel batch,
+    bool isDark,
+  ) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -163,15 +181,24 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                      color: isDark
+                          ? AmomimusDarkTheme.policeLineYellow
+                          : AmomimusDarkTheme.primaryPurple,
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
-                      color: AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.1),
+                      color: AmomimusDarkTheme.primaryPurple.withValues(
+                        alpha: 0.1,
+                      ),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AmomimusDarkTheme.primaryPurple),
+                      border: Border.all(
+                        color: AmomimusDarkTheme.primaryPurple,
+                      ),
                     ),
                     child: Text(
                       batch.category.toUpperCase(),
@@ -186,14 +213,19 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
               ),
               const SizedBox(height: 8),
               Text(
-                t.includes_exclusive_items.replaceAll('{count}', '${batch.stickers.length}'),
+                t.includes_exclusive_items.replaceAll(
+                  '{count}',
+                  '${batch.stickers.length}',
+                ),
                 style: TextStyle(
                   fontSize: 14,
-                  color: isDark ? AmomimusDarkTheme.textSecondary : Colors.grey[600],
+                  color: isDark
+                      ? AmomimusDarkTheme.textSecondary
+                      : Colors.grey[600],
                 ),
               ),
               const SizedBox(height: 24),
-              
+
               SizedBox(
                 height: 160,
                 child: ListView.builder(
@@ -208,96 +240,119 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                         borderRadius: 16.0,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: isDark ? const Color(0xFF23232F) : const Color(0xFFF4F0FF),
+                            color: isDark
+                                ? const Color(0xFF23232F)
+                                : const Color(0xFFF4F0FF),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: isDark ? AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.3) : AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.2),
+                              color: isDark
+                                  ? AmomimusDarkTheme.primaryPurple.withValues(
+                                      alpha: 0.3,
+                                    )
+                                  : AmomimusDarkTheme.primaryPurple.withValues(
+                                      alpha: 0.2,
+                                    ),
                               width: 1.5,
                             ),
-                            boxShadow: isDark 
-                              ? [
-                                  BoxShadow(
-                                    color: AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.15),
-                                    blurRadius: 10,
-                                    spreadRadius: 1,
-                                  )
-                                ] 
-                              : [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.05),
-                                    blurRadius: 8,
-                                    spreadRadius: 0,
-                                    offset: const Offset(0, 4),
-                                  )
-                                ],
-                          ),
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          sticker.imageAsset.contains('/')
-                              ? Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    if (isDark)
-                                      Container(
-                                        width: 50,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.white.withValues(alpha: 0.08),
-                                              blurRadius: 15,
-                                              spreadRadius: 5,
-                                            ),
-                                          ],
-                                        ),
+                            boxShadow: isDark
+                                ? [
+                                    BoxShadow(
+                                      color: AmomimusDarkTheme.primaryPurple
+                                          .withValues(alpha: 0.15),
+                                      blurRadius: 10,
+                                      spreadRadius: 1,
+                                    ),
+                                  ]
+                                : [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.05,
                                       ),
-                                    Image.asset(
-                                      sticker.imageAsset,
-                                      width: 90,
-                                      height: 90,
-                                      fit: BoxFit.contain,
+                                      blurRadius: 8,
+                                      spreadRadius: 0,
+                                      offset: const Offset(0, 4),
                                     ),
                                   ],
-                                )
-                              : Icon(
-                                  _getIconForAsset(sticker.imageAsset),
-                                  size: 60,
-                                  color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-                                ),
-                          const SizedBox(height: 12),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Text(
-                              sticker.name,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: isDark ? AmomimusDarkTheme.textPrimary : Colors.black87,
-                              ),
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                            ),
                           ),
-                        ],
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              sticker.imageAsset.contains('/')
+                                  ? Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        if (isDark)
+                                          Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.white
+                                                      .withValues(alpha: 0.08),
+                                                  blurRadius: 15,
+                                                  spreadRadius: 5,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        Image.asset(
+                                          sticker.imageAsset,
+                                          width: 90,
+                                          height: 90,
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ],
+                                    )
+                                  : Icon(
+                                      _getIconForAsset(sticker.imageAsset),
+                                      size: 60,
+                                      color: isDark
+                                          ? AmomimusDarkTheme.policeLineYellow
+                                          : AmomimusDarkTheme.primaryPurple,
+                                    ),
+                              const SizedBox(height: 12),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 4.0,
+                                ),
+                                child: Text(
+                                  sticker.name,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                    color: isDark
+                                        ? AmomimusDarkTheme.textPrimary
+                                        : Colors.black87,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              },
+                    );
+                  },
                 ),
               ),
-              
+
               const SizedBox(height: 24),
               SizedBox(
                 width: double.infinity,
                 child: Consumer<AccountManager>(
                   builder: (context, accountManager, child) {
-                    final isOwned = accountManager.currentUser?.ownedStickerBatches.contains(batch.id) ?? false;
+                    final isOwned =
+                        accountManager.currentUser?.ownedStickerBatches
+                            .contains(batch.id) ??
+                        false;
                     return ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                        backgroundColor: isDark
+                            ? AmomimusDarkTheme.policeLineYellow
+                            : AmomimusDarkTheme.primaryPurple,
                         foregroundColor: isDark ? Colors.black : Colors.white,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -305,29 +360,43 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                         ),
                       ),
                       onPressed: () async {
-                        final accountManager = Provider.of<AccountManager>(context, listen: false);
-                        final success = await accountManager.purchaseStickerBatch(batch.id, batch.price);
-                        
+                        final accountManager = Provider.of<AccountManager>(
+                          context,
+                          listen: false,
+                        );
+                        final success = await accountManager
+                            .purchaseStickerBatch(batch.id, batch.price);
+
                         if (!context.mounted) return;
                         Navigator.pop(context);
-                        
+
                         if (success) {
                           // Purchase successful, no snackbar needed.
                         } else {
-                          final isOwned = accountManager.currentUser?.ownedStickerBatches.contains(batch.id) ?? false;
+                          final isOwned =
+                              accountManager.currentUser?.ownedStickerBatches
+                                  .contains(batch.id) ??
+                              false;
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(isOwned ? t.already_own_batch : t.not_enough_coins)),
+                            SnackBar(
+                              content: Text(
+                                isOwned
+                                    ? t.already_own_batch
+                                    : t.not_enough_coins,
+                              ),
+                            ),
                           );
                         }
                       },
                       child: Text(
-                        isOwned 
-                            ? t.view 
-                            : '${t.buy} - ${batch.price} Coins',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        isOwned ? t.view : '${t.buy} - ${batch.price} Coins',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     );
-                  }
+                  },
                 ),
               ),
               const SizedBox(height: 10),
@@ -338,35 +407,40 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
     );
   }
 
-  Widget _buildCard(StickerBatchModel batch, bool isDark, {bool isFront = false}) {
+  Widget _buildCard(
+    StickerBatchModel batch,
+    bool isDark, {
+    bool isFront = false,
+  }) {
     // Dynamic opacity based on drag distance
     double dragOpacity = (1.0 - (_dragOffset.dx.abs() / 300)).clamp(0.2, 1.0);
-    
+
     // If it's the front card, apply gesture detectors and animated transforms
     if (isFront) {
       return GestureDetector(
         onPanUpdate: _onPanUpdate,
         onPanEnd: _onPanEnd,
         child: AnimatedContainer(
-          duration: _isSwipingAway ? const Duration(milliseconds: 300) : const Duration(milliseconds: 0),
+          duration: _isSwipingAway
+              ? const Duration(milliseconds: 300)
+              : const Duration(milliseconds: 0),
           curve: Curves.easeOutCubic,
           transform: Matrix4.identity()
             ..translate(_dragOffset.dx, _dragOffset.dy)
             ..rotateZ(_angle),
           child: AnimatedOpacity(
-            duration: _isSwipingAway ? const Duration(milliseconds: 300) : const Duration(milliseconds: 0),
+            duration: _isSwipingAway
+                ? const Duration(milliseconds: 300)
+                : const Duration(milliseconds: 0),
             opacity: _isSwipingAway ? 0.0 : dragOpacity,
             child: _buildCardContent(batch, isDark),
           ),
         ),
       );
     }
-    
+
     // The card behind is slightly scaled down to give depth
-    return Transform.scale(
-      scale: 0.9,
-      child: _buildCardContent(batch, isDark),
-    );
+    return Transform.scale(scale: 0.9, child: _buildCardContent(batch, isDark));
   }
 
   Widget _buildCardContent(StickerBatchModel batch, bool isDark) {
@@ -377,7 +451,9 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
           color: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: isDark ? AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.5) : Colors.grey[300]!,
+            color: isDark
+                ? AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.5)
+                : Colors.grey[300]!,
             width: 2,
           ),
           boxShadow: [
@@ -415,13 +491,24 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                               gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
-                                colors: isDark 
-                                  ? [AmomimusDarkTheme.backgroundDark, const Color(0xff8c72c4).withValues(alpha: 0.4)]
-                                  : [Colors.grey[100]!, const Color(0xff8c72c4).withValues(alpha: 0.2)],
+                                colors: isDark
+                                    ? [
+                                        AmomimusDarkTheme.backgroundDark,
+                                        const Color(
+                                          0xff8c72c4,
+                                        ).withValues(alpha: 0.4),
+                                      ]
+                                    : [
+                                        Colors.grey[100]!,
+                                        const Color(
+                                          0xff8c72c4,
+                                        ).withValues(alpha: 0.2),
+                                      ],
                               ),
                             ),
                             child: Center(
-                              child: batch.stickers.first.imageAsset.contains('/')
+                              child:
+                                  batch.stickers.first.imageAsset.contains('/')
                                   ? Image.asset(
                                       batch.stickers.first.imageAsset,
                                       width: 180,
@@ -429,9 +516,13 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                                       fit: BoxFit.contain,
                                     )
                                   : Icon(
-                                      _getIconForAsset(batch.stickers.first.imageAsset),
+                                      _getIconForAsset(
+                                        batch.stickers.first.imageAsset,
+                                      ),
                                       size: 140,
-                                      color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                                      color: isDark
+                                          ? AmomimusDarkTheme.policeLineYellow
+                                          : AmomimusDarkTheme.primaryPurple,
                                     ),
                             ),
                           ),
@@ -448,10 +539,14 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
               Expanded(
                 flex: 4,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 20.0,
+                  ),
                   color: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // Left align the title
+                    crossAxisAlignment:
+                        CrossAxisAlignment.start, // Left align the title
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -462,7 +557,9 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
-                                color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                                color: isDark
+                                    ? AmomimusDarkTheme.policeLineYellow
+                                    : AmomimusDarkTheme.primaryPurple,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -470,11 +567,18 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                           ),
                           Container(
                             margin: const EdgeInsets.only(left: 8),
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
-                              color: AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.1),
+                              color: AmomimusDarkTheme.primaryPurple.withValues(
+                                alpha: 0.1,
+                              ),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AmomimusDarkTheme.primaryPurple),
+                              border: Border.all(
+                                color: AmomimusDarkTheme.primaryPurple,
+                              ),
                             ),
                             child: Text(
                               batch.category.toUpperCase(),
@@ -491,62 +595,97 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                       Text(
                         t.stickers_inside
                             .replaceAll('{count}', '${batch.stickers.length}')
-                            .replaceAll('{tier}', batch.stickers.isNotEmpty ? batch.stickers.first.tier : t.premium),
+                            .replaceAll(
+                              '{tier}',
+                              batch.stickers.isNotEmpty
+                                  ? batch.stickers.first.tier
+                                  : t.premium,
+                            ),
                         style: TextStyle(
                           fontSize: 14,
                           fontStyle: FontStyle.italic,
-                          color: isDark ? AmomimusDarkTheme.textSecondary : Colors.grey[600],
+                          color: isDark
+                              ? AmomimusDarkTheme.textSecondary
+                              : Colors.grey[600],
                         ),
                       ),
                       const Spacer(),
                       // Tiers included
                       Row(
-                        children: batch.stickers.map((s) => s.tier).toSet().map((tier) {
-                          Color tierColor;
-                          switch (tier) {
-                            case 'classic': tierColor = Colors.grey; break;
-                            case 'common': tierColor = Colors.green; break;
-                            case 'rare': tierColor = Colors.blue; break;
-                            case 'epic': tierColor = Colors.purple; break;
-                            default: tierColor = Colors.grey;
-                          }
-                          return Container(
-                            margin: const EdgeInsets.only(right: 8),
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: tierColor.withValues(alpha: 0.15),
-                              border: Border.all(color: tierColor),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Text(
-                              tier.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: isDark ? tierColor : tierColor.withAlpha(220),
+                        children: batch.stickers.map((s) => s.tier).toSet().map(
+                          (tier) {
+                            Color tierColor;
+                            switch (tier) {
+                              case 'classic':
+                                tierColor = Colors.grey;
+                                break;
+                              case 'common':
+                                tierColor = Colors.green;
+                                break;
+                              case 'rare':
+                                tierColor = Colors.blue;
+                                break;
+                              case 'epic':
+                                tierColor = Colors.purple;
+                                break;
+                              default:
+                                tierColor = Colors.grey;
+                            }
+                            return Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
                               ),
-                            ),
-                          );
-                        }).toList(),
+                              decoration: BoxDecoration(
+                                color: tierColor.withValues(alpha: 0.15),
+                                border: Border.all(color: tierColor),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                tier.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: isDark
+                                      ? tierColor
+                                      : tierColor.withAlpha(220),
+                                ),
+                              ),
+                            );
+                          },
+                        ).toList(),
                       ),
                       const Spacer(),
                       Consumer<AccountManager>(
                         builder: (context, accountManager, child) {
-                          final isOwned = accountManager.currentUser?.ownedStickerBatches.contains(batch.id) ?? false;
+                          final isOwned =
+                              accountManager.currentUser?.ownedStickerBatches
+                                  .contains(batch.id) ??
+                              false;
                           return GestureDetector(
-                            onTap: () => _showPurchaseSheet(context, batch, isDark),
+                            onTap: () =>
+                                _showPurchaseSheet(context, batch, isDark),
                             child: Container(
                               width: double.infinity,
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               decoration: BoxDecoration(
-                                color: isOwned 
-                                    ? (isDark ? const Color(0xFF3A382C) : const Color(0xFFE8E5F0))
-                                    : (isDark ? AmomimusDarkTheme.backgroundDark : Colors.grey[100]),
+                                color: isOwned
+                                    ? (isDark
+                                          ? const Color(0xFF3A382C)
+                                          : const Color(0xFFE8E5F0))
+                                    : (isDark
+                                          ? AmomimusDarkTheme.backgroundDark
+                                          : Colors.grey[100]),
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: isOwned 
+                                  color: isOwned
                                       ? Colors.transparent
-                                      : (isDark ? AmomimusDarkTheme.policeLineYellow.withValues(alpha: 0.5) : AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.5)),
+                                      : (isDark
+                                            ? AmomimusDarkTheme.policeLineYellow
+                                                  .withValues(alpha: 0.5)
+                                            : AmomimusDarkTheme.primaryPurple
+                                                  .withValues(alpha: 0.5)),
                                 ),
                               ),
                               child: Center(
@@ -555,9 +694,15 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: isOwned 
-                                        ? (isDark ? const Color(0xFF8A8450) : const Color(0xFF9A8CB8))
-                                        : (isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple),
+                                    color: isOwned
+                                        ? (isDark
+                                              ? const Color(0xFF8A8450)
+                                              : const Color(0xFF9A8CB8))
+                                        : (isDark
+                                              ? AmomimusDarkTheme
+                                                    .policeLineYellow
+                                              : AmomimusDarkTheme
+                                                    .primaryPurple),
                                   ),
                                 ),
                               ),
@@ -592,12 +737,16 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
           child: Text(
             t.sticker_shop,
             style: TextStyle(
-              color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+              color: isDark
+                  ? AmomimusDarkTheme.policeLineYellow
+                  : AmomimusDarkTheme.primaryPurple,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-        backgroundColor: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
+        backgroundColor: isDark
+            ? AmomimusDarkTheme.backgroundDark
+            : Colors.white,
         elevation: 0,
         automaticallyImplyLeading: false,
         actions: [
@@ -610,7 +759,9 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                 color: Colors.transparent,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: isDark ? const Color(0xFFFFD54F) : AmomimusDarkTheme.primaryPurple,
+                  color: isDark
+                      ? const Color(0xFFFFD54F)
+                      : AmomimusDarkTheme.primaryPurple,
                   width: 1.5,
                 ),
               ),
@@ -628,7 +779,9 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
-                      color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                      color: isDark
+                          ? AmomimusDarkTheme.policeLineYellow
+                          : AmomimusDarkTheme.primaryPurple,
                     ),
                   ),
                 ],
@@ -636,12 +789,19 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
             ),
           ),
           IconButton(
-            icon: Icon(Icons.inventory_2_outlined, color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple),
+            icon: Icon(
+              Icons.inventory_2_outlined,
+              color: isDark
+                  ? AmomimusDarkTheme.policeLineYellow
+                  : AmomimusDarkTheme.primaryPurple,
+            ),
             tooltip: "My Stickers",
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const StickerInventoryScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const StickerInventoryScreen(),
+                ),
               );
             },
           ),
@@ -658,7 +818,7 @@ class _StickerShopScreenState extends State<StickerShopScreen> with SingleTicker
                 if (allMockBatches.length > 1)
                   // The card underneath (index 1)
                   _buildCard(allMockBatches[1], isDark, isFront: false),
-                
+
                 if (allMockBatches.isNotEmpty)
                   // The front card (index 0)
                   _buildCard(allMockBatches[0], isDark, isFront: true),
@@ -682,9 +842,11 @@ class _HeartButton extends StatelessWidget {
     final t = Translations.of(context);
     final accountManager = Provider.of<AccountManager>(context);
     final isDark = Provider.of<AmomimusDarkTheme>(context).isDarkMode;
-    
+
     // Check if the current user has wishlisted this specific batch ID
-    final isTapped = accountManager.currentUser?.wishlistStickerBatches.contains(batchId) ?? false;
+    final isTapped =
+        accountManager.currentUser?.wishlistStickerBatches.contains(batchId) ??
+        false;
 
     return GestureDetector(
       onTap: () {
@@ -694,8 +856,8 @@ class _HeartButton extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: isTapped 
-              ? Colors.redAccent.withValues(alpha: 0.15) 
+          color: isTapped
+              ? Colors.redAccent.withValues(alpha: 0.15)
               : (isDark ? Colors.black54 : Colors.white.withValues(alpha: 0.8)),
           boxShadow: [
             BoxShadow(
@@ -708,7 +870,9 @@ class _HeartButton extends StatelessWidget {
         child: Icon(
           isTapped ? Icons.favorite : Icons.favorite_border,
           size: 26,
-          color: isTapped ? Colors.redAccent : (isDark ? Colors.white : Colors.black87),
+          color: isTapped
+              ? Colors.redAccent
+              : (isDark ? Colors.white : Colors.black87),
         ),
       ),
     );

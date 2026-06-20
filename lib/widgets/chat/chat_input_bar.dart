@@ -51,17 +51,21 @@ class _ChatInputBarState extends State<ChatInputBar> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
     final t = Translations.of(context);
     final themeProvider = context.watch<AmomimusDarkTheme>();
     final isDark = themeProvider.isDarkMode;
-    final currentSurface = isDark ? AmomimusDarkTheme.surfaceDark : Colors.grey[200]!;
-    final dynamicAccentColor = isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
-    final currentTextSecondary = isDark ? AmomimusDarkTheme.textSecondary : Colors.black54;
+    final currentSurface = isDark
+        ? AmomimusDarkTheme.surfaceDark
+        : Colors.grey[200]!;
+    final dynamicAccentColor = isDark
+        ? AmomimusDarkTheme.policeLineYellow
+        : AmomimusDarkTheme.primaryPurple;
+    final currentTextSecondary = isDark
+        ? AmomimusDarkTheme.textSecondary
+        : Colors.black54;
     final currentText = isDark ? AmomimusDarkTheme.textPrimary : Colors.black87;
     final double screenHeight = MediaQuery.of(context).size.height;
 
@@ -70,10 +74,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
       children: [
         if (widget.replyingToMessage != null)
           Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 8,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               color: currentSurface,
               border: Border(
@@ -107,15 +108,30 @@ class _ChatInputBarState extends State<ChatInputBar> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      if (widget.replyingToMessage!.text.startsWith('[STICKER]:'))
+                      if (widget.replyingToMessage!.text.startsWith(
+                        '[STICKER]:',
+                      ))
                         Row(
                           children: [
-                            Icon(Icons.sticky_note_2, size: 14, color: currentTextSecondary),
+                            Icon(
+                              Icons.sticky_note_2,
+                              size: 14,
+                              color: currentTextSecondary,
+                            ),
                             const SizedBox(width: 4),
-                            Text(t.sticker, style: const TextStyle(fontSize: 13, color: Colors.grey)),
+                            Text(
+                              t.sticker,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: Colors.grey,
+                              ),
+                            ),
                             const SizedBox(width: 8),
                             Image.asset(
-                              widget.replyingToMessage!.text.replaceFirst('[STICKER]:', ''),
+                              widget.replyingToMessage!.text.replaceFirst(
+                                '[STICKER]:',
+                                '',
+                              ),
                               height: 20,
                               width: 20,
                             ),
@@ -151,16 +167,9 @@ class _ChatInputBarState extends State<ChatInputBar> {
           onSendSticker: _sendSticker,
         ),
         Container(
-          constraints: BoxConstraints(
-            maxHeight: screenHeight * 0.33,
-          ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 10,
-          ),
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-          ),
+          constraints: BoxConstraints(maxHeight: screenHeight * 0.33),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(color: Colors.transparent),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
@@ -177,17 +186,14 @@ class _ChatInputBarState extends State<ChatInputBar> {
                     transitionBuilder: (child, animation) {
                       return ScaleTransition(
                         scale: animation,
-                        child: FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        ),
+                        child: FadeTransition(opacity: animation, child: child),
                       );
                     },
                     switchInCurve: Curves.easeOutBack,
                     switchOutCurve: Curves.easeIn,
                     child: Icon(
-                      _isStickerPickerExpanded 
-                          ? Icons.keyboard_alt_outlined 
+                      _isStickerPickerExpanded
+                          ? Icons.keyboard_alt_outlined
                           : Icons.sentiment_satisfied_alt_outlined,
                       key: ValueKey<bool>(_isStickerPickerExpanded),
                       color: dynamicAccentColor,
@@ -199,16 +205,14 @@ class _ChatInputBarState extends State<ChatInputBar> {
               const SizedBox(width: 10),
               Expanded(
                 child: SingleChildScrollView(
-                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   child: TextField(
                     controller: _messageController,
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
                     minLines: 1,
-                    style: TextStyle(
-                      color: currentText,
-                      fontSize: 15,
-                    ),
+                    style: TextStyle(color: currentText, fontSize: 15),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -236,9 +240,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                     ),
                     child: const Icon(
                       Icons.send,

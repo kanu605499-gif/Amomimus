@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' as math;
 
-
 import '../database/models/user_register_sql.dart';
 import '../data/anonymous_names.dart';
 import '../services/account_manager.dart';
@@ -42,7 +41,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
   final TextEditingController _usernameController = TextEditingController();
 
   String? _selectedGender;
-  final String _generatedId = '#AMM-***';
+  final String _generatedId = 'AM*-******';
   bool _isRegistering = false;
 
   @override
@@ -76,12 +75,16 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
 
       // 2. Prepare the Amomimus UserAccount identity
       final customName = _usernameController.text.trim();
-      final realGeneratedId = '#AMM-${math.Random().nextInt(9000) + 1000}'; // Backend generation mock
-      
+      final alpha = String.fromCharCode(math.Random().nextInt(26) + 65); // Random A-Z
+      final numeric = math.Random().nextInt(1000000).toString().padLeft(6, '0'); // Random 000000-999999
+      final realGeneratedId = 'AM$alpha-$numeric'; // Backend generation mock
+
       final userAcc = UserAccount(
         email: widget.email,
         realUsername: widget.realUsername,
-        anonymousUsername: AnonymousNames.getRandomName(_selectedGender ?? 'Amo'),
+        anonymousUsername: AnonymousNames.getRandomName(
+          _selectedGender ?? 'Amo',
+        ),
         customUsername: customName.isNotEmpty ? customName : null,
         amomimusId: realGeneratedId,
         gender: _selectedGender ?? 'Amo',
@@ -91,7 +94,10 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
       );
 
       // 3. Register and Login via AccountManager (Hybrid Architecture)
-      bool isSuccess = await context.read<AccountManager>().registerAndLogin(newUserSql, userAcc);
+      bool isSuccess = await context.read<AccountManager>().registerAndLogin(
+        newUserSql,
+        userAcc,
+      );
 
       if (!mounted) return;
 
@@ -110,15 +116,18 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
   }
 
   void _showIncompleteDialog() {
-    
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: widget.isDarkMode ? const Color(0xff1e1b24) : const Color(0xfffdfbfe),
+        backgroundColor: widget.isDarkMode
+            ? const Color(0xff1e1b24)
+            : const Color(0xfffdfbfe),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(
-            color: widget.isDarkMode ? const Color(0xff3d344d) : const Color(0xffe1dbec),
+            color: widget.isDarkMode
+                ? const Color(0xff3d344d)
+                : const Color(0xffe1dbec),
             width: 1.5,
           ),
         ),
@@ -130,7 +139,9 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
               child: Text(
                 t.incomplete_selection,
                 style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : const Color(0xff121212),
+                  color: widget.isDarkMode
+                      ? Colors.white
+                      : const Color(0xff121212),
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -150,7 +161,10 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               t.cancel,
-              style: TextStyle(color: Colors.grey[500], fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.grey[500],
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           ElevatedButton(
@@ -160,12 +174,17 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xff6c52a3),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
               elevation: 0,
             ),
             child: Text(
               t.proceed,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],
@@ -195,11 +214,15 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
-        backgroundColor: widget.isDarkMode ? const Color(0xff1e1b24) : const Color(0xfffdfbfe),
+        backgroundColor: widget.isDarkMode
+            ? const Color(0xff1e1b24)
+            : const Color(0xfffdfbfe),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(
-            color: widget.isDarkMode ? const Color(0xff3d344d) : const Color(0xffe1dbec),
+            color: widget.isDarkMode
+                ? const Color(0xff3d344d)
+                : const Color(0xffe1dbec),
             width: 1.5,
           ),
         ),
@@ -211,7 +234,9 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
               child: Text(
                 t.email_already_registered_title,
                 style: TextStyle(
-                  color: widget.isDarkMode ? Colors.white : const Color(0xff121212),
+                  color: widget.isDarkMode
+                      ? Colors.white
+                      : const Color(0xff121212),
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -233,25 +258,23 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             const SizedBox(height: 16),
             const Center(
               child: SizedBox(
-                width: 24, 
-                height: 24, 
-                child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xff8c72c4))
-              )
-            )
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: Color(0xff8c72c4),
+                ),
+              ),
+            ),
           ],
         ),
         actions: [
-          ElevatedButton(
+          IconButton(
             onPressed: redirect,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xff6c52a3),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              elevation: 0,
-            ),
-            child: Text(
-              t.go_to_login,
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
+            icon: const Icon(Icons.send),
+            color: const Color(0xff8c72c4),
+            splashRadius: 24,
+            padding: EdgeInsets.zero,
           ),
         ],
       ),
@@ -264,13 +287,17 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
     for (int i = 0; i < words.length; i++) {
       final word = words[i];
       final strippedWord = word.replaceAll(RegExp(r'[^\w\s]'), '');
-      final isKeyword = strippedWord.toUpperCase() == 'AMOMUS' || strippedWord.toUpperCase() == 'AMOMIMUS';
-      spans.add(TextSpan(
-        text: word + (i < words.length - 1 ? ' ' : ''),
-        style: TextStyle(
-          color: isKeyword ? const Color(0xff8c72c4) : mainTextColor,
+      final isKeyword =
+          strippedWord.toUpperCase() == 'AMOMUS' ||
+          strippedWord.toUpperCase() == 'AMOMIMUS';
+      spans.add(
+        TextSpan(
+          text: word + (i < words.length - 1 ? ' ' : ''),
+          style: TextStyle(
+            color: isKeyword ? const Color(0xff8c72c4) : mainTextColor,
+          ),
         ),
-      ));
+      );
     }
     return RichText(
       text: TextSpan(
@@ -289,12 +316,21 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
     final t = Translations.of(context);
-    final Color mainTextColor = widget.isDarkMode ? Colors.white : const Color(0xff121212);
-    final Color subTextColor = widget.isDarkMode ? Colors.grey[400]! : Colors.grey[700]!;
-    final Color scaffoldBg = widget.isDarkMode ? const Color(0xff121212) : const Color(0xfffdfbfe);
-    final Color cardBg = widget.isDarkMode ? const Color(0xff1e1b24) : Colors.white;
-    final Color borderColor = widget.isDarkMode ? const Color(0xff3d344d) : const Color(0xffe1dbec);
-    
+    final Color mainTextColor = widget.isDarkMode
+        ? Colors.white
+        : const Color(0xff121212);
+    final Color subTextColor = widget.isDarkMode
+        ? Colors.grey[400]!
+        : Colors.grey[700]!;
+    final Color scaffoldBg = widget.isDarkMode
+        ? const Color(0xff121212)
+        : const Color(0xfffdfbfe);
+    final Color cardBg = widget.isDarkMode
+        ? const Color(0xff1e1b24)
+        : Colors.white;
+    final Color borderColor = widget.isDarkMode
+        ? const Color(0xff3d344d)
+        : const Color(0xffe1dbec);
 
     final List<Map<String, dynamic>> genders = [
       {
@@ -328,7 +364,8 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
           text: TextSpan(
             text: t.create_your,
             style: TextStyle(
-              color: mainTextColor, // Base title color to black/white (e.g. あなたの)
+              color:
+                  mainTextColor, // Base title color to black/white (e.g. あなたの)
               fontWeight: FontWeight.bold,
               fontSize: 18,
               fontFamily: 'Sans-Serif',
@@ -368,7 +405,10 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
-                  borderSide: const BorderSide(color: Color(0xff8c72c4), width: 2),
+                  borderSide: const BorderSide(
+                    color: Color(0xff8c72c4),
+                    width: 2,
+                  ),
                 ),
               ),
             ),
@@ -376,7 +416,11 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
               padding: const EdgeInsets.only(top: 6),
               child: Text(
                 t.leave_blank_random,
-                style: const TextStyle(fontSize: 11, color: Color(0xff8c72c4), fontStyle: FontStyle.italic),
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: Color(0xff8c72c4),
+                  fontStyle: FontStyle.italic,
+                ),
               ),
             ),
 
@@ -418,7 +462,10 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
                     ),
                   ),
                   // Removed the refresh button because it is censored/automatic
-                  const Icon(Icons.lock_outline_rounded, color: Color(0xff8c72c4)),
+                  const Icon(
+                    Icons.lock_outline_rounded,
+                    color: Color(0xff8c72c4),
+                  ),
                 ],
               ),
             ),
@@ -428,14 +475,16 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             // 3. ── CHOOSE AVATAR TITLE & SELECTOR (IN THE MIDDLE) ──
             _buildKeywordLabel(t.choose_avatar_title, mainTextColor),
             const SizedBox(height: 32), // INCREASED VERTICAL GAP BEFORE ICONS
-
             // ── ANIMATED GENDER SELECTOR (stair bounce) ──
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 20), // Adjust padding since margin expands height naturally
+                padding: const EdgeInsets.only(
+                  bottom: 20,
+                ), // Adjust padding since margin expands height naturally
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start, // Let items align to top
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start, // Let items align to top
                   children: genders.asMap().entries.map((entry) {
                     final int index = entry.key;
                     final g = entry.value;
@@ -447,15 +496,21 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
                       animation: _floatingController,
                       builder: (context, child) {
                         final double wave = math.sin(
-                          (_floatingController.value * 2 * math.pi) + (g['phase'] as double),
+                          (_floatingController.value * 2 * math.pi) +
+                              (g['phase'] as double),
                         );
                         return Transform.translate(
-                          offset: Offset(0, wave * 8), // Only wave animation here
+                          offset: Offset(
+                            0,
+                            wave * 8,
+                          ), // Only wave animation here
                           child: child,
                         );
                       },
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8), // Standard horizontal layout
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                        ), // Standard horizontal layout
                         width: 90, // Adjusted size to fit all screens
                         height: 90, // Adjusted size to fit all screens
                         child: Material(
@@ -465,7 +520,10 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(24),
                             side: isSelected
-                                ? BorderSide(color: g['iconColor'] as Color, width: 3)
+                                ? BorderSide(
+                                    color: g['iconColor'] as Color,
+                                    width: 3,
+                                  )
                                 : BorderSide.none,
                           ),
                           clipBehavior: Clip.antiAlias,
@@ -494,7 +552,9 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             // Dynamic Chosen text below icons
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(top: 16), // Reduced to 16 since the Row now has bottom padding 140
+                padding: const EdgeInsets.only(
+                  top: 16,
+                ), // Reduced to 16 since the Row now has bottom padding 140
                 child: Builder(
                   builder: (context) {
                     Color chosenColor = const Color(0xff8c72c4);
@@ -527,7 +587,9 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
                           children: [
                             TextSpan(
                               text: _selectedGender,
-                              style: TextStyle(color: chosenColor), // Unique color only for the name
+                              style: TextStyle(
+                                color: chosenColor,
+                              ), // Unique color only for the name
                             ),
                           ],
                         ),

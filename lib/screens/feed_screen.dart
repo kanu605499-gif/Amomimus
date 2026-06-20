@@ -2,8 +2,8 @@ import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:math';
 import 'dart:ui';
 
-
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:amomimus/screens/chatroomhome.dart';
 import 'package:amomimus/screens/fake_pdf_screen.dart';
@@ -20,7 +20,6 @@ import '../services/notification_manager.dart';
 import '../models/notification_model.dart';
 import 'forum_page.dart';
 import 'profile_screen.dart';
-
 
 class AmomimusApp5 extends StatefulWidget {
   const AmomimusApp5({super.key});
@@ -64,11 +63,19 @@ class _AmomimusApp5State extends State<AmomimusApp5>
 
   void _showNotificationsSheet(BuildContext context, bool isDark) {
     final t = Translations.of(context);
-    final currentUser = Provider.of<AccountManager>(context, listen: false).currentUser;
+    final currentUser = Provider.of<AccountManager>(
+      context,
+      listen: false,
+    ).currentUser;
     if (currentUser == null) return;
-    
-    final notifManager = Provider.of<NotificationManager>(context, listen: false);
-    final notifications = notifManager.getNotificationsForUser(currentUser.amomimusId);
+
+    final notifManager = Provider.of<NotificationManager>(
+      context,
+      listen: false,
+    );
+    final notifications = notifManager.getNotificationsForUser(
+      currentUser.amomimusId,
+    );
 
     // Mark as read when opened
     notifManager.markAllAsReadForUser(currentUser.amomimusId);
@@ -113,7 +120,9 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                     ? Center(
                         child: Text(
                           t.no_notifications,
-                          style: TextStyle(color: isDark ? Colors.white54 : Colors.black54),
+                          style: TextStyle(
+                            color: isDark ? Colors.white54 : Colors.black54,
+                          ),
                         ),
                       )
                     : ListView.builder(
@@ -136,7 +145,9 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                               break;
                             case NotificationType.reply:
                               iconData = Icons.reply;
-                              iconColor = isDark ? Colors.yellow : Colors.amber.shade800;
+                              iconColor = isDark
+                                  ? Colors.yellow
+                                  : Colors.amber.shade800;
                               translatedMessage = t.notif_reply;
                               break;
                           }
@@ -147,16 +158,26 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                             ),
                             title: RichText(
                               text: TextSpan(
-                                style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                                style: TextStyle(
+                                  color: isDark ? Colors.white : Colors.black,
+                                ),
                                 children: [
-                                  TextSpan(text: "${notif.actorName} ", style: const TextStyle(fontWeight: FontWeight.bold)),
+                                  TextSpan(
+                                    text: "${notif.actorName} ",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                   TextSpan(text: translatedMessage),
                                 ],
                               ),
                             ),
                             subtitle: Text(
                               t.just_now, // Ideally parse ISO string to time ago
-                              style: TextStyle(color: isDark ? Colors.white54 : Colors.black54, fontSize: 12),
+                              style: TextStyle(
+                                color: isDark ? Colors.white54 : Colors.black54,
+                                fontSize: 12,
+                              ),
                             ),
                             onTap: () {
                               Navigator.pop(context);
@@ -164,7 +185,8 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ForumPage(feedId: notif.feedId),
+                                    builder: (context) =>
+                                        ForumPage(feedId: notif.feedId),
                                   ),
                                 );
                               }
@@ -180,8 +202,6 @@ class _AmomimusApp5State extends State<AmomimusApp5>
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final amomimusTheme = Provider.of<AmomimusDarkTheme>(context);
@@ -190,12 +210,19 @@ class _AmomimusApp5State extends State<AmomimusApp5>
     final isDark = amomimusTheme.isDarkMode;
 
     final blockedUsers = currentUser?.blockedUsers ?? [];
+    final blockedBy = currentUser?.blockedBy ?? [];
     final hiddenFeeds = currentUser?.hiddenFeeds ?? [];
     final feedData = feedManager.feeds.where((feed) {
       if (hiddenFeeds.contains(feed.id)) return false;
-      if (feed.realAuthorId != null && blockedUsers.contains(feed.realAuthorId)) return false;
-      if (blockedUsers.contains(feed.id)) return false;
-      if (blockedUsers.contains(feed.userName)) return false;
+      if (feed.realAuthorId != null &&
+          (blockedUsers.contains(feed.realAuthorId) ||
+              blockedBy.contains(feed.realAuthorId)))
+        return false;
+      if (blockedUsers.contains(feed.id) || blockedBy.contains(feed.id))
+        return false;
+      if (blockedUsers.contains(feed.userName) ||
+          blockedBy.contains(feed.userName))
+        return false;
       return true;
     }).toList();
 
@@ -207,10 +234,11 @@ class _AmomimusApp5State extends State<AmomimusApp5>
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
-        
+
         DateTime now = DateTime.now();
-        if (currentBackPressTime == null || 
-            now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+        if (currentBackPressTime == null ||
+            now.difference(currentBackPressTime!) >
+                const Duration(seconds: 2)) {
           currentBackPressTime = now;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -285,16 +313,60 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                 ),
               ),
               Positioned.fill(
-                child: feedData.isEmpty
-                    ? Center(child: Text(Translations.of(context).no_feeds))
-                    : ListView.builder(
-                        padding: const EdgeInsets.only(top: 95, bottom: 120),
-                        itemCount: feedData.length,
-                        itemBuilder: (context, index) => FeedCard(
-                          model: feedData[index],
-                          feedIndex: index,
-                        ),
-                      ),
+                child: CustomScrollView(
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                  slivers: [
+                    const SliverPadding(padding: EdgeInsets.only(top: 95)),
+                    CupertinoSliverRefreshControl(
+                      refreshTriggerPullDistance: 110,
+                      refreshIndicatorExtent: 65,
+                      onRefresh: () async {
+                        await Future.delayed(const Duration(milliseconds: 800));
+                        await feedManager.loadFeeds();
+                      },
+                      builder: (context, refreshState, pulledExtent, refreshTriggerPullDistance, refreshIndicatorExtent) {
+                        return Container(
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(
+                                width: 26,
+                                height: 26,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.5,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                Translations.of(context).reloading_whispers,
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    SliverPadding(
+                      padding: const EdgeInsets.only(bottom: 120),
+                      sliver: feedData.isEmpty
+                          ? SliverFillRemaining(
+                              child: Center(child: Text(Translations.of(context).no_feeds)),
+                            )
+                          : SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) => FeedCard(model: feedData[index], feedIndex: index),
+                                childCount: feedData.length,
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
               ),
               Positioned(
                 top: 0,
@@ -305,100 +377,124 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                     child: Container(
                       height: 90,
-                      padding: const EdgeInsets.only(top: 30, right: 16, left: 16),
+                      padding: const EdgeInsets.only(
+                        top: 30,
+                        right: 16,
+                        left: 16,
+                      ),
                       color: currentScaffoldBg.withValues(alpha: 0.6),
                       child: Row(
                         children: [
-                      Builder(
-                        builder: (scaffoldContext) {
-                          return IconButton(
-                            icon: Icon(
-                              Icons.menu,
-                              color: isDark
-                                  ? AmomimusDarkTheme.textPrimary
-                                  : Colors.black,
-                            ),
-                            onPressed: () =>
-                                Scaffold.of(scaffoldContext).openDrawer(),
-                          );
-                        },
-                      ),
-                      const SizedBox(width: 8),
-                      GestureDetector(
-                        onTap: () {
-                          amomimusTheme.toggleTheme();
-                        },
-                        child: const Text(
-                          "Amomimus",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: AmomimusDarkTheme.primaryPurple,
+                          Builder(
+                            builder: (scaffoldContext) {
+                              return IconButton(
+                                icon: Icon(
+                                  Icons.menu,
+                                  color: isDark
+                                      ? AmomimusDarkTheme.textPrimary
+                                      : Colors.black,
+                                ),
+                                onPressed: () =>
+                                    Scaffold.of(scaffoldContext).openDrawer(),
+                              );
+                            },
                           ),
-                        ),
-                      ),
-                      const Spacer(),
-                      Builder(
-                        builder: (context) {
-                          final currentUser = Provider.of<AccountManager>(context).currentUser;
-                          final notifManager = Provider.of<NotificationManager>(context);
-                          final unreadCount = currentUser != null 
-                              ? notifManager.getUnreadCountForUser(currentUser.amomimusId) 
-                              : 0;
+                          const SizedBox(width: 8),
+                          GestureDetector(
+                            onTap: () {
+                              amomimusTheme.toggleTheme();
+                            },
+                            child: const Text(
+                              "Amomimus",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: AmomimusDarkTheme.primaryPurple,
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          Builder(
+                            builder: (context) {
+                              final currentUser = Provider.of<AccountManager>(
+                                context,
+                              ).currentUser;
+                              final notifManager =
+                                  Provider.of<NotificationManager>(context);
+                              final unreadCount = currentUser != null
+                                  ? notifManager.getUnreadCountForUser(
+                                      currentUser.amomimusId,
+                                    )
+                                  : 0;
 
-                          return Row(
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  Icons.search,
-                                  color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder: (context, animation, secondaryAnimation) => const FakePdfScreen(),
-                                      transitionDuration: Duration.zero,
-                                      reverseTransitionDuration: Duration.zero,
+                              return Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.search,
+                                      color: isDark
+                                          ? AmomimusDarkTheme.policeLineYellow
+                                          : AmomimusDarkTheme.primaryPurple,
                                     ),
-                                  );
-                                },
-                              ),
-                              Stack(
-                                clipBehavior: Clip.none,
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  Icons.notifications_none,
-                                  color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
-                                ),
-                                onPressed: () => _showNotificationsSheet(context, isDark),
-                              ),
-                              if (unreadCount > 0)
-                                Positioned(
-                                  right: 8,
-                                  top: 8,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(4),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.red,
-                                      shape: BoxShape.circle,
-                                    ),
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                          pageBuilder:
+                                              (
+                                                context,
+                                                animation,
+                                                secondaryAnimation,
+                                              ) => const FakePdfScreen(),
+                                          transitionDuration: Duration.zero,
+                                          reverseTransitionDuration:
+                                              Duration.zero,
+                                        ),
+                                      );
+                                    },
                                   ),
-                                ),
-                            ],
-                              ),
-                            ],
-                          );
-                        }
+                                  Stack(
+                                    clipBehavior: Clip.none,
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.notifications_none,
+                                          color: isDark
+                                              ? AmomimusDarkTheme
+                                                    .policeLineYellow
+                                              : AmomimusDarkTheme.primaryPurple,
+                                        ),
+                                        onPressed: () =>
+                                            _showNotificationsSheet(
+                                              context,
+                                              isDark,
+                                            ),
+                                      ),
+                                      if (unreadCount > 0)
+                                        Positioned(
+                                          right: 8,
+                                          top: 8,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            decoration: const BoxDecoration(
+                                              color: Colors.red,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          Positioned(
+              Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
@@ -408,85 +504,95 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                     child: Container(
                       height: 80,
                       decoration: BoxDecoration(
-                        color: isDark ? AmomimusDarkTheme.surfaceDark.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.6),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, -2),
+                        color: isDark
+                            ? AmomimusDarkTheme.surfaceDark.withValues(
+                                alpha: 0.6,
+                              )
+                            : Colors.white.withValues(alpha: 0.6),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, -2),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      IconButton(
-                        icon: Builder(
-                          builder: (context) {
-                            final chatModel = context.watch<ChatModel>();
-                            return Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Icon(
-                                  Icons.messenger_outline,
-                                  color: isDark
-                                      ? AmomimusDarkTheme.policeLineYellow
-                                      : AmomimusDarkTheme.primaryPurple,
-                                ),
-                                if (chatModel.hasUnreadMessages)
-                                  Positioned(
-                                    top: -2,
-                                    right: -2,
-                                    child: Container(
-                                      width: 10,
-                                      height: 10,
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
-                                          width: 1.5,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          IconButton(
+                            icon: Builder(
+                              builder: (context) {
+                                final chatModel = context.watch<ChatModel>();
+                                final accountManager = context.watch<AccountManager>();
+                                final blockedUsers = accountManager.currentUser?.blockedUsers ?? [];
+                                final blockedByUsers = accountManager.currentUser?.blockedBy ?? [];
+                                return Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Icon(
+                                      Icons.messenger_outline,
+                                      color: isDark
+                                          ? AmomimusDarkTheme.policeLineYellow
+                                          : AmomimusDarkTheme.primaryPurple,
+                                    ),
+                                    if (chatModel.hasUnreadMessages(blockedUsers, blockedByUsers))
+                                      Positioned(
+                                        top: -2,
+                                        right: -2,
+                                        child: Container(
+                                          width: 10,
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              color: isDark
+                                                  ? AmomimusDarkTheme
+                                                        .surfaceDark
+                                                  : Colors.white,
+                                              width: 1.5,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                              ],
-                            );
-                          },
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AmomimusApp7(),
+                                  ],
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
-                      const SizedBox(width: 60),
-                      IconButton(
-                        icon: Icon(
-                          Icons.person_outline,
-                          color: isDark
-                              ? AmomimusDarkTheme.policeLineYellow
-                              : AmomimusDarkTheme.primaryPurple,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ProfileScreen(),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const AmomimusApp7(),
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 60),
+                          IconButton(
+                            icon: Icon(
+                              Icons.person_outline,
+                              color: isDark
+                                  ? AmomimusDarkTheme.policeLineYellow
+                                  : AmomimusDarkTheme.primaryPurple,
                             ),
-                          );
-                        },
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ProfileScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          Positioned(
+              Positioned(
                 bottom: 40,
                 left: 0,
                 right: 0,
@@ -495,9 +601,15 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                   child: GestureDetector(
                     onVerticalDragUpdate: (details) {
                       if (details.primaryDelta! < -7) {
-                        final currentUser = context.read<AccountManager>().currentUser;
+                        final currentUser = context
+                            .read<AccountManager>()
+                            .currentUser;
                         if (currentUser != null) {
-                          showCreatePostBottomSheet(context, isDark, currentUser);
+                          showCreatePostBottomSheet(
+                            context,
+                            isDark,
+                            currentUser,
+                          );
                         }
                       }
                     },
@@ -512,9 +624,15 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                         height: 63,
                         child: FloatingActionButton(
                           onPressed: () {
-                            final currentUser = context.read<AccountManager>().currentUser;
+                            final currentUser = context
+                                .read<AccountManager>()
+                                .currentUser;
                             if (currentUser != null) {
-                              showCreatePostBottomSheet(context, isDark, currentUser);
+                              showCreatePostBottomSheet(
+                                context,
+                                isDark,
+                                currentUser,
+                              );
                             }
                           },
                           backgroundColor: isDark
@@ -539,11 +657,8 @@ class _AmomimusApp5State extends State<AmomimusApp5>
           ),
           drawer: Builder(
             builder: (context) {
-              return LeftDrawerMenu(
-                currentUser: currentUser,
-                isDark: isDark,
-              );
-            }
+              return LeftDrawerMenu(currentUser: currentUser, isDark: isDark);
+            },
           ),
         ),
       ),
@@ -577,4 +692,3 @@ class AmomimusWaveClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
 }
-

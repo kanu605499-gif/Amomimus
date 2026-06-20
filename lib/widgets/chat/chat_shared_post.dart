@@ -71,18 +71,25 @@ class _ChatSharedPostState extends State<ChatSharedPost> {
                   const SizedBox(width: 8),
                   Text(
                     widget.sharedPost.id,
-                    style: GenderHelpers.getTypeIdTextStyle(widget.sharedPost.type).copyWith(
-                      color: GenderHelpers.getTypeColor(widget.sharedPost.type),
-                      fontWeight: FontWeight.w900,
-                      fontSize: 12,
-                    ),
+                    style:
+                        GenderHelpers.getTypeIdTextStyle(
+                          widget.sharedPost.type,
+                        ).copyWith(
+                          color: GenderHelpers.getTypeColor(
+                            widget.sharedPost.type,
+                          ),
+                          fontWeight: FontWeight.w900,
+                          fontSize: 12,
+                        ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               RichText(
                 maxLines: _isExpanded ? null : 4,
-                overflow: _isExpanded ? TextOverflow.clip : TextOverflow.ellipsis,
+                overflow: _isExpanded
+                    ? TextOverflow.clip
+                    : TextOverflow.ellipsis,
                 text: TextSpan(
                   text: widget.sharedPost.content,
                   style: TextStyle(

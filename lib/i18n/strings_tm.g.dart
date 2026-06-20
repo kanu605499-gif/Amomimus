@@ -260,6 +260,53 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get email_already_registered_title => 'Ritual Failed';
 	@override String get email_already_registered_desc => 'This soul is already bound. Doth thou wish to awaken it instead?';
 	@override String get go_to_login => 'Awaken';
+	@override String get delayed_sync_msg => 'Whoops! It seems our server is being a bit shy to your phone right now. Don\'t worry, your message is saved securely and we\'ll deliver it ASAP when our server synchronized!';
+	@override String get delayed_sync_title => 'Delayed Sync';
+	@override String get delayed_sync_feed_msg => 'Whoops! It seems our server is being a bit shy to your phone right now. Don\'t worry, your post is saved securely and we\'ll publish it ASAP when our server synchronized!';
+	@override String get delayed_sync_feed_title => 'Delayed Post';
+	@override String get message_is_pending => 'Message is pending...';
+	@override String get message_successfully_sent => 'Message successfully sent';
+	@override String get room_chat_resetted => 'A new Courier approaches';
+	@override String get started_at => 'Summoned:';
+	@override String get end_at => 'Oblivion:';
+	@override String get resend => 'Recast Thu\'um';
+	@override String get delete_selected => 'Banish Runes';
+	@override String get failed_to_send => 'Thu\'um fizzled';
+	@override String get resend_confirm_title => 'Confirm Recast';
+	@override String get resend_confirm_desc => 'Is the sequence of your voice true? The echoes will be released in order.';
+	@override String get delete_confirm_desc => 'Are you certain you wish to cast this rot into the Void?';
+	@override String get cheat_detected_warning => 'The Daedric Princes mock your attempt to alter the flow of Time. This realm has been purged to ash.';
+	@override String get cheat_partner_warning => 'Your fellow traveler tampered with the Elder Scrolls of Time.';
+	@override String get copy => 'Scribe Rune';
+	@override String get copied_to_clipboard => 'Etched into memory';
+	@override String get app_features_title => 'Köpýe Aýratynlyklary';
+	@override String get system_features_title => 'Ulgam Aýratynlyklary';
+	@override String get feature_1_title => 'Dynamic Persona Theming';
+	@override String get feature_1_desc => 'Interfeýs temasy profil jynsyňyza (Amo, Amom ýa-da Ami) laýyklaşyp, her rol seansy üçin sinhronlaşdyrylan wizual sazlamany üpjün edýär.';
+	@override String get feature_2_title => 'Interactive Mini Island';
+	@override String get feature_2_desc => 'Ulanyjy aragatnaşygynyň amatlygyny ýeňilleşdirmek üçin niýetlenen göçme habarnama paneli. Çat meýdançasynda ýüzýär we ýokarky nawigasiýa zolagyna (App Bar) dinamiki birikýär.';
+	@override String get feature_3_title => 'Glitch & Ex-Blocked';
+	@override String get feature_3_desc => 'Bloklamak we hasabat bermek aýratynlyklaryna psihologik täsir etmek üçin niýetlenen. Öňki bloklanan ulanyjy bilen aragatnaşyk, tebigy ätiýaçlygy döretmek üçin wizual ýoýulma duýduryşyny döredýär.';
+	@override String get feature_4_title => 'Memories & Activity Log';
+	@override String get feature_4_desc => 'Köpmetaraplaýyn bellik amallaryny üpjün edýär. Möhüm habarlary Memories-e berkidip bilersiňiz, Chat Log bolsa otagyň taryhyny we işjeňliginiň hronologiýasyny awtonom resminamalaşdyrýar.';
+	@override String get feature_5_title => 'Floating Countdown Capsule';
+	@override String get feature_5_desc => 'Ulanyjylaryň galan çatyň dowamlylygyndan habarly bolmagyny üpjün edýän interaktiw wagt yzarlaýjy modul. Habary okamak meýdanyny beklemäzlik üçin erkin süýräp we taşlap bolýar.';
+	@override String get system_1_title => 'Hybrid Sync Engine';
+	@override String get system_1_desc => 'Habarlaşma arhitekturasy akylly asinhron simulýasiýa hereketlendirijisi bilen işleýär. Garaşylýan, üstünlikli bolanlardan başlap, şowsuzlygy ýokary hakykat bilen dolandyrýança habaryň ýaşaýyş siklini dolandyrýar.';
+	@override String get system_2_title => 'Secret "Human" Cheat Detection';
+	@override String get system_2_desc => 'Çat sport rejeliligini saklaýan göze görünmeýän howpsuzlyk protokoly. Gadagan edilen özüni alyp barşyň nusgalaryny passiw gözden geçirýär we programma öndürijiligine agram salman düzgün bozujylara duýduryş berýär.';
+	@override String get system_3_title => 'State Persistence Core';
+	@override String get system_3_desc => 'Shli ýagdaý islegleri, loglar we aragatnaşyklar API integrasiýasy bilen birleşdirilen gibrid ýerli usul arkaly dolandyrylýar. Möhüm çat maglumatlarynyň seanslaryň dowamynda üýtgewsiz galmagyny üpjün etmek.';
+	@override String get chat_log_title => 'Chat Log';
+	@override String get chat_log_empty => 'Heniz çat logy ýok.';
+	@override String get chat_log_system => 'Ulgam';
+	@override String get chat_log_room_created => 'Çat başlady';
+	@override String get chat_log_room_expired => 'Hasaplaýjy nol edildi: Çat otagy arassalandy';
+	@override String chat_log_delete_room({required Object actor}) => '${actor} bu çat otagyny pozdy';
+	@override String chat_log_pin({required Object actor}) => '${actor} habary Memories-e berkidi';
+	@override String chat_log_unpin({required Object actor}) => '${actor} habary Memories-den aýyrdy';
+	@override String chat_log_erase({required Object actor}) => '${actor} habary Memories-den hemişelik pozdy';
+	@override String get reloading_whispers => 'Käbir Pyşyrdylary Täzeden Ýüklenýär...';
 }
 
 /// The flat map containing all translations for locale <tm>.
@@ -491,6 +538,53 @@ extension on TranslationsTm {
 			'email_already_registered_title' => 'Ritual Failed',
 			'email_already_registered_desc' => 'This soul is already bound. Doth thou wish to awaken it instead?',
 			'go_to_login' => 'Awaken',
+			'delayed_sync_msg' => 'Whoops! It seems our server is being a bit shy to your phone right now. Don\'t worry, your message is saved securely and we\'ll deliver it ASAP when our server synchronized!',
+			'delayed_sync_title' => 'Delayed Sync',
+			'delayed_sync_feed_msg' => 'Whoops! It seems our server is being a bit shy to your phone right now. Don\'t worry, your post is saved securely and we\'ll publish it ASAP when our server synchronized!',
+			'delayed_sync_feed_title' => 'Delayed Post',
+			'message_is_pending' => 'Message is pending...',
+			'message_successfully_sent' => 'Message successfully sent',
+			'room_chat_resetted' => 'A new Courier approaches',
+			'started_at' => 'Summoned:',
+			'end_at' => 'Oblivion:',
+			'resend' => 'Recast Thu\'um',
+			'delete_selected' => 'Banish Runes',
+			'failed_to_send' => 'Thu\'um fizzled',
+			'resend_confirm_title' => 'Confirm Recast',
+			'resend_confirm_desc' => 'Is the sequence of your voice true? The echoes will be released in order.',
+			'delete_confirm_desc' => 'Are you certain you wish to cast this rot into the Void?',
+			'cheat_detected_warning' => 'The Daedric Princes mock your attempt to alter the flow of Time. This realm has been purged to ash.',
+			'cheat_partner_warning' => 'Your fellow traveler tampered with the Elder Scrolls of Time.',
+			'copy' => 'Scribe Rune',
+			'copied_to_clipboard' => 'Etched into memory',
+			'app_features_title' => 'Köpýe Aýratynlyklary',
+			'system_features_title' => 'Ulgam Aýratynlyklary',
+			'feature_1_title' => 'Dynamic Persona Theming',
+			'feature_1_desc' => 'Interfeýs temasy profil jynsyňyza (Amo, Amom ýa-da Ami) laýyklaşyp, her rol seansy üçin sinhronlaşdyrylan wizual sazlamany üpjün edýär.',
+			'feature_2_title' => 'Interactive Mini Island',
+			'feature_2_desc' => 'Ulanyjy aragatnaşygynyň amatlygyny ýeňilleşdirmek üçin niýetlenen göçme habarnama paneli. Çat meýdançasynda ýüzýär we ýokarky nawigasiýa zolagyna (App Bar) dinamiki birikýär.',
+			'feature_3_title' => 'Glitch & Ex-Blocked',
+			'feature_3_desc' => 'Bloklamak we hasabat bermek aýratynlyklaryna psihologik täsir etmek üçin niýetlenen. Öňki bloklanan ulanyjy bilen aragatnaşyk, tebigy ätiýaçlygy döretmek üçin wizual ýoýulma duýduryşyny döredýär.',
+			'feature_4_title' => 'Memories & Activity Log',
+			'feature_4_desc' => 'Köpmetaraplaýyn bellik amallaryny üpjün edýär. Möhüm habarlary Memories-e berkidip bilersiňiz, Chat Log bolsa otagyň taryhyny we işjeňliginiň hronologiýasyny awtonom resminamalaşdyrýar.',
+			'feature_5_title' => 'Floating Countdown Capsule',
+			'feature_5_desc' => 'Ulanyjylaryň galan çatyň dowamlylygyndan habarly bolmagyny üpjün edýän interaktiw wagt yzarlaýjy modul. Habary okamak meýdanyny beklemäzlik üçin erkin süýräp we taşlap bolýar.',
+			'system_1_title' => 'Hybrid Sync Engine',
+			'system_1_desc' => 'Habarlaşma arhitekturasy akylly asinhron simulýasiýa hereketlendirijisi bilen işleýär. Garaşylýan, üstünlikli bolanlardan başlap, şowsuzlygy ýokary hakykat bilen dolandyrýança habaryň ýaşaýyş siklini dolandyrýar.',
+			'system_2_title' => 'Secret "Human" Cheat Detection',
+			'system_2_desc' => 'Çat sport rejeliligini saklaýan göze görünmeýän howpsuzlyk protokoly. Gadagan edilen özüni alyp barşyň nusgalaryny passiw gözden geçirýär we programma öndürijiligine agram salman düzgün bozujylara duýduryş berýär.',
+			'system_3_title' => 'State Persistence Core',
+			'system_3_desc' => 'Shli ýagdaý islegleri, loglar we aragatnaşyklar API integrasiýasy bilen birleşdirilen gibrid ýerli usul arkaly dolandyrylýar. Möhüm çat maglumatlarynyň seanslaryň dowamynda üýtgewsiz galmagyny üpjün etmek.',
+			'chat_log_title' => 'Chat Log',
+			'chat_log_empty' => 'Heniz çat logy ýok.',
+			'chat_log_system' => 'Ulgam',
+			'chat_log_room_created' => 'Çat başlady',
+			'chat_log_room_expired' => 'Hasaplaýjy nol edildi: Çat otagy arassalandy',
+			'chat_log_delete_room' => ({required Object actor}) => '${actor} bu çat otagyny pozdy',
+			'chat_log_pin' => ({required Object actor}) => '${actor} habary Memories-e berkidi',
+			'chat_log_unpin' => ({required Object actor}) => '${actor} habary Memories-den aýyrdy',
+			'chat_log_erase' => ({required Object actor}) => '${actor} habary Memories-den hemişelik pozdy',
+			'reloading_whispers' => 'Käbir Pyşyrdylary Täzeden Ýüklenýär...',
 			_ => null,
 		};
 	}

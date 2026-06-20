@@ -640,18 +640,23 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                           ),
                           elevation: 0,
                         ),
-                        child: Text(
-                          (_hasAcceptedTerms && _selectedDate != null)
-                              ? t.accept_continue
-                              : _selectedDate == null
-                              ? t.select_birthday_first
-                              : t.accept_terms_first,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: (_hasAcceptedTerms && _selectedDate != null)
-                                ? Colors.white
-                                : Colors.grey[600],
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            (_hasAcceptedTerms && _selectedDate != null)
+                                ? t.accept_continue
+                                : _selectedDate == null
+                                ? t.select_birthday_first
+                                : t.accept_terms_first,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: (_hasAcceptedTerms && _selectedDate != null)
+                                  ? Colors.white
+                                  : Colors.grey[600],
+                            ),
                           ),
                         ),
                       ),
