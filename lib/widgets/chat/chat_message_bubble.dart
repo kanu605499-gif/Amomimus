@@ -45,11 +45,27 @@ class MessageBubble extends StatefulWidget {
   State<MessageBubble> createState() => _MessageBubbleState();
 }
 
-class _MessageBubbleState extends State<MessageBubble> {
+class _MessageBubbleState extends State<MessageBubble> with SingleTickerProviderStateMixin {
   bool _isExpanded = false;
   bool _showSuccessIcon = false;
   double _dragOffset = 0.0;
   bool _isDragging = false;
+  late AnimationController _spinController;
+
+  @override
+  void initState() {
+    super.initState();
+    _spinController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _spinController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,29 +127,32 @@ class _MessageBubbleState extends State<MessageBubble> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                if (!widget.message.isSynced)
-                  Icon(
-                    widget.message.showResendOptions
-                        ? Icons.error_outline
-                        : Icons.hourglass_empty,
-                    size: 10,
-                    color: widget.message.showResendOptions
-                        ? Colors.redAccent
-                        : textSecondaryColor.withValues(alpha: 0.6),
-                  )
-                else if (_showSuccessIcon)
-                  const Icon(Icons.check_circle, size: 10, color: Colors.green)
-                else
-                  const SizedBox.shrink(),
-                const SizedBox(height: 2),
-                Text(
-                  widget.message.timeStamp,
-                  style: TextStyle(
-                    fontSize: 9,
-                    color: widget.message.showResendOptions
-                        ? Colors.redAccent
-                        : textSecondaryColor.withValues(alpha: 0.6),
-                  ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: ScaleTransition(scale: animation, child: child),
+                    );
+                  },
+                  child: !widget.message.isSynced
+                      ? widget.message.showResendOptions
+                          ? Icon(
+                              Icons.error_outline,
+                              key: const ValueKey('error'),
+                              size: 10,
+                              color: textSecondaryColor.withValues(alpha: 0.6),
+                            )
+                          : RotationTransition(
+                              key: const ValueKey('spin'),
+                              turns: _spinController,
+                              child: Icon(
+                                Icons.hourglass_empty,
+                                size: 10,
+                                color: textSecondaryColor.withValues(alpha: 0.6),
+                              ),
+                            )
+                      : const SizedBox.shrink(key: ValueKey('empty')),
                 ),
               ],
             ),
@@ -534,16 +553,6 @@ class _MessageBubbleState extends State<MessageBubble> {
               ),
             ),
           ),
-          if (!isUserMessage) ...[
-            const SizedBox(width: 8),
-            Text(
-              widget.message.timeStamp,
-              style: TextStyle(
-                fontSize: 9,
-                color: textSecondaryColor.withValues(alpha: 0.6),
-              ),
-            ),
-          ],
         ],
       ),
     );

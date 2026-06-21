@@ -1,7 +1,9 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../amomimusdark.dart';
 import 'package:amomimus/i18n/strings.g.dart';
+import '../widgets/particle_background.dart';
 
 class AppFeaturesScreen extends StatelessWidget {
   const AppFeaturesScreen({super.key});
@@ -77,56 +79,55 @@ class AppFeaturesScreen extends StatelessWidget {
         final desc = isSystem ? _getSystemFeatureDesc(idx) : _getAppFeatureDesc(idx);
         return Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: cardColor,
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: textColor.withValues(alpha: 0.2),
-                width: 1.5,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: ExpansionTile(
-                iconColor: textColor,
-                collapsedIconColor: textColor.withValues(alpha: 0.7),
-                tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                title: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: isDark ? Colors.white : Colors.black87,
-                    ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: cardColor,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: textColor.withValues(alpha: 0.3),
+                    width: 1.0,
                   ),
                 ),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-                    child: Align(
+                child: Theme(
+                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                  child: ExpansionTile(
+                    iconColor: textColor,
+                    collapsedIconColor: textColor.withValues(alpha: 0.7),
+                    tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    title: FittedBox(
+                      fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        desc,
+                        title,
                         style: TextStyle(
-                          fontSize: 14,
-                          height: 1.5,
-                          color: isDark ? Colors.white70 : Colors.black87.withValues(alpha: 0.7),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: textColor,
                         ),
                       ),
                     ),
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            desc,
+                            style: TextStyle(
+                              fontSize: 14,
+                              height: 1.5,
+                              color: isDark ? Colors.white70 : Colors.black87.withValues(alpha: 0.7),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
@@ -142,40 +143,58 @@ class AppFeaturesScreen extends StatelessWidget {
 
     final textColor = isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
     final bgColor = isDark ? AmomimusDarkTheme.backgroundDark : Colors.white;
-    final cardColor = isDark ? AmomimusDarkTheme.surfaceDark : const Color(0xFFF4F0FF);
-    final unselectedColor = isDark ? Colors.grey[500] : Colors.grey[400];
+    final cardColor = isDark 
+        ? Colors.white.withValues(alpha: 0.05) 
+        : Colors.black.withValues(alpha: 0.03);
+    final unselectedColor = isDark ? Colors.white.withValues(alpha: 0.5) : Colors.black.withValues(alpha: 0.5);
 
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        backgroundColor: bgColor,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: bgColor,
-          elevation: 0,
-          title: Text(
-            t.app_features_title,
-            style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+    return Scaffold(
+      backgroundColor: bgColor,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: ParticleBackground(
+              particleColor: textColor.withValues(alpha: 0.15),
+            ),
           ),
-          bottom: TabBar(
-            labelColor: textColor,
-            unselectedLabelColor: unselectedColor,
-            indicatorColor: textColor,
-            indicatorWeight: 3,
-            tabs: [
-              Tab(text: t.app_features_title),
-              Tab(text: t.system_features_title),
-            ],
+          DefaultTabController(
+            length: 2,
+            child: Column(
+              children: [
+                AppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  title: Text(
+                    t.app_features_title,
+                    style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                  ),
+                  bottom: TabBar(
+                    labelColor: textColor,
+                    unselectedLabelColor: unselectedColor,
+                    indicatorColor: textColor,
+                    indicatorWeight: 3,
+                    tabs: [
+                      Tab(text: t.app_features_title),
+                      Tab(text: t.system_features_title),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: SafeArea(
+                    top: false,
+                    child: TabBarView(
+                      children: [
+                        _buildFeatureList(context, 5, false, textColor, cardColor, isDark),
+                        _buildFeatureList(context, 3, true, textColor, cardColor, isDark),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        body: SafeArea(
-          child: TabBarView(
-            children: [
-              _buildFeatureList(context, 5, false, textColor, cardColor, isDark),
-              _buildFeatureList(context, 3, true, textColor, cardColor, isDark),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

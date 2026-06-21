@@ -6,6 +6,7 @@ import '../../amomimusdark.dart';
 import '../../helpers/gender_helpers.dart';
 import '../effects/glitch_effect.dart';
 import '../../services/account_manager.dart';
+import 'presence_picker_capsule.dart';
 
 class ProfileHeaderInfo extends StatelessWidget {
   final dynamic user;
@@ -43,17 +44,35 @@ class ProfileHeaderInfo extends StatelessWidget {
               ),
               child: Center(child: Icon(icon, size: 50, color: iconColor)),
             ),
-            Container(
-              width: 24,
-              height: 24,
-              decoration: BoxDecoration(
-                color: Colors.green, // Active indicator
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: isDark
-                      ? AmomimusDarkTheme.backgroundDark
-                      : Colors.white,
-                  width: 3,
+            GestureDetector(
+              onTap: !isOtherUser
+                  ? () {
+                      final box = context.findRenderObject() as RenderBox?;
+                      if (box != null) {
+                        PresencePickerCapsule.show(context, box);
+                      }
+                    }
+                  : null,
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: isDark
+                        ? AmomimusDarkTheme.backgroundDark
+                        : Colors.white,
+                    width: 3,
+                  ),
+                ),
+                child: ClipOval(
+                  child: Container(
+                    color: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
+                    child: PresencePickerCapsule.getPresenceIcon(
+                      user.presenceStatus ?? 'auto',
+                      size: 24,
+                    ),
+                  ),
                 ),
               ),
             ),

@@ -1,3 +1,5 @@
+import '../i18n/strings.g.dart';
+
 /// Categories for user/chat reports in the Amomimus app.
 enum ReportCategory { spamHarassment, inappropriateContent, hateSpeech }
 
@@ -5,20 +7,23 @@ enum ReportCategory { spamHarassment, inappropriateContent, hateSpeech }
 class ReportCategoryHelper {
   ReportCategoryHelper._();
 
-  static const Map<ReportCategory, String> _labels = {
-    ReportCategory.spamHarassment: 'Spam / Harassment',
-    ReportCategory.inappropriateContent: 'Inappropriate Content',
-    ReportCategory.hateSpeech: 'Hate Speech',
-  };
-
   static const Map<ReportCategory, String> _values = {
     ReportCategory.spamHarassment: 'spam_harassment',
     ReportCategory.inappropriateContent: 'inappropriate_content',
     ReportCategory.hateSpeech: 'hate_speech',
   };
 
-  /// Display-friendly label for the category.
-  static String getLabel(ReportCategory category) => _labels[category]!;
+  /// Display-friendly label for the category using translations.
+  static String getLabel(ReportCategory category, Translations t) {
+    switch (category) {
+      case ReportCategory.spamHarassment:
+        return t.category_spam;
+      case ReportCategory.inappropriateContent:
+        return t.category_inappropriate;
+      case ReportCategory.hateSpeech:
+        return t.category_hate;
+    }
+  }
 
   /// Storable string value for the category.
   static String toValue(ReportCategory category) => _values[category]!;

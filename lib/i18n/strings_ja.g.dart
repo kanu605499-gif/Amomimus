@@ -308,6 +308,17 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String chat_log_unpin({required Object actor}) => '${actor}がMemoriesからメッセージのピン留めを解除しました';
 	@override String chat_log_erase({required Object actor}) => '${actor}がMemoriesからメッセージを完全に消去しました';
 	@override String get reloading_whispers => 'いくつかのささやきを再読み込み中...';
+	@override String get bio_duration_3 => '3日';
+	@override String get bio_duration_5 => '5日';
+	@override String get bio_duration_7 => '7日';
+	@override String get bio_duration_15 => '15日';
+	@override String get bio_duration_30 => '30日';
+	@override String get bio_bailout => '脱出 (1回のみ)';
+	@override String get bio_not_enough_coins => 'コインが足りません';
+	@override String get bio_locked => 'ロック中';
+	@override String get bio_bailout_used => '脱出済み';
+	@override String get bio_bailout_warning => 'あなたはプロファイルを編集するために1回限りのベイルアウトオプションを押しました。500コインを使用してベイルアウトプロセスを続行するには、続行を押してください。';
+	@override String get bio_bailout_confirm => '紙飛行機のボタンを押して、ベイルアウトを確認してください。';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -587,6 +598,17 @@ extension on TranslationsJa {
 			'chat_log_unpin' => ({required Object actor}) => '${actor}がMemoriesからメッセージのピン留めを解除しました',
 			'chat_log_erase' => ({required Object actor}) => '${actor}がMemoriesからメッセージを完全に消去しました',
 			'reloading_whispers' => 'いくつかのささやきを再読み込み中...',
+			'bio_duration_3' => '3日',
+			'bio_duration_5' => '5日',
+			'bio_duration_7' => '7日',
+			'bio_duration_15' => '15日',
+			'bio_duration_30' => '30日',
+			'bio_bailout' => '脱出 (1回のみ)',
+			'bio_not_enough_coins' => 'コインが足りません',
+			'bio_locked' => 'ロック中',
+			'bio_bailout_used' => '脱出済み',
+			'bio_bailout_warning' => 'あなたはプロファイルを編集するために1回限りのベイルアウトオプションを押しました。500コインを使用してベイルアウトプロセスを続行するには、続行を押してください。',
+			'bio_bailout_confirm' => '紙飛行機のボタンを押して、ベイルアウトを確認してください。',
 			_ => null,
 		};
 	}

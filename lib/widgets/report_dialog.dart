@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../i18n/strings.g.dart';
 import '../amomimusdark.dart';
 import '../models/report_model.dart';
 import '../services/account_manager.dart';
@@ -52,16 +53,17 @@ class _ReportDialogState extends State<ReportDialog> {
     if (blockReason != null) {
       if (mounted) {
         // Token limit reached — inform user that only local perspective was updated
+        final t = Translations.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
               blockReason == 'daily_limit_reached'
-                  ? 'Daily global limit reached. Applying locally.'
+                  ? t.report_limit_daily
                   : blockReason == 'category_limit_reached'
-                      ? 'Global token for this category exhausted. Applying locally.'
+                      ? t.report_limit_category
                       : blockReason == 'weekly_hate_speech_limit'
-                          ? 'Weekly hate speech limit reached. Applying locally.'
-                          : 'Global limit reached. Applying locally.',
+                          ? t.report_limit_weekly_hate_speech
+                          : t.report_limit_global,
               style: const TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.orange,
@@ -89,9 +91,13 @@ class _ReportDialogState extends State<ReportDialog> {
     if (!mounted) return;
 
     final amomimusTheme = context.read<AmomimusDarkTheme>();
+    final t = Translations.of(context);
     final isDark = amomimusTheme.isDarkMode;
     final bgColor = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
     final textColor = isDark ? Colors.white : Colors.black87;
+    final accentColor = isDark
+        ? AmomimusDarkTheme.policeLineYellow
+        : AmomimusDarkTheme.primaryPurple;
 
     await showJellyDialog(
       context: context,
@@ -103,14 +109,14 @@ class _ReportDialogState extends State<ReportDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.check_circle_outline,
-                color: Colors.green,
+                color: accentColor,
                 size: 54,
               ),
               const SizedBox(height: 16),
               Text(
-                "Report Submitted",
+                t.report_submitted,
                 style: TextStyle(
                   color: textColor,
                   fontSize: 18,
@@ -120,8 +126,8 @@ class _ReportDialogState extends State<ReportDialog> {
               const SizedBox(height: 8),
               Text(
                 _banUser
-                    ? "The report was sent and the user is now blocked."
-                    : "Thank you for making Amomimus a safer place.",
+                    ? t.report_sent_user_blocked
+                    : t.thank_you_safe,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: isDark ? Colors.white70 : Colors.black54,
@@ -142,9 +148,9 @@ class _ReportDialogState extends State<ReportDialog> {
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  child: const Text(
-                    "Close",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  child: Text(
+                    t.close,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -161,6 +167,7 @@ class _ReportDialogState extends State<ReportDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     final amomimusTheme = Provider.of<AmomimusDarkTheme>(context);
     final isDark = amomimusTheme.isDarkMode;
 
@@ -190,7 +197,7 @@ class _ReportDialogState extends State<ReportDialog> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  widget.isUserReport ? "Report User" : "Report Message",
+                  widget.isUserReport ? t.report_user : t.report_message,
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -201,7 +208,7 @@ class _ReportDialogState extends State<ReportDialog> {
             ),
             const SizedBox(height: 16),
             Text(
-              "Select a category:",
+              t.select_category,
               style: TextStyle(color: textSecondaryColor, fontSize: 14),
             ),
             const SizedBox(height: 8),
@@ -214,7 +221,7 @@ class _ReportDialogState extends State<ReportDialog> {
                 children: ReportCategory.values.map((category) {
                   return RadioListTile<ReportCategory>(
                     title: Text(
-                      ReportCategoryHelper.getLabel(category),
+                      ReportCategoryHelper.getLabel(category, t),
                       style: TextStyle(color: textColor, fontSize: 15),
                     ),
                     value: category,
@@ -230,7 +237,7 @@ class _ReportDialogState extends State<ReportDialog> {
             ),
             const SizedBox(height: 16),
             Text(
-              "Detailed comment (required for ban):",
+              t.detailed_comment,
               style: TextStyle(color: textSecondaryColor, fontSize: 14),
             ),
             const SizedBox(height: 8),
@@ -239,7 +246,7 @@ class _ReportDialogState extends State<ReportDialog> {
               maxLines: 3,
               style: TextStyle(color: textColor),
               decoration: InputDecoration(
-                hintText: "Please provide details...",
+                hintText: t.provide_details,
                 hintStyle: TextStyle(
                   color: textSecondaryColor.withValues(alpha: 0.5),
                 ),
@@ -265,14 +272,14 @@ class _ReportDialogState extends State<ReportDialog> {
                 contentPadding: EdgeInsets.zero,
                 activeColor: accentColor,
                 title: Text(
-                  "Block / Ban User",
+                  t.block_ban_user,
                   style: TextStyle(
                     color: textColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 subtitle: Text(
-                  "You must provide a comment to enable this.",
+                  t.comment_required_ban,
                   style: TextStyle(color: textSecondaryColor, fontSize: 12),
                 ),
                 value: _banUser,
@@ -290,7 +297,7 @@ class _ReportDialogState extends State<ReportDialog> {
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
                   child: Text(
-                    "Cancel",
+                    t.cancel,
                     style: TextStyle(color: textSecondaryColor),
                   ),
                 ),
@@ -304,7 +311,7 @@ class _ReportDialogState extends State<ReportDialog> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text("Submit Report"),
+                  child: Text(t.submit_report),
                 ),
               ],
             ),

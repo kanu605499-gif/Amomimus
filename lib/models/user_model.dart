@@ -12,6 +12,9 @@ class UserAccount {
   final String registrationDate;
   final bool isDemo;
   final String bio;
+  final String? bioExpirationDate;
+  final int? bioOriginalDuration;
+  final bool hasUsedBioBailout;
   final int coins;
   final int reportedCount;
   final String? lastRedeemed;
@@ -35,6 +38,7 @@ class UserAccount {
   final int
   benevolentPoints; // 0–100 (percentage); 0-59 = CLOUDY, 60-89 = GHOST, 90-100 = NOISE
   final String indicator; // 'cloudy', 'ghost', or 'noise' (noise = admin-only)
+  final String presenceStatus; // 'auto', 'online', 'invisible', 'dnd'
 
   UserAccount({
     this.id,
@@ -47,6 +51,9 @@ class UserAccount {
     required this.registrationDate,
     required this.isDemo,
     this.bio = "No bio yet",
+    this.bioExpirationDate,
+    this.bioOriginalDuration,
+    this.hasUsedBioBailout = false,
     this.coins = 1240,
     this.reportedCount = 0,
     this.lastRedeemed,
@@ -64,6 +71,7 @@ class UserAccount {
     this.localAssignedPoints = const {},
     this.benevolentPoints = 0,
     this.indicator = 'cloudy',
+    this.presenceStatus = 'auto',
   });
 
   /// Firestore-ready: creates a [UserAccount] from a [Map].
@@ -79,6 +87,9 @@ class UserAccount {
       registrationDate: map['registrationDate'],
       isDemo: map['isDemo'] == 1 || map['isDemo'] == true || (map['amomimusId'] as String? ?? '').startsWith('#AMM-'),
       bio: map['bio'] ?? "No bio yet",
+      bioExpirationDate: map['bioExpirationDate'],
+      bioOriginalDuration: map['bioOriginalDuration'],
+      hasUsedBioBailout: map['hasUsedBioBailout'] == 1 || map['hasUsedBioBailout'] == true,
       coins: map['coins'] ?? 1240,
       reportedCount: map['reportedCount'] ?? 0,
       lastRedeemed: map['lastRedeemed'],
@@ -114,6 +125,7 @@ class UserAccount {
           : {},
       benevolentPoints: map['benevolentPoints'] ?? 0,
       indicator: map['indicator'] ?? 'cloudy',
+      presenceStatus: map['presenceStatus'] ?? 'auto',
     );
   }
 
@@ -130,6 +142,9 @@ class UserAccount {
       'registrationDate': registrationDate,
       'isDemo': isDemo ? 1 : 0,
       'bio': bio,
+      'bioExpirationDate': bioExpirationDate,
+      'bioOriginalDuration': bioOriginalDuration,
+      'hasUsedBioBailout': hasUsedBioBailout ? 1 : 0,
       'coins': coins,
       'reportedCount': reportedCount,
       'lastRedeemed': lastRedeemed,
@@ -147,6 +162,7 @@ class UserAccount {
       'localAssignedPoints': localAssignedPoints,
       'benevolentPoints': benevolentPoints,
       'indicator': indicator,
+      'presenceStatus': presenceStatus,
     };
   }
 
@@ -161,6 +177,9 @@ class UserAccount {
     String? registrationDate,
     bool? isDemo,
     String? bio,
+    String? bioExpirationDate,
+    int? bioOriginalDuration,
+    bool? hasUsedBioBailout,
     int? coins,
     int? reportedCount,
     String? lastRedeemed,
@@ -178,6 +197,7 @@ class UserAccount {
     Map<String, int>? localAssignedPoints,
     int? benevolentPoints,
     String? indicator,
+    String? presenceStatus,
   }) {
     return UserAccount(
       id: id ?? this.id,
@@ -190,6 +210,9 @@ class UserAccount {
       registrationDate: registrationDate ?? this.registrationDate,
       isDemo: isDemo ?? this.isDemo,
       bio: bio ?? this.bio,
+      bioExpirationDate: bioExpirationDate ?? this.bioExpirationDate,
+      bioOriginalDuration: bioOriginalDuration ?? this.bioOriginalDuration,
+      hasUsedBioBailout: hasUsedBioBailout ?? this.hasUsedBioBailout,
       coins: coins ?? this.coins,
       reportedCount: reportedCount ?? this.reportedCount,
       lastRedeemed: lastRedeemed ?? this.lastRedeemed,
@@ -210,6 +233,7 @@ class UserAccount {
       localAssignedPoints: localAssignedPoints ?? this.localAssignedPoints,
       benevolentPoints: benevolentPoints ?? this.benevolentPoints,
       indicator: indicator ?? this.indicator,
+      presenceStatus: presenceStatus ?? this.presenceStatus,
     );
   }
 

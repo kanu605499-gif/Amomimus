@@ -316,42 +316,45 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                 child: CustomScrollView(
                   physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   slivers: [
-                    const SliverPadding(padding: EdgeInsets.only(top: 95)),
                     CupertinoSliverRefreshControl(
-                      refreshTriggerPullDistance: 110,
-                      refreshIndicatorExtent: 65,
+                      refreshTriggerPullDistance: 115 + 80,
+                      refreshIndicatorExtent: 115 + 65,
                       onRefresh: () async {
                         await Future.delayed(const Duration(milliseconds: 800));
                         await feedManager.loadFeeds();
                       },
                       builder: (context, refreshState, pulledExtent, refreshTriggerPullDistance, refreshIndicatorExtent) {
                         return Container(
-                          alignment: Alignment.center,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const SizedBox(
-                                width: 26,
-                                height: 26,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2.5,
-                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                          alignment: Alignment.bottomCenter,
+                          child: Transform.translate(
+                            offset: const Offset(0, 28),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const SizedBox(
+                                  width: 26,
+                                  height: 26,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2.5,
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                Translations.of(context).reloading_whispers,
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
+                                const SizedBox(height: 10),
+                                Text(
+                                  Translations.of(context).reloading_whispers,
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },
                     ),
+                    const SliverPadding(padding: EdgeInsets.only(top: 95)),
                     SliverPadding(
                       padding: const EdgeInsets.only(bottom: 120),
                       sliver: feedData.isEmpty

@@ -25,7 +25,13 @@ class ProfileBioSection extends StatefulWidget {
 class _ProfileBioSectionState extends State<ProfileBioSection> {
   final PageController _pageController = PageController();
   final TextEditingController _bioController = TextEditingController();
+  final PageController _durationPageController = PageController(viewportFraction: 0.33);
   bool _bioChanged = false;
+  bool _showCommitOptions = false;
+  int _selectedScrollDurationIndex = 0;
+  bool _isPickingBailoutDuration = false;
+  bool _isEditingBailout = false;
+  int _bailoutSelectedDuration = 0;
 
   @override
   void initState() {
@@ -128,73 +134,124 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Expanded(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _bioController,
-                          maxLines: 2,
-                          maxLength: 80,
-                          onChanged: (val) {
-                            if (!_bioChanged) {
-                              setState(() => _bioChanged = true);
-                            }
-                          },
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: widget.isDark
-                                ? Colors.white
-                                : Colors.black87,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: t.write_bio,
-                            hintStyle: TextStyle(
-                              color: widget.isDark
-                                  ? Colors.grey[600]
-                                  : Colors.grey[400],
+                Builder(
+                  builder: (context) {
+                    bool isLocked = false;
+                    String lockTimeLeft = "";
+                    if (widget.user.bioExpirationDate != null) {
+                      final expDate = DateTime.tryParse(widget.user.bioExpirationDate!);
+                      if (expDate != null && expDate.isAfter(DateTime.now())) {
+                        isLocked = true;
+                        final diff = expDate.difference(DateTime.now());
+                        lockTimeLeft = "${diff.inDays}d ${diff.inHours % 24}h";
+                      }
+                    }
+
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _bioController,
+                              maxLines: 2,
+                              maxLength: 80,
+                              readOnly: isLocked && !_isEditingBailout,
+                              enableInteractiveSelection: !isLocked || _isEditingBailout,
+                              onChanged: (val) {
+                                if (!_bioChanged && !isLocked) {
+                                  setState(() => _bioChanged = true);
+                                } else if (isLocked && _isEditingBailout && !_bioChanged) {
+                                  setState(() => _bioChanged = true);
+                                }
+                              },
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: widget.isDark
+                                    ? Colors.white
+                                    : Colors.black87,
+                              ),
+                              decoration: InputDecoration(
+                                hintText: t.write_bio,
+                                hintStyle: TextStyle(
+                                  color: widget.isDark
+                                      ? Colors.grey[600]
+                                      : Colors.grey[400],
+                                ),
+                                counterText: '',
+                                border: InputBorder.none,
+                                isDense: true,
+                                contentPadding: EdgeInsets.zero,
+                              ),
                             ),
-                            counterText: '',
-                            border: InputBorder.none,
-                            isDense: true,
-                            contentPadding: EdgeInsets.zero,
                           ),
-                        ),
-                      ),
-                      if (_bioChanged)
-                        GestureDetector(
-                          onTap: () async {
-                            final text = _bioController.text.trim();
-                            if (text.isEmpty) return;
-                            await Provider.of<AccountManager>(
-                              context,
-                              listen: false,
-                            ).updateBio(text);
-                            setState(() => _bioChanged = false);
-                            if (context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(t.bio_updated),
-                                  backgroundColor: widget.isDark
+                          if (isLocked && !_isPickingBailoutDuration && !_isEditingBailout)
+                            _buildLockUI(context, lockTimeLeft, t)
+                          else if (_isPickingBailoutDuration)
+                            _buildBailoutDurationPicker(context, t)
+                          else if (_isEditingBailout)
+                            GestureDetector(
+                              onTap: () async {
+                                final text = _bioController.text.trim();
+                                if (text.isEmpty) return;
+
+                                final am = Provider.of<AccountManager>(context, listen: false);
+                                final messenger = ScaffoldMessenger.of(context);
+                                final themeColor = widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
+                                
+                                final success = await am.bailoutBio();
+                                if (success) {
+                                  await am.updateBio(text, _bailoutSelectedDuration);
+                                  if (mounted) {
+                                    setState(() {
+                                      _isEditingBailout = false;
+                                      _bioChanged = false;
+                                      _showCommitOptions = false;
+                                    });
+                                    messenger.showSnackBar(SnackBar(content: Text(t.bio_bailout_used), backgroundColor: themeColor));
+                                  }
+                                } else {
+                                  if (mounted) {
+                                    messenger.showSnackBar(SnackBar(content: Text(t.bio_not_enough_coins), backgroundColor: Colors.redAccent));
+                                  }
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Icon(
+                                  Icons.send_rounded,
+                                  size: 22,
+                                  color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                                ),
+                              ),
+                            )
+                          else if (_showCommitOptions)
+                            _buildScrollWheelOptions(context, t)
+                          else if (_bioChanged)
+                            GestureDetector(
+                              onTap: () {
+                                final text = _bioController.text.trim();
+                                if (text.isEmpty) return;
+                                setState(() {
+                                  _showCommitOptions = true;
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Icon(
+                                  Icons.send_rounded,
+                                  size: 22,
+                                  color: widget.isDark
                                       ? AmomimusDarkTheme.policeLineYellow
                                       : AmomimusDarkTheme.primaryPurple,
                                 ),
-                              );
-                            }
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: Icon(
-                              Icons.send_rounded,
-                              size: 22,
-                              color: widget.isDark
-                                  ? AmomimusDarkTheme.policeLineYellow
-                                  : AmomimusDarkTheme.primaryPurple,
+                              ),
                             ),
-                          ),
-                        ),
-                    ],
-                  ),
+                        ],
+                      ),
+                    );
+                  }
                 ),
                 const Spacer(),
                 Center(
@@ -236,16 +293,12 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
               border: Border.all(
                 color: widget.isDark
                     ? AmomimusDarkTheme.policeLineYellow.withValues(alpha: 0.5)
-                    : Colors.amber.shade300,
+                    : AmomimusDarkTheme.policeLineYellow.withValues(alpha: 0.8),
                 width: 1.5,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: widget.isDark
-                      ? AmomimusDarkTheme.policeLineYellow.withValues(
-                          alpha: 0.1,
-                        )
-                      : Colors.amber.withValues(alpha: 0.2),
+                  color: AmomimusDarkTheme.policeLineYellow.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -261,7 +314,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                       size: 18,
                       color: widget.isDark
                           ? AmomimusDarkTheme.policeLineYellow
-                          : Colors.amber.shade800,
+                          : Colors.amber.shade700,
                     ),
                     const SizedBox(width: 8),
                     Text(
@@ -270,7 +323,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                         fontWeight: FontWeight.bold,
                         color: widget.isDark
                             ? AmomimusDarkTheme.policeLineYellow
-                            : Colors.amber.shade900,
+                            : Colors.amber.shade700,
                       ),
                     ),
                   ],
@@ -316,8 +369,14 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text(t.redeemed_100_coins),
-                                    backgroundColor: Colors.orange,
+                                    content: Text(
+                                      t.redeemed_100_coins,
+                                      style: TextStyle(
+                                        color: widget.isDark ? Colors.black : Colors.black87,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    backgroundColor: AmomimusDarkTheme.policeLineYellow,
                                   ),
                                 );
                               }
@@ -393,6 +452,198 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLockUI(BuildContext context, String timeStr, Translations t) {
+    final bool hasBailout = !widget.user.hasUsedBioBailout;
+    final Color iconColor = hasBailout
+        ? (widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple)
+        : Colors.grey[500]!;
+
+    return GestureDetector(
+      onTap: hasBailout ? () => _showBailoutDialog(context, t) : null,
+      child: Container(
+        padding: const EdgeInsets.only(left: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.lock, color: iconColor, size: 20),
+            Text(
+              timeStr,
+              style: TextStyle(
+                fontSize: 10,
+                color: Colors.grey[500],
+                fontFamily: 'monospace',
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showBailoutDialog(BuildContext context, Translations t) {
+    showDialog<bool>(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
+        title: Text("Bailout", style: TextStyle(color: widget.isDark ? Colors.white : Colors.black87)),
+        content: Text(t.bio_bailout_warning, style: TextStyle(color: widget.isDark ? Colors.white70 : Colors.black54)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(t.continue_btn, style: TextStyle(color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    ).then((result) {
+      if (result == true && mounted) {
+        setState(() {
+          _isPickingBailoutDuration = true;
+        });
+      }
+    });
+  }
+
+  Widget _buildBailoutDurationPicker(BuildContext context, Translations t) {
+    final themeColor = widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
+    final labels = [t.bio_duration_3, t.bio_duration_5, t.bio_duration_7, t.bio_duration_15, t.bio_duration_30];
+    final days = [3, 5, 7, 15, 30];
+
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOutCubic,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(days.length, (index) {
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  _bailoutSelectedDuration = days[index];
+                  _isPickingBailoutDuration = false;
+                  _isEditingBailout = true;
+                });
+                _showBailoutConfirmDialog(context, t);
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 12),
+                child: Text(
+                  labels[index],
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: themeColor,
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  void _showBailoutConfirmDialog(BuildContext context, Translations t) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
+        content: Text(t.bio_bailout_confirm, style: TextStyle(color: widget.isDark ? Colors.white70 : Colors.black54)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(t.ok, style: TextStyle(color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildScrollWheelOptions(BuildContext context, Translations t) {
+    final themeColor = widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
+    final labels = [t.bio_duration_3, t.bio_duration_5, t.bio_duration_7, t.bio_duration_15, t.bio_duration_30];
+    final days = [3, 5, 7, 15, 30];
+
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeOutCubic,
+      child: Container(
+        margin: const EdgeInsets.only(left: 12),
+        width: 36,
+        height: 70,
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification notification) {
+            if (notification is ScrollEndNotification && notification.depth == 0) {
+              final text = _bioController.text.trim();
+              if (text.isNotEmpty) {
+                 final am = Provider.of<AccountManager>(context, listen: false);
+                 final messenger = ScaffoldMessenger.of(context);
+                 am.updateBio(text, days[_selectedScrollDurationIndex]).then((success) {
+                   if (success && mounted) {
+                     setState(() {
+                       _bioChanged = false;
+                       _showCommitOptions = false;
+                     });
+                     messenger.showSnackBar(SnackBar(content: Text(t.bio_updated), backgroundColor: themeColor));
+                   } else if (!success && mounted) {
+                     messenger.showSnackBar(SnackBar(content: Text(t.bio_not_enough_coins), backgroundColor: Colors.redAccent));
+                   }
+                 });
+              }
+            }
+            return false;
+          },
+          child: PageView.builder(
+            scrollDirection: Axis.vertical,
+            controller: _durationPageController,
+            itemCount: days.length,
+            onPageChanged: (index) {
+              setState(() {
+                _selectedScrollDurationIndex = index;
+              });
+            },
+            itemBuilder: (context, index) {
+              final isSelected = index == _selectedScrollDurationIndex;
+              return GestureDetector(
+                onTap: () {
+                   if (isSelected) {
+                     final text = _bioController.text.trim();
+                     if (text.isNotEmpty) {
+                       final am = Provider.of<AccountManager>(context, listen: false);
+                       final messenger = ScaffoldMessenger.of(context);
+                       am.updateBio(text, days[index]).then((success) {
+                         if (success && mounted) {
+                           setState(() {
+                             _bioChanged = false;
+                             _showCommitOptions = false;
+                           });
+                           messenger.showSnackBar(SnackBar(content: Text(t.bio_updated), backgroundColor: themeColor));
+                         }
+                       });
+                     }
+                   } else {
+                     _durationPageController.animateToPage(index, duration: const Duration(milliseconds: 200), curve: Curves.ease);
+                   }
+                },
+                child: Center(
+                  child: Text(
+                    labels[index],
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      color: isSelected ? themeColor : Colors.grey,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }

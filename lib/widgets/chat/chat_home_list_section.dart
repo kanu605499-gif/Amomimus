@@ -7,6 +7,7 @@ import 'package:amomimus/i18n/strings.g.dart';
 import '../../models/user_indicator_model.dart';
 import '../../models/user_model.dart';
 import '../../models/chat_preview_model.dart';
+import '../profile/presence_picker_capsule.dart';
 import '../../services/account_manager.dart';
 import '../../services/chat_request_manager.dart';
 import '../../services/chatmodel.dart';
@@ -187,17 +188,23 @@ class ChatListTileWidget extends StatelessWidget {
                           size: 28,
                         ),
                       ),
-                      if (chat.isOnline)
+                      if (chat.isOnline || (targetAccount.presenceStatus != 'invisible' && targetAccount.presenceStatus != 'offline'))
                         Positioned(
                           bottom: -1,
                           right: -1,
                           child: Container(
-                            width: 12,
-                            height: 12,
                             decoration: BoxDecoration(
-                              color: Colors.green,
                               shape: BoxShape.circle,
                               border: Border.all(color: tileBg, width: 1.5),
+                            ),
+                            child: ClipOval(
+                              child: Container(
+                                color: tileBg,
+                                child: PresencePickerCapsule.getPresenceIcon(
+                                  targetAccount.presenceStatus,
+                                  size: 12,
+                                ),
+                              ),
                             ),
                           ),
                         ),

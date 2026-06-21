@@ -1,7 +1,9 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../amomimusdark.dart';
 import 'package:amomimus/i18n/strings.g.dart';
+import '../widgets/particle_background.dart';
 
 class AppDocumentationScreen extends StatelessWidget {
   const AppDocumentationScreen({super.key});
@@ -71,24 +73,35 @@ class AppDocumentationScreen extends StatelessWidget {
         ? AmomimusDarkTheme.policeLineYellow
         : AmomimusDarkTheme.primaryPurple;
     final bgColor = isDark ? AmomimusDarkTheme.backgroundDark : Colors.white;
-    final cardColor = isDark
-        ? AmomimusDarkTheme.surfaceDark
-        : const Color(0xFFF4F0FF);
+    final cardColor = isDark 
+        ? Colors.white.withValues(alpha: 0.05) 
+        : Colors.black.withValues(alpha: 0.03);
 
     return Scaffold(
       backgroundColor: bgColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(
-          t.doc_title,
-          style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: bgColor,
-        elevation: 0,
-        iconTheme: IconThemeData(color: textColor),
-      ),
-      body: SafeArea(
-        child: ListView(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: ParticleBackground(
+              particleColor: textColor.withValues(alpha: 0.15),
+            ),
+          ),
+          Column(
+            children: [
+              AppBar(
+                automaticallyImplyLeading: false,
+                title: Text(
+                  t.doc_title,
+                  style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
+                ),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                iconTheme: IconThemeData(color: textColor),
+              ),
+              Expanded(
+                child: SafeArea(
+                  top: false,
+                  child: ListView(
           padding: const EdgeInsets.all(24.0),
           children: [
             Text(
@@ -105,65 +118,62 @@ class AppDocumentationScreen extends StatelessWidget {
               final idx = index + 1;
               return Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: cardColor,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: textColor.withValues(alpha: 0.2),
-                      width: 1.5,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(
-                          alpha: isDark ? 0.2 : 0.05,
-                        ),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Theme(
-                    data: Theme.of(
-                      context,
-                    ).copyWith(dividerColor: Colors.transparent),
-                    child: ExpansionTile(
-                      iconColor: textColor,
-                      collapsedIconColor: textColor.withValues(alpha: 0.7),
-                      tilePadding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 8,
-                      ),
-                      title: Text(
-                        _getDocTitle(idx),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? Colors.white : Colors.black87,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: textColor.withValues(alpha: 0.3),
+                          width: 1.0,
                         ),
                       ),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 20.0,
-                            right: 20.0,
-                            bottom: 20.0,
+                      child: Theme(
+                        data: Theme.of(
+                          context,
+                        ).copyWith(dividerColor: Colors.transparent),
+                        child: ExpansionTile(
+                          iconColor: textColor,
+                          collapsedIconColor: textColor.withValues(alpha: 0.7),
+                          tilePadding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 8,
                           ),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              _getDocDesc(idx),
-                              style: TextStyle(
-                                fontSize: 14,
-                                height: 1.5,
-                                color: isDark
-                                    ? Colors.white70
-                                    : Colors.black87.withValues(alpha: 0.7),
-                              ),
+                          title: Text(
+                            _getDocTitle(idx),
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
                             ),
                           ),
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 20.0,
+                                right: 20.0,
+                                bottom: 20.0,
+                              ),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  _getDocDesc(idx),
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    height: 1.5,
+                                    color: isDark
+                                        ? Colors.white70
+                                        : Colors.black87.withValues(alpha: 0.7),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -182,6 +192,11 @@ class AppDocumentationScreen extends StatelessWidget {
             ),
           ],
         ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

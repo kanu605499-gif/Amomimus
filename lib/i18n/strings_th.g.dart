@@ -310,6 +310,32 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String chat_log_unpin({required Object actor}) => '${actor} เลิกปักหมุดข้อความจาก Memories';
 	@override String chat_log_erase({required Object actor}) => '${actor} ลบข้อความออกจาก Memories อย่างถาวร';
 	@override String get reloading_whispers => 'กำลังโหลดเสียงกระซิบใหม่...';
+	@override String get report_user => 'รายงานผู้ใช้';
+	@override String get report_message => 'รายงานข้อความ';
+	@override String get select_category => 'เลือกหมวดหมู่:';
+	@override String get detailed_comment => 'รายละเอียด (จำเป็นสำหรับการแบน):';
+	@override String get provide_details => 'กรุณาให้รายละเอียด...';
+	@override String get block_ban_user => 'บล็อกผู้ใช้';
+	@override String get comment_required_ban => 'คุณต้องระบุความคิดเห็นเพื่อเปิดใช้งานสิ่งนี้';
+	@override String get submit_report => 'ส่งรายงาน';
+	@override String get report_submitted => 'ส่งรายงานแล้ว';
+	@override String get report_sent_user_blocked => 'ส่งรายงานแล้วและผู้ใช้ถูกบล็อกแล้ว';
+	@override String get thank_you_safe => 'ขอบคุณที่ทำให้ Amomimus เป็นพื้นที่ที่ปลอดภัยขึ้น';
+	@override String get close => 'ปิด';
+	@override String get category_spam => 'สแปม / การคุกคาม';
+	@override String get category_inappropriate => 'เนื้อหาไม่เหมาะสม';
+	@override String get category_hate => 'คำพูดเกลียดชัง';
+	@override String get bio_duration_3 => '3ว';
+	@override String get bio_duration_5 => '5ว';
+	@override String get bio_duration_7 => '7ว';
+	@override String get bio_duration_15 => '15ว';
+	@override String get bio_duration_30 => '30ว';
+	@override String get bio_bailout => 'Bailout (1 ครั้งเท่านั้น)';
+	@override String get bio_not_enough_coins => 'เหรียญไม่พอ';
+	@override String get bio_locked => 'ล็อค';
+	@override String get bio_bailout_used => 'ใช้ Bailout แล้ว';
+	@override String get bio_bailout_warning => 'คุณได้กดตัวเลือก bailout แบบครั้งเดียวเพื่อแก้ไขประวัติของคุณ โปรดกดดำเนินการต่อเพื่อเข้าสู่กระบวนการ bailout โดยใช้ 500 coins';
+	@override String get bio_bailout_confirm => 'โปรดยืนยัน bailout ของคุณโดยกดปุ่มเครื่องบินกระดาษ';
 }
 
 /// The flat map containing all translations for locale <th>.
@@ -591,6 +617,32 @@ extension on TranslationsTh {
 			'chat_log_unpin' => ({required Object actor}) => '${actor} เลิกปักหมุดข้อความจาก Memories',
 			'chat_log_erase' => ({required Object actor}) => '${actor} ลบข้อความออกจาก Memories อย่างถาวร',
 			'reloading_whispers' => 'กำลังโหลดเสียงกระซิบใหม่...',
+			'report_user' => 'รายงานผู้ใช้',
+			'report_message' => 'รายงานข้อความ',
+			'select_category' => 'เลือกหมวดหมู่:',
+			'detailed_comment' => 'รายละเอียด (จำเป็นสำหรับการแบน):',
+			'provide_details' => 'กรุณาให้รายละเอียด...',
+			'block_ban_user' => 'บล็อกผู้ใช้',
+			'comment_required_ban' => 'คุณต้องระบุความคิดเห็นเพื่อเปิดใช้งานสิ่งนี้',
+			'submit_report' => 'ส่งรายงาน',
+			'report_submitted' => 'ส่งรายงานแล้ว',
+			'report_sent_user_blocked' => 'ส่งรายงานแล้วและผู้ใช้ถูกบล็อกแล้ว',
+			'thank_you_safe' => 'ขอบคุณที่ทำให้ Amomimus เป็นพื้นที่ที่ปลอดภัยขึ้น',
+			'close' => 'ปิด',
+			'category_spam' => 'สแปม / การคุกคาม',
+			'category_inappropriate' => 'เนื้อหาไม่เหมาะสม',
+			'category_hate' => 'คำพูดเกลียดชัง',
+			'bio_duration_3' => '3ว',
+			'bio_duration_5' => '5ว',
+			'bio_duration_7' => '7ว',
+			'bio_duration_15' => '15ว',
+			'bio_duration_30' => '30ว',
+			'bio_bailout' => 'Bailout (1 ครั้งเท่านั้น)',
+			'bio_not_enough_coins' => 'เหรียญไม่พอ',
+			'bio_locked' => 'ล็อค',
+			'bio_bailout_used' => 'ใช้ Bailout แล้ว',
+			'bio_bailout_warning' => 'คุณได้กดตัวเลือก bailout แบบครั้งเดียวเพื่อแก้ไขประวัติของคุณ โปรดกดดำเนินการต่อเพื่อเข้าสู่กระบวนการ bailout โดยใช้ 500 coins',
+			'bio_bailout_confirm' => 'โปรดยืนยัน bailout ของคุณโดยกดปุ่มเครื่องบินกระดาษ',
 			_ => null,
 		};
 	}

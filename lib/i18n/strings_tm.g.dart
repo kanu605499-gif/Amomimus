@@ -307,6 +307,32 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String chat_log_unpin({required Object actor}) => '${actor} habary Memories-den aýyrdy';
 	@override String chat_log_erase({required Object actor}) => '${actor} habary Memories-den hemişelik pozdy';
 	@override String get reloading_whispers => 'Käbir Pyşyrdylary Täzeden Ýüklenýär...';
+	@override String get report_user => 'Condemn Joor';
+	@override String get report_message => 'Condemn Rot';
+	@override String get select_category => 'Select a transgression:';
+	@override String get detailed_comment => 'Scribe your reason (required for banishment):';
+	@override String get provide_details => 'Detail the transgression...';
+	@override String get block_ban_user => 'Throw in Dungeon';
+	@override String get comment_required_ban => 'You must scribe a reason to banish this soul.';
+	@override String get submit_report => 'Summon Guards';
+	@override String get report_submitted => 'Guards Summoned';
+	@override String get report_sent_user_blocked => 'The guards have taken the soul to the dungeon.';
+	@override String get thank_you_safe => 'You have done Skyrim a great service.';
+	@override String get close => 'Sheathe';
+	@override String get category_spam => 'Annoying Bard / Harassment';
+	@override String get category_inappropriate => 'Skooma Dealing / Vile Act';
+	@override String get category_hate => 'Blasphemy against the Divines';
+	@override String get bio_duration_3 => '3R';
+	@override String get bio_duration_5 => '5R';
+	@override String get bio_duration_7 => '7R';
+	@override String get bio_duration_15 => '15R';
+	@override String get bio_duration_30 => '30R';
+	@override String get bio_bailout => 'Bailout (1 Attempt)';
+	@override String get bio_not_enough_coins => 'Not enough Septims.';
+	@override String get bio_locked => 'Bound';
+	@override String get bio_bailout_used => 'Bailout exhausted.';
+	@override String get bio_bailout_warning => 'Siz bioňyzy üýtgetmek üçin bir gezeklik bailout opsiýasyna basdyňyz. 500 teňňe ulanyp bailout prosesini dowam etdirmek üçin dowam et düwmesine basyň.';
+	@override String get bio_bailout_confirm => 'Kagyz uçary düwmesine basyp bailoutyňyzy tassyklaň.';
 }
 
 /// The flat map containing all translations for locale <tm>.
@@ -585,6 +611,32 @@ extension on TranslationsTm {
 			'chat_log_unpin' => ({required Object actor}) => '${actor} habary Memories-den aýyrdy',
 			'chat_log_erase' => ({required Object actor}) => '${actor} habary Memories-den hemişelik pozdy',
 			'reloading_whispers' => 'Käbir Pyşyrdylary Täzeden Ýüklenýär...',
+			'report_user' => 'Condemn Joor',
+			'report_message' => 'Condemn Rot',
+			'select_category' => 'Select a transgression:',
+			'detailed_comment' => 'Scribe your reason (required for banishment):',
+			'provide_details' => 'Detail the transgression...',
+			'block_ban_user' => 'Throw in Dungeon',
+			'comment_required_ban' => 'You must scribe a reason to banish this soul.',
+			'submit_report' => 'Summon Guards',
+			'report_submitted' => 'Guards Summoned',
+			'report_sent_user_blocked' => 'The guards have taken the soul to the dungeon.',
+			'thank_you_safe' => 'You have done Skyrim a great service.',
+			'close' => 'Sheathe',
+			'category_spam' => 'Annoying Bard / Harassment',
+			'category_inappropriate' => 'Skooma Dealing / Vile Act',
+			'category_hate' => 'Blasphemy against the Divines',
+			'bio_duration_3' => '3R',
+			'bio_duration_5' => '5R',
+			'bio_duration_7' => '7R',
+			'bio_duration_15' => '15R',
+			'bio_duration_30' => '30R',
+			'bio_bailout' => 'Bailout (1 Attempt)',
+			'bio_not_enough_coins' => 'Not enough Septims.',
+			'bio_locked' => 'Bound',
+			'bio_bailout_used' => 'Bailout exhausted.',
+			'bio_bailout_warning' => 'Siz bioňyzy üýtgetmek üçin bir gezeklik bailout opsiýasyna basdyňyz. 500 teňňe ulanyp bailout prosesini dowam etdirmek üçin dowam et düwmesine basyň.',
+			'bio_bailout_confirm' => 'Kagyz uçary düwmesine basyp bailoutyňyzy tassyklaň.',
 			_ => null,
 		};
 	}

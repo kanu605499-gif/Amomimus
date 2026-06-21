@@ -121,10 +121,25 @@ class AccountManager extends ChangeNotifier {
     }
   }
 
-  Future<void> updateBio(String newBio) async {
-    if (_currentUser == null) return;
+  Future<bool> updateBio(String newBio, int durationDays) async {
+    if (_currentUser == null) return false;
 
-    final updatedUser = _currentUser!.copyWith(bio: newBio);
+    final expirationDate = DateTime.now().add(Duration(days: durationDays)).toIso8601String();
+
+    bool shouldResetBailout = false;
+    if (_currentUser!.bioExpirationDate != null) {
+      final expDate = DateTime.tryParse(_currentUser!.bioExpirationDate!);
+      if (expDate != null && expDate.isBefore(DateTime.now())) {
+        shouldResetBailout = true;
+      }
+    }
+
+    final updatedUser = _currentUser!.copyWith(
+      bio: newBio,
+      bioExpirationDate: expirationDate,
+      bioOriginalDuration: durationDays,
+      hasUsedBioBailout: shouldResetBailout ? false : _currentUser!.hasUsedBioBailout,
+    );
 
     try {
       await DatabaseHelper.instance.updateUser(updatedUser);
@@ -140,6 +155,41 @@ class AccountManager extends ChangeNotifier {
     }
 
     notifyListeners();
+    return true;
+  }
+
+  Future<bool> bailoutBio() async {
+    if (_currentUser == null) return false;
+    if (_currentUser!.hasUsedBioBailout) return false;
+
+    int cost = (_currentUser!.bioOriginalDuration ?? 0) <= 7 ? 500 : 0;
+    if (_currentUser!.coins < cost) {
+      return false; // Not enough coins
+    }
+
+    final newCoins = _currentUser!.coins - cost;
+
+    final updatedUser = _currentUser!.copyWith(
+      coins: newCoins,
+      hasUsedBioBailout: true,
+      bioExpirationDate: null,
+    );
+
+    try {
+      await DatabaseHelper.instance.updateUser(updatedUser);
+    } catch (e) {
+      print("==== DB UPDATE SKIPPED: $e ====");
+    }
+
+    _currentUser = updatedUser;
+
+    final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
+    if (index != -1) {
+      _accounts[index] = updatedUser;
+    }
+
+    notifyListeners();
+    return true;
   }
 
   Future<void> updateCoins(
@@ -379,6 +429,32 @@ class AccountManager extends ChangeNotifier {
     } catch (_) {
       return null;
     }
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // PRESENCE SYSTEM
+  // ══════════════════════════════════════════════════════════
+
+  Future<void> updatePresenceStatus(String status) async {
+    if (_currentUser == null) return;
+    
+    // Update local currentUser
+    _currentUser = _currentUser!.copyWith(presenceStatus: status);
+    
+    // Update in memory list
+    final idx = _accounts.indexWhere((acc) => acc.id == _currentUser!.id);
+    if (idx != -1) {
+      _accounts[idx] = _currentUser!;
+    }
+    
+    // Persist to local database
+    try {
+      await DatabaseHelper.instance.updateUser(_currentUser!);
+    } catch (e) {
+      print("==== DB UPDATE SKIPPED: $e ====");
+    }
+    
+    notifyListeners();
   }
 
   // ══════════════════════════════════════════════════════════

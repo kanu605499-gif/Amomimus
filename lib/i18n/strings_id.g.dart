@@ -310,6 +310,36 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String chat_log_unpin({required Object actor}) => '${actor} melepas sematan pesan dari Memories';
 	@override String chat_log_erase({required Object actor}) => '${actor} menghapus pesan dari Memories secara permanen';
 	@override String get reloading_whispers => 'Memuat Ulang Beberapa Bisikan...';
+	@override String get report_limit_daily => 'Limit global harian tercapai. Diterapkan secara lokal.';
+	@override String get report_limit_category => 'Token global untuk kategori ini habis. Diterapkan secara lokal.';
+	@override String get report_limit_weekly_hate_speech => 'Limit hate speech mingguan tercapai. Diterapkan secara lokal.';
+	@override String get report_limit_global => 'Limit global tercapai. Diterapkan secara lokal.';
+	@override String get report_user => 'Laporkan Pengguna';
+	@override String get report_message => 'Laporkan Pesan';
+	@override String get select_category => 'Pilih kategori:';
+	@override String get detailed_comment => 'Komentar detail (wajib untuk ban):';
+	@override String get provide_details => 'Tolong berikan detail...';
+	@override String get block_ban_user => 'Blokir / Ban Pengguna';
+	@override String get comment_required_ban => 'Anda harus memberikan komentar untuk mengaktifkan ini.';
+	@override String get submit_report => 'Kirim Laporan';
+	@override String get report_submitted => 'Laporan Terkirim';
+	@override String get report_sent_user_blocked => 'Laporan terkirim dan pengguna kini diblokir.';
+	@override String get thank_you_safe => 'Terima kasih telah membuat Amomimus lebih aman.';
+	@override String get close => 'Tutup';
+	@override String get category_spam => 'Spam / Pelecehan';
+	@override String get category_inappropriate => 'Konten Tidak Pantas';
+	@override String get category_hate => 'Ujaran Kebencian';
+	@override String get bio_duration_3 => '3H';
+	@override String get bio_duration_5 => '5H';
+	@override String get bio_duration_7 => '7H';
+	@override String get bio_duration_15 => '15H';
+	@override String get bio_duration_30 => '30H';
+	@override String get bio_bailout => 'Bailout (1x Coba)';
+	@override String get bio_not_enough_coins => 'Koin tidak cukup.';
+	@override String get bio_locked => 'Terkunci';
+	@override String get bio_bailout_used => 'Bailout terpakai.';
+	@override String get bio_bailout_warning => 'Anda telah menekan opsi one time bailout untuk mengedit bio anda, silahkan tekan lanjut untuk melanjutkan proses bailout menggunakan 500 coins.';
+	@override String get bio_bailout_confirm => 'Silahkan konfirmasi bailout anda dengan menekan tombol pesawat kertas.';
 }
 
 /// The flat map containing all translations for locale <id>.
@@ -591,6 +621,36 @@ extension on TranslationsId {
 			'chat_log_unpin' => ({required Object actor}) => '${actor} melepas sematan pesan dari Memories',
 			'chat_log_erase' => ({required Object actor}) => '${actor} menghapus pesan dari Memories secara permanen',
 			'reloading_whispers' => 'Memuat Ulang Beberapa Bisikan...',
+			'report_limit_daily' => 'Limit global harian tercapai. Diterapkan secara lokal.',
+			'report_limit_category' => 'Token global untuk kategori ini habis. Diterapkan secara lokal.',
+			'report_limit_weekly_hate_speech' => 'Limit hate speech mingguan tercapai. Diterapkan secara lokal.',
+			'report_limit_global' => 'Limit global tercapai. Diterapkan secara lokal.',
+			'report_user' => 'Laporkan Pengguna',
+			'report_message' => 'Laporkan Pesan',
+			'select_category' => 'Pilih kategori:',
+			'detailed_comment' => 'Komentar detail (wajib untuk ban):',
+			'provide_details' => 'Tolong berikan detail...',
+			'block_ban_user' => 'Blokir / Ban Pengguna',
+			'comment_required_ban' => 'Anda harus memberikan komentar untuk mengaktifkan ini.',
+			'submit_report' => 'Kirim Laporan',
+			'report_submitted' => 'Laporan Terkirim',
+			'report_sent_user_blocked' => 'Laporan terkirim dan pengguna kini diblokir.',
+			'thank_you_safe' => 'Terima kasih telah membuat Amomimus lebih aman.',
+			'close' => 'Tutup',
+			'category_spam' => 'Spam / Pelecehan',
+			'category_inappropriate' => 'Konten Tidak Pantas',
+			'category_hate' => 'Ujaran Kebencian',
+			'bio_duration_3' => '3H',
+			'bio_duration_5' => '5H',
+			'bio_duration_7' => '7H',
+			'bio_duration_15' => '15H',
+			'bio_duration_30' => '30H',
+			'bio_bailout' => 'Bailout (1x Coba)',
+			'bio_not_enough_coins' => 'Koin tidak cukup.',
+			'bio_locked' => 'Terkunci',
+			'bio_bailout_used' => 'Bailout terpakai.',
+			'bio_bailout_warning' => 'Anda telah menekan opsi one time bailout untuk mengedit bio anda, silahkan tekan lanjut untuk melanjutkan proses bailout menggunakan 500 coins.',
+			'bio_bailout_confirm' => 'Silahkan konfirmasi bailout anda dengan menekan tombol pesawat kertas.',
 			_ => null,
 		};
 	}

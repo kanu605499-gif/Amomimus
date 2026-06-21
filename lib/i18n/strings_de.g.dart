@@ -310,6 +310,17 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String chat_log_unpin({required Object actor}) => '${actor} hat eine Nachricht von Memories losgelöst';
 	@override String chat_log_erase({required Object actor}) => '${actor} hat eine Nachricht dauerhaft aus Memories gelöscht';
 	@override String get reloading_whispers => 'Einige Flüstern Werden Neu Geladen...';
+	@override String get bio_duration_3 => '3T';
+	@override String get bio_duration_5 => '5T';
+	@override String get bio_duration_7 => '7T';
+	@override String get bio_duration_15 => '15T';
+	@override String get bio_duration_30 => '30T';
+	@override String get bio_bailout => 'Bailout (Nur 1 Versuch)';
+	@override String get bio_not_enough_coins => 'Nicht genug Münzen.';
+	@override String get bio_locked => 'Gesperrt';
+	@override String get bio_bailout_used => 'Bailout verbraucht.';
+	@override String get bio_bailout_warning => 'Sie haben die einmalige Bailout-Option gedrückt, um Ihre Bio zu bearbeiten. Bitte drücken Sie auf Weiter, um den Bailout-Vorgang mit 500 Münzen fortzusetzen.';
+	@override String get bio_bailout_confirm => 'Bitte bestätigen Sie Ihren Bailout, indem Sie auf die Papierflugzeug-Taste drücken.';
 }
 
 /// The flat map containing all translations for locale <de>.
@@ -591,6 +602,17 @@ extension on TranslationsDe {
 			'chat_log_unpin' => ({required Object actor}) => '${actor} hat eine Nachricht von Memories losgelöst',
 			'chat_log_erase' => ({required Object actor}) => '${actor} hat eine Nachricht dauerhaft aus Memories gelöscht',
 			'reloading_whispers' => 'Einige Flüstern Werden Neu Geladen...',
+			'bio_duration_3' => '3T',
+			'bio_duration_5' => '5T',
+			'bio_duration_7' => '7T',
+			'bio_duration_15' => '15T',
+			'bio_duration_30' => '30T',
+			'bio_bailout' => 'Bailout (Nur 1 Versuch)',
+			'bio_not_enough_coins' => 'Nicht genug Münzen.',
+			'bio_locked' => 'Gesperrt',
+			'bio_bailout_used' => 'Bailout verbraucht.',
+			'bio_bailout_warning' => 'Sie haben die einmalige Bailout-Option gedrückt, um Ihre Bio zu bearbeiten. Bitte drücken Sie auf Weiter, um den Bailout-Vorgang mit 500 Münzen fortzusetzen.',
+			'bio_bailout_confirm' => 'Bitte bestätigen Sie Ihren Bailout, indem Sie auf die Papierflugzeug-Taste drücken.',
 			_ => null,
 		};
 	}

@@ -853,6 +853,96 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
 	/// en: 'Reloading Some Whispers...'
 	String get reloading_whispers => 'Reloading Some Whispers...';
+
+	/// en: 'Daily global limit reached. Applying locally.'
+	String get report_limit_daily => 'Daily global limit reached. Applying locally.';
+
+	/// en: 'Global token for this category exhausted. Applying locally.'
+	String get report_limit_category => 'Global token for this category exhausted. Applying locally.';
+
+	/// en: 'Weekly hate speech limit reached. Applying locally.'
+	String get report_limit_weekly_hate_speech => 'Weekly hate speech limit reached. Applying locally.';
+
+	/// en: 'Global limit reached. Applying locally.'
+	String get report_limit_global => 'Global limit reached. Applying locally.';
+
+	/// en: 'Report User'
+	String get report_user => 'Report User';
+
+	/// en: 'Report Message'
+	String get report_message => 'Report Message';
+
+	/// en: 'Select a category:'
+	String get select_category => 'Select a category:';
+
+	/// en: 'Detailed comment (required for ban):'
+	String get detailed_comment => 'Detailed comment (required for ban):';
+
+	/// en: 'Please provide details...'
+	String get provide_details => 'Please provide details...';
+
+	/// en: 'Block / Ban User'
+	String get block_ban_user => 'Block / Ban User';
+
+	/// en: 'You must provide a comment to enable this.'
+	String get comment_required_ban => 'You must provide a comment to enable this.';
+
+	/// en: 'Submit Report'
+	String get submit_report => 'Submit Report';
+
+	/// en: 'Report Submitted'
+	String get report_submitted => 'Report Submitted';
+
+	/// en: 'The report was sent and the user is now blocked.'
+	String get report_sent_user_blocked => 'The report was sent and the user is now blocked.';
+
+	/// en: 'Thank you for making Amomimus a safer place.'
+	String get thank_you_safe => 'Thank you for making Amomimus a safer place.';
+
+	/// en: 'Close'
+	String get close => 'Close';
+
+	/// en: 'Spam / Harassment'
+	String get category_spam => 'Spam / Harassment';
+
+	/// en: 'Inappropriate Content'
+	String get category_inappropriate => 'Inappropriate Content';
+
+	/// en: 'Hate Speech'
+	String get category_hate => 'Hate Speech';
+
+	/// en: '3D'
+	String get bio_duration_3 => '3D';
+
+	/// en: '5D'
+	String get bio_duration_5 => '5D';
+
+	/// en: '7D'
+	String get bio_duration_7 => '7D';
+
+	/// en: '15D'
+	String get bio_duration_15 => '15D';
+
+	/// en: '30D'
+	String get bio_duration_30 => '30D';
+
+	/// en: 'Bailout (1 Try Only)'
+	String get bio_bailout => 'Bailout (1 Try Only)';
+
+	/// en: 'Not enough coins.'
+	String get bio_not_enough_coins => 'Not enough coins.';
+
+	/// en: 'Locked'
+	String get bio_locked => 'Locked';
+
+	/// en: 'Bailout used.'
+	String get bio_bailout_used => 'Bailout used.';
+
+	/// en: 'You have pressed the one-time bailout option to edit your bio. Please press continue to proceed with the bailout process using 500 coins.'
+	String get bio_bailout_warning => 'You have pressed the one-time bailout option to edit your bio. Please press continue to proceed with the bailout process using 500 coins.';
+
+	/// en: 'Please confirm your bailout by pressing the paper plane button.'
+	String get bio_bailout_confirm => 'Please confirm your bailout by pressing the paper plane button.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1134,6 +1224,36 @@ extension on Translations {
 			'chat_log_unpin' => ({required Object actor}) => '${actor} unpinned a message from Memories',
 			'chat_log_erase' => ({required Object actor}) => '${actor} permanently erased a message from Memories',
 			'reloading_whispers' => 'Reloading Some Whispers...',
+			'report_limit_daily' => 'Daily global limit reached. Applying locally.',
+			'report_limit_category' => 'Global token for this category exhausted. Applying locally.',
+			'report_limit_weekly_hate_speech' => 'Weekly hate speech limit reached. Applying locally.',
+			'report_limit_global' => 'Global limit reached. Applying locally.',
+			'report_user' => 'Report User',
+			'report_message' => 'Report Message',
+			'select_category' => 'Select a category:',
+			'detailed_comment' => 'Detailed comment (required for ban):',
+			'provide_details' => 'Please provide details...',
+			'block_ban_user' => 'Block / Ban User',
+			'comment_required_ban' => 'You must provide a comment to enable this.',
+			'submit_report' => 'Submit Report',
+			'report_submitted' => 'Report Submitted',
+			'report_sent_user_blocked' => 'The report was sent and the user is now blocked.',
+			'thank_you_safe' => 'Thank you for making Amomimus a safer place.',
+			'close' => 'Close',
+			'category_spam' => 'Spam / Harassment',
+			'category_inappropriate' => 'Inappropriate Content',
+			'category_hate' => 'Hate Speech',
+			'bio_duration_3' => '3D',
+			'bio_duration_5' => '5D',
+			'bio_duration_7' => '7D',
+			'bio_duration_15' => '15D',
+			'bio_duration_30' => '30D',
+			'bio_bailout' => 'Bailout (1 Try Only)',
+			'bio_not_enough_coins' => 'Not enough coins.',
+			'bio_locked' => 'Locked',
+			'bio_bailout_used' => 'Bailout used.',
+			'bio_bailout_warning' => 'You have pressed the one-time bailout option to edit your bio. Please press continue to proceed with the bailout process using 500 coins.',
+			'bio_bailout_confirm' => 'Please confirm your bailout by pressing the paper plane button.',
 			_ => null,
 		};
 	}

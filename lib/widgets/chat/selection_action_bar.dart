@@ -57,49 +57,53 @@ class SelectionActionBar extends StatelessWidget {
         ],
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.close, size: 20),
-            onPressed: onClearSelection,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            "${selectedMessageIds.length} Selected",
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(width: 16),
-          if (allPending)
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.close, size: 20),
+              onPressed: onClearSelection,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              "${selectedMessageIds.length} Selected",
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(width: 16),
+            if (allPending)
+              TextButton.icon(
+                icon: Icon(
+                  Icons.refresh,
+                  size: 18,
+                  color: themeProvider.isDarkMode ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple,
+                ),
+                label: Text(
+                  t.resend,
+                  style: TextStyle(color: themeProvider.isDarkMode ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple),
+                ),
+                onPressed: () {
+                  _showResendDialog(context, themeProvider, t);
+                },
+              ),
             TextButton.icon(
               icon: const Icon(
-                Icons.refresh,
+                Icons.delete_outline,
                 size: 18,
-                color: Colors.blueAccent,
+                color: Colors.redAccent,
               ),
               label: Text(
-                t.resend,
-                style: const TextStyle(color: Colors.blueAccent),
+                t.delete_selected,
+                style: const TextStyle(color: Colors.redAccent),
               ),
               onPressed: () {
-                _showResendDialog(context, themeProvider, t);
+                _showDeleteDialog(context, themeProvider, t);
               },
             ),
-          TextButton.icon(
-            icon: const Icon(
-              Icons.delete_outline,
-              size: 18,
-              color: Colors.redAccent,
-            ),
-            label: Text(
-              t.delete_selected,
-              style: const TextStyle(color: Colors.redAccent),
-            ),
-            onPressed: () {
-              _showDeleteDialog(context, themeProvider, t);
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -120,7 +124,10 @@ class SelectionActionBar extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: Text(t.cancel),
+            child: Text(
+              t.cancel,
+              style: TextStyle(color: themeProvider.isDarkMode ? Colors.white70 : Colors.black87),
+            ),
           ),
           TextButton(
             onPressed: () {
@@ -134,7 +141,7 @@ class SelectionActionBar extends StatelessWidget {
             },
             child: Text(
               t.resend,
-              style: const TextStyle(color: Colors.blueAccent),
+              style: TextStyle(color: themeProvider.isDarkMode ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple),
             ),
           ),
         ],
@@ -158,7 +165,10 @@ class SelectionActionBar extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: Text(t.cancel),
+            child: Text(
+              t.cancel,
+              style: TextStyle(color: themeProvider.isDarkMode ? Colors.white70 : Colors.black87),
+            ),
           ),
           TextButton(
             onPressed: () {
