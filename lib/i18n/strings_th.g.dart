@@ -215,8 +215,8 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get view => 'ดู';
 	@override String get buy => 'ซื้อ';
 	@override String get unlock_stickers => 'ปลดล็อกสติกเกอร์ของคุณที่นี่';
-	@override String get includes_exclusive_items => 'มีไอเท็มพิเศษ {count} ชิ้น';
-	@override String get stickers_inside => 'มีสติกเกอร์ {tier} {count} ชิ้นอยู่ข้างใน';
+	@override String includes_exclusive_items({required Object count}) => 'มีไอเท็มพิเศษ ${count} ชิ้น';
+	@override String stickers_inside({required Object tier, required Object count}) => 'มีสติกเกอร์ ${tier} ${count} ชิ้นอยู่ข้างใน';
 	@override String get premium => 'พรีเมียม';
 	@override String get already_own_batch => 'คุณเป็นเจ้าของเซตนี้อยู่แล้ว';
 	@override String get not_enough_coins => 'เหรียญไม่พอ';
@@ -335,7 +335,8 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bio_locked => 'ล็อค';
 	@override String get bio_bailout_used => 'ใช้ Bailout แล้ว';
 	@override String get bio_bailout_warning => 'คุณได้กดตัวเลือก bailout แบบครั้งเดียวเพื่อแก้ไขประวัติของคุณ โปรดกดดำเนินการต่อเพื่อเข้าสู่กระบวนการ bailout โดยใช้ 500 coins';
-	@override String get bio_bailout_confirm => 'โปรดยืนยัน bailout ของคุณโดยกดปุ่มเครื่องบินกระดาษ';
+	@override String bio_bailout_confirm({required Object duration}) => '${duration} - โปรดยืนยัน bailout ของคุณโดยกดปุ่มเครื่องบินกระดาษ';
+	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Please confirm your bio.';
 }
 
 /// The flat map containing all translations for locale <th>.
@@ -522,8 +523,8 @@ extension on TranslationsTh {
 			'view' => 'ดู',
 			'buy' => 'ซื้อ',
 			'unlock_stickers' => 'ปลดล็อกสติกเกอร์ของคุณที่นี่',
-			'includes_exclusive_items' => 'มีไอเท็มพิเศษ {count} ชิ้น',
-			'stickers_inside' => 'มีสติกเกอร์ {tier} {count} ชิ้นอยู่ข้างใน',
+			'includes_exclusive_items' => ({required Object count}) => 'มีไอเท็มพิเศษ ${count} ชิ้น',
+			'stickers_inside' => ({required Object tier, required Object count}) => 'มีสติกเกอร์ ${tier} ${count} ชิ้นอยู่ข้างใน',
 			'premium' => 'พรีเมียม',
 			'already_own_batch' => 'คุณเป็นเจ้าของเซตนี้อยู่แล้ว',
 			'not_enough_coins' => 'เหรียญไม่พอ',
@@ -642,7 +643,8 @@ extension on TranslationsTh {
 			'bio_locked' => 'ล็อค',
 			'bio_bailout_used' => 'ใช้ Bailout แล้ว',
 			'bio_bailout_warning' => 'คุณได้กดตัวเลือก bailout แบบครั้งเดียวเพื่อแก้ไขประวัติของคุณ โปรดกดดำเนินการต่อเพื่อเข้าสู่กระบวนการ bailout โดยใช้ 500 coins',
-			'bio_bailout_confirm' => 'โปรดยืนยัน bailout ของคุณโดยกดปุ่มเครื่องบินกระดาษ',
+			'bio_bailout_confirm' => ({required Object duration}) => '${duration} - โปรดยืนยัน bailout ของคุณโดยกดปุ่มเครื่องบินกระดาษ',
+			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Please confirm your bio.',
 			_ => null,
 		};
 	}

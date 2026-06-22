@@ -23,6 +23,17 @@ class AccountManager extends ChangeNotifier {
   UserAccount? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
 
+  List<UserAccount> get switchableAccounts {
+    if (_currentUser == null) return [];
+    final realAccounts = _accounts
+        .where((acc) => !acc.isDemo && acc.masterEmail == _currentUser!.masterEmail)
+        .toList();
+    if (realAccounts.length > 3) {
+      return realAccounts.sublist(0, 3);
+    }
+    return realAccounts;
+  }
+
   Future<void> loadAccounts() async {
     _isLoading = true;
     notifyListeners();
@@ -35,7 +46,19 @@ class AccountManager extends ChangeNotifier {
       _accounts = [];
     }
 
-    // Auto-select the first account if none is selected
+    // Auto-select based on savedEmail in SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    final savedEmail = prefs.getString('savedEmail');
+
+    if (savedEmail != null && savedEmail.isNotEmpty) {
+      final matchingAccounts = _accounts.where(
+        (acc) => acc.email.toLowerCase() == savedEmail.toLowerCase(),
+      );
+      if (matchingAccounts.isNotEmpty) {
+        _currentUser = matchingAccounts.first;
+      }
+    }
+
     if (_accounts.isNotEmpty && _currentUser == null) {
       // By default, select the first demo account if available, else first dummy
       _currentUser = _accounts.firstWhere(
@@ -49,8 +72,6 @@ class AccountManager extends ChangeNotifier {
       );
       if (matchingAccounts.isNotEmpty) {
         _currentUser = matchingAccounts.first;
-      } else {
-        _currentUser = _accounts.isNotEmpty ? _accounts.first : null;
       }
     }
 
@@ -76,7 +97,7 @@ class AccountManager extends ChangeNotifier {
         return newUser;
       },
     );
-    switchAccount(createdUser);
+    await switchAccount(createdUser);
     return true;
   }
 
@@ -89,18 +110,24 @@ class AccountManager extends ChangeNotifier {
     if (user != null) {
       await loadAccounts();
       final loggedInUser = _accounts.firstWhere(
-        (acc) => acc.email == email,
+        (acc) => acc.masterEmail == email,
         orElse: () => user,
       );
-      switchAccount(loggedInUser);
+      await switchAccount(loggedInUser);
       return true;
     }
     return false;
   }
 
-  void switchAccount(UserAccount account) {
+  Future<void> switchAccount(UserAccount account) async {
     _currentUser = account;
     notifyListeners();
+    
+    // Persist the switch
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', true);
+    await prefs.setString('savedEmail', account.email);
+    await prefs.setBool('rememberMe', true);
   }
 
   Future<void> deleteAccount(String email) async {

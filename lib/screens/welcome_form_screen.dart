@@ -64,8 +64,10 @@ class _AmomimusApp4State extends State<AmomimusApp4> {
       ),
     ];
 
-    return Scaffold(
-      backgroundColor: scaffoldBg,
+    return Theme(
+      data: ThemeData.light(),
+      child: Scaffold(
+        backgroundColor: scaffoldBg,
       appBar: AppBar(
         title: Padding(
           padding: EdgeInsets.only(left: 9.0),
@@ -116,6 +118,7 @@ class _AmomimusApp4State extends State<AmomimusApp4> {
           ),
         ],
       ),
+    ),
     );
   }
 }

@@ -213,10 +213,7 @@ class _StickerShopScreenState extends State<StickerShopScreen>
               ),
               const SizedBox(height: 8),
               Text(
-                t.includes_exclusive_items.replaceAll(
-                  '{count}',
-                  '${batch.stickers.length}',
-                ),
+                t.includes_exclusive_items(count: batch.stickers.length),
                 style: TextStyle(
                   fontSize: 14,
                   color: isDark
@@ -593,14 +590,12 @@ class _StickerShopScreenState extends State<StickerShopScreen>
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        t.stickers_inside
-                            .replaceAll('{count}', '${batch.stickers.length}')
-                            .replaceAll(
-                              '{tier}',
-                              batch.stickers.isNotEmpty
-                                  ? batch.stickers.first.tier
-                                  : t.premium,
-                            ),
+                        t.stickers_inside(
+                          count: batch.stickers.length,
+                          tier: batch.stickers.isNotEmpty
+                              ? batch.stickers.first.tier
+                              : t.premium,
+                        ),
                         style: TextStyle(
                           fontSize: 14,
                           fontStyle: FontStyle.italic,

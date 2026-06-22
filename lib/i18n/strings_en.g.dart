@@ -569,11 +569,11 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// en: 'Unlock your stickers here'
 	String get unlock_stickers => 'Unlock your stickers here';
 
-	/// en: 'Includes {count} exclusive items'
-	String get includes_exclusive_items => 'Includes {count} exclusive items';
+	/// en: 'Includes ${count} exclusive items'
+	String includes_exclusive_items({required Object count}) => 'Includes ${count} exclusive items';
 
-	/// en: '{count} {tier} stickers inside.'
-	String get stickers_inside => '{count} {tier} stickers inside.';
+	/// en: '${count} ${tier} stickers inside.'
+	String stickers_inside({required Object count, required Object tier}) => '${count} ${tier} stickers inside.';
 
 	/// en: 'premium'
 	String get premium => 'premium';
@@ -941,8 +941,11 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// en: 'You have pressed the one-time bailout option to edit your bio. Please press continue to proceed with the bailout process using 500 coins.'
 	String get bio_bailout_warning => 'You have pressed the one-time bailout option to edit your bio. Please press continue to proceed with the bailout process using 500 coins.';
 
-	/// en: 'Please confirm your bailout by pressing the paper plane button.'
-	String get bio_bailout_confirm => 'Please confirm your bailout by pressing the paper plane button.';
+	/// en: 'You selected the bio bailout duration of ${duration}. Please confirm your bailout by pressing the paper plane button.'
+	String bio_bailout_confirm({required Object duration}) => 'You selected the bio bailout duration of ${duration}.\nPlease confirm your bailout by pressing the paper plane button.';
+
+	/// en: 'You selected the bio duration of ${duration}. Please confirm your bio by pressing the paper plane button.'
+	String bio_first_time_confirm({required Object duration}) => 'You selected the bio duration of ${duration}.\nPlease confirm your bio by pressing the paper plane button.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1129,8 +1132,8 @@ extension on Translations {
 			'view' => 'View',
 			'buy' => 'Buy',
 			'unlock_stickers' => 'Unlock your stickers here',
-			'includes_exclusive_items' => 'Includes {count} exclusive items',
-			'stickers_inside' => '{count} {tier} stickers inside.',
+			'includes_exclusive_items' => ({required Object count}) => 'Includes ${count} exclusive items',
+			'stickers_inside' => ({required Object count, required Object tier}) => '${count} ${tier} stickers inside.',
 			'premium' => 'premium',
 			'already_own_batch' => 'You already own this batch.',
 			'not_enough_coins' => 'Not enough coins.',
@@ -1253,7 +1256,8 @@ extension on Translations {
 			'bio_locked' => 'Locked',
 			'bio_bailout_used' => 'Bailout used.',
 			'bio_bailout_warning' => 'You have pressed the one-time bailout option to edit your bio. Please press continue to proceed with the bailout process using 500 coins.',
-			'bio_bailout_confirm' => 'Please confirm your bailout by pressing the paper plane button.',
+			'bio_bailout_confirm' => ({required Object duration}) => 'You selected the bio bailout duration of ${duration}.\nPlease confirm your bailout by pressing the paper plane button.',
+			'bio_first_time_confirm' => ({required Object duration}) => 'You selected the bio duration of ${duration}.\nPlease confirm your bio by pressing the paper plane button.',
 			_ => null,
 		};
 	}

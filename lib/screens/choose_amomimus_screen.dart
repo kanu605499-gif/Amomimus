@@ -356,8 +356,10 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
       },
     ];
 
-    return Scaffold(
-      backgroundColor: scaffoldBg,
+    return Theme(
+      data: ThemeData.light(),
+      child: Scaffold(
+        backgroundColor: scaffoldBg,
       appBar: AppBar(
         automaticallyImplyLeading: false, // Delete back arrow icon
         title: RichText(
@@ -645,6 +647,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             ),
             const SizedBox(height: 24),
           ],
+        ),
         ),
       ),
     );

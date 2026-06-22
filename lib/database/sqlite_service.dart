@@ -21,7 +21,25 @@ class SqliteService {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 1, onCreate: _createDB);
+    return await openDatabase(
+      path,
+      version: 3,
+      onCreate: _createDB,
+      onUpgrade: _upgradeDB,
+    );
+  }
+
+  Future _upgradeDB(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE accounts ADD COLUMN bioExpirationDate TEXT;');
+      await db.execute('ALTER TABLE accounts ADD COLUMN bioOriginalDuration INTEGER;');
+      await db.execute('ALTER TABLE accounts ADD COLUMN hasUsedBioBailout INTEGER;');
+      await db.execute('ALTER TABLE accounts ADD COLUMN presenceStatus TEXT;');
+    }
+    if (oldVersion < 3) {
+      await db.execute('ALTER TABLE accounts ADD COLUMN master_email TEXT;');
+      await db.execute('UPDATE accounts SET master_email = email;');
+    }
   }
 
   Future _createDB(Database db, int version) async {
@@ -43,6 +61,7 @@ class SqliteService {
       CREATE TABLE accounts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         email TEXT UNIQUE,
+        master_email TEXT,
         realUsername TEXT,
         anonymousUsername TEXT,
         customUsername TEXT,
@@ -60,6 +79,10 @@ class SqliteService {
         totalResonatesReceived INTEGER,
         benevolentPoints INTEGER,
         indicator TEXT,
+        bioExpirationDate TEXT,
+        bioOriginalDuration INTEGER,
+        hasUsedBioBailout INTEGER,
+        presenceStatus TEXT,
         is_synced INTEGER DEFAULT 0
       )
     ''');

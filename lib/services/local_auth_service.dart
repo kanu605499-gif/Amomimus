@@ -19,18 +19,43 @@ class LocalAuthService implements AuthService {
     UserModelSql credentials,
     UserAccount profile,
   ) async {
-    // 1. Save login credentials to SharedPreferences (DBHelper)
-    final bool isSuccess = await _dbHelper.registerUser(credentials);
-    if (!isSuccess) return false;
+    // If the email is already registered, this is a sub-profile creation. We must verify password.
+    final bool exists = await isEmailRegistered(credentials.email ?? "");
+    if (!exists) {
+      final bool isSuccess = await _dbHelper.registerUser(credentials);
+      if (!isSuccess) return false;
+    } else {
+      // Mencegah pendaftaran email yang sama lewat halaman Sign Up (password harus cocok)
+      final validUser = await _dbHelper.loginUser(credentials.email ?? "", credentials.password ?? "");
+      if (validUser == null) {
+        print("==== REGISTRATION FAILED: Email already registered or Invalid password ====");
+        return false;
+      }
+    }
 
-    // 2. Save complete profile (Amomus ID, avatar, etc.) to SQLite (DatabaseHelper)
+    // 2. Validate Binded Account Restrictions & Save Profile
     try {
+      final allProfiles = await _databaseHelper.getAllUsers();
+      
+      // Aturan: 1 device / master email maksimal 3 akun
+      final profilesUnderThisMaster = allProfiles.where((p) => p.masterEmail == credentials.email).toList();
+      if (profilesUnderThisMaster.length >= 3) {
+        print("==== REGISTRATION FAILED: Limit reached (Max 3 accounts per master) ====");
+        return false;
+      }
+
+      // Aturan: Akun yang terdaftar (binded) ga bisa di bind ke master/batch lain
+      final isIdAlreadyBound = allProfiles.any((p) => p.amomimusId == profile.amomimusId && p.masterEmail != profile.masterEmail);
+      if (isIdAlreadyBound) {
+        print("==== REGISTRATION FAILED: This Amomimus ID is already bound to another master account! ====");
+        return false;
+      }
+
       await _databaseHelper.createUser(profile);
       return true;
     } catch (e) {
-      print("==== DB REGISTER PROFILE SKIPPED: $e ====");
+      print("==== DB REGISTER PROFILE ERROR/SKIPPED: $e ====");
       // For web/environments where sqflite might fail, we still consider it a success locally
-      // since the login credentials were saved.
       return true;
     }
   }
@@ -44,7 +69,7 @@ class LocalAuthService implements AuthService {
     // 2. Fetch the complete profile from SQLite
     try {
       final allProfiles = await _databaseHelper.getAllUsers();
-      return allProfiles.firstWhere((p) => p.email == email);
+      return allProfiles.firstWhere((p) => p.masterEmail == email);
     } catch (e) {
       print("==== DB FETCH PROFILE FAILED: $e ====");
       return null;

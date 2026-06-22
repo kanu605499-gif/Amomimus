@@ -215,8 +215,8 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get view => '見る';
 	@override String get buy => '購入';
 	@override String get unlock_stickers => 'ここでステッカーをアンロック';
-	@override String get includes_exclusive_items => '限定アイテムが{count}個含まれています';
-	@override String get stickers_inside => '中に{tier}のステッカーが{count}個入っています。';
+	@override String includes_exclusive_items({required Object count}) => '限定アイテムが${count}個含まれています';
+	@override String stickers_inside({required Object tier, required Object count}) => '中に${tier}のステッカーが${count}個入っています。';
 	@override String get premium => 'プレミアム';
 	@override String get already_own_batch => 'このバッチはすでに所有しています。';
 	@override String get not_enough_coins => 'コインが足りません。';
@@ -318,7 +318,8 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bio_locked => 'ロック中';
 	@override String get bio_bailout_used => '脱出済み';
 	@override String get bio_bailout_warning => 'あなたはプロファイルを編集するために1回限りのベイルアウトオプションを押しました。500コインを使用してベイルアウトプロセスを続行するには、続行を押してください。';
-	@override String get bio_bailout_confirm => '紙飛行機のボタンを押して、ベイルアウトを確認してください。';
+	@override String bio_bailout_confirm({required Object duration}) => '${duration} - 紙飛行機のボタンを押して、ベイルアウトを確認してください。';
+	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Please confirm your bio.';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -505,8 +506,8 @@ extension on TranslationsJa {
 			'view' => '見る',
 			'buy' => '購入',
 			'unlock_stickers' => 'ここでステッカーをアンロック',
-			'includes_exclusive_items' => '限定アイテムが{count}個含まれています',
-			'stickers_inside' => '中に{tier}のステッカーが{count}個入っています。',
+			'includes_exclusive_items' => ({required Object count}) => '限定アイテムが${count}個含まれています',
+			'stickers_inside' => ({required Object tier, required Object count}) => '中に${tier}のステッカーが${count}個入っています。',
 			'premium' => 'プレミアム',
 			'already_own_batch' => 'このバッチはすでに所有しています。',
 			'not_enough_coins' => 'コインが足りません。',
@@ -608,7 +609,8 @@ extension on TranslationsJa {
 			'bio_locked' => 'ロック中',
 			'bio_bailout_used' => '脱出済み',
 			'bio_bailout_warning' => 'あなたはプロファイルを編集するために1回限りのベイルアウトオプションを押しました。500コインを使用してベイルアウトプロセスを続行するには、続行を押してください。',
-			'bio_bailout_confirm' => '紙飛行機のボタンを押して、ベイルアウトを確認してください。',
+			'bio_bailout_confirm' => ({required Object duration}) => '${duration} - 紙飛行機のボタンを押して、ベイルアウトを確認してください。',
+			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Please confirm your bio.',
 			_ => null,
 		};
 	}

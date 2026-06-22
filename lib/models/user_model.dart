@@ -4,6 +4,7 @@
 class UserAccount {
   final int? id;
   final String email;
+  final String masterEmail;
   final String realUsername;
   final String anonymousUsername;
   final String? customUsername;
@@ -43,6 +44,7 @@ class UserAccount {
   UserAccount({
     this.id,
     required this.email,
+    this.masterEmail = "",
     required this.realUsername,
     required this.anonymousUsername,
     this.customUsername,
@@ -79,6 +81,7 @@ class UserAccount {
     return UserAccount(
       id: map['id'],
       email: map['email'],
+      masterEmail: map['master_email'] ?? map['email'], // Fallback for legacy
       realUsername: map['realUsername'],
       anonymousUsername: map['anonymousUsername'],
       customUsername: map['customUsername'],
@@ -134,6 +137,7 @@ class UserAccount {
     return {
       'id': id,
       'email': email,
+      'master_email': masterEmail,
       'realUsername': realUsername,
       'anonymousUsername': anonymousUsername,
       'customUsername': customUsername,

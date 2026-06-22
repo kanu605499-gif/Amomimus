@@ -14,6 +14,9 @@ import 'fake_pdf_screen.dart';
 import '../widgets/chat/chat_home_requests_sheet.dart';
 import '../widgets/chat/chat_home_mini_island.dart';
 import '../widgets/chat/chat_home_list_section.dart';
+import '../services/auth_service.dart';
+import 'choose_amomimus_screen.dart';
+import 'master_account_screen.dart';
 
 class AmomimusApp7 extends StatefulWidget {
   const AmomimusApp7({super.key});
@@ -97,7 +100,10 @@ class _AmomimusApp7State extends State<AmomimusApp7>
     // They will only see the room once the unblocker sends a real message (for replying).
     final filteredChatList = chatList.where((chat) {
       if (myAmomimusId.isEmpty) return true;
-      if (accountManager.isRecentlyUnblockedByTarget(myAmomimusId, chat.username)) {
+      if (accountManager.isRecentlyUnblockedByTarget(
+        myAmomimusId,
+        chat.username,
+      )) {
         return chat.messages.isNotEmpty;
       }
       return true;
@@ -205,265 +211,317 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                                         );
                                       },
                                     ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.switch_account_outlined,
-                                        color: dynamicAccentColor,
-                                      ),
-                                      onPressed: () {
-                                        final accountManager = context
-                                            .read<AccountManager>();
-                                        final accounts = accountManager.accounts
-                                            .where((acc) => !acc.isDemo)
-                                            .toList();
-                                        
-                                        accounts.sort((a, b) {
-                                          if (a.id == accountManager.currentUser?.id) return -1;
-                                          if (b.id == accountManager.currentUser?.id) return 1;
-                                          return 0;
-                                        });
+                                    if (context
+                                            .watch<AccountManager>()
+                                            .switchableAccounts
+                                            .length >
+                                        1)
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.switch_account_outlined,
+                                          color: dynamicAccentColor,
+                                        ),
+                                        onPressed: () {
+                                          final accountManager = context
+                                              .read<AccountManager>();
+                                          final accounts = List.of(
+                                            accountManager.switchableAccounts,
+                                          );
 
-                                        final isDark = themeProvider.isDarkMode;
+                                          accounts.sort((a, b) {
+                                            if (a.id ==
+                                                accountManager.currentUser?.id)
+                                              return -1;
+                                            if (b.id ==
+                                                accountManager.currentUser?.id)
+                                              return 1;
+                                            return 0;
+                                          });
 
-                                        showModalBottomSheet(
-                                          context: context,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (ctx) {
-                                            final sheetBg = isDark
-                                                ? AmomimusDarkTheme.surfaceDark
-                                                : Colors.white;
-                                            final textCol = isDark
-                                                ? Colors.white
-                                                : Colors.black87;
-                                            final subCol = isDark
-                                                ? AmomimusDarkTheme
-                                                      .textSecondary
-                                                : Colors.black54;
+                                          final isDark =
+                                              themeProvider.isDarkMode;
 
-                                            return Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 20,
-                                                    vertical: 16,
-                                                  ),
-                                              decoration: BoxDecoration(
-                                                color: sheetBg,
-                                                borderRadius:
-                                                    const BorderRadius.vertical(
-                                                      top: Radius.circular(24),
+                                          showModalBottomSheet(
+                                            context: context,
+                                            backgroundColor: Colors.transparent,
+                                            builder: (ctx) {
+                                              final sheetBg = isDark
+                                                  ? AmomimusDarkTheme
+                                                        .surfaceDark
+                                                  : Colors.white;
+                                              final textCol = isDark
+                                                  ? Colors.white
+                                                  : Colors.black87;
+                                              final subCol = isDark
+                                                  ? AmomimusDarkTheme
+                                                        .textSecondary
+                                                  : Colors.black54;
+
+                                              return Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 16,
                                                     ),
-                                              ),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Container(
-                                                    width: 40,
-                                                    height: 5,
-                                                    decoration: BoxDecoration(
-                                                      color: isDark
-                                                          ? Colors.white24
-                                                          : Colors.black12,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            2.5,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 16),
-                                                  Text(
-                                                    t.switch_account,
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: textCol,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(height: 16),
-                                                  if (accounts.isEmpty)
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                            20,
-                                                          ),
-                                                      child: Text(
-                                                        t.no_accounts_registered,
-                                                        style: TextStyle(
-                                                          color: subCol,
+                                                decoration: BoxDecoration(
+                                                  color: sheetBg,
+                                                  borderRadius:
+                                                      const BorderRadius.vertical(
+                                                        top: Radius.circular(
+                                                          24,
                                                         ),
                                                       ),
-                                                    )
-                                                  else
-                                                    ConstrainedBox(
-                                                      constraints:
-                                                          const BoxConstraints(
-                                                            maxHeight: 225,
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Container(
+                                                      width: 40,
+                                                      height: 5,
+                                                      decoration: BoxDecoration(
+                                                        color: isDark
+                                                            ? Colors.white24
+                                                            : Colors.black12,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              2.5,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 16),
+                                                    Text(
+                                                      t.switch_account,
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: textCol,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 16),
+                                                    if (accounts.isEmpty)
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets.all(
+                                                              20,
+                                                            ),
+                                                        child: Text(
+                                                          t.no_accounts_registered,
+                                                          style: TextStyle(
+                                                            color: subCol,
                                                           ),
-                                                      child: SingleChildScrollView(
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: accounts.map((
-                                                            acc,
-                                                          ) {
-                                                            final isActive =
-                                                                acc.id ==
-                                                                accountManager
-                                                                    .currentUser
-                                                                    ?.id;
-                                                            final genderColor =
-                                                                GenderHelpers.getGenderColor(
-                                                                  acc.gender,
-                                                                );
-                                                            final genderIcon =
-                                                                GenderHelpers.getGenderIcon(
-                                                                  acc.gender,
-                                                                );
-
-                                                            return Padding(
-                                                              padding:
-                                                                  const EdgeInsets.symmetric(
-                                                                    vertical: 4,
-                                                                  ),
-                                                              child: InkWell(
-                                                                borderRadius:
-                                                                    BorderRadius.circular(
-                                                                      16,
-                                                                    ),
-                                                                onTap: () {
+                                                        ),
+                                                      )
+                                                    else
+                                                      ConstrainedBox(
+                                                        constraints:
+                                                            const BoxConstraints(
+                                                              maxHeight: 225,
+                                                            ),
+                                                        child: SingleChildScrollView(
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: accounts.map((
+                                                              acc,
+                                                            ) {
+                                                              final isActive =
+                                                                  acc.id ==
                                                                   accountManager
-                                                                      .switchAccount(
-                                                                        acc,
-                                                                      );
-                                                                  // Sync ChatModel with the new account
-                                                                  context
-                                                                      .read<
-                                                                        ChatModel
-                                                                      >()
-                                                                      .setCurrentUser(
-                                                                        acc.amomimusId,
-                                                                        acc.anonymousUsername,
-                                                                      );
-                                                                  Navigator.pop(
-                                                                    ctx,
+                                                                      .currentUser
+                                                                      ?.id;
+                                                              final genderColor =
+                                                                  GenderHelpers.getGenderColor(
+                                                                    acc.gender,
                                                                   );
-                                                                },
-                                                                child: Container(
-                                                                  padding:
-                                                                      const EdgeInsets.symmetric(
-                                                                        horizontal:
-                                                                            14,
-                                                                        vertical:
-                                                                            12,
+                                                              final genderIcon =
+                                                                  GenderHelpers.getGenderIcon(
+                                                                    acc.gender,
+                                                                  );
+
+                                                              return Padding(
+                                                                padding:
+                                                                    const EdgeInsets.symmetric(
+                                                                      vertical:
+                                                                          4,
+                                                                    ),
+                                                                child: InkWell(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                        16,
                                                                       ),
-                                                                  decoration: BoxDecoration(
-                                                                    color:
-                                                                        isActive
-                                                                        ? genderColor.withValues(
-                                                                            alpha:
-                                                                                0.12,
-                                                                          )
-                                                                        : Colors
-                                                                              .transparent,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                          16,
-                                                                        ),
-                                                                    border: Border.all(
+                                                                  onTap: () async {
+                                                                    await accountManager
+                                                                        .switchAccount(
+                                                                          acc,
+                                                                        );
+                                                                    // Sync ChatModel with the new account
+                                                                    context
+                                                                        .read<
+                                                                          ChatModel
+                                                                        >()
+                                                                        .setCurrentUser(
+                                                                          acc.amomimusId,
+                                                                          acc.anonymousUsername,
+                                                                        );
+                                                                    Navigator.pop(
+                                                                      ctx,
+                                                                    );
+                                                                  },
+                                                                  child: Container(
+                                                                    padding: const EdgeInsets.symmetric(
+                                                                      horizontal:
+                                                                          14,
+                                                                      vertical:
+                                                                          12,
+                                                                    ),
+                                                                    decoration: BoxDecoration(
                                                                       color:
                                                                           isActive
                                                                           ? genderColor.withValues(
-                                                                              alpha: 0.8,
+                                                                              alpha: 0.12,
                                                                             )
-                                                                          : (isDark
-                                                                                ? Colors.white12
-                                                                                : Colors.black12),
-                                                                      width:
-                                                                          isActive
-                                                                          ? 1.5
-                                                                          : 1,
-                                                                    ),
-                                                                  ),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Container(
-                                                                        width:
-                                                                            40,
-                                                                        height:
-                                                                            40,
-                                                                        decoration: BoxDecoration(
-                                                                          borderRadius: BorderRadius.circular(
-                                                                            12,
+                                                                          : Colors.transparent,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                            16,
                                                                           ),
-                                                                          border: Border.all(
+                                                                      border: Border.all(
+                                                                        color:
+                                                                            isActive
+                                                                            ? genderColor.withValues(
+                                                                                alpha: 0.8,
+                                                                              )
+                                                                            : (isDark
+                                                                                  ? Colors.white12
+                                                                                  : Colors.black12),
+                                                                        width:
+                                                                            isActive
+                                                                            ? 1.5
+                                                                            : 1,
+                                                                      ),
+                                                                    ),
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Container(
+                                                                          width:
+                                                                              40,
+                                                                          height:
+                                                                              40,
+                                                                          decoration: BoxDecoration(
+                                                                            borderRadius: BorderRadius.circular(
+                                                                              12,
+                                                                            ),
+                                                                            border: Border.all(
+                                                                              color: genderColor,
+                                                                              width: 1.2,
+                                                                            ),
+                                                                          ),
+                                                                          child: Icon(
+                                                                            genderIcon,
                                                                             color:
                                                                                 genderColor,
-                                                                            width:
-                                                                                1.2,
+                                                                            size:
+                                                                                22,
                                                                           ),
                                                                         ),
-                                                                        child: Icon(
-                                                                          genderIcon,
-                                                                          color:
-                                                                              genderColor,
-                                                                          size:
-                                                                              22,
+                                                                        const SizedBox(
+                                                                          width:
+                                                                              12,
                                                                         ),
-                                                                      ),
-                                                                      const SizedBox(
-                                                                        width:
-                                                                            12,
-                                                                      ),
-                                                                      Expanded(
-                                                                        child: Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.start,
-                                                                          children: [
-                                                                            Text(
-                                                                              acc.anonymousUsername,
-                                                                              style: TextStyle(
-                                                                                fontSize: 15,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                color: textCol,
+                                                                        Expanded(
+                                                                          child: Column(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            children: [
+                                                                              Text(
+                                                                                acc.anonymousUsername,
+                                                                                style: TextStyle(
+                                                                                  fontSize: 15,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  color: textCol,
+                                                                                ),
                                                                               ),
-                                                                            ),
-                                                                            Text(
-                                                                              '${acc.amomimusId} · ${acc.gender}',
-                                                                              style: TextStyle(
-                                                                                fontSize: 11,
-                                                                                color: genderColor,
-                                                                                fontWeight: FontWeight.w500,
+                                                                              Text(
+                                                                                '${acc.amomimusId} · ${acc.gender}',
+                                                                                style: TextStyle(
+                                                                                  fontSize: 11,
+                                                                                  color: genderColor,
+                                                                                  fontWeight: FontWeight.w500,
+                                                                                ),
                                                                               ),
-                                                                            ),
-                                                                          ],
+                                                                            ],
+                                                                          ),
                                                                         ),
-                                                                      ),
-                                                                      if (isActive)
-                                                                        Icon(
-                                                                          Icons
-                                                                              .check_circle,
-                                                                          color:
-                                                                              genderColor,
-                                                                          size:
-                                                                              20,
-                                                                        ),
-                                                                    ],
+                                                                        if (isActive)
+                                                                          Icon(
+                                                                            Icons.check_circle,
+                                                                            color:
+                                                                                genderColor,
+                                                                            size:
+                                                                                20,
+                                                                          ),
+                                                                      ],
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            );
-                                                          }).toList(),
+                                                              );
+                                                            }).toList(),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  const SizedBox(height: 8),
-                                                ],
-                                              ),
-                                            );
-                                          },
-                                        );
-                                      },
-                                    ),
+                                                    if (accounts.length < 3)
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                              top: 8.0,
+                                                            ),
+                                                        child: TextButton.icon(
+                                                          onPressed: () async {
+                                                            Navigator.pop(ctx);
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        const MasterAccountScreen(),
+                                                              ),
+                                                            );
+                                                          },
+                                                          icon: Icon(
+                                                            Icons
+                                                                .add_circle_outline,
+                                                            color: isDark
+                                                                ? AmomimusDarkTheme
+                                                                      .policeLineYellow
+                                                                : AmomimusDarkTheme
+                                                                      .primaryPurple,
+                                                          ),
+                                                          label: Text(
+                                                            "Add Profile",
+                                                            style: TextStyle(
+                                                              color: isDark
+                                                                  ? AmomimusDarkTheme
+                                                                        .policeLineYellow
+                                                                  : AmomimusDarkTheme
+                                                                        .primaryPurple,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    const SizedBox(height: 8),
+                                                  ],
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
                                   ],
                                 ),
                               ],

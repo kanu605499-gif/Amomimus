@@ -25,11 +25,8 @@ class ProfileBioSection extends StatefulWidget {
 class _ProfileBioSectionState extends State<ProfileBioSection> {
   final PageController _pageController = PageController();
   final TextEditingController _bioController = TextEditingController();
-  final PageController _durationPageController = PageController(viewportFraction: 0.33);
   bool _bioChanged = false;
-  bool _showCommitOptions = false;
   int _selectedScrollDurationIndex = 0;
-  bool _isPickingBailoutDuration = false;
   bool _isEditingBailout = false;
   int _bailoutSelectedDuration = 0;
 
@@ -186,10 +183,8 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                               ),
                             ),
                           ),
-                          if (isLocked && !_isPickingBailoutDuration && !_isEditingBailout)
+                          if (isLocked && !_isEditingBailout)
                             _buildLockUI(context, lockTimeLeft, t)
-                          else if (_isPickingBailoutDuration)
-                            _buildBailoutDurationPicker(context, t)
                           else if (_isEditingBailout)
                             GestureDetector(
                               onTap: () async {
@@ -207,7 +202,6 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                                     setState(() {
                                       _isEditingBailout = false;
                                       _bioChanged = false;
-                                      _showCommitOptions = false;
                                     });
                                     messenger.showSnackBar(SnackBar(content: Text(t.bio_bailout_used), backgroundColor: themeColor));
                                   }
@@ -226,16 +220,12 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                                 ),
                               ),
                             )
-                          else if (_showCommitOptions)
-                            _buildScrollWheelOptions(context, t)
                           else if (_bioChanged)
                             GestureDetector(
                               onTap: () {
                                 final text = _bioController.text.trim();
                                 if (text.isEmpty) return;
-                                setState(() {
-                                  _showCommitOptions = true;
-                                });
+                                _showConvexDurationPicker(context, t, false);
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 8),
@@ -247,7 +237,9 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                                       : AmomimusDarkTheme.primaryPurple,
                                 ),
                               ),
-                            ),
+                            )
+                          else
+                            const SizedBox(width: 30),
                         ],
                       ),
                     );
@@ -485,166 +477,240 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
   }
 
   void _showBailoutDialog(BuildContext context, Translations t) {
+    final themeColor = widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
     showDialog<bool>(
       context: context,
       barrierDismissible: true,
       builder: (ctx) => AlertDialog(
         backgroundColor: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
-        title: Text("Bailout", style: TextStyle(color: widget.isDark ? Colors.white : Colors.black87)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: themeColor.withValues(alpha: 0.5), width: 1.5),
+        ),
+        title: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Text("Bailout", style: TextStyle(color: widget.isDark ? Colors.white : Colors.black87)),
+            Positioned(
+              top: -15,
+              right: -15,
+              child: IconButton(
+                icon: Icon(Icons.close, color: Colors.grey[500], size: 24),
+                onPressed: () => Navigator.pop(ctx, false),
+              ),
+            ),
+          ],
+        ),
         content: Text(t.bio_bailout_warning, style: TextStyle(color: widget.isDark ? Colors.white70 : Colors.black54)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(t.continue_btn, style: TextStyle(color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple, fontWeight: FontWeight.bold)),
+            child: Text(t.continue_btn, style: TextStyle(color: themeColor, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
     ).then((result) {
       if (result == true && mounted) {
-        setState(() {
-          _isPickingBailoutDuration = true;
-        });
+        _showConvexDurationPicker(context, t, true);
       }
     });
   }
 
-  Widget _buildBailoutDurationPicker(BuildContext context, Translations t) {
-    final themeColor = widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
-    final labels = [t.bio_duration_3, t.bio_duration_5, t.bio_duration_7, t.bio_duration_15, t.bio_duration_30];
-    final days = [3, 5, 7, 15, 30];
-
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeOutCubic,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: List.generate(days.length, (index) {
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  _bailoutSelectedDuration = days[index];
-                  _isPickingBailoutDuration = false;
-                  _isEditingBailout = true;
-                });
-                _showBailoutConfirmDialog(context, t);
-              },
-              child: Container(
-                margin: const EdgeInsets.only(left: 12),
-                child: Text(
-                  labels[index],
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                    color: themeColor,
-                  ),
-                ),
-              ),
-            );
-          }),
-        ),
-      ),
-    );
-  }
-
-  void _showBailoutConfirmDialog(BuildContext context, Translations t) {
+  void _showPostScrollConfirmDialog(BuildContext context, Translations t, bool isBailout, int durationDays, Color themeColor) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (ctx) => AlertDialog(
         backgroundColor: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
-        content: Text(t.bio_bailout_confirm, style: TextStyle(color: widget.isDark ? Colors.white70 : Colors.black54)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: themeColor.withValues(alpha: 0.5), width: 1.5),
+        ),
+        content: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 24.0, bottom: 8.0, left: 8.0, right: 8.0),
+              child: Text(
+                isBailout
+                    ? t.bio_bailout_confirm(duration: "${durationDays}D")
+                    : t.bio_first_time_confirm(duration: "${durationDays}D"),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: widget.isDark ? Colors.white : Colors.black87, fontSize: 16, height: 1.4),
+              ),
+            ),
+            Positioned(
+              top: -20,
+              right: -20,
+              child: IconButton(
+                icon: Icon(Icons.close, color: Colors.grey[500], size: 24),
+                onPressed: () => Navigator.pop(ctx),
+              ),
+            ),
+          ],
+        ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(t.ok, style: TextStyle(color: widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple, fontWeight: FontWeight.bold)),
+          IconButton(
+            icon: Icon(Icons.send, color: themeColor, size: 28),
+            onPressed: () {
+              Navigator.pop(ctx);
+              if (!isBailout) {
+                _commitBioChange(durationDays, themeColor, t);
+              } else {
+                setState(() => _isEditingBailout = true);
+              }
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget _buildScrollWheelOptions(BuildContext context, Translations t) {
+  void _commitBioChange(int durationDays, Color themeColor, Translations t) async {
+    final text = _bioController.text.trim();
+    if (text.isEmpty) return;
+    
+    final am = Provider.of<AccountManager>(context, listen: false);
+    final messenger = ScaffoldMessenger.of(context);
+    final success = await am.updateBio(text, durationDays);
+    if (success && mounted) {
+      setState(() {
+        _bioChanged = false;
+      });
+      messenger.showSnackBar(SnackBar(content: Text(t.bio_updated), backgroundColor: themeColor));
+    } else if (!success && mounted) {
+      messenger.showSnackBar(SnackBar(content: Text(t.bio_not_enough_coins), backgroundColor: Colors.redAccent));
+    }
+  }
+
+  void _showConvexDurationPicker(BuildContext context, Translations t, bool isBailout) {
     final themeColor = widget.isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
     final labels = [t.bio_duration_3, t.bio_duration_5, t.bio_duration_7, t.bio_duration_15, t.bio_duration_30];
     final days = [3, 5, 7, 15, 30];
 
-    return AnimatedSize(
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeOutCubic,
-      child: Container(
-        margin: const EdgeInsets.only(left: 12),
-        width: 36,
-        height: 70,
-        child: NotificationListener<ScrollNotification>(
-          onNotification: (ScrollNotification notification) {
-            if (notification is ScrollEndNotification && notification.depth == 0) {
-              final text = _bioController.text.trim();
-              if (text.isNotEmpty) {
-                 final am = Provider.of<AccountManager>(context, listen: false);
-                 final messenger = ScaffoldMessenger.of(context);
-                 am.updateBio(text, days[_selectedScrollDurationIndex]).then((success) {
-                   if (success && mounted) {
-                     setState(() {
-                       _bioChanged = false;
-                       _showCommitOptions = false;
-                     });
-                     messenger.showSnackBar(SnackBar(content: Text(t.bio_updated), backgroundColor: themeColor));
-                   } else if (!success && mounted) {
-                     messenger.showSnackBar(SnackBar(content: Text(t.bio_not_enough_coins), backgroundColor: Colors.redAccent));
-                   }
-                 });
-              }
-            }
-            return false;
-          },
-          child: PageView.builder(
-            scrollDirection: Axis.vertical,
-            controller: _durationPageController,
-            itemCount: days.length,
-            onPageChanged: (index) {
-              setState(() {
-                _selectedScrollDurationIndex = index;
-              });
-            },
-            itemBuilder: (context, index) {
-              final isSelected = index == _selectedScrollDurationIndex;
-              return GestureDetector(
-                onTap: () {
-                   if (isSelected) {
-                     final text = _bioController.text.trim();
-                     if (text.isNotEmpty) {
-                       final am = Provider.of<AccountManager>(context, listen: false);
-                       final messenger = ScaffoldMessenger.of(context);
-                       am.updateBio(text, days[index]).then((success) {
-                         if (success && mounted) {
-                           setState(() {
-                             _bioChanged = false;
-                             _showCommitOptions = false;
-                           });
-                           messenger.showSnackBar(SnackBar(content: Text(t.bio_updated), backgroundColor: themeColor));
-                         }
-                       });
-                     }
-                   } else {
-                     _durationPageController.animateToPage(index, duration: const Duration(milliseconds: 200), curve: Curves.ease);
-                   }
-                },
-                child: Center(
-                  child: Text(
-                    labels[index],
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      color: isSelected ? themeColor : Colors.grey,
-                    ),
-                  ),
+    int localSelectedIndex = isBailout ? 0 : _selectedScrollDurationIndex;
+    final scrollController = FixedExtentScrollController(initialItem: localSelectedIndex);
+
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "Dismiss",
+      barrierColor: Colors.black.withValues(alpha: 0.6),
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, anim1, anim2) {
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(
+            children: [
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: () => Navigator.pop(context, localSelectedIndex),
+                  child: Container(color: Colors.transparent),
                 ),
-              );
-            },
+              ),
+              Center(
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  duration: const Duration(milliseconds: 400),
+                  curve: Curves.easeOutBack,
+                  builder: (context, scale, child) {
+                    return Transform.scale(
+                      scale: scale,
+                      child: Container(
+                        height: 120,
+                        width: 250,
+                        decoration: BoxDecoration(
+                          color: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(color: themeColor.withValues(alpha: 0.5), width: 2),
+                          boxShadow: [
+                            BoxShadow(
+                              color: themeColor.withValues(alpha: 0.3),
+                              blurRadius: 20,
+                              spreadRadius: 2,
+                            )
+                          ],
+                        ),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 120,
+                              decoration: BoxDecoration(
+                                color: themeColor.withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            RotatedBox(
+                              quarterTurns: -1,
+                              child: ListWheelScrollView.useDelegate(
+                                controller: scrollController,
+                                itemExtent: 60,
+                                diameterRatio: 1.2,
+                                physics: const FixedExtentScrollPhysics(),
+                                onSelectedItemChanged: (index) {
+                                  localSelectedIndex = index;
+                                },
+                                childDelegate: ListWheelChildBuilderDelegate(
+                                  builder: (context, index) {
+                                    return RotatedBox(
+                                      quarterTurns: 1,
+                                      child: Center(
+                                        child: Text(
+                                          labels[index],
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: themeColor,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  childCount: days.length,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 10,
+                              child: GestureDetector(
+                                onTap: () => Navigator.pop(context, localSelectedIndex),
+                                child: Icon(Icons.check_circle, color: themeColor, size: 30),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-        ),
-      ),
-    );
+        );
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        return FadeTransition(
+          opacity: anim1,
+          child: child,
+        );
+      },
+    ).then((selectedIndex) {
+      if (mounted) {
+        int finalIndex = (selectedIndex as int?) ?? localSelectedIndex;
+        if (isBailout) {
+          setState(() {
+            _bailoutSelectedDuration = days[finalIndex];
+          });
+          _showPostScrollConfirmDialog(context, t, true, days[finalIndex], themeColor);
+        } else {
+          setState(() {
+            _selectedScrollDurationIndex = finalIndex;
+          });
+          _showPostScrollConfirmDialog(context, t, false, days[finalIndex], themeColor);
+        }
+      }
+    });
   }
 }

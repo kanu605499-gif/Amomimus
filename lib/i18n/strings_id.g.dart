@@ -215,8 +215,8 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get view => 'Lihat';
 	@override String get buy => 'Beli';
 	@override String get unlock_stickers => 'Buka kunci stikermu di sini';
-	@override String get includes_exclusive_items => 'Termasuk {count} item eksklusif';
-	@override String get stickers_inside => '{count} {tier} stiker di dalamnya.';
+	@override String includes_exclusive_items({required Object count}) => 'Termasuk ${count} item eksklusif';
+	@override String stickers_inside({required Object count, required Object tier}) => '${count} ${tier} stiker di dalamnya.';
 	@override String get premium => 'premium';
 	@override String get already_own_batch => 'Kamu udah punya batch ini.';
 	@override String get not_enough_coins => 'Koin nggak cukup.';
@@ -338,8 +338,9 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bio_not_enough_coins => 'Koin tidak cukup.';
 	@override String get bio_locked => 'Terkunci';
 	@override String get bio_bailout_used => 'Bailout terpakai.';
-	@override String get bio_bailout_warning => 'Anda telah menekan opsi one time bailout untuk mengedit bio anda, silahkan tekan lanjut untuk melanjutkan proses bailout menggunakan 500 coins.';
-	@override String get bio_bailout_confirm => 'Silahkan konfirmasi bailout anda dengan menekan tombol pesawat kertas.';
+	@override String get bio_bailout_warning => 'Anda telah memilih opsi satu kali Bailout untuk mengedit Bio Anda. Silakan tekan Lanjut untuk memproses Bailout dengan menggunakan 500 koin.';
+	@override String bio_bailout_confirm({required Object duration}) => 'Kamu memilih opsi durasi Bailout ${duration}.\nKonfirmasi dengan menekan icon pesawat kertas.';
+	@override String bio_first_time_confirm({required Object duration}) => 'Kamu memilih opsi durasi Bio ${duration}.\nKonfirmasi dengan menekan icon pesawat kertas.';
 }
 
 /// The flat map containing all translations for locale <id>.
@@ -526,8 +527,8 @@ extension on TranslationsId {
 			'view' => 'Lihat',
 			'buy' => 'Beli',
 			'unlock_stickers' => 'Buka kunci stikermu di sini',
-			'includes_exclusive_items' => 'Termasuk {count} item eksklusif',
-			'stickers_inside' => '{count} {tier} stiker di dalamnya.',
+			'includes_exclusive_items' => ({required Object count}) => 'Termasuk ${count} item eksklusif',
+			'stickers_inside' => ({required Object count, required Object tier}) => '${count} ${tier} stiker di dalamnya.',
 			'premium' => 'premium',
 			'already_own_batch' => 'Kamu udah punya batch ini.',
 			'not_enough_coins' => 'Koin nggak cukup.',
@@ -649,8 +650,9 @@ extension on TranslationsId {
 			'bio_not_enough_coins' => 'Koin tidak cukup.',
 			'bio_locked' => 'Terkunci',
 			'bio_bailout_used' => 'Bailout terpakai.',
-			'bio_bailout_warning' => 'Anda telah menekan opsi one time bailout untuk mengedit bio anda, silahkan tekan lanjut untuk melanjutkan proses bailout menggunakan 500 coins.',
-			'bio_bailout_confirm' => 'Silahkan konfirmasi bailout anda dengan menekan tombol pesawat kertas.',
+			'bio_bailout_warning' => 'Anda telah memilih opsi satu kali Bailout untuk mengedit Bio Anda. Silakan tekan Lanjut untuk memproses Bailout dengan menggunakan 500 koin.',
+			'bio_bailout_confirm' => ({required Object duration}) => 'Kamu memilih opsi durasi Bailout ${duration}.\nKonfirmasi dengan menekan icon pesawat kertas.',
+			'bio_first_time_confirm' => ({required Object duration}) => 'Kamu memilih opsi durasi Bio ${duration}.\nKonfirmasi dengan menekan icon pesawat kertas.',
 			_ => null,
 		};
 	}

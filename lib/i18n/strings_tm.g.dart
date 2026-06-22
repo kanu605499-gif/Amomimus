@@ -215,8 +215,8 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get view => 'Inspect';
 	@override String get buy => 'Barter Faraan';
 	@override String get unlock_stickers => 'Break the seals on new Runes here';
-	@override String get includes_exclusive_items => 'Holds {count} rare artifacts';
-	@override String get stickers_inside => '{count} {tier} enchanted runes inside.';
+	@override String includes_exclusive_items({required Object count}) => 'Holds ${count} rare artifacts';
+	@override String stickers_inside({required Object count, required Object tier}) => '${count} ${tier} enchanted runes inside.';
 	@override String get premium => 'Daedric Premium';
 	@override String get already_own_batch => 'You already have this artifact.';
 	@override String get not_enough_coins => 'You don\'t have enough Faraan.';
@@ -332,7 +332,8 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bio_locked => 'Bound';
 	@override String get bio_bailout_used => 'Bailout exhausted.';
 	@override String get bio_bailout_warning => 'Siz bioňyzy üýtgetmek üçin bir gezeklik bailout opsiýasyna basdyňyz. 500 teňňe ulanyp bailout prosesini dowam etdirmek üçin dowam et düwmesine basyň.';
-	@override String get bio_bailout_confirm => 'Kagyz uçary düwmesine basyp bailoutyňyzy tassyklaň.';
+	@override String bio_bailout_confirm({required Object duration}) => '${duration} - Kagyz uçary düwmesine basyp bailoutyňyzy tassyklaň.';
+	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Please confirm your bio.';
 }
 
 /// The flat map containing all translations for locale <tm>.
@@ -519,8 +520,8 @@ extension on TranslationsTm {
 			'view' => 'Inspect',
 			'buy' => 'Barter Faraan',
 			'unlock_stickers' => 'Break the seals on new Runes here',
-			'includes_exclusive_items' => 'Holds {count} rare artifacts',
-			'stickers_inside' => '{count} {tier} enchanted runes inside.',
+			'includes_exclusive_items' => ({required Object count}) => 'Holds ${count} rare artifacts',
+			'stickers_inside' => ({required Object count, required Object tier}) => '${count} ${tier} enchanted runes inside.',
 			'premium' => 'Daedric Premium',
 			'already_own_batch' => 'You already have this artifact.',
 			'not_enough_coins' => 'You don\'t have enough Faraan.',
@@ -636,7 +637,8 @@ extension on TranslationsTm {
 			'bio_locked' => 'Bound',
 			'bio_bailout_used' => 'Bailout exhausted.',
 			'bio_bailout_warning' => 'Siz bioňyzy üýtgetmek üçin bir gezeklik bailout opsiýasyna basdyňyz. 500 teňňe ulanyp bailout prosesini dowam etdirmek üçin dowam et düwmesine basyň.',
-			'bio_bailout_confirm' => 'Kagyz uçary düwmesine basyp bailoutyňyzy tassyklaň.',
+			'bio_bailout_confirm' => ({required Object duration}) => '${duration} - Kagyz uçary düwmesine basyp bailoutyňyzy tassyklaň.',
+			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Please confirm your bio.',
 			_ => null,
 		};
 	}

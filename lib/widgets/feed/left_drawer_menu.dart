@@ -11,6 +11,8 @@ import 'package:amomimus/helpers/gender_helpers.dart';
 import 'package:amomimus/screens/splash_screen.dart';
 import 'package:amomimus/screens/app_documentation_screen.dart';
 import 'package:amomimus/screens/app_features_screen.dart';
+import 'package:amomimus/screens/master_account_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'right_options_panel.dart';
 
 class LeftDrawerMenu extends StatelessWidget {
@@ -50,7 +52,15 @@ class LeftDrawerMenu extends StatelessWidget {
                 Material(
                   color: headerColor,
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      Navigator.pop(context); // close drawer
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MasterAccountScreen(),
+                        ),
+                      );
+                    },
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.fromLTRB(24, 70, 24, 30),

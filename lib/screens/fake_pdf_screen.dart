@@ -7,8 +7,10 @@ class FakePdfScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // To make it look like a real PDF reader app, we use a light grey background
     // for the "reader" behind the "page" itself.
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return Theme(
+      data: ThemeData.light(),
+      child: Scaffold(
+        backgroundColor: Colors.white,
       body: SafeArea(
         child: InteractiveViewer(
           panEnabled: true,
@@ -84,6 +86,7 @@ class FakePdfScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
       ),
     );
   }

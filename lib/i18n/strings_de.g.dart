@@ -215,8 +215,8 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get view => 'Ansehen';
 	@override String get buy => 'Kaufen';
 	@override String get unlock_stickers => 'Schalte hier deine Sticker frei';
-	@override String get includes_exclusive_items => 'Enthält {count} exklusive Items';
-	@override String get stickers_inside => '{count} {tier} Sticker enthalten.';
+	@override String includes_exclusive_items({required Object count}) => 'Enthält ${count} exklusive Items';
+	@override String stickers_inside({required Object count, required Object tier}) => '${count} ${tier} Sticker enthalten.';
 	@override String get premium => 'Premium';
 	@override String get already_own_batch => 'Du besitzt dieses Paket bereits.';
 	@override String get not_enough_coins => 'Nicht genug Münzen.';
@@ -320,7 +320,8 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bio_locked => 'Gesperrt';
 	@override String get bio_bailout_used => 'Bailout verbraucht.';
 	@override String get bio_bailout_warning => 'Sie haben die einmalige Bailout-Option gedrückt, um Ihre Bio zu bearbeiten. Bitte drücken Sie auf Weiter, um den Bailout-Vorgang mit 500 Münzen fortzusetzen.';
-	@override String get bio_bailout_confirm => 'Bitte bestätigen Sie Ihren Bailout, indem Sie auf die Papierflugzeug-Taste drücken.';
+	@override String bio_bailout_confirm({required Object duration}) => '${duration} - Bitte bestätigen Sie Ihren Bailout, indem Sie auf die Papierflugzeug-Taste drücken.';
+	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Please confirm your bio.';
 }
 
 /// The flat map containing all translations for locale <de>.
@@ -507,8 +508,8 @@ extension on TranslationsDe {
 			'view' => 'Ansehen',
 			'buy' => 'Kaufen',
 			'unlock_stickers' => 'Schalte hier deine Sticker frei',
-			'includes_exclusive_items' => 'Enthält {count} exklusive Items',
-			'stickers_inside' => '{count} {tier} Sticker enthalten.',
+			'includes_exclusive_items' => ({required Object count}) => 'Enthält ${count} exklusive Items',
+			'stickers_inside' => ({required Object count, required Object tier}) => '${count} ${tier} Sticker enthalten.',
 			'premium' => 'Premium',
 			'already_own_batch' => 'Du besitzt dieses Paket bereits.',
 			'not_enough_coins' => 'Nicht genug Münzen.',
@@ -612,7 +613,8 @@ extension on TranslationsDe {
 			'bio_locked' => 'Gesperrt',
 			'bio_bailout_used' => 'Bailout verbraucht.',
 			'bio_bailout_warning' => 'Sie haben die einmalige Bailout-Option gedrückt, um Ihre Bio zu bearbeiten. Bitte drücken Sie auf Weiter, um den Bailout-Vorgang mit 500 Münzen fortzusetzen.',
-			'bio_bailout_confirm' => 'Bitte bestätigen Sie Ihren Bailout, indem Sie auf die Papierflugzeug-Taste drücken.',
+			'bio_bailout_confirm' => ({required Object duration}) => '${duration} - Bitte bestätigen Sie Ihren Bailout, indem Sie auf die Papierflugzeug-Taste drücken.',
+			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Please confirm your bio.',
 			_ => null,
 		};
 	}

@@ -215,9 +215,11 @@ class _AmomimusApp3State extends State<AmomimusApp3>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xfffdfbfe),
-      body: Stack(
+    return Theme(
+      data: ThemeData.light(),
+      child: Scaffold(
+        backgroundColor: const Color(0xfffdfbfe),
+        body: Stack(
         children: [
           Positioned(
             top: 31,
@@ -439,6 +441,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
           ),
         ],
       ),
+    ),
     );
   }
 
