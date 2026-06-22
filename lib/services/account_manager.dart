@@ -11,6 +11,24 @@ import 'auth_service.dart';
 import '../database/models/user_register_sql.dart';
 
 class AccountManager extends ChangeNotifier {
+  Future<void> _persistAndNotify(UserAccount updatedUser) async {
+    try {
+      await DatabaseHelper.instance.updateUser(updatedUser);
+    } catch (e) {
+      print("==== DB UPDATE SKIPPED: \$e ====");
+    }
+
+    if (_currentUser?.id == updatedUser.id) {
+      _currentUser = updatedUser;
+    }
+
+    final index = _accounts.indexWhere((acc) => acc.id == updatedUser.id);
+    if (index != -1) {
+      _accounts[index] = updatedUser;
+    }
+
+    notifyListeners();
+  }
   final AuthService authService;
 
   AccountManager({required this.authService});
@@ -46,11 +64,20 @@ class AccountManager extends ChangeNotifier {
       _accounts = [];
     }
 
-    // Auto-select based on savedEmail in SharedPreferences
+    // Auto-select based on savedAmomimusId in SharedPreferences
     final prefs = await SharedPreferences.getInstance();
+    final savedAmomimusId = prefs.getString('savedAmomimusId');
     final savedEmail = prefs.getString('savedEmail');
 
-    if (savedEmail != null && savedEmail.isNotEmpty) {
+    if (savedAmomimusId != null && savedAmomimusId.isNotEmpty) {
+      final matchingAccounts = _accounts.where(
+        (acc) => acc.amomimusId == savedAmomimusId,
+      );
+      if (matchingAccounts.isNotEmpty) {
+        _currentUser = matchingAccounts.first;
+      }
+    } else if (savedEmail != null && savedEmail.isNotEmpty) {
+      // Fallback for older version
       final matchingAccounts = _accounts.where(
         (acc) => acc.email.toLowerCase() == savedEmail.toLowerCase(),
       );
@@ -91,7 +118,7 @@ class AccountManager extends ChangeNotifier {
 
     // Set the newly created user as the active user
     final createdUser = _accounts.firstWhere(
-      (acc) => acc.email == newUser.email,
+      (acc) => acc.amomimusId == newUser.amomimusId,
       orElse: () {
         _accounts.add(newUser);
         return newUser;
@@ -127,6 +154,7 @@ class AccountManager extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', true);
     await prefs.setString('savedEmail', account.email);
+    await prefs.setString('savedAmomimusId', account.amomimusId);
     await prefs.setBool('rememberMe', true);
   }
 

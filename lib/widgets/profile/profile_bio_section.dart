@@ -490,7 +490,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
         title: Stack(
           clipBehavior: Clip.none,
           children: [
-            Text("Bailout", style: TextStyle(color: widget.isDark ? Colors.white : Colors.black87)),
+            Text(t.bio_bailout, style: TextStyle(color: widget.isDark ? Colors.white : Colors.black87)),
             Positioned(
               top: -15,
               right: -15,
@@ -516,7 +516,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
     });
   }
 
-  void _showPostScrollConfirmDialog(BuildContext context, Translations t, bool isBailout, int durationDays, Color themeColor) {
+  void _showPostScrollConfirmDialog(BuildContext context, Translations t, bool isBailout, int durationDays, String durationLabel, Color themeColor) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -533,8 +533,8 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
               padding: const EdgeInsets.only(top: 24.0, bottom: 8.0, left: 8.0, right: 8.0),
               child: Text(
                 isBailout
-                    ? t.bio_bailout_confirm(duration: "${durationDays}D")
-                    : t.bio_first_time_confirm(duration: "${durationDays}D"),
+                    ? t.bio_bailout_confirm(duration: durationLabel)
+                    : t.bio_first_time_confirm(duration: durationLabel),
                 textAlign: TextAlign.center,
                 style: TextStyle(color: widget.isDark ? Colors.white : Colors.black87, fontSize: 16, height: 1.4),
               ),
@@ -617,8 +617,8 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                     return Transform.scale(
                       scale: scale,
                       child: Container(
-                        height: 120,
-                        width: 250,
+                        height: 250,
+                        width: 120,
                         decoration: BoxDecoration(
                           color: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
                           borderRadius: BorderRadius.circular(30),
@@ -634,19 +634,22 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-                            Container(
-                              width: 60,
-                              height: 120,
-                              decoration: BoxDecoration(
-                                color: themeColor.withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(15),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 40),
+                              child: Container(
+                                width: 100,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: themeColor.withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
                               ),
                             ),
-                            RotatedBox(
-                              quarterTurns: -1,
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 40),
                               child: ListWheelScrollView.useDelegate(
                                 controller: scrollController,
-                                itemExtent: 60,
+                                itemExtent: 50,
                                 diameterRatio: 1.2,
                                 physics: const FixedExtentScrollPhysics(),
                                 onSelectedItemChanged: (index) {
@@ -654,16 +657,13 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                                 },
                                 childDelegate: ListWheelChildBuilderDelegate(
                                   builder: (context, index) {
-                                    return RotatedBox(
-                                      quarterTurns: 1,
-                                      child: Center(
-                                        child: Text(
-                                          labels[index],
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: themeColor,
-                                          ),
+                                    return Center(
+                                      child: Text(
+                                        labels[index],
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: themeColor,
                                         ),
                                       ),
                                     );
@@ -673,10 +673,10 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                               ),
                             ),
                             Positioned(
-                              bottom: 10,
+                              bottom: 15,
                               child: GestureDetector(
                                 onTap: () => Navigator.pop(context, localSelectedIndex),
-                                child: Icon(Icons.check_circle, color: themeColor, size: 30),
+                                child: Icon(Icons.check_circle, color: themeColor, size: 36),
                               ),
                             ),
                           ],
@@ -703,12 +703,12 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
           setState(() {
             _bailoutSelectedDuration = days[finalIndex];
           });
-          _showPostScrollConfirmDialog(context, t, true, days[finalIndex], themeColor);
+          _showPostScrollConfirmDialog(context, t, true, days[finalIndex], labels[finalIndex], themeColor);
         } else {
           setState(() {
             _selectedScrollDurationIndex = finalIndex;
           });
-          _showPostScrollConfirmDialog(context, t, false, days[finalIndex], themeColor);
+          _showPostScrollConfirmDialog(context, t, false, days[finalIndex], labels[finalIndex], themeColor);
         }
       }
     });

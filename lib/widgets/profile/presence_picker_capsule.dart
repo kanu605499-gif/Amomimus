@@ -13,8 +13,9 @@ class PresencePickerCapsule extends StatelessWidget {
     
     // We position the menu right below the indicator
     final topOffset = position.dy + size.height + 8;
-    // We center it horizontally relative to the indicator
-    final leftOffset = position.dx - (120 / 2) + (size.width / 2);
+    // For horizontal scroll, we want to constrain it so it doesn't overflow
+    double leftOffset = position.dx - 40;
+    if (leftOffset < 16) leftOffset = 16;
 
     showGeneralDialog(
       context: context,
@@ -23,14 +24,23 @@ class PresencePickerCapsule extends StatelessWidget {
       barrierColor: Colors.transparent,
       transitionDuration: const Duration(milliseconds: 250),
       pageBuilder: (context, anim1, anim2) {
+        final screenWidth = MediaQuery.of(context).size.width;
+        if (leftOffset > screenWidth - 250) {
+          leftOffset = screenWidth - 250;
+        }
+
         return Stack(
           children: [
             Positioned(
               top: topOffset,
               left: leftOffset,
-              child: Material(
-                color: Colors.transparent,
-                child: const PresencePickerCapsule(),
+              right: 16, // constraint width so horizontal scroll kicks in
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Material(
+                  color: Colors.transparent,
+                  child: const PresencePickerCapsule(),
+                ),
               ),
             ),
           ],
@@ -57,14 +67,29 @@ class PresencePickerCapsule extends StatelessWidget {
   static Widget getPresenceIcon(String status, {double size = 12}) {
     switch (status) {
       case 'dnd':
-        return Icon(Icons.do_not_disturb_on, color: Colors.redAccent, size: size);
-      case 'invisible':
         return Container(
           width: size,
           height: size,
           decoration: const BoxDecoration(
+            color: Colors.redAccent,
             shape: BoxShape.circle,
-            color: Colors.grey,
+          ),
+          child: Center(
+            child: Container(
+              width: size * 0.6,
+              height: size * 0.15,
+              color: Colors.white,
+            ),
+          ),
+        );
+      case 'invisible':
+        return Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.transparent,
+            border: Border.all(color: Colors.grey, width: 2),
           ),
         );
       case 'online':
@@ -88,13 +113,15 @@ class PresencePickerCapsule extends StatelessWidget {
     final currentStatus = accountManager.currentUser?.presenceStatus ?? 'auto';
 
     final isDark = themeProvider.isDarkMode;
+    // Make container yellow in dark theme, white in light theme
     final bgColor = isDark 
-        ? Colors.black87.withValues(alpha: 0.8) 
-        : Colors.white.withValues(alpha: 0.9);
+        ? AmomimusDarkTheme.policeLineYellow
+        : Colors.white.withValues(alpha: 0.95);
     final borderColor = isDark 
-        ? Colors.white.withValues(alpha: 0.1) 
+        ? AmomimusDarkTheme.policeLineYellow
         : Colors.black.withValues(alpha: 0.1);
-    final textColor = isDark ? Colors.white : Colors.black87;
+    // Dark text for both since background is yellow in dark mode and white in light mode
+    final textColor = isDark ? Colors.black87 : Colors.black87;
 
     final options = [
       {'status': 'auto', 'label': 'Automatic'},
@@ -104,11 +131,10 @@ class PresencePickerCapsule extends StatelessWidget {
     ];
 
     return Container(
-      width: 140,
-      constraints: const BoxConstraints(maxHeight: 180),
+      height: 48, // single row
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         border: Border.all(color: borderColor),
         boxShadow: [
           BoxShadow(
@@ -119,46 +145,44 @@ class PresencePickerCapsule extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
         child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: options.map((opt) {
-                final status = opt['status']!;
-                final isSelected = currentStatus == status;
-                return InkWell(
-                  onTap: () {
-                    context.read<AccountManager>().updatePresenceStatus(status);
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    color: isSelected 
-                        ? (isDark ? Colors.white10 : Colors.black12) 
-                        : Colors.transparent,
-                    child: Row(
-                      children: [
-                        getPresenceIcon(status, size: 14),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            opt['label']!,
-                            style: TextStyle(
-                              color: textColor,
-                              fontSize: 12,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                            ),
-                          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: options.map((opt) {
+              final status = opt['status']!;
+              final isSelected = currentStatus == status;
+              return InkWell(
+                onTap: () {
+                  context.read<AccountManager>().updatePresenceStatus(status);
+                  Navigator.pop(context);
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  alignment: Alignment.center,
+                  color: isSelected 
+                      ? Colors.black.withValues(alpha: 0.1) // active indicator
+                      : Colors.transparent,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      getPresenceIcon(status, size: 14),
+                      const SizedBox(width: 8),
+                      Text(
+                        opt['label']!,
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 13,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                );
-              }).toList(),
-            ),
+                ),
+              );
+            }).toList(),
           ),
         ),
       ),

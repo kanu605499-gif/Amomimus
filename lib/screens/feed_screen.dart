@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:amomimus/widgets/feed/left_drawer_menu.dart';
 import 'package:amomimus/widgets/feed/create_post_bottom_sheet.dart';
 import 'package:amomimus/widgets/feed/feed_post_card.dart';
+import 'package:amomimus/widgets/chat/amomimus_wave_clipper.dart';
 
 import '../amomimusdark.dart';
 import '../services/chatmodel.dart';
@@ -667,31 +668,4 @@ class _AmomimusApp5State extends State<AmomimusApp5>
       ),
     );
   }
-}
-
-class AmomimusWaveClipper extends CustomClipper<Path> {
-  final double animationValue;
-  final double offset;
-
-  AmomimusWaveClipper(this.animationValue, this.offset);
-
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.lineTo(0, size.height);
-    path.lineTo(size.width, size.height);
-
-    for (double i = size.width; i >= 0; i--) {
-      double angle =
-          (animationValue * 2 * pi) + (i / size.width * 2 * pi) + (offset * pi);
-      double y = sin(angle) * 12 + 35;
-      path.lineTo(i, y);
-    }
-
-    path.close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
 }

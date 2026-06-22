@@ -15,7 +15,7 @@ import '../services/chatmodel.dart';
 import '../widgets/report_dialog.dart';
 
 import 'profile_screen.dart';
-import 'feed_screen.dart' hide AmomimusWaveClipper;
+import 'feed_screen.dart';
 import 'package:amomimus/i18n/strings.g.dart';
 import '../widgets/chat/chat_message_bubble.dart';
 import '../widgets/chat/chat_input_bar.dart';
@@ -26,6 +26,7 @@ import '../widgets/chat/room_chat_mini_island.dart';
 import '../widgets/chat/selection_action_bar.dart';
 import '../widgets/effects/glitch_effect.dart';
 import '../widgets/chat/amomimus_wave_clipper.dart';
+import '../widgets/chat/radio_tuner_gesture.dart';
 import 'package:amomimus/utils/jelly_dialog.dart';
 
 void main() {
@@ -136,41 +137,14 @@ class _AmomimusApp6State extends State<AmomimusApp6>
     super.dispose();
   }
 
-  void _sendMessage(String text) {
+  void _sendPayload(String payload) {
     final username = widget.username ?? '@partner_dev';
     final activeUser = context.read<AccountManager>().currentUser;
     final senderName = activeUser?.anonymousUsername ?? 'You';
 
     context.read<ChatModel>().sendMessage(
       username,
-      text,
-      senderName: senderName,
-      targetName: widget.name,
-      replyMessageId: _replyingToMessage?.id,
-    );
-
-    setState(() {
-      _replyingToMessage = null;
-    });
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    });
-  }
-
-  void _sendSticker(String assetPath) {
-    final username = widget.username ?? '@partner_dev';
-    final activeUser = context.read<AccountManager>().currentUser;
-    final senderName = activeUser?.anonymousUsername ?? 'You';
-
-    context.read<ChatModel>().sendMessage(
-      username,
-      '[STICKER]:$assetPath',
+      payload,
       senderName: senderName,
       targetName: widget.name,
       replyMessageId: _replyingToMessage?.id,
@@ -190,6 +164,9 @@ class _AmomimusApp6State extends State<AmomimusApp6>
       }
     });
   }
+
+  void _sendMessage(String text) => _sendPayload(text);
+  void _sendSticker(String assetPath) => _sendPayload('[STICKER]:$assetPath');
 
   void _showMemoriesPopup(
     BuildContext context,
@@ -807,11 +784,15 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                     child: Column(
                       children: [
                         Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              FocusScope.of(context).unfocus();
-                            },
-                            child: CustomScrollView(
+                          child: RadioTunerGestureWrapper(
+                            scrollController: _scrollController,
+                            themeColor: dynamicHeaderColor,
+                            isDark: themeProvider.isDarkMode,
+                            child: GestureDetector(
+                              onTap: () {
+                                FocusScope.of(context).unfocus();
+                              },
+                              child: CustomScrollView(
                               controller: _scrollController,
                               slivers: [
                                 SliverPadding(
@@ -954,6 +935,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                                 ),
                               ],
                             ),
+                          ),
                           ),
                         ),
                         ChatInputBar(

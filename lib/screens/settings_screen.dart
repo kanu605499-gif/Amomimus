@@ -121,6 +121,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Divider(color: textColor.withOpacity(0.3)),
             const SizedBox(height: 32),
 
+          if (am.switchableAccounts.isNotEmpty && am.switchableAccounts.first.amomimusId == currentUser.amomimusId) ...[
             // 3. Danger Zone
             Text(
               t.danger_zone,
@@ -163,6 +164,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             const SizedBox(height: 40),
+          ],
           ],
         ),
       ),

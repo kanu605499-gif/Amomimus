@@ -5,6 +5,7 @@ import 'package:amomimus/database/preference_handler.dart';
 import 'package:amomimus/screens/login.dart'; // AmomimusApp2 (Login)
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:amomimus/models/user_indicator_model.dart'; // Colors
+import '../widgets/particle_background.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final bool fromDrawer;
@@ -373,45 +374,21 @@ class _Slide3TheIndicators extends StatefulWidget {
 }
 
 class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators>
-    with TickerProviderStateMixin {
-  late AnimationController _particleController;
+    with SingleTickerProviderStateMixin {
   late AnimationController _sequenceController;
 
   Color _particleColor = UserIndicatorHelper.cloudyColor;
   String _currentIndicator = "CLOUDY";
 
-  List<_Particle> particles = [];
-  final int maxParticles = 50;
-
   @override
   void initState() {
     super.initState();
-    // Particle continuous animation
-    _particleController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat();
-
     // Sequence to cycle between Cloudy -> Ghost -> Noise
     _sequenceController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 9),
     )..repeat();
     _sequenceController.addListener(_updateSequence);
-
-    _initParticles();
-  }
-
-  void _initParticles() {
-    for (int i = 0; i < maxParticles; i++) {
-      particles.add(
-        _Particle(
-          x: math.Random().nextDouble(),
-          y: math.Random().nextDouble(),
-          speed: 0.2 + math.Random().nextDouble() * 0.5,
-        ),
-      );
-    }
   }
 
   void _updateSequence() {
@@ -442,7 +419,6 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators>
 
   @override
   void dispose() {
-    _particleController.dispose();
     _sequenceController.dispose();
     super.dispose();
   }
@@ -456,18 +432,12 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators>
       child: Stack(
         children: [
           // Particle Background
-          AnimatedBuilder(
-            animation: _particleController,
-            builder: (context, child) {
-              return CustomPaint(
-                painter: _ParticlePainter(
-                  particles,
-                  _particleController.value,
-                  _particleColor,
-                ),
-                size: Size.infinite,
-              );
-            },
+          Positioned.fill(
+            child: ParticleBackground(
+              particleColor: _particleColor,
+              maxParticles: 50,
+              particleSize: 3.0,
+            ),
           ),
 
           // Content
@@ -612,43 +582,7 @@ class _Slide3TheIndicatorsState extends State<_Slide3TheIndicators>
   }
 }
 
-class _Particle {
-  double x;
-  double y;
-  double speed;
-  _Particle({required this.x, required this.y, required this.speed});
-}
 
-class _ParticlePainter extends CustomPainter {
-  final List<_Particle> particles;
-  final double progress;
-  final Color color;
-
-  _ParticlePainter(this.particles, this.progress, this.color);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color.withValues(alpha: 0.6)
-      ..style = PaintingStyle.fill;
-
-    final double time = DateTime.now().millisecondsSinceEpoch / 2000.0;
-
-    for (var p in particles) {
-      double currentY = (p.y - (time * p.speed)) % 1.0;
-      if (currentY < 0) currentY += 1.0; // Wrap around safely
-
-      canvas.drawCircle(
-        Offset(p.x * size.width, currentY * size.height),
-        3.0, // Particle radius
-        paint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-}
 
 // -------------------------------------------------------------------------
 // SLIDE 4: Safe & Respectful (Rules)

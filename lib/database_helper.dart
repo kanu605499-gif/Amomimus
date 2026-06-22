@@ -163,13 +163,8 @@ class DatabaseHelper {
   }
 
   Future<void> deleteUser(String email) async {
-    // Note: We need amomimusId to clear relational tables properly.
-    // For now we get the account first.
-    final accounts = await getAllUsers();
-    final target = accounts.where((e) => e.email == email).firstOrNull;
-    if (target != null) {
-      await SqliteService.instance.deleteAccount(email, target.amomimusId);
-    }
+    // This will nuke the master credential and cascade to all its profiles
+    await SqliteService.instance.deleteAccount(email);
   }
 
   Future<void> updateUser(UserAccount user) async {

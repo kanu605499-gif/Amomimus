@@ -81,6 +81,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
 
       final userAcc = UserAccount(
         email: widget.email,
+        masterEmail: widget.email,
         realUsername: widget.realUsername,
         anonymousUsername: AnonymousNames.getRandomName(
           _selectedGender ?? 'Amo',

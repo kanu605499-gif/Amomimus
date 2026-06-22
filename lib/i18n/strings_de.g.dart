@@ -165,7 +165,7 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get chat_req_accepted => 'Chat-Anfrage akzeptiert!';
 	@override String get messages => 'Nachrichten';
 	@override String get amomus_list => 'Amomus-Liste';
-	@override String get switch_account => 'Account wechseln';
+	@override String get switch_account => 'Konto wechseln';
 	@override String get no_accounts_registered => 'Noch keine Accounts registriert.';
 	@override String get chat_requests => 'Chat-Anfragen';
 	@override String get chat_request_title => 'Chat-Anfrage';
@@ -322,6 +322,8 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bio_bailout_warning => 'Sie haben die einmalige Bailout-Option gedrückt, um Ihre Bio zu bearbeiten. Bitte drücken Sie auf Weiter, um den Bailout-Vorgang mit 500 Münzen fortzusetzen.';
 	@override String bio_bailout_confirm({required Object duration}) => '${duration} - Bitte bestätigen Sie Ihren Bailout, indem Sie auf die Papierflugzeug-Taste drücken.';
 	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Please confirm your bio.';
+	@override String get add_profile => 'Profil hinzufügen';
+	@override String get switch_email => 'E-Mail wechseln';
 }
 
 /// The flat map containing all translations for locale <de>.
@@ -458,7 +460,7 @@ extension on TranslationsDe {
 			'chat_req_accepted' => 'Chat-Anfrage akzeptiert!',
 			'messages' => 'Nachrichten',
 			'amomus_list' => 'Amomus-Liste',
-			'switch_account' => 'Account wechseln',
+			'switch_account' => 'Konto wechseln',
 			'no_accounts_registered' => 'Noch keine Accounts registriert.',
 			'chat_requests' => 'Chat-Anfragen',
 			'chat_request_title' => 'Chat-Anfrage',
@@ -615,6 +617,8 @@ extension on TranslationsDe {
 			'bio_bailout_warning' => 'Sie haben die einmalige Bailout-Option gedrückt, um Ihre Bio zu bearbeiten. Bitte drücken Sie auf Weiter, um den Bailout-Vorgang mit 500 Münzen fortzusetzen.',
 			'bio_bailout_confirm' => ({required Object duration}) => '${duration} - Bitte bestätigen Sie Ihren Bailout, indem Sie auf die Papierflugzeug-Taste drücken.',
 			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Please confirm your bio.',
+			'add_profile' => 'Profil hinzufügen',
+			'switch_email' => 'E-Mail wechseln',
 			_ => null,
 		};
 	}

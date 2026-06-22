@@ -283,13 +283,13 @@ class RoomChatLargeProfile extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 0),
+            const SizedBox(height: 12),
             AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeOutCubic,
               transform: Matrix4.translationValues(
                 0,
-                isProfileMenuExpanded ? 28.0 : 0.0,
+                isProfileMenuExpanded ? 48.0 : 0.0,
                 0,
               ),
               child: Column(

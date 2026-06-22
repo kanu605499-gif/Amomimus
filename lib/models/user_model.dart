@@ -44,7 +44,7 @@ class UserAccount {
   UserAccount({
     this.id,
     required this.email,
-    this.masterEmail = "",
+    String? masterEmail,
     required this.realUsername,
     required this.anonymousUsername,
     this.customUsername,
@@ -74,7 +74,7 @@ class UserAccount {
     this.benevolentPoints = 0,
     this.indicator = 'cloudy',
     this.presenceStatus = 'auto',
-  });
+  }) : masterEmail = (masterEmail == null || masterEmail.isEmpty) ? email : masterEmail;
 
   /// Firestore-ready: creates a [UserAccount] from a [Map].
   factory UserAccount.fromMap(Map<String, dynamic> map) {
@@ -173,6 +173,7 @@ class UserAccount {
   UserAccount copyWith({
     int? id,
     String? email,
+    String? masterEmail,
     String? realUsername,
     String? anonymousUsername,
     String? customUsername,
@@ -206,6 +207,7 @@ class UserAccount {
     return UserAccount(
       id: id ?? this.id,
       email: email ?? this.email,
+      masterEmail: masterEmail ?? this.masterEmail,
       realUsername: realUsername ?? this.realUsername,
       anonymousUsername: anonymousUsername ?? this.anonymousUsername,
       customUsername: customUsername ?? this.customUsername,

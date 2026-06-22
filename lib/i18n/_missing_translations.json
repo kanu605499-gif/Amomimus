@@ -1,0 +1,66 @@
+{
+  "@@info": [
+    "Here are translations that exist in <en> but not in secondary locales.",
+    "After editing this file, you can run 'dart run slang apply --locale=<locale>' to quickly apply the newly added translations."
+  ],
+  "de": {
+    "report_limit_daily": "Daily global limit reached. Applying locally.",
+    "report_limit_category": "Global token for this category exhausted. Applying locally.",
+    "report_limit_weekly_hate_speech": "Weekly hate speech limit reached. Applying locally.",
+    "report_limit_global": "Global limit reached. Applying locally.",
+    "report_user": "Report User",
+    "report_message": "Report Message",
+    "select_category": "Select a category:",
+    "detailed_comment": "Detailed comment (required for ban):",
+    "provide_details": "Please provide details...",
+    "block_ban_user": "Block / Ban User",
+    "comment_required_ban": "You must provide a comment to enable this.",
+    "submit_report": "Submit Report",
+    "report_submitted": "Report Submitted",
+    "report_sent_user_blocked": "The report was sent and the user is now blocked.",
+    "thank_you_safe": "Thank you for making Amomimus a safer place.",
+    "close": "Close",
+    "category_spam": "Spam / Harassment",
+    "category_inappropriate": "Inappropriate Content",
+    "category_hate": "Hate Speech"
+  },
+  "id": {},
+  "ja": {
+    "continue_btn": "Continue",
+    "validation_form": "Validation Form",
+    "report_limit_daily": "Daily global limit reached. Applying locally.",
+    "report_limit_category": "Global token for this category exhausted. Applying locally.",
+    "report_limit_weekly_hate_speech": "Weekly hate speech limit reached. Applying locally.",
+    "report_limit_global": "Global limit reached. Applying locally.",
+    "report_user": "Report User",
+    "report_message": "Report Message",
+    "select_category": "Select a category:",
+    "detailed_comment": "Detailed comment (required for ban):",
+    "provide_details": "Please provide details...",
+    "block_ban_user": "Block / Ban User",
+    "comment_required_ban": "You must provide a comment to enable this.",
+    "submit_report": "Submit Report",
+    "report_submitted": "Report Submitted",
+    "report_sent_user_blocked": "The report was sent and the user is now blocked.",
+    "thank_you_safe": "Thank you for making Amomimus a safer place.",
+    "close": "Close",
+    "category_spam": "Spam / Harassment",
+    "category_inappropriate": "Inappropriate Content",
+    "category_hate": "Hate Speech"
+  },
+  "th": {
+    "report_limit_daily": "Daily global limit reached. Applying locally.",
+    "report_limit_category": "Global token for this category exhausted. Applying locally.",
+    "report_limit_weekly_hate_speech": "Weekly hate speech limit reached. Applying locally.",
+    "report_limit_global": "Global limit reached. Applying locally."
+  },
+  "tm": {
+    "share": "Share",
+    "continue_btn": "Continue",
+    "validation_form": "Validation Form",
+    "report_limit_daily": "Daily global limit reached. Applying locally.",
+    "report_limit_category": "Global token for this category exhausted. Applying locally.",
+    "report_limit_weekly_hate_speech": "Weekly hate speech limit reached. Applying locally.",
+    "report_limit_global": "Global limit reached. Applying locally."
+  }
+}

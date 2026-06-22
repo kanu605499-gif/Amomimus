@@ -341,6 +341,8 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bio_bailout_warning => 'Anda telah memilih opsi satu kali Bailout untuk mengedit Bio Anda. Silakan tekan Lanjut untuk memproses Bailout dengan menggunakan 500 koin.';
 	@override String bio_bailout_confirm({required Object duration}) => 'Kamu memilih opsi durasi Bailout ${duration}.\nKonfirmasi dengan menekan icon pesawat kertas.';
 	@override String bio_first_time_confirm({required Object duration}) => 'Kamu memilih opsi durasi Bio ${duration}.\nKonfirmasi dengan menekan icon pesawat kertas.';
+	@override String get add_profile => 'Tambah Profil';
+	@override String get switch_email => 'Ganti Email';
 }
 
 /// The flat map containing all translations for locale <id>.
@@ -653,6 +655,8 @@ extension on TranslationsId {
 			'bio_bailout_warning' => 'Anda telah memilih opsi satu kali Bailout untuk mengedit Bio Anda. Silakan tekan Lanjut untuk memproses Bailout dengan menggunakan 500 koin.',
 			'bio_bailout_confirm' => ({required Object duration}) => 'Kamu memilih opsi durasi Bailout ${duration}.\nKonfirmasi dengan menekan icon pesawat kertas.',
 			'bio_first_time_confirm' => ({required Object duration}) => 'Kamu memilih opsi durasi Bio ${duration}.\nKonfirmasi dengan menekan icon pesawat kertas.',
+			'add_profile' => 'Tambah Profil',
+			'switch_email' => 'Ganti Email',
 			_ => null,
 		};
 	}

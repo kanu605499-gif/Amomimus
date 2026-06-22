@@ -317,9 +317,11 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bio_not_enough_coins => 'コインが足りません';
 	@override String get bio_locked => 'ロック中';
 	@override String get bio_bailout_used => '脱出済み';
-	@override String get bio_bailout_warning => 'あなたはプロファイルを編集するために1回限りのベイルアウトオプションを押しました。500コインを使用してベイルアウトプロセスを続行するには、続行を押してください。';
-	@override String bio_bailout_confirm({required Object duration}) => '${duration} - 紙飛行機のボタンを押して、ベイルアウトを確認してください。';
-	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Please confirm your bio.';
+	@override String get bio_bailout_warning => 'バイオを変更するための一回限りのBailoutオプションを押しました。500コインを使用してBailoutプロセスを続行するには「続ける」を押してください。';
+	@override String bio_bailout_confirm({required Object duration}) => 'Bailoutの期間として ${duration} を選択しました。\n紙飛行機ボタンを押してBailoutを確定してください。';
+	@override String bio_first_time_confirm({required Object duration}) => 'バイオの期間として ${duration} を選択しました。\n紙飛行機ボタンを押して確定してください。';
+	@override String get add_profile => 'プロフィールを追加';
+	@override String get switch_email => 'メールを切り替え';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -608,9 +610,11 @@ extension on TranslationsJa {
 			'bio_not_enough_coins' => 'コインが足りません',
 			'bio_locked' => 'ロック中',
 			'bio_bailout_used' => '脱出済み',
-			'bio_bailout_warning' => 'あなたはプロファイルを編集するために1回限りのベイルアウトオプションを押しました。500コインを使用してベイルアウトプロセスを続行するには、続行を押してください。',
-			'bio_bailout_confirm' => ({required Object duration}) => '${duration} - 紙飛行機のボタンを押して、ベイルアウトを確認してください。',
-			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Please confirm your bio.',
+			'bio_bailout_warning' => 'バイオを変更するための一回限りのBailoutオプションを押しました。500コインを使用してBailoutプロセスを続行するには「続ける」を押してください。',
+			'bio_bailout_confirm' => ({required Object duration}) => 'Bailoutの期間として ${duration} を選択しました。\n紙飛行機ボタンを押してBailoutを確定してください。',
+			'bio_first_time_confirm' => ({required Object duration}) => 'バイオの期間として ${duration} を選択しました。\n紙飛行機ボタンを押して確定してください。',
+			'add_profile' => 'プロフィールを追加',
+			'switch_email' => 'メールを切り替え',
 			_ => null,
 		};
 	}

@@ -22,6 +22,13 @@ class LocalAuthService implements AuthService {
     // If the email is already registered, this is a sub-profile creation. We must verify password.
     final bool exists = await isEmailRegistered(credentials.email ?? "");
     if (!exists) {
+      // Aturan: 1 Device maksimal 3 master email
+      final users = await _dbHelper.getAllUsers();
+      if (users.length >= 3) {
+        print("==== REGISTRATION FAILED: Limit reached (Max 3 master emails per device) ====");
+        return false;
+      }
+
       final bool isSuccess = await _dbHelper.registerUser(credentials);
       if (!isSuccess) return false;
     } else {
@@ -83,6 +90,13 @@ class LocalAuthService implements AuthService {
 
   @override
   Future<void> deleteAccount(String email) async {
+    // ==== [API READY] Simulate Backend Deletion ====
+    // This represents the future API call to delete the master account,
+    // which will also cascade to delete all sub-profiles, chat history, and tokens.
+    print("==== [API READY] Sending DELETE request to /api/v1/users/$email ====");
+    await Future.delayed(const Duration(seconds: 1)); // Network simulation
+    print("==== [API READY] Successfully deleted user data from server ====");
+
     await _dbHelper.deleteUser(email);
     try {
       await _databaseHelper.deleteUser(email);

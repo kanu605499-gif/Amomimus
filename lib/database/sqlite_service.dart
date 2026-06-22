@@ -23,7 +23,7 @@ class SqliteService {
 
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -39,6 +39,41 @@ class SqliteService {
     if (oldVersion < 3) {
       await db.execute('ALTER TABLE accounts ADD COLUMN master_email TEXT;');
       await db.execute('UPDATE accounts SET master_email = email;');
+    }
+    if (oldVersion < 4) {
+      // Drop UNIQUE constraint on email by recreating the table
+      await db.execute('''
+        CREATE TABLE accounts_v4 (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          email TEXT,
+          master_email TEXT,
+          realUsername TEXT,
+          anonymousUsername TEXT,
+          customUsername TEXT,
+          amomimusId TEXT UNIQUE,
+          gender TEXT,
+          registrationDate TEXT,
+          isDemo INTEGER,
+          bio TEXT,
+          coins INTEGER,
+          reportedCount INTEGER,
+          lastRedeemed TEXT,
+          dailyChatRequestsSent INTEGER,
+          lastChatRequestDate TEXT,
+          dateOfBirth TEXT,
+          totalResonatesReceived INTEGER,
+          benevolentPoints INTEGER,
+          indicator TEXT,
+          bioExpirationDate TEXT,
+          bioOriginalDuration INTEGER,
+          hasUsedBioBailout INTEGER,
+          presenceStatus TEXT,
+          is_synced INTEGER DEFAULT 0
+        )
+      ''');
+      await db.execute('INSERT INTO accounts_v4 SELECT * FROM accounts');
+      await db.execute('DROP TABLE accounts');
+      await db.execute('ALTER TABLE accounts_v4 RENAME TO accounts');
     }
   }
 
@@ -60,7 +95,7 @@ class SqliteService {
     await db.execute('''
       CREATE TABLE accounts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT UNIQUE,
+        email TEXT,
         master_email TEXT,
         realUsername TEXT,
         anonymousUsername TEXT,
@@ -271,8 +306,8 @@ class SqliteService {
     await db.update(
       'accounts',
       map,
-      where: 'email = ?',
-      whereArgs: [account.email],
+      where: 'amomimusId = ?',
+      whereArgs: [account.amomimusId],
     );
 
     // Update relational items (replacing old ones)
@@ -346,20 +381,22 @@ class SqliteService {
     return accounts;
   }
 
-  Future<void> deleteAccount(String email, String amomimusId) async {
+  Future<void> deleteAccount(String email) async {
     final db = await instance.database;
-    await db.delete('accounts', where: 'email = ?', whereArgs: [email]);
-    await db.delete(
-      'user_items',
-      where: 'amomimusId = ?',
-      whereArgs: [amomimusId],
-    );
-    await db.delete('blocks', where: 'blocker_id = ?', whereArgs: [amomimusId]);
-    await db.delete(
-      'reports',
-      where: 'reporter_id = ?',
-      whereArgs: [amomimusId],
-    );
+    
+    // Fetch all amomimusIds under this master email
+    final maps = await db.query('accounts', where: 'master_email = ?', whereArgs: [email]);
+    final ids = maps.map((m) => m['amomimusId'] as String).toList();
+    
+    // Delete all profiles under this email
+    await db.delete('accounts', where: 'master_email = ?', whereArgs: [email]);
+    
+    // Cascade delete relational data for all profiles
+    for (var id in ids) {
+      await db.delete('user_items', where: 'amomimusId = ?', whereArgs: [id]);
+      await db.delete('blocks', where: 'blocker_id = ?', whereArgs: [id]);
+      await db.delete('reports', where: 'reporter_id = ?', whereArgs: [id]);
+    }
   }
 
   // ==========================================

@@ -159,6 +159,7 @@ class _MessageBubbleState extends State<MessageBubble> with SingleTickerProvider
             const SizedBox(width: 8),
           ],
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onLongPress: widget.onLongPress,
             onTap: widget.isSelectionMode
                 ? widget.onSelectionTap
@@ -335,8 +336,7 @@ class _MessageBubbleState extends State<MessageBubble> with SingleTickerProvider
                             onTap: () {
                               if (widget.onReplyTapped != null) {
                                 widget.onReplyTapped!();
-                              } else if (widget.repliedMessage!.text.length >
-                                  100) {
+                              } else if (widget.repliedMessage!.text.length > 100) {
                                 showJellyDialog(
                                   context: context,
                                   builder: (dialogContext) => AlertDialog(
@@ -600,6 +600,7 @@ class _MessageBubbleState extends State<MessageBubble> with SingleTickerProvider
 
   Widget _buildSwipeableBubble(Widget child, Color textSecondaryColor) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onHorizontalDragUpdate: (details) {
         setState(() {
           _dragOffset += details.primaryDelta!;

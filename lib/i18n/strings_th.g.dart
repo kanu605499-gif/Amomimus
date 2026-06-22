@@ -337,6 +337,8 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bio_bailout_warning => 'คุณได้กดตัวเลือก bailout แบบครั้งเดียวเพื่อแก้ไขประวัติของคุณ โปรดกดดำเนินการต่อเพื่อเข้าสู่กระบวนการ bailout โดยใช้ 500 coins';
 	@override String bio_bailout_confirm({required Object duration}) => '${duration} - โปรดยืนยัน bailout ของคุณโดยกดปุ่มเครื่องบินกระดาษ';
 	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Please confirm your bio.';
+	@override String get add_profile => 'เพิ่มโปรไฟล์';
+	@override String get switch_email => 'สลับอีเมล';
 }
 
 /// The flat map containing all translations for locale <th>.
@@ -645,6 +647,8 @@ extension on TranslationsTh {
 			'bio_bailout_warning' => 'คุณได้กดตัวเลือก bailout แบบครั้งเดียวเพื่อแก้ไขประวัติของคุณ โปรดกดดำเนินการต่อเพื่อเข้าสู่กระบวนการ bailout โดยใช้ 500 coins',
 			'bio_bailout_confirm' => ({required Object duration}) => '${duration} - โปรดยืนยัน bailout ของคุณโดยกดปุ่มเครื่องบินกระดาษ',
 			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Please confirm your bio.',
+			'add_profile' => 'เพิ่มโปรไฟล์',
+			'switch_email' => 'สลับอีเมล',
 			_ => null,
 		};
 	}

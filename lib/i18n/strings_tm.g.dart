@@ -331,9 +331,11 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bio_not_enough_coins => 'Not enough Septims.';
 	@override String get bio_locked => 'Bound';
 	@override String get bio_bailout_used => 'Bailout exhausted.';
-	@override String get bio_bailout_warning => 'Siz bioňyzy üýtgetmek üçin bir gezeklik bailout opsiýasyna basdyňyz. 500 teňňe ulanyp bailout prosesini dowam etdirmek üçin dowam et düwmesine basyň.';
+	@override String get bio_bailout_warning => 'Siz bionyzy üýtgetmek üçin bir gezeklik bailout opsiýasyna basdyňyz. 500 teňňe ulanyp bailout prosesini dowam etdirmek üçin dowam et düwmesine basyň.';
 	@override String bio_bailout_confirm({required Object duration}) => '${duration} - Kagyz uçary düwmesine basyp bailoutyňyzy tassyklaň.';
-	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Please confirm your bio.';
+	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Kagyz uçary düwmesine basyp bioňyzy tassyklaň.';
+	@override String get add_profile => 'Summon Vessel';
+	@override String get switch_email => 'Change Scroll';
 }
 
 /// The flat map containing all translations for locale <tm>.
@@ -636,9 +638,11 @@ extension on TranslationsTm {
 			'bio_not_enough_coins' => 'Not enough Septims.',
 			'bio_locked' => 'Bound',
 			'bio_bailout_used' => 'Bailout exhausted.',
-			'bio_bailout_warning' => 'Siz bioňyzy üýtgetmek üçin bir gezeklik bailout opsiýasyna basdyňyz. 500 teňňe ulanyp bailout prosesini dowam etdirmek üçin dowam et düwmesine basyň.',
+			'bio_bailout_warning' => 'Siz bionyzy üýtgetmek üçin bir gezeklik bailout opsiýasyna basdyňyz. 500 teňňe ulanyp bailout prosesini dowam etdirmek üçin dowam et düwmesine basyň.',
 			'bio_bailout_confirm' => ({required Object duration}) => '${duration} - Kagyz uçary düwmesine basyp bailoutyňyzy tassyklaň.',
-			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Please confirm your bio.',
+			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Kagyz uçary düwmesine basyp bioňyzy tassyklaň.',
+			'add_profile' => 'Summon Vessel',
+			'switch_email' => 'Change Scroll',
 			_ => null,
 		};
 	}
