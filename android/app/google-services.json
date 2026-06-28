@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "959959455583",
+    "project_id": "amomimus-dev",
+    "storage_bucket": "amomimus-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959959455583:android:524c396033e652626b08ea",
+        "android_client_info": {
+          "package_name": "com.diata.amomimus.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959959455583-tt2uqm62a64vr0eliuk0qfsf0r65au1i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.diata.amomimus.dev",
+            "certificate_hash": "1c8e004c059f2197ba2049b5e93c5d219d2986c9"
+          }
+        },
+        {
+          "client_id": "959959455583-gpaahsld9r6qb2526mer6vjipbphik7f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgF4vn-uLsirWLp3XLWDWIj6vvMoIUjkE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959959455583-gpaahsld9r6qb2526mer6vjipbphik7f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,20 +1,22 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' as math;
-import '../database/preference_handler.dart';
+import '../services/preference_handler.dart';
 import 'package:amomimus/screens/about_screen.dart';
 import 'package:amomimus/i18n/strings.g.dart';
-import '../database/models/user_register_sql.dart';
+import '../models/user_credentials_model.dart';
 import '../data/anonymous_names.dart';
 import '../services/account_manager.dart';
 import 'package:amomimus/screens/feed_screen.dart';
 import 'package:amomimus/screens/choose_amomimus_screen.dart';
+import 'package:amomimus/widgets/update_checker.dart';
 
 class AmomimusApp4 extends StatefulWidget {
   final String email;
   final String realUsername;
   final String password;
   final String favoriteCharacter;
+  final bool isGoogleAuth;
 
   const AmomimusApp4({
     super.key,
@@ -22,6 +24,7 @@ class AmomimusApp4 extends StatefulWidget {
     required this.realUsername,
     required this.password,
     required this.favoriteCharacter,
+    this.isGoogleAuth = false,
   });
 
   @override
@@ -31,6 +34,18 @@ class AmomimusApp4 extends StatefulWidget {
 class _AmomimusApp4State extends State<AmomimusApp4> {
   int _currentIndex = 0;
   final bool _isDarkMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    updateNavigatorObserver.pause();
+  }
+
+  @override
+  void dispose() {
+    updateNavigatorObserver.resume();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +68,7 @@ class _AmomimusApp4State extends State<AmomimusApp4> {
         password: widget.password,
         favoriteCharacter: widget.favoriteCharacter,
         isDarkMode: _isDarkMode,
+        isGoogleAuth: widget.isGoogleAuth,
       ),
       AboutPage(
         isDarkMode: _isDarkMode,
@@ -129,6 +145,7 @@ class AmomimusFormPage extends StatefulWidget {
   final String password;
   final String favoriteCharacter;
   final bool isDarkMode;
+  final bool isGoogleAuth;
 
   const AmomimusFormPage({
     super.key,
@@ -137,6 +154,7 @@ class AmomimusFormPage extends StatefulWidget {
     required this.password,
     required this.favoriteCharacter,
     required this.isDarkMode,
+    required this.isGoogleAuth,
   });
 
   @override
@@ -628,6 +646,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                                           widget.favoriteCharacter,
                                       dateOfBirth: _getFormattedDate(),
                                       isDarkMode: widget.isDarkMode,
+                                      isGoogleAuth: widget.isGoogleAuth,
                                     ),
                                   ),
                                 );

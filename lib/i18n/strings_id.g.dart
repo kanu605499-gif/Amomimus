@@ -81,7 +81,7 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get incomplete_selection => 'Seleksi Tidak Lengkap';
 	@override String get proceed => 'Melanjutkan';
 	@override String get choose_avatar_first => 'Silakan pilih Avatar Amomus Anda terlebih dahulu!';
-	@override String get incomplete_selection_desc_1 => 'Anda belum';
+	@override String get incomplete_selection_desc_1 => 'Anda belum memilih ';
 	@override String get incomplete_selection_desc_2 => '.\n\nAnda tidak akan dibatasi, tetapi nama khusus Anda tidak akan ditampilkan kepada Anda. Sistem akan secara otomatis menghasilkan yang acak. Apakah Anda ingin melanjutkan?';
 	@override String get you_found_easter_egg => 'Anda menemukan telur paskah';
 	@override String get developer => 'Pengembang:';
@@ -343,6 +343,27 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String bio_first_time_confirm({required Object duration}) => 'Kamu memilih opsi durasi Bio ${duration}.\nKonfirmasi dengan menekan icon pesawat kertas.';
 	@override String get add_profile => 'Tambah Profil';
 	@override String get switch_email => 'Ganti Email';
+	@override String get update_later_btn => 'Nanti Saja';
+	@override String get update_now_btn => 'Update Sekarang';
+	@override String get update_available_title => 'Pembaruan Tersedia';
+	@override String get favorite_char_hint_security => 'Masukkan karakter favorit Anda untuk keamanan.';
+	@override String get reauthenticate_with_google => 'Harap autentikasi ulang dengan Google untuk melanjutkan.';
+	@override String get spam_cooldown_warning => 'Harap tunggu sebelum memposting lagi.';
+	@override String get update_available_body => 'Versi baru Amomimus tersedia. Harap perbarui.';
+	@override String get user_ghost_warning => 'Pengguna ini sedang menjadi hantu.';
+	@override String get passcode => 'Kode Sandi';
+	@override String get tap_to_reveal => 'Ketuk untuk membuka rahasia';
+	@override String get passcode_hint_security => 'Masukkan 6 digit kode sandi untuk keamanan.';
+	@override String get notif_chat => 'mengirimimu pesan';
+	@override String presence_cooldown_hours({required Object hours}) => 'Perubahan status Anda dapat direset dalam ${hours} jam ke depan';
+	@override String presence_cooldown_minutes({required Object minutes}) => 'Perubahan status Anda dapat direset dalam ${minutes} menit ke depan';
+	@override String get notif_chat_request => 'mengirimkan permintaan obrolan';
+	@override String get notif_blocked => 'telah memblokir kamu';
+	@override String get notif_unblocked => 'telah membuka blokir kamu';
+	@override String get notif_bio_expiry => 'Bio kamu akan segera kedaluwarsa';
+	@override String get amow_summary_title => 'Amow 👻';
+	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'Haloow! Amow di mari~ Ada ${chat} chat, ${comment} komen, dan ${resonate} resonate yang nungguin lu nih. Sini cek dong!';
+	@override String get amow_summary_empty => 'Haloow! Amow di mari~ Belum ada notifikasi baru nih. Nanti Amow cek lagi ya!';
 }
 
 /// The flat map containing all translations for locale <id>.
@@ -395,7 +416,7 @@ extension on TranslationsId {
 			'incomplete_selection' => 'Seleksi Tidak Lengkap',
 			'proceed' => 'Melanjutkan',
 			'choose_avatar_first' => 'Silakan pilih Avatar Amomus Anda terlebih dahulu!',
-			'incomplete_selection_desc_1' => 'Anda belum',
+			'incomplete_selection_desc_1' => 'Anda belum memilih ',
 			'incomplete_selection_desc_2' => '.\n\nAnda tidak akan dibatasi, tetapi nama khusus Anda tidak akan ditampilkan kepada Anda. Sistem akan secara otomatis menghasilkan yang acak. Apakah Anda ingin melanjutkan?',
 			'you_found_easter_egg' => 'Anda menemukan telur paskah',
 			'developer' => 'Pengembang:',
@@ -657,6 +678,27 @@ extension on TranslationsId {
 			'bio_first_time_confirm' => ({required Object duration}) => 'Kamu memilih opsi durasi Bio ${duration}.\nKonfirmasi dengan menekan icon pesawat kertas.',
 			'add_profile' => 'Tambah Profil',
 			'switch_email' => 'Ganti Email',
+			'update_later_btn' => 'Nanti Saja',
+			'update_now_btn' => 'Update Sekarang',
+			'update_available_title' => 'Pembaruan Tersedia',
+			'favorite_char_hint_security' => 'Masukkan karakter favorit Anda untuk keamanan.',
+			'reauthenticate_with_google' => 'Harap autentikasi ulang dengan Google untuk melanjutkan.',
+			'spam_cooldown_warning' => 'Harap tunggu sebelum memposting lagi.',
+			'update_available_body' => 'Versi baru Amomimus tersedia. Harap perbarui.',
+			'user_ghost_warning' => 'Pengguna ini sedang menjadi hantu.',
+			'passcode' => 'Kode Sandi',
+			'tap_to_reveal' => 'Ketuk untuk membuka rahasia',
+			'passcode_hint_security' => 'Masukkan 6 digit kode sandi untuk keamanan.',
+			'notif_chat' => 'mengirimimu pesan',
+			'presence_cooldown_hours' => ({required Object hours}) => 'Perubahan status Anda dapat direset dalam ${hours} jam ke depan',
+			'presence_cooldown_minutes' => ({required Object minutes}) => 'Perubahan status Anda dapat direset dalam ${minutes} menit ke depan',
+			'notif_chat_request' => 'mengirimkan permintaan obrolan',
+			'notif_blocked' => 'telah memblokir kamu',
+			'notif_unblocked' => 'telah membuka blokir kamu',
+			'notif_bio_expiry' => 'Bio kamu akan segera kedaluwarsa',
+			'amow_summary_title' => 'Amow 👻',
+			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'Haloow! Amow di mari~ Ada ${chat} chat, ${comment} komen, dan ${resonate} resonate yang nungguin lu nih. Sini cek dong!',
+			'amow_summary_empty' => 'Haloow! Amow di mari~ Belum ada notifikasi baru nih. Nanti Amow cek lagi ya!',
 			_ => null,
 		};
 	}

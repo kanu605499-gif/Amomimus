@@ -167,8 +167,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// en: 'Please choose your Amomus Avatar first!'
 	String get choose_avatar_first => 'Please choose your Amomus Avatar first!';
 
-	/// en: 'You haven't '
-	String get incomplete_selection_desc_1 => 'You haven\'t ';
+	/// en: 'You haven't selected an '
+	String get incomplete_selection_desc_1 => 'You haven\'t selected an ';
 
 	/// en: '. You won't be restricted, but you will not have your custom name displayed to you. The system will auto-generate a random one instead. Do you want to proceed?'
 	String get incomplete_selection_desc_2 => '.\n\nYou won\'t be restricted, but you will not have your custom name displayed to you. The system will auto-generate a random one instead. Do you want to proceed?';
@@ -952,6 +952,69 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
 	/// en: 'Switch Email'
 	String get switch_email => 'Switch Email';
+
+	/// en: 'Later'
+	String get update_later_btn => 'Later';
+
+	/// en: 'Update Now'
+	String get update_now_btn => 'Update Now';
+
+	/// en: 'Update Available'
+	String get update_available_title => 'Update Available';
+
+	/// en: 'Enter favorite character for security.'
+	String get favorite_char_hint_security => 'Enter favorite character for security.';
+
+	/// en: 'Please reauthenticate with Google to continue.'
+	String get reauthenticate_with_google => 'Please reauthenticate with Google to continue.';
+
+	/// en: 'Please wait before posting again.'
+	String get spam_cooldown_warning => 'Please wait before posting again.';
+
+	/// en: 'A new version of Amomimus is available. Please update.'
+	String get update_available_body => 'A new version of Amomimus is available. Please update.';
+
+	/// en: 'This user is currently a ghost.'
+	String get user_ghost_warning => 'This user is currently a ghost.';
+
+	/// en: 'Passcode'
+	String get passcode => 'Passcode';
+
+	/// en: 'Tap to reveal'
+	String get tap_to_reveal => 'Tap to reveal';
+
+	/// en: 'Enter 6-digit passcode for security.'
+	String get passcode_hint_security => 'Enter 6-digit passcode for security.';
+
+	/// en: 'sent you a message'
+	String get notif_chat => 'sent you a message';
+
+	/// en: 'Your status change could be reset by next ${hours} hours'
+	String presence_cooldown_hours({required Object hours}) => 'Your status change could be reset by next ${hours} hours';
+
+	/// en: 'Your status change could be reset by next ${minutes} minutes'
+	String presence_cooldown_minutes({required Object minutes}) => 'Your status change could be reset by next ${minutes} minutes';
+
+	/// en: 'sent you a chat request'
+	String get notif_chat_request => 'sent you a chat request';
+
+	/// en: 'has blocked you'
+	String get notif_blocked => 'has blocked you';
+
+	/// en: 'has unblocked you'
+	String get notif_unblocked => 'has unblocked you';
+
+	/// en: 'Your bio is about to expire'
+	String get notif_bio_expiry => 'Your bio is about to expire';
+
+	/// en: 'Amow 👻'
+	String get amow_summary_title => 'Amow 👻';
+
+	/// en: 'Hellloo! Amoooww here just to tell you that you got ${chat} messages, ${comment} comments and ${resonate} resonates, come check it out!'
+	String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'Hellloo! Amoooww here just to tell you that you got ${chat} messages, ${comment} comments and ${resonate} resonates, come check it out!';
+
+	/// en: 'Hellloo! Amoooww here! No new notifications for now, I'll check back later!'
+	String get amow_summary_empty => 'Hellloo! Amoooww here! No new notifications for now, I\'ll check back later!';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1004,7 +1067,7 @@ extension on Translations {
 			'incomplete_selection' => 'Incomplete Selection',
 			'proceed' => 'Proceed',
 			'choose_avatar_first' => 'Please choose your Amomus Avatar first!',
-			'incomplete_selection_desc_1' => 'You haven\'t ',
+			'incomplete_selection_desc_1' => 'You haven\'t selected an ',
 			'incomplete_selection_desc_2' => '.\n\nYou won\'t be restricted, but you will not have your custom name displayed to you. The system will auto-generate a random one instead. Do you want to proceed?',
 			'you_found_easter_egg' => 'You found the easter egg',
 			'developer' => 'Developer:',
@@ -1266,6 +1329,27 @@ extension on Translations {
 			'bio_first_time_confirm' => ({required Object duration}) => 'You selected the bio duration of ${duration}.\nPlease confirm your bio by pressing the paper plane button.',
 			'add_profile' => 'Add Profile',
 			'switch_email' => 'Switch Email',
+			'update_later_btn' => 'Later',
+			'update_now_btn' => 'Update Now',
+			'update_available_title' => 'Update Available',
+			'favorite_char_hint_security' => 'Enter favorite character for security.',
+			'reauthenticate_with_google' => 'Please reauthenticate with Google to continue.',
+			'spam_cooldown_warning' => 'Please wait before posting again.',
+			'update_available_body' => 'A new version of Amomimus is available. Please update.',
+			'user_ghost_warning' => 'This user is currently a ghost.',
+			'passcode' => 'Passcode',
+			'tap_to_reveal' => 'Tap to reveal',
+			'passcode_hint_security' => 'Enter 6-digit passcode for security.',
+			'notif_chat' => 'sent you a message',
+			'presence_cooldown_hours' => ({required Object hours}) => 'Your status change could be reset by next ${hours} hours',
+			'presence_cooldown_minutes' => ({required Object minutes}) => 'Your status change could be reset by next ${minutes} minutes',
+			'notif_chat_request' => 'sent you a chat request',
+			'notif_blocked' => 'has blocked you',
+			'notif_unblocked' => 'has unblocked you',
+			'notif_bio_expiry' => 'Your bio is about to expire',
+			'amow_summary_title' => 'Amow 👻',
+			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'Hellloo! Amoooww here just to tell you that you got ${chat} messages, ${comment} comments and ${resonate} resonates, come check it out!',
+			'amow_summary_empty' => 'Hellloo! Amoooww here! No new notifications for now, I\'ll check back later!',
 			_ => null,
 		};
 	}

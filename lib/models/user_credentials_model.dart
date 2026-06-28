@@ -1,6 +1,6 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-class UserModelSql {
+class UserCredentialsModel {
   final int? id;
   final String? fullName;
   final String? email;
@@ -8,7 +8,7 @@ class UserModelSql {
   final String? password;
   final String? lastFavCharEditDate;
 
-  UserModelSql({
+  UserCredentialsModel({
     this.id,
     this.fullName,
     this.email,
@@ -17,7 +17,7 @@ class UserModelSql {
     this.lastFavCharEditDate,
   });
 
-  factory UserModelSql.fromMap(Map<String, dynamic> map) => UserModelSql(
+  factory UserCredentialsModel.fromMap(Map<String, dynamic> map) => UserCredentialsModel(
     id: map['id'] as int?,
     fullName: map['full_name'] as String?,
     email: map['email'] as String?,
@@ -39,10 +39,10 @@ class UserModelSql {
 
   String toJson() => json.encode(toMap());
 
-  factory UserModelSql.fromJson(String source) =>
-      UserModelSql.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserCredentialsModel.fromJson(String source) =>
+      UserCredentialsModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  UserModelSql copyWith({
+  UserCredentialsModel copyWith({
     int? id,
     String? fullName,
     String? email,
@@ -51,7 +51,7 @@ class UserModelSql {
     String? password,
     String? lastFavCharEditDate,
   }) {
-    return UserModelSql(
+    return UserCredentialsModel(
       id: id ?? this.id,
       fullName: fullName ?? this.fullName,
       email: email ?? this.email,

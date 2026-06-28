@@ -359,18 +359,19 @@ class _ForumPageState extends State<ForumPage> {
                                     message: "replied to your comment",
                                   ),
                                 );
-                              } else if (currentFeed.realAuthorId != null &&
-                                  currentFeed.realAuthorId !=
-                                      currentUser.amomimusId) {
-                                notifManager.addNotification(
-                                  NotificationModel(
-                                    targetUserId: currentFeed.realAuthorId!,
-                                    actorName: generatedName,
-                                    type: NotificationType.comment,
-                                    feedId: currentFeed.id,
-                                    message: "commented on your post",
-                                  ),
-                                );
+                              } else {
+                                final targetId = currentFeed.realAuthorId ?? currentFeed.id;
+                                if (targetId != currentUser.amomimusId) {
+                                  notifManager.addNotification(
+                                    NotificationModel(
+                                      targetUserId: targetId,
+                                      actorName: generatedName,
+                                      type: NotificationType.comment,
+                                      feedId: currentFeed.id,
+                                      message: "commented on your post",
+                                    ),
+                                  );
+                                }
                               }
 
                               _commentController.clear();

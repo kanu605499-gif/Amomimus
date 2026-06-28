@@ -81,7 +81,7 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get incomplete_selection => 'Unvollständige Auswahl';
 	@override String get proceed => 'Fortfahren';
 	@override String get choose_avatar_first => 'Bitte wählen Sie zuerst Ihren Amomus-Avatar!';
-	@override String get incomplete_selection_desc_1 => 'Das hast du nicht';
+	@override String get incomplete_selection_desc_1 => 'Sie haben noch keinen ausgewählt: ';
 	@override String get incomplete_selection_desc_2 => '.\n\nSie werden nicht eingeschränkt, Ihr individueller Name wird Ihnen jedoch nicht angezeigt. Das System generiert stattdessen automatisch ein zufälliges Ergebnis. Möchten Sie fortfahren?';
 	@override String get you_found_easter_egg => 'Du hast das Osterei gefunden';
 	@override String get developer => 'Entwickler:';
@@ -324,6 +324,27 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Please confirm your bio.';
 	@override String get add_profile => 'Profil hinzufügen';
 	@override String get switch_email => 'E-Mail wechseln';
+	@override String get update_later_btn => 'Später';
+	@override String get update_now_btn => 'Jetzt aktualisieren';
+	@override String get update_available_title => 'Update Available';
+	@override String get favorite_char_hint_security => 'Enter favorite character for security.';
+	@override String get reauthenticate_with_google => 'Please reauthenticate with Google to continue.';
+	@override String get spam_cooldown_warning => 'Please wait before posting again.';
+	@override String get update_available_body => 'A new version of Amomimus is available. Please update.';
+	@override String get user_ghost_warning => 'This user is currently a ghost.';
+	@override String get passcode => 'Passcode';
+	@override String get tap_to_reveal => 'Tap to reveal';
+	@override String get passcode_hint_security => 'Enter 6-digit passcode for security.';
+	@override String get notif_chat => 'hat dir eine Nachricht gesendet';
+	@override String presence_cooldown_hours({required Object hours}) => 'Ihre Statusnderung kann in den nchsten ${hours} Stunden zurckgesetzt werden';
+	@override String presence_cooldown_minutes({required Object minutes}) => 'Ihre Statusnderung kann in den nchsten ${minutes} Minuten zurckgesetzt werden';
+	@override String get notif_chat_request => 'hat dir eine Chat-Anfrage gesendet';
+	@override String get notif_blocked => 'hat dich blockiert';
+	@override String get notif_unblocked => 'hat deine Blockierung aufgehoben';
+	@override String get notif_bio_expiry => 'Deine Bio läuft bald ab';
+	@override String get amow_summary_title => 'Amow 👻';
+	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'Halloo! Amow hier, um dir zu sagen, dass du ${chat} Nachrichten, ${comment} Kommentare und ${resonate} Resonates hast. Komm und sieh es dir an!';
+	@override String get amow_summary_empty => 'Halloo! Amow hier! Keine neuen Benachrichtigungen für den Moment, ich schaue später wieder vorbei!';
 }
 
 /// The flat map containing all translations for locale <de>.
@@ -376,7 +397,7 @@ extension on TranslationsDe {
 			'incomplete_selection' => 'Unvollständige Auswahl',
 			'proceed' => 'Fortfahren',
 			'choose_avatar_first' => 'Bitte wählen Sie zuerst Ihren Amomus-Avatar!',
-			'incomplete_selection_desc_1' => 'Das hast du nicht',
+			'incomplete_selection_desc_1' => 'Sie haben noch keinen ausgewählt: ',
 			'incomplete_selection_desc_2' => '.\n\nSie werden nicht eingeschränkt, Ihr individueller Name wird Ihnen jedoch nicht angezeigt. Das System generiert stattdessen automatisch ein zufälliges Ergebnis. Möchten Sie fortfahren?',
 			'you_found_easter_egg' => 'Du hast das Osterei gefunden',
 			'developer' => 'Entwickler:',
@@ -619,6 +640,27 @@ extension on TranslationsDe {
 			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Please confirm your bio.',
 			'add_profile' => 'Profil hinzufügen',
 			'switch_email' => 'E-Mail wechseln',
+			'update_later_btn' => 'Später',
+			'update_now_btn' => 'Jetzt aktualisieren',
+			'update_available_title' => 'Update Available',
+			'favorite_char_hint_security' => 'Enter favorite character for security.',
+			'reauthenticate_with_google' => 'Please reauthenticate with Google to continue.',
+			'spam_cooldown_warning' => 'Please wait before posting again.',
+			'update_available_body' => 'A new version of Amomimus is available. Please update.',
+			'user_ghost_warning' => 'This user is currently a ghost.',
+			'passcode' => 'Passcode',
+			'tap_to_reveal' => 'Tap to reveal',
+			'passcode_hint_security' => 'Enter 6-digit passcode for security.',
+			'notif_chat' => 'hat dir eine Nachricht gesendet',
+			'presence_cooldown_hours' => ({required Object hours}) => 'Ihre Statusnderung kann in den nchsten ${hours} Stunden zurckgesetzt werden',
+			'presence_cooldown_minutes' => ({required Object minutes}) => 'Ihre Statusnderung kann in den nchsten ${minutes} Minuten zurckgesetzt werden',
+			'notif_chat_request' => 'hat dir eine Chat-Anfrage gesendet',
+			'notif_blocked' => 'hat dich blockiert',
+			'notif_unblocked' => 'hat deine Blockierung aufgehoben',
+			'notif_bio_expiry' => 'Deine Bio läuft bald ab',
+			'amow_summary_title' => 'Amow 👻',
+			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'Halloo! Amow hier, um dir zu sagen, dass du ${chat} Nachrichten, ${comment} Kommentare und ${resonate} Resonates hast. Komm und sieh es dir an!',
+			'amow_summary_empty' => 'Halloo! Amow hier! Keine neuen Benachrichtigungen für den Moment, ich schaue später wieder vorbei!',
 			_ => null,
 		};
 	}

@@ -13,8 +13,7 @@ class PresencePickerCapsule extends StatelessWidget {
     
     // We position the menu right below the indicator
     final topOffset = position.dy + size.height + 8;
-    // For horizontal scroll, we want to constrain it so it doesn't overflow
-    double leftOffset = position.dx - 40;
+    double leftOffset = position.dx - 80;
     if (leftOffset < 16) leftOffset = 16;
 
     showGeneralDialog(
@@ -25,8 +24,8 @@ class PresencePickerCapsule extends StatelessWidget {
       transitionDuration: const Duration(milliseconds: 250),
       pageBuilder: (context, anim1, anim2) {
         final screenWidth = MediaQuery.of(context).size.width;
-        if (leftOffset > screenWidth - 250) {
-          leftOffset = screenWidth - 250;
+        if (leftOffset > screenWidth - 216) {
+          leftOffset = screenWidth - 216;
         }
 
         return Stack(
@@ -34,13 +33,9 @@ class PresencePickerCapsule extends StatelessWidget {
             Positioned(
               top: topOffset,
               left: leftOffset,
-              right: 16, // constraint width so horizontal scroll kicks in
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Material(
-                  color: Colors.transparent,
-                  child: const PresencePickerCapsule(),
-                ),
+              child: const Material(
+                color: Colors.transparent,
+                child: PresencePickerCapsule(),
               ),
             ),
           ],
@@ -131,10 +126,10 @@ class PresencePickerCapsule extends StatelessWidget {
     ];
 
     return Container(
-      height: 48, // single row
+      width: 200,
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: borderColor),
         boxShadow: [
           BoxShadow(
@@ -145,11 +140,10 @@ class PresencePickerCapsule extends StatelessWidget {
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(16),
         child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
           physics: const BouncingScrollPhysics(),
-          child: Row(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: options.map((opt) {
               final status = opt['status']!;
@@ -160,22 +154,22 @@ class PresencePickerCapsule extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  alignment: Alignment.center,
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                   color: isSelected 
-                      ? Colors.black.withValues(alpha: 0.1) // active indicator
+                      ? Colors.black.withValues(alpha: 0.1)
                       : Colors.transparent,
                   child: Row(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       getPresenceIcon(status, size: 14),
-                      const SizedBox(width: 8),
-                      Text(
-                        opt['label']!,
-                        style: TextStyle(
-                          color: textColor,
-                          fontSize: 13,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          opt['label']!,
+                          style: TextStyle(
+                            color: textColor,
+                            fontSize: 13,
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],

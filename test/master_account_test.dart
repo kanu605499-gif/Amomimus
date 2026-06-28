@@ -17,7 +17,7 @@ class MockAuthService implements AuthService {
   Future<bool> isEmailRegistered(String email) async => true;
 
   @override
-  Future<bool> registerAccount(UserModelSql credentials, UserAccount profile) async => true;
+  Future<UserAccount?> registerAccount(UserModelSql credentials, UserAccount profile) async => profile;
 
   @override
   Future<UserAccount?> login(String email, String password) async => accounts.first;
@@ -33,6 +33,15 @@ class MockAuthService implements AuthService {
 
   @override
   Future<UserModelSql?> getCredentials(String email) async => credentials;
+
+  @override
+  Future<GoogleAuthResult?> loginWithGoogle() async => null;
+
+  @override
+  Future<UserAccount?> registerGoogleProfile(UserModelSql credentials, UserAccount profile) async => profile;
+
+  @override
+  Future<bool> reauthenticate(String? password) async => true;
 }
 
 // A mock AccountManager to override database load

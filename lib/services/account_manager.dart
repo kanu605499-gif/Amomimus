@@ -3,12 +3,14 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../database_helper.dart';
-import '../database/sqlite_service.dart';
 import '../models/report_model.dart';
 import '../models/user_indicator_model.dart';
 import '../helpers/benevolent_calculator.dart';
+import '../models/user_credentials_model.dart';
 import 'auth_service.dart';
-import '../database/models/user_register_sql.dart';
+import 'fcm_service.dart';
+import 'background_service.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
 class AccountManager extends ChangeNotifier {
   Future<void> _persistAndNotify(UserAccount updatedUser) async {
@@ -40,6 +42,13 @@ class AccountManager extends ChangeNotifier {
   List<UserAccount> get accounts => _accounts;
   UserAccount? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
+
+  bool get isMasterProfile {
+    if (_currentUser == null || _currentUser!.isDemo) return false;
+    final masterAccs = _accounts.where((acc) => acc.masterEmail == _currentUser!.masterEmail).toList();
+    if (masterAccs.isEmpty) return false;
+    return masterAccs.first.amomimusId == _currentUser!.amomimusId;
+  }
 
   List<UserAccount> get switchableAccounts {
     if (_currentUser == null) return [];
@@ -107,25 +116,48 @@ class AccountManager extends ChangeNotifier {
   }
 
   Future<bool> registerAndLogin(
-    UserModelSql credentials,
+    UserCredentialsModel credentials,
     UserAccount newUser,
   ) async {
-    bool isSuccess = await authService.registerAccount(credentials, newUser);
-    if (!isSuccess) return false;
+    final createdProfile = await authService.registerAccount(credentials, newUser);
+    if (createdProfile == null) return false;
 
     // We fetch updated accounts to sync the internal state
     await loadAccounts();
 
     // Set the newly created user as the active user
     final createdUser = _accounts.firstWhere(
-      (acc) => acc.amomimusId == newUser.amomimusId,
+      (acc) => acc.amomimusId == createdProfile.amomimusId,
       orElse: () {
-        _accounts.add(newUser);
-        return newUser;
+        _accounts.add(createdProfile);
+        return createdProfile;
       },
     );
     await switchAccount(createdUser);
     return true;
+  }
+
+  Future<GoogleAuthResult?> loginWithGoogle() async {
+    return await authService.loginWithGoogle();
+  }
+
+  Future<bool> registerGoogleAccount(UserCredentialsModel credentials, UserAccount newUser) async {
+    final createdProfile = await authService.registerGoogleProfile(credentials, newUser);
+    if (createdProfile == null) return false;
+    await loadAccounts();
+    final createdUser = _accounts.firstWhere(
+      (acc) => acc.amomimusId == createdProfile.amomimusId,
+      orElse: () {
+        _accounts.add(createdProfile);
+        return createdProfile;
+      },
+    );
+    await switchAccount(createdUser);
+    return true;
+  }
+
+  Future<bool> reauthenticate(String? password) async {
+    return await authService.reauthenticate(password);
   }
 
   Future<bool> checkEmailExists(String email) async {
@@ -156,6 +188,38 @@ class AccountManager extends ChangeNotifier {
     await prefs.setString('savedEmail', account.email);
     await prefs.setString('savedAmomimusId', account.amomimusId);
     await prefs.setBool('rememberMe', true);
+
+    // Refresh FCM token for this account so push notifications are delivered correctly
+    FcmService().refreshToken(account.amomimusId);
+    
+    // Schedule local push notifications for Amow Summaries
+    await scheduleAmowSummaries();
+  }
+
+  Future<void> scheduleAmowSummaries() async {
+    final times = [
+      const TimeOfDay(hour: 11, minute: 0),
+      const TimeOfDay(hour: 16, minute: 35),
+      const TimeOfDay(hour: 21, minute: 45),
+      const TimeOfDay(hour: 5, minute: 30),
+      const TimeOfDay(hour: 0, minute: 0),
+    ];
+    
+    final now = DateTime.now();
+    for (int i = 0; i < times.length; i++) {
+      var nextTime = DateTime(now.year, now.month, now.day, times[i].hour, times[i].minute);
+      if (nextTime.isBefore(now)) {
+        nextTime = nextTime.add(const Duration(days: 1));
+      }
+      await AndroidAlarmManager.periodic(
+        const Duration(days: 1),
+        i, // unique ID for each alarm
+        amowSummaryTask,
+        startAt: nextTime,
+        exact: true,
+        wakeup: true,
+      );
+    }
   }
 
   Future<void> deleteAccount(String email) async {
@@ -493,23 +557,12 @@ class AccountManager extends ChangeNotifier {
   Future<void> updatePresenceStatus(String status) async {
     if (_currentUser == null) return;
     
-    // Update local currentUser
-    _currentUser = _currentUser!.copyWith(presenceStatus: status);
+    final updatedUser = _currentUser!.copyWith(
+      presenceStatus: status,
+      presenceUpdatedAt: DateTime.now().toIso8601String(),
+    );
     
-    // Update in memory list
-    final idx = _accounts.indexWhere((acc) => acc.id == _currentUser!.id);
-    if (idx != -1) {
-      _accounts[idx] = _currentUser!;
-    }
-    
-    // Persist to local database
-    try {
-      await DatabaseHelper.instance.updateUser(_currentUser!);
-    } catch (e) {
-      print("==== DB UPDATE SKIPPED: $e ====");
-    }
-    
-    notifyListeners();
+    await _persistAndNotify(updatedUser);
   }
 
   // ══════════════════════════════════════════════════════════
@@ -743,13 +796,6 @@ class AccountManager extends ChangeNotifier {
 
       try {
         await DatabaseHelper.instance.updateUser(updatedUser);
-        await SqliteService.instance.addReport(
-          _currentUser?.amomimusId ?? 'anonymous',
-          normalizedTargetId,
-          category.toString(),
-          1,
-          isChatBubbleReport,
-        );
       } catch (e) {
         print("==== DB UPDATE SKIPPED: \$e ====");
       }

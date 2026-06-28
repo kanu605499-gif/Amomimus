@@ -24,20 +24,28 @@ void showAccountSwitchSheet(BuildContext context) {
 
   showModalBottomSheet(
     context: context,
+    isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (ctx) {
       final sheetBg = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
       final textCol = isDark ? Colors.white : Colors.black87;
       final subCol = isDark ? AmomimusDarkTheme.textSecondary : Colors.black54;
 
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        decoration: BoxDecoration(
-          color: sheetBg,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      return Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(ctx).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Container(
+          height: MediaQuery.of(ctx).size.height * 0.5,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          decoration: BoxDecoration(
+            color: sheetBg,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: Column(
           children: [
             Container(
               width: 40,
@@ -72,7 +80,7 @@ void showAccountSwitchSheet(BuildContext context) {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: accounts.map((acc) {
-                      final isActive = acc.id == accountManager.currentUser?.id;
+                      final isActive = acc.amomimusId == accountManager.currentUser?.amomimusId;
                       final genderColor = GenderHelpers.getGenderColor(acc.gender);
                       final genderIcon = GenderHelpers.getGenderIcon(acc.gender);
 
@@ -151,10 +159,20 @@ void showAccountSwitchSheet(BuildContext context) {
                                   ),
                                 ),
                                 if (isActive)
-                                  Icon(
-                                    Icons.check_circle,
-                                    color: genderColor,
-                                    size: 20,
+                                  Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                      color: genderColor,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: genderColor.withValues(alpha: 0.4),
+                                          blurRadius: 4,
+                                          spreadRadius: 1,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                               ],
                             ),
@@ -198,7 +216,10 @@ void showAccountSwitchSheet(BuildContext context) {
             const SizedBox(height: 8),
           ],
         ),
+      ),
       );
     },
   );
 }
+
+

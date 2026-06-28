@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceHandler {
   static late SharedPreferences _prefs;
-  static const _keyIsLogin = "isLogin";
+  static const _keyIsLogin = "isLoggedIn";
   static const _keyHasSeenOnboarding = "hasSeenOnboarding";
   static const _keyIsDarkMode = "isDarkMode";
   static const _keyLanguage = "language";

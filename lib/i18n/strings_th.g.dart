@@ -81,7 +81,7 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get incomplete_selection => 'การเลือกที่ไม่สมบูรณ์';
 	@override String get proceed => 'ดำเนินการ';
 	@override String get choose_avatar_first => 'โปรดเลือกอวาตาร์ Amomus ของคุณก่อน!';
-	@override String get incomplete_selection_desc_1 => 'คุณไม่ได้';
+	@override String get incomplete_selection_desc_1 => 'คุณยังไม่ได้เลือก ';
 	@override String get incomplete_selection_desc_2 => '.\n\nคุณจะไม่ถูกจำกัดแต่คุณจะไม่แสดงชื่อที่คุณกำหนดเอง ระบบจะสร้างแบบสุ่มขึ้นมาแทน คุณต้องการดำเนินการต่อหรือไม่?';
 	@override String get you_found_easter_egg => 'คุณพบไข่อีสเตอร์';
 	@override String get developer => 'ผู้พัฒนา:';
@@ -339,6 +339,27 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Please confirm your bio.';
 	@override String get add_profile => 'เพิ่มโปรไฟล์';
 	@override String get switch_email => 'สลับอีเมล';
+	@override String get update_later_btn => 'ภายหลัง';
+	@override String get update_now_btn => 'อัปเดตตอนนี้';
+	@override String get update_available_title => 'Update Available';
+	@override String get favorite_char_hint_security => 'Enter favorite character for security.';
+	@override String get reauthenticate_with_google => 'Please reauthenticate with Google to continue.';
+	@override String get spam_cooldown_warning => 'Please wait before posting again.';
+	@override String get update_available_body => 'A new version of Amomimus is available. Please update.';
+	@override String get user_ghost_warning => 'This user is currently a ghost.';
+	@override String get passcode => 'Passcode';
+	@override String get tap_to_reveal => 'Tap to reveal';
+	@override String get passcode_hint_security => 'Enter 6-digit passcode for security.';
+	@override String get notif_chat => 'ส่งข้อความถึงคุณ';
+	@override String presence_cooldown_hours({required Object hours}) => '????????????????????????????????????????? ${hours} ???????????????';
+	@override String presence_cooldown_minutes({required Object minutes}) => '????????????????????????????????????????? ${minutes} ????????????';
+	@override String get notif_chat_request => 'ส่งคำขอแชทถึงคุณ';
+	@override String get notif_blocked => 'ได้บล็อกคุณ';
+	@override String get notif_unblocked => 'ได้เลิกบล็อกคุณ';
+	@override String get notif_bio_expiry => 'ประวัติของคุณกำลังจะหมดอายุ';
+	@override String get amow_summary_title => 'Amow 👻';
+	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'ฮัลโหล! Amow อยู่นี่~ มีข้อความ ${chat} รายการ ความคิดเห็น ${comment} รายการ และการสะท้อนกลับ ${resonate} รายการรอคุณอยู่ มาดูสิ!';
+	@override String get amow_summary_empty => 'ฮัลโหล! Amow อยู่นี่~ ยังไม่มีการแจ้งเตือนใหม่นะ เดี๋ยวมาเช็คใหม่!';
 }
 
 /// The flat map containing all translations for locale <th>.
@@ -391,7 +412,7 @@ extension on TranslationsTh {
 			'incomplete_selection' => 'การเลือกที่ไม่สมบูรณ์',
 			'proceed' => 'ดำเนินการ',
 			'choose_avatar_first' => 'โปรดเลือกอวาตาร์ Amomus ของคุณก่อน!',
-			'incomplete_selection_desc_1' => 'คุณไม่ได้',
+			'incomplete_selection_desc_1' => 'คุณยังไม่ได้เลือก ',
 			'incomplete_selection_desc_2' => '.\n\nคุณจะไม่ถูกจำกัดแต่คุณจะไม่แสดงชื่อที่คุณกำหนดเอง ระบบจะสร้างแบบสุ่มขึ้นมาแทน คุณต้องการดำเนินการต่อหรือไม่?',
 			'you_found_easter_egg' => 'คุณพบไข่อีสเตอร์',
 			'developer' => 'ผู้พัฒนา:',
@@ -649,6 +670,27 @@ extension on TranslationsTh {
 			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Please confirm your bio.',
 			'add_profile' => 'เพิ่มโปรไฟล์',
 			'switch_email' => 'สลับอีเมล',
+			'update_later_btn' => 'ภายหลัง',
+			'update_now_btn' => 'อัปเดตตอนนี้',
+			'update_available_title' => 'Update Available',
+			'favorite_char_hint_security' => 'Enter favorite character for security.',
+			'reauthenticate_with_google' => 'Please reauthenticate with Google to continue.',
+			'spam_cooldown_warning' => 'Please wait before posting again.',
+			'update_available_body' => 'A new version of Amomimus is available. Please update.',
+			'user_ghost_warning' => 'This user is currently a ghost.',
+			'passcode' => 'Passcode',
+			'tap_to_reveal' => 'Tap to reveal',
+			'passcode_hint_security' => 'Enter 6-digit passcode for security.',
+			'notif_chat' => 'ส่งข้อความถึงคุณ',
+			'presence_cooldown_hours' => ({required Object hours}) => '????????????????????????????????????????? ${hours} ???????????????',
+			'presence_cooldown_minutes' => ({required Object minutes}) => '????????????????????????????????????????? ${minutes} ????????????',
+			'notif_chat_request' => 'ส่งคำขอแชทถึงคุณ',
+			'notif_blocked' => 'ได้บล็อกคุณ',
+			'notif_unblocked' => 'ได้เลิกบล็อกคุณ',
+			'notif_bio_expiry' => 'ประวัติของคุณกำลังจะหมดอายุ',
+			'amow_summary_title' => 'Amow 👻',
+			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'ฮัลโหล! Amow อยู่นี่~ มีข้อความ ${chat} รายการ ความคิดเห็น ${comment} รายการ และการสะท้อนกลับ ${resonate} รายการรอคุณอยู่ มาดูสิ!',
+			'amow_summary_empty' => 'ฮัลโหล! Amow อยู่นี่~ ยังไม่มีการแจ้งเตือนใหม่นะ เดี๋ยวมาเช็คใหม่!',
 			_ => null,
 		};
 	}

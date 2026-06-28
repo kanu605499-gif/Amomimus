@@ -2,6 +2,7 @@ import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../services/account_manager.dart';
 import '../amomimusdark.dart';
@@ -37,6 +38,31 @@ class _ProfileScreenState extends State<ProfileScreen>
   late AnimationController _fabAnimationController;
   late Animation<double> _fabAnimation;
   Timer? _countdownTimer;
+  UserAccount? _fetchedUser;
+  bool _isLoadingUser = false;
+
+  Future<void> _fetchTargetUser() async {
+    final accountManager = Provider.of<AccountManager>(context, listen: false);
+    if (widget.targetUserId == null || widget.targetUserId == accountManager.currentUser?.amomimusId) return;
+
+    // Check if it is a local child profile first
+    final isChild = accountManager.accounts.any((acc) => acc.amomimusId == widget.targetUserId);
+    if (isChild) return; // Will be handled synchronously in build()
+
+    setState(() { _isLoadingUser = true; });
+    try {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(widget.targetUserId).get();
+      if (doc.exists) {
+        if (mounted) {
+          setState(() { _fetchedUser = UserAccount.fromMap(doc.data()!); });
+        }
+      }
+    } catch (e) {
+      print("Failed to fetch user from Firestore: `$e");
+    } finally {
+      if (mounted) setState(() { _isLoadingUser = false; });
+    }
+  }
 
   @override
   void initState() {
@@ -54,6 +80,8 @@ class _ProfileScreenState extends State<ProfileScreen>
     _fabAnimation = Tween<double>(begin: 0, end: 10).animate(
       CurvedAnimation(parent: _fabAnimationController, curve: Curves.easeInOut),
     );
+
+    _fetchTargetUser();
 
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (mounted) setState(() {});
@@ -79,54 +107,51 @@ class _ProfileScreenState extends State<ProfileScreen>
 
     dynamic user = accountManager.currentUser;
     bool isOtherUser = false;
+    bool isChildProfile = false;
     bool isLocked = false;
 
     if (widget.targetUserId != null &&
         widget.targetUserId != accountManager.currentUser?.amomimusId) {
       isOtherUser = true;
+      isChildProfile = accountManager.accounts.any(
+        (acc) => acc.amomimusId == widget.targetUserId
+      );
 
       // Check if locked
-      if (!reqManager.isChatAllowed(widget.targetUserId!) &&
+      if (!isChildProfile &&
+          !reqManager.isChatAllowed(widget.targetUserId!) &&
           chatModel.getChatByUsername(widget.targetUserId!).messages.isEmpty) {
         isLocked = true;
       }
 
-      String normalizedTargetId = widget.targetUserId!;
-      final match = RegExp(
-        r'#(?:YOU|AMO|AMI|AMOM)-(\d+)',
-      ).firstMatch(widget.targetUserId!);
-      if (match != null) {
-        int num = int.parse(match.group(1)!);
-        if (num == 100) num = 110;
-        normalizedTargetId = '#AMM-$num';
+      if (isChildProfile) {
+        try {
+          user = accountManager.accounts.firstWhere((acc) => acc.amomimusId == widget.targetUserId);
+        } catch (_) {}
+      } else if (_fetchedUser != null) {
+        user = _fetchedUser;
+      } else if (_isLoadingUser) {
+        // Will show loading indicator later
+      } else if (widget.feedModel != null) {
+        String gender = "Amo";
+        if (widget.feedModel!.type == AccountType.ami) gender = "Ami";
+        if (widget.feedModel!.type == AccountType.amom) gender = "Amom";
+        user = UserAccount.empty().copyWith(
+          amomimusId: widget.targetUserId,
+          gender: gender,
+        );
       } else {
-        normalizedTargetId = widget.targetUserId!.replaceAll(
-          RegExp(r'#AM[OMI]+-'),
-          '#AMM-',
-        );
+        // Fallback to current user if not found and no feed info
+        user = accountManager.currentUser;
+        isOtherUser = false;
       }
+    }
 
-      try {
-        user = accountManager.accounts.firstWhere(
-          (acc) =>
-              acc.amomimusId == widget.targetUserId ||
-              acc.amomimusId == normalizedTargetId,
-        );
-      } catch (e) {
-        if (widget.feedModel != null) {
-          String gender = "Amo";
-          if (widget.feedModel!.type == AccountType.ami) gender = "Ami";
-          if (widget.feedModel!.type == AccountType.amom) gender = "Amom";
-          user = UserAccount.empty().copyWith(
-            amomimusId: widget.targetUserId,
-            gender: gender,
-          );
-        } else {
-          // Fallback to current user if not found
-          user = accountManager.currentUser;
-          isOtherUser = false;
-        }
-      }
+    if (_isLoadingUser) {
+      return Scaffold(
+        appBar: AppBar(title: Text(t.profile)),
+        body: Center(child: CircularProgressIndicator(color: isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple)),
+      );
     }
 
     if (user == null) {
@@ -190,7 +215,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 );
               },
             ),
-          if (isOtherUser)
+          if (isOtherUser && !isChildProfile)
             IconButton(
               icon: const Icon(
                 Icons.warning_amber_rounded,
@@ -279,3 +304,5 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
   }
 }
+
+

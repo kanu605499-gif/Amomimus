@@ -15,20 +15,28 @@ void showRequestsBottomSheet(
 ) {
   showModalBottomSheet(
     context: context,
+    isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (ctx) {
       final isDark = themeProvider.isDarkMode;
       final bgCol = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
       final textCol = isDark ? Colors.white : Colors.black87;
 
-      return Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: bgCol,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+      return Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(ctx).viewInsets.bottom,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Container(
+          height: MediaQuery.of(ctx).size.height * 0.65,
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          decoration: BoxDecoration(
+            color: bgCol,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: Column(
           children: [
             Container(
               width: 40,
@@ -56,8 +64,17 @@ void showRequestsBottomSheet(
                   style: TextStyle(color: textCol.withValues(alpha: 0.6)),
                 ),
               ),
-            ...reqManager.incomingRequests.map((req) {
-              final accountManager = context.read<AccountManager>();
+            
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                children: reqManager.incomingRequests.where((req) {
+                  final accountManager = context.read<AccountManager>();
+                  final blockedUsers = accountManager.currentUser?.blockedUsers ?? [];
+                  final blockedBy = accountManager.currentUser?.blockedBy ?? [];
+                  return !blockedUsers.contains(req.senderId) && !blockedBy.contains(req.senderId);
+                }).map((req) {
+                  final accountManager = context.read<AccountManager>();
               final senderAccount = accountManager.accounts.firstWhere(
                 (acc) => acc.amomimusId == req.senderId,
                 orElse: () => UserAccount(
@@ -124,10 +141,14 @@ void showRequestsBottomSheet(
                   ],
                 ),
               );
-            }),
+            }).toList(),
+            ),
+            ),
           ],
         ),
+      ),
       );
     },
   );
 }
+

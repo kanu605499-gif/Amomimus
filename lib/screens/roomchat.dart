@@ -28,6 +28,7 @@ import '../widgets/effects/glitch_effect.dart';
 import '../widgets/chat/amomimus_wave_clipper.dart';
 import '../widgets/chat/radio_tuner_gesture.dart';
 import 'package:amomimus/utils/jelly_dialog.dart';
+import '../services/audio_manager.dart';
 
 void main() {
   runApp(
@@ -107,6 +108,9 @@ class _AmomimusApp6State extends State<AmomimusApp6>
     )..repeat();
 
     _scrollController.addListener(_onScroll);
+    
+    // Play the old radio sound effect when entering the chat room
+    AudioManager().playOldRadio();
   }
 
   void _onScroll() {
@@ -134,6 +138,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     _waveController.dispose();
+    AudioManager().stop();
     super.dispose();
   }
 
@@ -153,6 +158,9 @@ class _AmomimusApp6State extends State<AmomimusApp6>
     setState(() {
       _replyingToMessage = null;
     });
+    
+    // Play the chat send sound
+    AudioManager().playClickChat();
 
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
@@ -393,24 +401,10 @@ class _AmomimusApp6State extends State<AmomimusApp6>
 
     final accountManager = context.read<AccountManager>();
     final currentUserId = accountManager.currentUser?.amomimusId;
-    final currentUserName = accountManager.currentUser?.anonymousUsername ?? 'Anda';
+    final currentUserName = GenderHelpers.getDisplayName(
+        accountManager.currentUser?.anonymousUsername ?? 'Anda');
 
-    // Find the partner target account
-    final targetAccount = accountManager.accounts.firstWhere(
-      (acc) => acc.amomimusId == targetUsername,
-      orElse: () => UserAccount(
-        email: '',
-        realUsername: '',
-        anonymousUsername: '',
-        amomimusId: '',
-        gender: 'Amo',
-        registrationDate: '',
-        isDemo: false,
-      ),
-    );
-    final partnerName = targetAccount.anonymousUsername.isNotEmpty
-        ? targetAccount.anonymousUsername
-        : (widget.name ?? 'Partner');
+    final partnerName = GenderHelpers.getDisplayName(widget.name ?? 'Partner');
 
     showJellyDialog(
       context: context,
@@ -695,19 +689,9 @@ class _AmomimusApp6State extends State<AmomimusApp6>
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
     // Get the target user's gender for dynamic styling
-    targetAccount = accountManager.accounts.firstWhere(
-      (acc) => acc.amomimusId == widget.username,
-      orElse: () => UserAccount(
-        email: '',
-        realUsername: '',
-        anonymousUsername: '',
-        amomimusId: '',
-        gender: 'Amo',
-        registrationDate: '',
-        isDemo: false,
-      ),
-    );
-    final targetGender = targetAccount.gender;
+    // We CANNOT use local AccountManager for remote users, as it will fallback to Amo.
+    // Instead, extract the gender from the provided name (e.g., "Astral Echo Amom" -> "Amom")
+    final targetGender = GenderHelpers.extractGenderFromName(widget.name ?? 'Unknown');
     final dynamicHeaderIcon = GenderHelpers.getGenderIcon(targetGender);
     final dynamicHeaderColor = GenderHelpers.getGenderColor(targetGender);
 

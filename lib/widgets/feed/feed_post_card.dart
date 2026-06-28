@@ -14,6 +14,8 @@ import 'package:amomimus/models/user_indicator_model.dart';
 import 'package:amomimus/models/effects/breathing_effect.dart';
 import 'package:amomimus/models/effects/card_blur_effect.dart';
 import 'package:amomimus/services/chat_request_manager.dart';
+import 'package:amomimus/services/notification_manager.dart';
+import 'package:amomimus/models/notification_model.dart';
 import 'package:amomimus/widgets/report_dialog.dart';
 import 'package:amomimus/widgets/chat_request_dialog.dart';
 import 'package:amomimus/data/anonymous_names.dart';
@@ -35,6 +37,7 @@ class FeedCard extends StatefulWidget {
 
 class _FeedCardState extends State<FeedCard> {
   bool isMenuOpen = false;
+  bool _isGhostRevealed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,20 +46,23 @@ class _FeedCardState extends State<FeedCard> {
     final currentUser = Provider.of<AccountManager>(context).currentUser;
     final userId = currentUser?.amomimusId ?? "unknown";
 
+    final accountManager = context.watch<AccountManager>();
+    final realId = widget.model.realAuthorId ?? widget.model.id;
+
+    // Check local perspective indicator (combining global Firebase indicator and local manual indicator)
+    String targetIndicator = accountManager.getDisplayIndicator(
+      realId,
+      widget.model.authorIndicator, // Use the global indicator from Firebase as the baseline
+    );
+
+    final isGhost = targetIndicator == 'ghost';
+    final shouldBlurForGhost = isGhost && !_isGhostRevealed;
+
     final isResonated = widget.model.resonatedBy.contains(userId);
     final displayResonateCount = widget.model.resonatedBy.length;
     final displayCommentCount = widget.model.comments.length;
     final hasUserCommented = widget.model.comments.any(
       (c) => c.authorId == userId,
-    );
-    final accountManager = context.watch<AccountManager>();
-    final realId = widget.model.realAuthorId ?? widget.model.id;
-
-    // Check local perspective indicator
-    final userAcc = accountManager.getAccountById(realId);
-    String targetIndicator = accountManager.getDisplayIndicator(
-      realId,
-      userAcc?.indicator ?? 'cloudy',
     );
 
     final bool isExBlocked = accountManager.isRecentlyUnblocked(realId);
@@ -139,7 +145,7 @@ class _FeedCardState extends State<FeedCard> {
         child: Stack(
           children: [
             CardBlurEffect(
-              isBlurred: isMenuOpen,
+              isBlurred: isMenuOpen || shouldBlurForGhost,
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -148,6 +154,7 @@ class _FeedCardState extends State<FeedCard> {
                     Row(
                       children: [
                         GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () {
                             final realId =
                                 widget.model.realAuthorId ?? widget.model.id;
@@ -407,18 +414,22 @@ class _FeedCardState extends State<FeedCard> {
                               }
                             },
                             itemBuilder: (BuildContext context) {
-                              final menuUser = Provider.of<AccountManager>(
+                              final accountManager = Provider.of<AccountManager>(
                                 context,
                                 listen: false,
-                              ).currentUser;
+                              );
+                              final menuUser = accountManager.currentUser;
                               final menuTargetId =
                                   widget.model.realAuthorId ?? widget.model.id;
                               final isMyPost =
                                   menuUser != null &&
                                   menuUser.amomimusId == menuTargetId;
+                              final isChildProfile = accountManager.accounts.any(
+                                (acc) => acc.amomimusId == menuTargetId
+                              );
 
                               return <PopupMenuEntry<String>>[
-                                if (!isMyPost)
+                                if (!isChildProfile)
                                   PopupMenuItem<String>(
                                     value: 'chat',
                                     height: 38,
@@ -506,7 +517,7 @@ class _FeedCardState extends State<FeedCard> {
                                       ],
                                     ),
                                   )
-                                else
+                                else if (!isChildProfile)
                                   PopupMenuItem<String>(
                                     value: 'report',
                                     height: 38,
@@ -566,6 +577,24 @@ class _FeedCardState extends State<FeedCard> {
                                   context,
                                   listen: false,
                                 ).toggleResonate(widget.model.id, userId);
+
+                                if (!isResonated) {
+                                  final targetId = widget.model.realAuthorId ?? widget.model.id;
+                                  if (targetId != userId) {
+                                    Provider.of<NotificationManager>(
+                                      context,
+                                      listen: false,
+                                    ).addNotification(
+                                      NotificationModel(
+                                        targetUserId: targetId,
+                                        actorName: currentUser?.anonymousUsername ?? "Someone",
+                                        type: NotificationType.resonate,
+                                        feedId: widget.model.id,
+                                        message: "resonated with your post",
+                                      ),
+                                    );
+                                  }
+                                }
                               }
                             },
                             child: AnimatedContainer(
@@ -649,6 +678,48 @@ class _FeedCardState extends State<FeedCard> {
                 ),
               ),
             ),
+            if (shouldBlurForGhost)
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _isGhostRevealed = true;
+                    });
+                  },
+                  child: Container(
+                    color: Colors.transparent, // Capture taps over the blurred area
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.visibility_off,
+                            color: isDarkCard ? Colors.white70 : Colors.black54,
+                            size: 32,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            Translations.of(context).user_ghost_warning,
+                            style: TextStyle(
+                              color: isDarkCard ? Colors.white : Colors.black87,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            Translations.of(context).tap_to_reveal,
+                            style: TextStyle(
+                              color: isDarkCard ? Colors.white70 : Colors.black54,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             // Indicator label at the bottom right if it's GHOST or NOISE
           ],
         ),

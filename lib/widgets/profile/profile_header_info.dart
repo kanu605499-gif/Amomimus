@@ -29,6 +29,17 @@ class ProfileHeaderInfo extends StatelessWidget {
     Color iconColor = GenderHelpers.getGenderColor(user.gender);
     IconData icon = GenderHelpers.getGenderIcon(user.gender);
 
+    int cooldownMinutes = 0;
+    if (!isOtherUser && user.presenceUpdatedAt != null) {
+      try {
+        final diff = DateTime.now().difference(DateTime.parse(user.presenceUpdatedAt!));
+        if (diff.inHours < 1 && diff.inMinutes >= 0) {
+          cooldownMinutes = 60 - diff.inMinutes;
+        }
+      } catch (_) {}
+    }
+    final bool isDimmed = cooldownMinutes > 0;
+
     return Column(
       children: [
         Stack(
@@ -47,6 +58,33 @@ class ProfileHeaderInfo extends StatelessWidget {
             GestureDetector(
               onTap: !isOtherUser
                   ? () {
+                      if (cooldownMinutes > 0) {
+                        String msg = cooldownMinutes == 60 
+                            ? t.presence_cooldown_hours(hours: 1) 
+                            : t.presence_cooldown_minutes(minutes: cooldownMinutes);
+                        
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              msg, 
+                              style: TextStyle(
+                                color: isDark ? Colors.white : Colors.black87,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                            margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            backgroundColor: isDark ? Colors.grey[850] : Colors.grey[200],
+                            duration: const Duration(seconds: 3),
+                          ),
+                        );
+                        return;
+                      }
+                      
                       final box = context.findRenderObject() as RenderBox?;
                       if (box != null) {
                         PresencePickerCapsule.show(context, box);
@@ -65,15 +103,36 @@ class ProfileHeaderInfo extends StatelessWidget {
                     width: 3,
                   ),
                 ),
-                child: ClipOval(
-                  child: Container(
-                    color: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
-                    child: PresencePickerCapsule.getPresenceIcon(
-                      user.presenceStatus ?? 'auto',
-                      size: 24,
-                    ),
-                  ),
-                ),
+                child: isDimmed
+                    ? ColorFiltered(
+                        colorFilter: const ColorFilter.matrix(<double>[
+                          0.2126, 0.7152, 0.0722, 0, 0,
+                          0.2126, 0.7152, 0.0722, 0, 0,
+                          0.2126, 0.7152, 0.0722, 0, 0,
+                          0,      0,      0,      1, 0,
+                        ]),
+                        child: Opacity(
+                          opacity: 0.5,
+                          child: ClipOval(
+                            child: Container(
+                              color: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
+                              child: PresencePickerCapsule.getPresenceIcon(
+                                user.presenceStatus ?? 'auto',
+                                size: 24,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : ClipOval(
+                        child: Container(
+                          color: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
+                          child: PresencePickerCapsule.getPresenceIcon(
+                            user.presenceStatus ?? 'auto',
+                            size: 24,
+                          ),
+                        ),
+                      ),
               ),
             ),
           ],

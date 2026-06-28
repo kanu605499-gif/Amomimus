@@ -7,7 +7,7 @@ import '../../amomimusdark.dart';
 import '../../models/post_model.dart';
 import '../../services/feed_manager.dart';
 import 'package:amomimus/utils/jelly_dialog.dart';
-
+import 'package:amomimus/utils/utc_time_manager.dart';
 class ProfileRecentResonates extends StatelessWidget {
   final dynamic user;
   final bool isDark;
@@ -280,7 +280,7 @@ class ProfileRecentResonates extends StatelessWidget {
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                      feed.timeStamp,
+                                                      UTCTimeManager.formatTimeAgo(feed.timeStamp),
                                                       style: TextStyle(
                                                         fontSize: 12,
                                                         color: isDark
@@ -351,7 +351,7 @@ class ProfileRecentResonates extends StatelessWidget {
         if (f.createdAt != null) {
           final createdAt = DateTime.tryParse(f.createdAt!);
           if (createdAt != null) {
-            if (DateTime.now().difference(createdAt).inHours > 24) return false;
+            if (DateTime.now().difference(createdAt).inDays > 90) return false;
           }
         } else {
           return false;
@@ -440,7 +440,7 @@ class ProfileRecentResonates extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          feed.timeStamp,
+                          UTCTimeManager.formatTimeAgo(feed.timeStamp),
                           style: TextStyle(
                             fontSize: 12,
                             color: isDark ? Colors.grey[400] : Colors.grey[500],

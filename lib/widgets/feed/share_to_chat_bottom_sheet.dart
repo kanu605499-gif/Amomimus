@@ -13,10 +13,7 @@ void showShareToChatSheet(BuildContext context, FeedModel post, bool isDark) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-    ),
+    backgroundColor: Colors.transparent,
     builder: (context) {
       return ShareToChatBottomSheet(post: post, isDark: isDark);
     },
@@ -51,6 +48,13 @@ class ShareToChatBottomSheet extends StatelessWidget {
       ),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.6,
+        decoration: BoxDecoration(
+          color: isDark ? AmomimusDarkTheme.backgroundDark : Colors.white,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+          ),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
           children: [
@@ -84,26 +88,10 @@ class ShareToChatBottomSheet extends StatelessWidget {
                       itemCount: chatList.length,
                       itemBuilder: (context, index) {
                         final chat = chatList[index];
-                        final targetAccount = accountManager.accounts
-                            .firstWhere(
-                              (acc) => acc.amomimusId == chat.username,
-                              orElse: () => UserAccount(
-                                email: '',
-                                realUsername: '',
-                                anonymousUsername: '',
-                                amomimusId: '',
-                                gender: 'Amo',
-                                registrationDate: '',
-                                isDemo: false,
-                              ),
-                            );
-                        final targetGender = targetAccount.gender;
-                        final dynamicTileIcon = GenderHelpers.getGenderIcon(
-                          targetGender,
-                        );
-                        final dynamicTileColor = GenderHelpers.getGenderColor(
-                          targetGender,
-                        );
+                        final targetGender = GenderHelpers.extractGenderFromName(chat.name);
+                        final dynamicTileIcon = GenderHelpers.getGenderIcon(targetGender);
+                        final dynamicTileColor = GenderHelpers.getGenderColor(targetGender);
+                        final displayName = GenderHelpers.getDisplayName(chat.name);
 
                         return ListTile(
                           contentPadding: const EdgeInsets.symmetric(
@@ -126,9 +114,7 @@ class ShareToChatBottomSheet extends StatelessWidget {
                             ),
                           ),
                           title: Text(
-                            (targetAccount.anonymousUsername.isNotEmpty)
-                                ? targetAccount.anonymousUsername
-                                : chat.name,
+                            displayName,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -171,3 +157,5 @@ class ShareToChatBottomSheet extends StatelessWidget {
     );
   }
 }
+
+

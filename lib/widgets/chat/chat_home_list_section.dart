@@ -33,20 +33,9 @@ class ChatListTileWidget extends StatelessWidget {
         : Colors.black54;
 
     // Get the target user's gender for dynamic styling
-    final accountManager = context.watch<AccountManager>();
-    final targetAccount = accountManager.accounts.firstWhere(
-      (acc) => acc.amomimusId == chat.username,
-      orElse: () => UserAccount(
-        email: '',
-        realUsername: '',
-        anonymousUsername: '',
-        amomimusId: '',
-        gender: 'Amo',
-        registrationDate: '',
-        isDemo: false,
-      ),
-    );
-    final targetGender = targetAccount.gender;
+    // Since AccountManager only holds locally logged-in accounts, it will fail for remote users.
+    // We MUST extract the gender from the chat.name (e.g. "Astral Echo Amom" -> "Amom").
+    final targetGender = GenderHelpers.extractGenderFromName(chat.name);
     final dynamicTileIcon = GenderHelpers.getGenderIcon(targetGender);
     final dynamicTileColor = GenderHelpers.getGenderColor(targetGender);
 
@@ -54,6 +43,7 @@ class ChatListTileWidget extends StatelessWidget {
         ? dynamicTileColor
         : dynamicTileColor.withValues(alpha: 0.5);
 
+    final accountManager = context.watch<AccountManager>();
     final isRecentlyUnblocked = accountManager.isRecentlyUnblocked(
       chat.username,
     );
@@ -188,7 +178,7 @@ class ChatListTileWidget extends StatelessWidget {
                           size: 28,
                         ),
                       ),
-                      if (chat.isOnline || (targetAccount.presenceStatus != 'invisible' && targetAccount.presenceStatus != 'offline'))
+                      if (chat.isOnline) // Simplified presence check for remote users
                         Positioned(
                           bottom: -1,
                           right: -1,
@@ -198,13 +188,13 @@ class ChatListTileWidget extends StatelessWidget {
                               border: Border.all(color: tileBg, width: 1.5),
                             ),
                             child: ClipOval(
-                              child: Container(
-                                color: tileBg,
-                                child: PresencePickerCapsule.getPresenceIcon(
-                                  targetAccount.presenceStatus,
-                                  size: 12,
+                                child: Container(
+                                  color: tileBg,
+                                  child: PresencePickerCapsule.getPresenceIcon(
+                                    'online', // Remote presence not fully cached locally yet
+                                    size: 12,
+                                  ),
                                 ),
-                              ),
                             ),
                           ),
                         ),
@@ -220,9 +210,7 @@ class ChatListTileWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              (targetAccount.anonymousUsername.isNotEmpty)
-                                  ? targetAccount.anonymousUsername
-                                  : chat.name,
+                              GenderHelpers.getDisplayName(chat.name),
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,

@@ -19,6 +19,26 @@ class AnonymousNames {
     "Lunar Veil",
     "Crimson Haunt",
     "Neon Specter",
+    "Astral Echo",
+    "Midnight Strider",
+    "Phantom Shade",
+    "Echo Wraith",
+    "Abyssal Walker",
+    "Hollow Whisper",
+    "Ethereal Mask",
+    "Dusky Nomad",
+    "Celestial Vagabond",
+    "Gloom Wanderer",
+    "Cosmic Ripple",
+    "Silent Solstice",
+    "Onyx Illusion",
+    "Somber Wraith",
+    "Eclipse Seeker",
+    "Raven Shadow",
+    "Nebular Drift",
+    "Twilight Enigma",
+    "Ghostly Cipher",
+    "Spectral Aura",
   ];
 
   static final List<String> amiNames = [
@@ -32,6 +52,26 @@ class AnonymousNames {
     "Pearl Cascade",
     "Aurora Shade",
     "Lilac Phantom",
+    "Dawn Blossom",
+    "Roseate Veil",
+    "Gossamer Dew",
+    "Luminous Petal",
+    "Ruby Whisper",
+    "Celestial Swan",
+    "Emerald Breeze",
+    "Radiant Aura",
+    "Starlit Lily",
+    "Velvet Halo",
+    "Iris Glimmer",
+    "Silken Mirage",
+    "Opal Reverie",
+    "Amber Tear",
+    "Lotus Whisper",
+    "Fae Glimpse",
+    "Coral Echo",
+    "Whisper Willow",
+    "Amethyst Dawn",
+    "Snowy Feathers",
   ];
 
   static final List<String> amomNames = [
@@ -45,6 +85,26 @@ class AnonymousNames {
     "Platinum Veil",
     "Cobalt Echo",
     "Rustic Phantom",
+    "Chrome Strider",
+    "Onyx Vanguard",
+    "Granite Sentinel",
+    "Brass Horizon",
+    "Obsidian Core",
+    "Meteor Strike",
+    "Tungsten Will",
+    "Forge Wanderer",
+    "Flint Echo",
+    "Carbon Phantom",
+    "Basalt Drifter",
+    "Titanium Edge",
+    "Lead Shadow",
+    "Mercury Flash",
+    "Zinc Illusion",
+    "Ironclad Myth",
+    "Rust Vagabond",
+    "Vulcan Spirit",
+    "Aegis Wraith",
+    "Nickel Glimmer",
   ];
 
   /// Returns a random anonymous name from the pool matching the given [gender].
@@ -74,14 +134,12 @@ class AnonymousNames {
   ];
 
   static const List<int> _colors = [
-    0xFFE53935, // Colors.red.shade600
-    0xFF1E88E5, // Colors.blue.shade600
-    0xFF43A047, // Colors.green.shade600
-    0xFFFB8C00, // Colors.orange.shade600
-    0xFF8E24AA, // Colors.purple.shade600
-    0xFF00ACC1, // Colors.cyan.shade600
-    0xFFFDD835, // Colors.yellow.shade600
-    0xFFD81B60, // Colors.pink.shade600
+    0xFF6C52A3, // Primary Purple
+    0xFFFFD54F, // Police Line Yellow
+    0xFF9E8EB9, // Amomimus Grey (from border color)
+    0xFFB388FF, // Lighter Purple (Noise indicator color)
+    0xFFFBC02D, // Slightly darker Yellow
+    0xFFBDBDBD, // Standard Grey
   ];
 
   /// Generates a consistent random name for a specific user on a specific post

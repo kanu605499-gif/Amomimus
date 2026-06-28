@@ -81,7 +81,7 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get incomplete_selection => '不完全な選択';
 	@override String get proceed => '進む';
 	@override String get choose_avatar_first => '最初にアモムスのアバターを選択してください。';
-	@override String get incomplete_selection_desc_1 => 'あなたはしていない';
+	@override String get incomplete_selection_desc_1 => 'まだ選択していません： ';
 	@override String get incomplete_selection_desc_2 => '。\n\n制限はされませんが、カスタム名は表示されません。代わりに、システムがランダムな値を自動生成します。続行しますか?';
 	@override String get you_found_easter_egg => 'イースターエッグを見つけました';
 	@override String get developer => '開発者：';
@@ -322,6 +322,27 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String bio_first_time_confirm({required Object duration}) => 'バイオの期間として ${duration} を選択しました。\n紙飛行機ボタンを押して確定してください。';
 	@override String get add_profile => 'プロフィールを追加';
 	@override String get switch_email => 'メールを切り替え';
+	@override String get update_later_btn => '後で';
+	@override String get update_now_btn => '今すぐ更新';
+	@override String get update_available_title => 'Update Available';
+	@override String get favorite_char_hint_security => 'Enter favorite character for security.';
+	@override String get reauthenticate_with_google => 'Please reauthenticate with Google to continue.';
+	@override String get spam_cooldown_warning => 'Please wait before posting again.';
+	@override String get update_available_body => 'A new version of Amomimus is available. Please update.';
+	@override String get user_ghost_warning => 'This user is currently a ghost.';
+	@override String get passcode => 'Passcode';
+	@override String get tap_to_reveal => 'Tap to reveal';
+	@override String get passcode_hint_security => 'Enter 6-digit passcode for security.';
+	@override String get notif_chat => 'メッセージを送信しました';
+	@override String presence_cooldown_hours({required Object hours}) => '??????????? ${hours} ????????????????????';
+	@override String presence_cooldown_minutes({required Object minutes}) => '??????????? ${minutes} ???????????????????';
+	@override String get notif_chat_request => 'チャットリクエストを送信しました';
+	@override String get notif_blocked => 'あなたをブロックしました';
+	@override String get notif_unblocked => 'ブロックを解除しました';
+	@override String get notif_bio_expiry => 'あなたの自己紹介の有効期限が近づいています';
+	@override String get amow_summary_title => 'Amow 👻';
+	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'ハロー！Amowだよ〜 ${chat}件のメッセージ、${comment}件のコメント、${resonate}件のレゾネートが待ってるよ。見に来てね！';
+	@override String get amow_summary_empty => 'ハロー！Amowだよ〜 今は新しい通知はないよ。また後で確認するね！';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -374,7 +395,7 @@ extension on TranslationsJa {
 			'incomplete_selection' => '不完全な選択',
 			'proceed' => '進む',
 			'choose_avatar_first' => '最初にアモムスのアバターを選択してください。',
-			'incomplete_selection_desc_1' => 'あなたはしていない',
+			'incomplete_selection_desc_1' => 'まだ選択していません： ',
 			'incomplete_selection_desc_2' => '。\n\n制限はされませんが、カスタム名は表示されません。代わりに、システムがランダムな値を自動生成します。続行しますか?',
 			'you_found_easter_egg' => 'イースターエッグを見つけました',
 			'developer' => '開発者：',
@@ -615,6 +636,27 @@ extension on TranslationsJa {
 			'bio_first_time_confirm' => ({required Object duration}) => 'バイオの期間として ${duration} を選択しました。\n紙飛行機ボタンを押して確定してください。',
 			'add_profile' => 'プロフィールを追加',
 			'switch_email' => 'メールを切り替え',
+			'update_later_btn' => '後で',
+			'update_now_btn' => '今すぐ更新',
+			'update_available_title' => 'Update Available',
+			'favorite_char_hint_security' => 'Enter favorite character for security.',
+			'reauthenticate_with_google' => 'Please reauthenticate with Google to continue.',
+			'spam_cooldown_warning' => 'Please wait before posting again.',
+			'update_available_body' => 'A new version of Amomimus is available. Please update.',
+			'user_ghost_warning' => 'This user is currently a ghost.',
+			'passcode' => 'Passcode',
+			'tap_to_reveal' => 'Tap to reveal',
+			'passcode_hint_security' => 'Enter 6-digit passcode for security.',
+			'notif_chat' => 'メッセージを送信しました',
+			'presence_cooldown_hours' => ({required Object hours}) => '??????????? ${hours} ????????????????????',
+			'presence_cooldown_minutes' => ({required Object minutes}) => '??????????? ${minutes} ???????????????????',
+			'notif_chat_request' => 'チャットリクエストを送信しました',
+			'notif_blocked' => 'あなたをブロックしました',
+			'notif_unblocked' => 'ブロックを解除しました',
+			'notif_bio_expiry' => 'あなたの自己紹介の有効期限が近づいています',
+			'amow_summary_title' => 'Amow 👻',
+			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'ハロー！Amowだよ〜 ${chat}件のメッセージ、${comment}件のコメント、${resonate}件のレゾネートが待ってるよ。見に来てね！',
+			'amow_summary_empty' => 'ハロー！Amowだよ〜 今は新しい通知はないよ。また後で確認するね！',
 			_ => null,
 		};
 	}

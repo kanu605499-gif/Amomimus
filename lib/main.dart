@@ -4,21 +4,30 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:amomimus/amomimusdark.dart';
 import 'package:amomimus/services/chatmodel.dart';
 import 'package:amomimus/services/account_manager.dart';
-import 'package:amomimus/database/preference_handler.dart';
+import 'package:amomimus/services/preference_handler.dart';
 import 'package:amomimus/screens/splash_screen.dart'; // Add SplashScreen
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:amomimus/services/auth_service.dart';
-import 'package:amomimus/services/local_auth_service.dart';
+import 'package:amomimus/services/firebase_auth_service.dart';
 
 import 'package:amomimus/services/feed_manager.dart';
 import 'package:amomimus/services/chat_request_manager.dart';
 import 'package:amomimus/services/notification_manager.dart';
+import 'package:amomimus/services/fcm_service.dart';
 
 import 'package:flutter/services.dart';
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
-void main() async {
+Future<void> runAmomimusApp(FirebaseOptions options) async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  await Firebase.initializeApp(
+    options: options,
+  );
+  
+  await AndroidAlarmManager.initialize();
   
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(
@@ -30,6 +39,7 @@ void main() async {
 
   await initializeDateFormatting('id_ID', null);
   await PreferenceHandler.init();
+  await FcmService().init();
 
   final savedLang = PreferenceHandler.language;
   if (savedLang != null) {
@@ -43,7 +53,7 @@ void main() async {
       child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => AmomimusDarkTheme()),
-          Provider<AuthService>(create: (_) => LocalAuthService()),
+          Provider<AuthService>(create: (_) => FirebaseAuthService()),
           ChangeNotifierProxyProvider<AuthService, AccountManager>(
             create: (context) =>
                 AccountManager(authService: context.read<AuthService>())
@@ -76,8 +86,14 @@ void main() async {
           ChangeNotifierProvider(
             create: (context) => FeedManager()..loadFeeds(),
           ),
-          ChangeNotifierProvider(
+          ChangeNotifierProxyProvider<AccountManager, NotificationManager>(
             create: (context) => NotificationManager()..loadNotifications(),
+            update: (context, auth, notifManager) {
+              if (auth.currentUser != null) {
+                notifManager!.setCurrentUser(auth.currentUser!.amomimusId);
+              }
+              return notifManager!;
+            },
           ),
         ],
         child: const MyApp(),

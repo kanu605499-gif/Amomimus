@@ -82,7 +82,7 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get incomplete_selection => 'Unfinished Ritual';
 	@override String get proceed => 'Venture Forth';
 	@override String get choose_avatar_first => 'Choose your Visage first, by Ysmir!';
-	@override String get incomplete_selection_desc_1 => 'You haven\'t ';
+	@override String get incomplete_selection_desc_1 => 'You haven\'t selected an ';
 	@override String get incomplete_selection_desc_2 => '.\n\nYou won\'t be restricted, but you will not have your custom title. The realm will auto-generate a random one. Do you desire to proceed?';
 	@override String get you_found_easter_egg => 'You found a sweetroll!';
 	@override String get developer => 'Moth Priest:';
@@ -336,6 +336,27 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Kagyz uçary düwmesine basyp bioňyzy tassyklaň.';
 	@override String get add_profile => 'Summon Vessel';
 	@override String get switch_email => 'Change Scroll';
+	@override String get update_later_btn => 'Later';
+	@override String get update_now_btn => 'Update Now';
+	@override String get update_available_title => 'Update Available';
+	@override String get favorite_char_hint_security => 'Enter favorite character for security.';
+	@override String get reauthenticate_with_google => 'Please reauthenticate with Google to continue.';
+	@override String get spam_cooldown_warning => 'Please wait before posting again.';
+	@override String get update_available_body => 'A new version of Amomimus is available. Please update.';
+	@override String get user_ghost_warning => 'This user is currently a ghost.';
+	@override String get passcode => 'Passcode';
+	@override String get tap_to_reveal => 'Tap to reveal';
+	@override String get passcode_hint_security => 'Enter 6-digit passcode for security.';
+	@override String get notif_chat => 'sent a message to your rot';
+	@override String presence_cooldown_hours({required Object hours}) => 'Status tgemniz indiki ${hours} sagadyn dowamynda nol edilip bilner';
+	@override String presence_cooldown_minutes({required Object minutes}) => 'Status tgemniz indiki ${minutes} minudyn dowamynda nol edilip bilner';
+	@override String get notif_chat_request => 'çat haýyşy iberdi';
+	@override String get notif_blocked => 'sizi bloklady';
+	@override String get notif_unblocked => 'siziň blogyňyzy aýyrdy';
+	@override String get notif_bio_expiry => 'Gysgaça maglumatyňyzyň wagty gutarýar';
+	@override String get amow_summary_title => 'Amow 👻';
+	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'Säher! Amow şu ýerde~ ${chat} hat, ${comment} teswir we ${resonate} seslenme garaşýar. Gelip gör!';
+	@override String get amow_summary_empty => 'Säher! Amow şu ýerde~ Häzirlikçe täze bildiriş ýok, soňrak ýene barlaryn!';
 }
 
 /// The flat map containing all translations for locale <tm>.
@@ -389,7 +410,7 @@ extension on TranslationsTm {
 			'incomplete_selection' => 'Unfinished Ritual',
 			'proceed' => 'Venture Forth',
 			'choose_avatar_first' => 'Choose your Visage first, by Ysmir!',
-			'incomplete_selection_desc_1' => 'You haven\'t ',
+			'incomplete_selection_desc_1' => 'You haven\'t selected an ',
 			'incomplete_selection_desc_2' => '.\n\nYou won\'t be restricted, but you will not have your custom title. The realm will auto-generate a random one. Do you desire to proceed?',
 			'you_found_easter_egg' => 'You found a sweetroll!',
 			'developer' => 'Moth Priest:',
@@ -643,6 +664,27 @@ extension on TranslationsTm {
 			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Kagyz uçary düwmesine basyp bioňyzy tassyklaň.',
 			'add_profile' => 'Summon Vessel',
 			'switch_email' => 'Change Scroll',
+			'update_later_btn' => 'Later',
+			'update_now_btn' => 'Update Now',
+			'update_available_title' => 'Update Available',
+			'favorite_char_hint_security' => 'Enter favorite character for security.',
+			'reauthenticate_with_google' => 'Please reauthenticate with Google to continue.',
+			'spam_cooldown_warning' => 'Please wait before posting again.',
+			'update_available_body' => 'A new version of Amomimus is available. Please update.',
+			'user_ghost_warning' => 'This user is currently a ghost.',
+			'passcode' => 'Passcode',
+			'tap_to_reveal' => 'Tap to reveal',
+			'passcode_hint_security' => 'Enter 6-digit passcode for security.',
+			'notif_chat' => 'sent a message to your rot',
+			'presence_cooldown_hours' => ({required Object hours}) => 'Status tgemniz indiki ${hours} sagadyn dowamynda nol edilip bilner',
+			'presence_cooldown_minutes' => ({required Object minutes}) => 'Status tgemniz indiki ${minutes} minudyn dowamynda nol edilip bilner',
+			'notif_chat_request' => 'çat haýyşy iberdi',
+			'notif_blocked' => 'sizi bloklady',
+			'notif_unblocked' => 'siziň blogyňyzy aýyrdy',
+			'notif_bio_expiry' => 'Gysgaça maglumatyňyzyň wagty gutarýar',
+			'amow_summary_title' => 'Amow 👻',
+			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'Säher! Amow şu ýerde~ ${chat} hat, ${comment} teswir we ${resonate} seslenme garaşýar. Gelip gör!',
+			'amow_summary_empty' => 'Säher! Amow şu ýerde~ Häzirlikçe täze bildiriş ýok, soňrak ýene barlaryn!',
 			_ => null,
 		};
 	}

@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/message_model.dart';
 import '../models/chat_room_model.dart';
@@ -17,6 +19,8 @@ class ChatModel extends ChangeNotifier {
   List<ChatSession> _sessions = [];
   String? _currentUserId;
   String? _currentUserName;
+  StreamSubscription? _chatSubscription;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   String? get currentUserId => _currentUserId;
 
@@ -78,6 +82,7 @@ class ChatModel extends ChangeNotifier {
                 )),
             );
             changed = true;
+            _updateSessionToFirestore(_sessions[i]);
           }
         }
       }
@@ -87,6 +92,36 @@ class ChatModel extends ChangeNotifier {
       notifyListeners();
       _saveChats();
     }
+  }
+
+  Future<void> _updateSessionToFirestore(ChatSession session) async {
+    try {
+      await _firestore
+          .collection('chat_sessions')
+          .doc(session.id)
+          .set(session.toMap());
+    } catch (e) {
+      print('Error syncing session to Firestore: $e');
+    }
+  }
+
+  void _setupFirestoreListener() {
+    _chatSubscription?.cancel();
+    if (_currentUserId == null) return;
+    _chatSubscription = _firestore
+        .collection('chat_sessions')
+        .where('participants', arrayContains: _currentUserId)
+        .snapshots()
+        .listen((snapshot) {
+      _sessions = snapshot.docs
+          .map((doc) => ChatSession.fromMap(doc.data()))
+          .toList();
+      _checkExpirations();
+      _saveChats();
+      notifyListeners();
+    }, onError: (e) {
+      print('Error listening to chat sessions: $e');
+    });
   }
 
   Future<void> loadChats() async {
@@ -117,6 +152,7 @@ class ChatModel extends ChangeNotifier {
     if (_currentUserId != userId) {
       _currentUserId = userId;
       changed = true;
+      _setupFirestoreListener();
     }
     if (_currentUserName != userName) {
       _currentUserName = userName;
@@ -417,21 +453,33 @@ class ChatModel extends ChangeNotifier {
         forceFail || message.text.toLowerCase().contains('fail');
 
     if (!willFail) {
-      // Simulate network delay 9 seconds
-      Future.delayed(const Duration(seconds: 9), () {
+      if (_currentUserId == null || message.roomId == null) return;
+      final chatId = _getChatId(_currentUserId!, message.roomId!);
+      final sessionIndex = _sessions.indexWhere((s) => s.id == chatId);
+      if (sessionIndex == -1) return;
+      final session = _sessions[sessionIndex];
+
+      try {
+        // Eagerly increment unread count for target
+        session.unreadCounts[message.roomId!] =
+            (session.unreadCounts[message.roomId!] ?? 0) + 1;
+
+        // Temporarily set isSynced = true so it is serialized correctly to Firestore
+        message.isSynced = true;
+        final writeFuture = _updateSessionToFirestore(session);
+        // Restore isSynced = false so the UI continues to show the pending state (hourglass)
+        message.isSynced = false;
+
+        // Race Firestore write against a 9-second timeout
+        await Future.any([
+          writeFuture,
+          Future.delayed(const Duration(seconds: 9),
+              () => throw TimeoutException('Offline Sync Timeout')),
+        ]);
+
         if (message.showResendOptions) return; // if already failed
 
         message.isSynced = true;
-        
-        if (_currentUserId != null && message.roomId != null) {
-          final chatId = _getChatId(_currentUserId!, message.roomId!);
-          final sessionIndex = _sessions.indexWhere((s) => s.id == chatId);
-          if (sessionIndex != -1) {
-            final session = _sessions[sessionIndex];
-            session.unreadCounts[message.roomId!] =
-                (session.unreadCounts[message.roomId!] ?? 0) + 1;
-          }
-        }
 
         if (message.isPendingSlow) {
           message.isPendingSlow = false;
@@ -455,10 +503,23 @@ class ChatModel extends ChangeNotifier {
           Navigator.of(context).pop();
         }
         _saveChats();
-      });
+      } catch (e) {
+        if (!message.isSynced) {
+          message.showResendOptions = true;
+          notifyListeners();
+
+          if (dialogShown &&
+              !dialogDismissed &&
+              context != null &&
+              context.mounted) {
+            Navigator.of(context).pop();
+          }
+          _saveChats();
+        }
+      }
     } else {
-      // Hard fail limit: 15 seconds
-      Future.delayed(const Duration(seconds: 15), () {
+      // Hard fail limit: 9 seconds
+      Future.delayed(const Duration(seconds: 9), () {
         if (!message.isSynced) {
           message.showResendOptions = true;
           notifyListeners();
@@ -506,6 +567,7 @@ class ChatModel extends ChangeNotifier {
 
     _saveChats();
     notifyListeners();
+    _updateSessionToFirestore(session);
   }
 
   void deleteChatForUser(String targetUserId) {
@@ -567,6 +629,7 @@ class ChatModel extends ChangeNotifier {
 
     _saveChats();
     notifyListeners();
+    _updateSessionToFirestore(_sessions[index]);
   }
 
   Future<void> resendSelectedMessages(
@@ -682,6 +745,7 @@ class ChatModel extends ChangeNotifier {
     if (changed) {
       notifyListeners();
       _saveChats();
+      _updateSessionToFirestore(_sessions[index]);
     }
   }
 
@@ -716,6 +780,7 @@ class ChatModel extends ChangeNotifier {
         );
         notifyListeners();
         _saveChats();
+        _updateSessionToFirestore(_sessions[index]);
       }
     }
   }
@@ -727,9 +792,14 @@ class ChatModel extends ChangeNotifier {
     _sessions.removeWhere((s) => s.id == chatId);
     notifyListeners();
     _saveChats();
+    _firestore.collection('chat_sessions').doc(chatId).delete();
   }
 
   void clearAllChatsForUser(String userId) {
+    final chatsToDelete = _sessions.where((s) => s.user1Id == userId || s.user2Id == userId).toList();
+    for (var s in chatsToDelete) {
+      _firestore.collection('chat_sessions').doc(s.id).delete();
+    }
     _sessions.removeWhere((s) => s.user1Id == userId || s.user2Id == userId);
     notifyListeners();
     _saveChats();
@@ -799,6 +869,7 @@ class ChatModel extends ChangeNotifier {
         );
         notifyListeners();
         _saveChats();
+        _updateSessionToFirestore(_sessions[index]);
         return true;
       }
     }
@@ -844,6 +915,7 @@ class ChatModel extends ChangeNotifier {
         );
         notifyListeners();
         _saveChats();
+        _updateSessionToFirestore(_sessions[index]);
       }
     }
   }
@@ -898,6 +970,7 @@ class ChatModel extends ChangeNotifier {
         );
         notifyListeners();
         _saveChats();
+        _updateSessionToFirestore(_sessions[index]);
       }
     }
   }

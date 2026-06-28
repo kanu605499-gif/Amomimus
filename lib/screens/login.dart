@@ -1,14 +1,15 @@
-import 'package:flutter/gestures.dart';
+﻿import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:amomimus/amomimusdark.dart';
 import 'package:amomimus/screens/register_screen.dart';
 import 'package:amomimus/screens/splash_screen.dart';
+import 'package:amomimus/screens/welcome_form_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:provider/provider.dart';
 import 'package:amomimus/services/account_manager.dart';
 
-import '../database/preference_handler.dart';
+import '../services/preference_handler.dart';
 import '../widgets/custom_input_field.dart';
 
 void main() {
@@ -48,9 +49,10 @@ class _LoginScreenState extends State<LoginScreen>
   String? _emailErrorMsg;
   String? _passwordErrorMsg;
   bool _showEasterEggBubble = false;
+  bool _isGoogleLoading = false;
 
   // We will load accounts directly from AccountManager
-  // Future<List<UserModelSql>>? _userListFuture;
+  // Future<List<UserCredentialsModel>>? _userListFuture;
 
   @override
   void initState() {
@@ -178,7 +180,56 @@ class _LoginScreenState extends State<LoginScreen>
     });
   }
 
-  void _handleGoogleLogin() {}
+  void _handleGoogleLogin() async {
+    final accountManager = context.read<AccountManager>();
+    
+    setState(() {
+      _isGoogleLoading = true;
+    });
+
+    final result = await accountManager.loginWithGoogle();
+    
+    if (!mounted) return;
+
+    setState(() {
+      _isGoogleLoading = false;
+    });
+
+    if (result == null) {
+      // User canceled or error occurred
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Google Sign-In canceled or failed'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    if (result.isNewUser) {
+      // Proceed to WelcomeFormScreen (DOB + Privacy Policy) for new users
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => AmomimusApp4(
+            email: result.email ?? '',
+            realUsername: result.name ?? 'Amo',
+            password: '', // No password for Google Auth
+            favoriteCharacter: 'Amo', // Default
+            isGoogleAuth: true,
+          ),
+        ),
+      );
+    } else {
+      // Existing user logged in
+      await _saveLoginPreferences();
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const SplashScreen()),
+      );
+    }
+  }
 
 
 
@@ -570,6 +621,16 @@ class _LoginScreenState extends State<LoginScreen>
               ),
             ),
           ),
+          
+          if (_isGoogleLoading)
+            Container(
+              color: Colors.black.withValues(alpha: 0.3),
+              child: const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xff6c52a3)),
+                ),
+              ),
+            ),
         ],
       ),
     ),

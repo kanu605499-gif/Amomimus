@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/account_manager.dart';
-import '../../database/models/user_register_sql.dart';
+import '../../models/user_credentials_model.dart';
 import '../amomimusdark.dart';
 import '../widgets/settings/blocked_users_section.dart';
 import '../widgets/settings/security_auth_section.dart';
@@ -17,7 +17,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  UserModelSql? _credentials;
+  UserCredentialsModel? _credentials;
   bool _isLoading = true;
 
   @override
@@ -121,7 +121,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Divider(color: textColor.withOpacity(0.3)),
             const SizedBox(height: 32),
 
-          if (am.switchableAccounts.isNotEmpty && am.switchableAccounts.first.amomimusId == currentUser.amomimusId) ...[
+          if (am.isMasterProfile) ...[
             // 3. Danger Zone
             Text(
               t.danger_zone,

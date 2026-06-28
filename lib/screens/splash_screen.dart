@@ -1,4 +1,4 @@
-import 'package:amomimus/i18n/strings.g.dart';
+﻿import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
@@ -6,7 +6,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:amomimus/screens/feed_screen.dart';
-import 'package:amomimus/database/preference_handler.dart';
+import 'package:amomimus/services/preference_handler.dart';
 import 'package:amomimus/screens/login.dart';
 import 'package:amomimus/screens/onboarding_screen.dart' as amomimus_onboarding;
 import 'package:amomimus/amomimusdark.dart';

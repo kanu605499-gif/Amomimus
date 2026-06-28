@@ -21,6 +21,8 @@ class FeedModel {
   final String? realAuthorId;
   final String? realAuthorName;
   final String? createdAt;
+  final bool isDeletedAuthor;
+  final String authorIndicator;
 
   List<String> resonatedBy;
   List<CommentModel> comments;
@@ -35,6 +37,8 @@ class FeedModel {
     this.realAuthorName,
     String?
     createdAt, // Diubah jadi parameter biasa agar bisa di-intercept otomatis
+    this.isDeletedAuthor = false,
+    this.authorIndicator = 'cloudy',
     List<String>? resonatedBy,
     List<CommentModel>? comments,
   }) : // Otomatis isi waktu ISO saat ini jika dari UI kosong (Solusi anti-hilang filter 24 jam)
@@ -57,6 +61,8 @@ class FeedModel {
       'realAuthorId': realAuthorId,
       'realAuthorName': realAuthorName,
       'createdAt': createdAt,
+      'isDeletedAuthor': isDeletedAuthor,
+      'authorIndicator': authorIndicator,
       'resonatedBy':
           resonatedBy, // List<String> aman didukung langsung oleh Firestore Array
       'comments': comments
@@ -70,7 +76,7 @@ class FeedModel {
     return FeedModel(
       userName: map['userName'] ?? '',
       id: map['id'] ?? '',
-
+      
       // Mengonversi kembali data int dari Firestore menjadi Enum AccountType Flutter kamu
       type: AccountType.values[map['type'] ?? 0],
 
@@ -79,6 +85,8 @@ class FeedModel {
       realAuthorId: map['realAuthorId'],
       realAuthorName: map['realAuthorName'],
       createdAt: map['createdAt'],
+      isDeletedAuthor: map['isDeletedAuthor'] == true,
+      authorIndicator: map['authorIndicator'] ?? 'cloudy',
 
       // REVISI KRUSIAL UNTUK FIREBASE & SHARED PREFERENCES:
       // Memaksa data array dari database (yang tipenya List<dynamic>) dicasting menjadi List<String> secara aman.

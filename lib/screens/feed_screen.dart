@@ -3,6 +3,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:amomimus/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:amomimus/screens/chatroomhome.dart';
@@ -20,6 +22,7 @@ import '../services/feed_manager.dart';
 import '../services/notification_manager.dart';
 import '../models/notification_model.dart';
 import 'forum_page.dart';
+import 'roomchat.dart';
 import 'profile_screen.dart';
 
 class AmomimusApp5 extends StatefulWidget {
@@ -62,6 +65,40 @@ class _AmomimusApp5State extends State<AmomimusApp5>
     super.dispose();
   }
 
+  Future<void> _handleCreatePost(BuildContext context, bool isDark, UserAccount currentUser) async {
+    if (currentUser.indicator == 'noise') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Akun Anda berada di zona NOISE. Anda tidak dapat membuat postingan baru.')),
+      );
+      return;
+    }
+
+    // Check 10 posts per day limit
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day).toIso8601String();
+    
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('feeds')
+          .where('realAuthorId', isEqualTo: currentUser.amomimusId)
+          .where('createdAt', isGreaterThanOrEqualTo: startOfDay)
+          .get();
+          
+      if (snapshot.docs.length >= 10) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Anda telah mencapai batas maksimal 10 postingan per hari.')),
+        );
+        return;
+      }
+    } catch (e) {
+      print('Error checking post limit: $e');
+    }
+
+    if (context.mounted) {
+      showCreatePostBottomSheet(context, isDark, currentUser);
+    }
+  }
+
   void _showNotificationsSheet(BuildContext context, bool isDark) {
     final t = Translations.of(context);
     final currentUser = Provider.of<AccountManager>(
@@ -95,7 +132,12 @@ class _AmomimusApp5State extends State<AmomimusApp5>
               topRight: Radius.circular(30),
             ),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: 16 + MediaQuery.of(context).padding.bottom,
+          ),
           child: Column(
             children: [
               Container(
@@ -151,8 +193,37 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                                   : Colors.amber.shade800;
                               translatedMessage = t.notif_reply;
                               break;
+                            case NotificationType.chat:
+                              iconData = Icons.chat;
+                              iconColor = Colors.blue;
+                              translatedMessage = t.notif_chat;
+                              break;
+                            case NotificationType.chatRequest:
+                              iconData = Icons.mark_chat_unread;
+                              iconColor = Colors.lightBlue;
+                              translatedMessage = t.notif_chat_request;
+                              break;
+                            case NotificationType.blocked:
+                              iconData = Icons.block;
+                              iconColor = Colors.redAccent;
+                              translatedMessage = t.notif_blocked;
+                              break;
+                            case NotificationType.unblocked:
+                              iconData = Icons.check_circle_outline;
+                              iconColor = Colors.green;
+                              translatedMessage = t.notif_unblocked;
+                              break;
+                            case NotificationType.bioExpiry:
+                              iconData = Icons.timer;
+                              iconColor = Colors.orange;
+                              translatedMessage = t.notif_bio_expiry;
+                              break;
                           }
                           return ListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                              vertical: 8.0,
+                            ),
                             leading: CircleAvatar(
                               backgroundColor: iconColor.withValues(alpha: 0.2),
                               child: Icon(iconData, color: iconColor, size: 20),
@@ -162,15 +233,22 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                                 style: TextStyle(
                                   color: isDark ? Colors.white : Colors.black,
                                 ),
-                                children: [
-                                  TextSpan(
-                                    text: "${notif.actorName} ",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(text: translatedMessage),
-                                ],
+                                children: notif.type == NotificationType.bioExpiry
+                                    ? [
+                                        TextSpan(
+                                          text: translatedMessage,
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ]
+                                    : [
+                                        TextSpan(
+                                          text: "${notif.actorName} ",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        TextSpan(text: translatedMessage),
+                                      ],
                               ),
                             ),
                             subtitle: Text(
@@ -182,7 +260,15 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                             ),
                             onTap: () {
                               Navigator.pop(context);
-                              if (notif.feedId.isNotEmpty) {
+                              if (notif.type == NotificationType.chat) {
+                                // For chat notifications, navigate to chat
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const AmomimusApp6(), // Since we don't have the explicit constructor parameters handled here, might need to pass username
+                                  ),
+                                );
+                              } else if (notif.feedId.isNotEmpty) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -609,7 +695,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                             .read<AccountManager>()
                             .currentUser;
                         if (currentUser != null) {
-                          showCreatePostBottomSheet(
+                          _handleCreatePost(
                             context,
                             isDark,
                             currentUser,
@@ -632,7 +718,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                                 .read<AccountManager>()
                                 .currentUser;
                             if (currentUser != null) {
-                              showCreatePostBottomSheet(
+                              _handleCreatePost(
                                 context,
                                 isDark,
                                 currentUser,

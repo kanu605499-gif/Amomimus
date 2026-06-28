@@ -1,0 +1,31 @@
+﻿{
+  "functions": {
+    "source": "functions",
+    "codebase": "default"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "amomimus",
+          "appId": "1:932913168592:android:ff00762b55b048c108ded5",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "amomimus",
+          "configurations": { "android": "1:932913168592:android:ff00762b55b048c108ded5" }
+        },
+        "lib/firebase_options_dev.dart": {
+          "projectId": "amomimus-dev",
+          "configurations": { "android": "1:959959455583:android:524c396033e652626b08ea" }
+        },
+        "lib/firebase_options_prod.dart": {
+          "projectId": "amomimus",
+          "configurations": { "android": "1:932913168592:android:ff00762b55b048c108ded5" }
+        }
+      }
+    }
+  }
+}

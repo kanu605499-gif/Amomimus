@@ -1,18 +1,20 @@
 import 'dart:math' as math;
 import 'dart:ui';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../services/account_manager.dart';
 import '../../services/auth_service.dart';
-import '../../database/models/user_register_sql.dart';
+import '../../models/user_credentials_model.dart';
 import '../../models/user_model.dart';
 import '../amomimusdark.dart';
 import 'package:amomimus/i18n/strings.g.dart';
 import 'login.dart';
 import 'choose_amomimus_screen.dart';
 import '../helpers/gender_helpers.dart';
-import 'chatroomhome.dart';
+import 'feed_screen.dart';
 
 class MasterAccountScreen extends StatefulWidget {
   const MasterAccountScreen({super.key});
@@ -23,7 +25,7 @@ class MasterAccountScreen extends StatefulWidget {
 
 class _MasterAccountScreenState extends State<MasterAccountScreen>
     with SingleTickerProviderStateMixin {
-  UserModelSql? _credentials;
+  UserCredentialsModel? _credentials;
   bool _isLoading = true;
   late AnimationController _danceController;
 
@@ -60,6 +62,10 @@ class _MasterAccountScreenState extends State<MasterAccountScreen>
 
   void _handleAddProfile(BuildContext context, bool isDark) {
     if (_credentials == null) return;
+    
+    // Check if password is empty or null (which means it's a Google Auth account)
+    final bool isGoogleAuth = _credentials!.password?.isEmpty ?? true;
+    
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -70,6 +76,7 @@ class _MasterAccountScreenState extends State<MasterAccountScreen>
           favoriteCharacter: _credentials!.favoriteCharacter ?? "",
           dateOfBirth: "Unknown", // Bypassing for sub-profiles
           isDarkMode: false, // Force Light Theme for auth flow
+          isGoogleAuth: isGoogleAuth,
         ),
       ),
     );
@@ -92,7 +99,7 @@ class _MasterAccountScreenState extends State<MasterAccountScreen>
     await am.switchAccount(targetUser);
     if (!context.mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const AmomimusApp7()),
+      MaterialPageRoute(builder: (_) => const AmomimusApp5()),
       (route) => false,
     );
   }
@@ -175,15 +182,25 @@ class _MasterAccountScreenState extends State<MasterAccountScreen>
                                                       child: child,
                                                     );
                                                   },
-                                                  child: Container(
-                                                    width: iconSize,
-                                                    height: iconSize,
-                                                    decoration: BoxDecoration(
-                                                      color: GenderHelpers.getGenderColor(bindedAccounts[index].gender).withValues(alpha: 0.1),
-                                                      borderRadius: BorderRadius.circular(18),
-                                                      border: Border.all(color: GenderHelpers.getGenderColor(bindedAccounts[index].gender).withValues(alpha: 0.5), width: 1.5),
-                                                    ),
-                                                    child: Icon(GenderHelpers.getGenderIcon(bindedAccounts[index].gender), color: GenderHelpers.getGenderColor(bindedAccounts[index].gender), size: iconSize * 0.5),
+                                                  child: Stack(
+                                                    alignment: Alignment.bottomRight,
+                                                    children: [
+                                                      Container(
+                                                        width: iconSize,
+                                                        height: iconSize,
+                                                        decoration: BoxDecoration(
+                                                          color: GenderHelpers.getGenderColor(bindedAccounts[index].gender).withValues(alpha: 0.1),
+                                                          borderRadius: BorderRadius.circular(18),
+                                                          border: Border.all(color: GenderHelpers.getGenderColor(bindedAccounts[index].gender).withValues(alpha: 0.5), width: 1.5),
+                                                        ),
+                                                        child: Icon(GenderHelpers.getGenderIcon(bindedAccounts[index].gender), color: GenderHelpers.getGenderColor(bindedAccounts[index].gender), size: iconSize * 0.5),
+                                                      ),
+                                                      NotificationDot(
+                                                        account: bindedAccounts[index],
+                                                        allAccounts: bindedAccounts,
+                                                        iconSize: iconSize,
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ),
@@ -325,7 +342,7 @@ class _DashedBorderPainter extends CustomPainter {
     Path path = Path()..addRRect(rrect);
     Path dashPath = Path();
 
-    for (PathMetric measurePath in path.computeMetrics()) {
+    for (ui.PathMetric measurePath in path.computeMetrics()) {
       double distance = 0;
       while (distance < measurePath.length) {
         dashPath.addPath(
@@ -335,9 +352,74 @@ class _DashedBorderPainter extends CustomPainter {
         distance += dashWidth + dashSpace;
       }
     }
+
     canvas.drawPath(dashPath, paint);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class NotificationDot extends StatelessWidget {
+  final UserAccount account;
+  final List<UserAccount> allAccounts;
+  final double iconSize;
+
+  const NotificationDot({
+    super.key,
+    required this.account,
+    required this.allAccounts,
+    required this.iconSize,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance
+          .collection('users')
+          .doc(account.amomimusId)
+          .collection('notifications')
+          .where('isRead', isEqualTo: false)
+          .limit(10)
+          .get(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
+        final siblingIds = allAccounts.map((a) => a.amomimusId).toSet();
+        bool hasValidNotif = false;
+
+        for (var doc in snapshot.data!.docs) {
+          final data = doc.data() as Map<String, dynamic>?;
+          if (data != null) {
+            final senderId = data['senderUserId'] as String?;
+            if (senderId == null || !siblingIds.contains(senderId)) {
+              hasValidNotif = true;
+              break;
+            }
+          }
+        }
+
+        if (!hasValidNotif) return const SizedBox.shrink();
+
+        final isDark = Provider.of<AmomimusDarkTheme>(context).isDarkMode;
+        final bgColor = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
+        final dotColor = GenderHelpers.getGenderColor(account.gender);
+
+        return Container(
+          width: iconSize * 0.3,
+          height: iconSize * 0.3,
+          decoration: BoxDecoration(
+            color: dotColor,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: bgColor,
+              width: 2.5,
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:amomimus/i18n/strings.g.dart';
+import 'package:amomimus/widgets/update_checker.dart';
 
 import 'welcome_form_screen.dart';
 import '../widgets/custom_input_field.dart';
@@ -26,6 +27,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
   @override
   void initState() {
     super.initState();
+    updateNavigatorObserver.pause();
     _floatingController = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
@@ -34,6 +36,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
 
   @override
   void dispose() {
+    updateNavigatorObserver.resume();
     _floatingController.dispose();
     _nameController.dispose();
     _emailController.dispose();
@@ -259,13 +262,16 @@ class _AmomimusApp3State extends State<AmomimusApp3>
           ),
           SafeArea(
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 16),
                     RichText(
                       text: const TextSpan(
                         text: 'Cooking Your ',
@@ -282,7 +288,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                         ],
                       ),
                     ),
-                    const SizedBox(height: 35),
+                    const SizedBox(height: 25),
                     CustomInputField(
                       label: 'FULL NAME',
                       hintText: 'Input your full name here',
@@ -302,7 +308,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                         return null;
                       },
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     CustomInputField(
                       label: 'EMAIL',
                       hintText: 'Input your email here',
@@ -321,7 +327,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                         return null;
                       },
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     CustomInputField(
                       label: 'PASSWORD',
                       hintText: 'Input your password here',
@@ -337,7 +343,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                         return null;
                       },
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     CustomInputField(
                       label: 'FAVORITE CHARACTER',
                       hintText: 'Who are your favorite character?',
@@ -346,7 +352,7 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                           ? 'Just write anyone brooooo lmao'
                           : null,
                     ),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
                       height: 54,
@@ -374,43 +380,6 @@ class _AmomimusApp3State extends State<AmomimusApp3>
                       ),
                     ),
                     const SizedBox(height: 24),
-                    _buildSeparator(),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 54,
-                      child: OutlinedButton(
-                        onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: const Color(0xFFFFD54F),
-                          side: const BorderSide(color: Color(0xffeaeaea)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          elevation: 2,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/Social_Icons.png',
-                              width: 24,
-                              height: 24,
-                            ),
-                            const SizedBox(width: 12),
-                            const Text(
-                              'Sign up with Google',
-                              style: TextStyle(
-                                color: Color(0xff121212),
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 25),
                     Center(
                       child: RichText(
                         text: TextSpan(
@@ -478,23 +447,4 @@ class _AmomimusApp3State extends State<AmomimusApp3>
     );
   }
 
-  Widget _buildSeparator() {
-    return Row(
-      children: [
-        const Expanded(child: Divider()),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Text(
-            'OR',
-            style: TextStyle(
-              color: Colors.grey[500],
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const Expanded(child: Divider()),
-      ],
-    );
-  }
 }

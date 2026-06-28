@@ -1,5 +1,5 @@
 /// Represents a notification type in the app.
-enum NotificationType { resonate, comment, reply }
+enum NotificationType { resonate, comment, reply, chat, chatRequest, blocked, unblocked, bioExpiry }
 
 /// Notification model for the Amomimus app.
 ///
@@ -13,6 +13,7 @@ class NotificationModel {
   final String message;
   final String createdAt;
   bool isRead;
+  bool notifiedLocally;
 
   NotificationModel({
     String? id,
@@ -23,6 +24,7 @@ class NotificationModel {
     required this.message,
     String? createdAt,
     this.isRead = false,
+    this.notifiedLocally = false,
   }) : id = id ?? DateTime.now().millisecondsSinceEpoch.toString(),
        createdAt = createdAt ?? DateTime.now().toIso8601String();
 
@@ -39,6 +41,7 @@ class NotificationModel {
       'isRead': isRead
           ? 1
           : 0, // 1 for true, 0 for false (SQLite/Firestore compatible)
+      'notifiedLocally': notifiedLocally,
     };
   }
 
@@ -53,6 +56,7 @@ class NotificationModel {
       message: map['message'] ?? '',
       createdAt: map['createdAt'],
       isRead: map['isRead'] == 1 || map['isRead'] == true,
+      notifiedLocally: map['notifiedLocally'] == true,
     );
   }
 

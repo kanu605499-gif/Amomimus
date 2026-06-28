@@ -39,6 +39,8 @@ class _FloatingCountdownCapsuleState extends State<FloatingCountdownCapsule>
   double _posX = 50.0;
   double _posY = 100.0;
   bool _isDragging = false;
+  Duration _currentDuration = const Duration(seconds: 6);
+  Curve _currentCurve = Curves.easeInOut;
 
   late AnimationController _bounceCtrl;
   late Animation<double> _bounceAnim;
@@ -135,13 +137,34 @@ class _FloatingCountdownCapsuleState extends State<FloatingCountdownCapsule>
   }
 
   void _handlePanEnd(DragEndDetails details) {
+    final size = MediaQuery.of(context).size;
+    final maxX = size.width - 150.0;
+    final maxY = size.height - 200.0;
+    
+    // Calculate glide target based on velocity
+    double targetX = _posX + details.velocity.pixelsPerSecond.dx * 0.15;
+    double targetY = _posY + details.velocity.pixelsPerSecond.dy * 0.15;
+    
+    // Clamp to screen bounds
+    targetX = targetX.clamp(10.0, max(10.0, maxX));
+    targetY = targetY.clamp(40.0, max(40.0, maxY));
+
     setState(() {
       _isDragging = false;
       _dragOffset = null;
+      _posX = targetX;
+      _posY = targetY;
+      _currentDuration = const Duration(milliseconds: 800);
+      _currentCurve = Curves.easeOutQuart;
     });
+
     // Stay idle at this position for 5 seconds before resuming float
     _idleTimer = Timer(const Duration(seconds: 5), () {
       if (mounted) {
+        setState(() {
+          _currentDuration = const Duration(seconds: 6);
+          _currentCurve = Curves.easeInOut;
+        });
         _randomizePosition();
         _startFloatingCycle();
       }
@@ -174,8 +197,8 @@ class _FloatingCountdownCapsuleState extends State<FloatingCountdownCapsule>
     final textColor = isDark ? Colors.white : Colors.black87;
 
     return AnimatedPositioned(
-      duration: _isDragging ? Duration.zero : const Duration(seconds: 6),
-      curve: Curves.easeInOut,
+      duration: _isDragging ? Duration.zero : _currentDuration,
+      curve: _currentCurve,
       left: _posX,
       top: _posY,
       child: AnimatedBuilder(

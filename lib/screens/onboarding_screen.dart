@@ -1,7 +1,7 @@
-import 'package:amomimus/i18n/strings.g.dart';
+﻿import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:amomimus/database/preference_handler.dart';
+import 'package:amomimus/services/preference_handler.dart';
 import 'package:amomimus/screens/login.dart'; // AmomimusApp2 (Login)
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:amomimus/models/user_indicator_model.dart'; // Colors

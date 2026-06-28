@@ -40,6 +40,8 @@ class UserAccount {
   benevolentPoints; // 0–100 (percentage); 0-59 = CLOUDY, 60-89 = GHOST, 90-100 = NOISE
   final String indicator; // 'cloudy', 'ghost', or 'noise' (noise = admin-only)
   final String presenceStatus; // 'auto', 'online', 'invisible', 'dnd'
+  final String? presenceUpdatedAt;
+  final String? fcmToken; // Firebase Cloud Messaging token for push notifications
 
   UserAccount({
     this.id,
@@ -74,6 +76,8 @@ class UserAccount {
     this.benevolentPoints = 0,
     this.indicator = 'cloudy',
     this.presenceStatus = 'auto',
+    this.presenceUpdatedAt,
+    this.fcmToken,
   }) : masterEmail = (masterEmail == null || masterEmail.isEmpty) ? email : masterEmail;
 
   /// Firestore-ready: creates a [UserAccount] from a [Map].
@@ -129,6 +133,8 @@ class UserAccount {
       benevolentPoints: map['benevolentPoints'] ?? 0,
       indicator: map['indicator'] ?? 'cloudy',
       presenceStatus: map['presenceStatus'] ?? 'auto',
+      presenceUpdatedAt: map['presenceUpdatedAt'],
+      fcmToken: map['fcmToken'],
     );
   }
 
@@ -167,6 +173,8 @@ class UserAccount {
       'benevolentPoints': benevolentPoints,
       'indicator': indicator,
       'presenceStatus': presenceStatus,
+      'presenceUpdatedAt': presenceUpdatedAt,
+      'fcmToken': fcmToken,
     };
   }
 
@@ -203,6 +211,8 @@ class UserAccount {
     int? benevolentPoints,
     String? indicator,
     String? presenceStatus,
+    String? presenceUpdatedAt,
+    String? fcmToken,
   }) {
     return UserAccount(
       id: id ?? this.id,
@@ -240,6 +250,8 @@ class UserAccount {
       benevolentPoints: benevolentPoints ?? this.benevolentPoints,
       indicator: indicator ?? this.indicator,
       presenceStatus: presenceStatus ?? this.presenceStatus,
+      presenceUpdatedAt: presenceUpdatedAt ?? this.presenceUpdatedAt,
+      fcmToken: fcmToken ?? this.fcmToken,
     );
   }
 

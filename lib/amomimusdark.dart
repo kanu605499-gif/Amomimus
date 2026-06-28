@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:amomimus/database/preference_handler.dart';
+﻿import 'package:flutter/material.dart';
+import 'package:amomimus/services/preference_handler.dart';
 
 class AmomimusDarkTheme extends ChangeNotifier {
   // 1. State privat untuk menyimpan kondisi tema saat ini (Default: Dark Mode = true)
@@ -97,6 +97,15 @@ class AmomimusDarkTheme extends ChangeNotifier {
           textColor: textPrimary,
           horizontalTitleGap: 12,
         ),
+
+        snackBarTheme: SnackBarThemeData(
+          behavior: SnackBarBehavior.floating,
+shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          backgroundColor: surfaceDark,
+          contentTextStyle: const TextStyle(color: textPrimary),
+        ),
       );
     } else {
       // Skema warna untuk Light Mode (Mode Terang)
@@ -167,6 +176,15 @@ class AmomimusDarkTheme extends ChangeNotifier {
           textColor: Colors.black87,
           horizontalTitleGap: 12,
         ),
+
+        snackBarTheme: SnackBarThemeData(
+          behavior: SnackBarBehavior.floating,
+shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          backgroundColor: Colors.grey[800],
+          contentTextStyle: const TextStyle(color: Colors.white),
+        ),
       );
     }
   }
@@ -196,3 +214,5 @@ class AmomimusDarkTheme extends ChangeNotifier {
   // Tetap mempertahankan properti static lama agar tidak merusak halaman lain yang memanggil secara langsung
   static ThemeData get themeData => AmomimusDarkTheme().currentThemeData;
 }
+
+

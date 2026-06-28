@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' as math;
 
-import '../database/models/user_register_sql.dart';
+import '../models/user_credentials_model.dart';
 import '../data/anonymous_names.dart';
 import '../services/account_manager.dart';
 import '../database_helper.dart'; // for UserAccount
@@ -20,6 +20,7 @@ class ChooseAmomusPage extends StatefulWidget {
   final String favoriteCharacter;
   final String dateOfBirth;
   final bool isDarkMode;
+  final bool isGoogleAuth;
 
   const ChooseAmomusPage({
     super.key,
@@ -29,6 +30,7 @@ class ChooseAmomusPage extends StatefulWidget {
     required this.favoriteCharacter,
     required this.dateOfBirth,
     required this.isDarkMode,
+    this.isGoogleAuth = false,
   });
 
   @override
@@ -66,7 +68,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
 
     try {
       // 1. Prepare login credentials
-      final newUserSql = UserModelSql(
+      final newUserSql = UserCredentialsModel(
         fullName: widget.realUsername,
         email: widget.email,
         favoriteCharacter: widget.favoriteCharacter,
@@ -95,10 +97,18 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
       );
 
       // 3. Register and Login via AccountManager (Hybrid Architecture)
-      bool isSuccess = await context.read<AccountManager>().registerAndLogin(
-        newUserSql,
-        userAcc,
-      );
+      bool isSuccess;
+      if (widget.isGoogleAuth) {
+        isSuccess = await context.read<AccountManager>().registerGoogleAccount(
+          newUserSql,
+          userAcc,
+        );
+      } else {
+        isSuccess = await context.read<AccountManager>().registerAndLogin(
+          newUserSql,
+          userAcc,
+        );
+      }
 
       if (!mounted) return;
 

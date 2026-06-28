@@ -157,9 +157,10 @@ class RoomChatMiniIsland extends StatelessWidget {
                       },
                     ),
                     // Report Button
-                    IconButton(
-                      icon: const Icon(Icons.report_problem_outlined, size: 20),
-                      color: Colors.orangeAccent,
+                    if (!context.read<AccountManager>().accounts.any((acc) => acc.amomimusId == targetUsername))
+                      IconButton(
+                        icon: const Icon(Icons.report_problem_outlined, size: 20),
+                        color: Colors.orangeAccent,
                       constraints: const BoxConstraints(),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 6,

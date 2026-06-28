@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../amomimusdark.dart';
 import '../../models/message_model.dart';
 import '../../services/feed_manager.dart';
+import 'package:amomimus/helpers/gender_helpers.dart';
 import '../../i18n/strings.g.dart';
 import '../../services/account_manager.dart';
 import '../../widgets/report_dialog.dart';
@@ -246,7 +247,7 @@ class _MessageBubbleState extends State<MessageBubble> with SingleTickerProvider
                                   }
                                 },
                               ),
-                              if (!isUserMessage)
+                              if (!isUserMessage && !context.read<AccountManager>().accounts.any((acc) => acc.amomimusId == widget.message.senderId))
                                 ListTile(
                                   leading: const Icon(
                                     Icons.report_gmailerrorred,
@@ -292,7 +293,7 @@ class _MessageBubbleState extends State<MessageBubble> with SingleTickerProvider
                         left: isUserMessage ? 0 : 4,
                       ),
                       child: Text(
-                        widget.message.senderName!,
+                        GenderHelpers.getDisplayName(widget.message.senderName!),
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,

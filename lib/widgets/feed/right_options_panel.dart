@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui';
 
 import '../../amomimusdark.dart';
 import 'package:amomimus/i18n/strings.g.dart';
-import '../../database/preference_handler.dart';
+import '../../services/preference_handler.dart';
 
 class RightOptionsPanel extends StatefulWidget {
   final bool isDark;

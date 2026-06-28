@@ -123,4 +123,19 @@ class GenderHelpers {
     fontSize: 14,
     height: 1.4,
   );
+
+  /// Extracts the gender from an anonymous name (e.g., "Astral Echo Amom" -> "Amom").
+  static String extractGenderFromName(String name) {
+    if (name.endsWith(' Amom')) return 'Amom';
+    if (name.endsWith(' Ami')) return 'Ami';
+    return 'Amo'; // Default for Amo or unknown
+  }
+
+  /// Extracts the display name without the gender suffix (e.g., "Astral Echo Amom" -> "Astral Echo").
+  static String getDisplayName(String name) {
+    if (name.endsWith(' Amom')) return name.substring(0, name.length - 5);
+    if (name.endsWith(' Ami')) return name.substring(0, name.length - 4);
+    if (name.endsWith(' Amo')) return name.substring(0, name.length - 4);
+    return name;
+  }
 }

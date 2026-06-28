@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/account_manager.dart';
-import '../../database/models/user_register_sql.dart';
+import '../../models/user_credentials_model.dart';
 import '../../amomimusdark.dart';
 import 'package:amomimus/i18n/strings.g.dart';
 
 class SecurityAuthSection extends StatefulWidget {
-  final UserModelSql credentials;
+  final UserCredentialsModel credentials;
 
   const SecurityAuthSection({super.key, required this.credentials});
 

@@ -69,10 +69,12 @@ class _ChatInputBarState extends State<ChatInputBar> {
     final currentText = isDark ? AmomimusDarkTheme.textPrimary : Colors.black87;
     final double screenHeight = MediaQuery.of(context).size.height;
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (widget.replyingToMessage != null)
+    return SafeArea(
+      bottom: true,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.replyingToMessage != null)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
@@ -254,6 +256,8 @@ class _ChatInputBarState extends State<ChatInputBar> {
           ),
         ),
       ],
+    ),
     );
   }
 }
+

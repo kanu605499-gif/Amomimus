@@ -1,4 +1,4 @@
-import 'package:amomimus/i18n/strings.g.dart';
+﻿import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:amomimus/amomimusdark.dart';
 import 'package:amomimus/models/user_model.dart';
@@ -119,7 +119,7 @@ class _CreatePostFormState extends State<_CreatePostForm> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_postController.text.trim().isNotEmpty) {
                     AccountType accountType;
                     switch (widget.currentUser.gender) {
@@ -145,14 +145,29 @@ class _CreatePostFormState extends State<_CreatePostForm> {
                       timeStamp: DateTime.now().toIso8601String(),
                       realAuthorId: widget.currentUser.amomimusId,
                       realAuthorName: widget.currentUser.anonymousUsername,
+                      authorIndicator: widget.currentUser.indicator,
                     );
-                    Provider.of<FeedManager>(
+                    final success = await Provider.of<FeedManager>(
                       context,
                       listen: false,
                     ).addPost(newPost);
 
+                    if (!success) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(t.spam_cooldown_warning),
+                            backgroundColor: Colors.redAccent,
+                            behavior: SnackBarBehavior.floating,
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      }
+                      return;
+                    }
+
                     _postController.clear();
-                    Navigator.pop(context);
+                    if (context.mounted) Navigator.pop(context);
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -179,3 +194,4 @@ class _CreatePostFormState extends State<_CreatePostForm> {
     );
   }
 }
+
