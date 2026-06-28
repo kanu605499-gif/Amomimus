@@ -8,7 +8,6 @@ import '../models/user_indicator_model.dart';
 import '../helpers/benevolent_calculator.dart';
 import '../models/user_credentials_model.dart';
 import 'auth_service.dart';
-import 'fcm_service.dart';
 import 'background_service.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
@@ -189,20 +188,17 @@ class AccountManager extends ChangeNotifier {
     await prefs.setString('savedAmomimusId', account.amomimusId);
     await prefs.setBool('rememberMe', true);
 
-    // Refresh FCM token for this account so push notifications are delivered correctly
-    FcmService().refreshToken(account.amomimusId);
-    
     // Schedule local push notifications for Amow Summaries
     await scheduleAmowSummaries();
   }
 
   Future<void> scheduleAmowSummaries() async {
     final times = [
-      const TimeOfDay(hour: 11, minute: 0),
-      const TimeOfDay(hour: 16, minute: 35),
-      const TimeOfDay(hour: 21, minute: 45),
-      const TimeOfDay(hour: 5, minute: 30),
-      const TimeOfDay(hour: 0, minute: 0),
+      const TimeOfDay(hour: 10, minute: 59),
+      const TimeOfDay(hour: 16, minute: 34),
+      const TimeOfDay(hour: 21, minute: 44),
+      const TimeOfDay(hour: 5, minute: 29),
+      const TimeOfDay(hour: 23, minute: 59),
     ];
     
     final now = DateTime.now();

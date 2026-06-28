@@ -15,7 +15,6 @@ import 'package:amomimus/services/firebase_auth_service.dart';
 import 'package:amomimus/services/feed_manager.dart';
 import 'package:amomimus/services/chat_request_manager.dart';
 import 'package:amomimus/services/notification_manager.dart';
-import 'package:amomimus/services/fcm_service.dart';
 
 import 'package:flutter/services.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
@@ -39,7 +38,6 @@ Future<void> runAmomimusApp(FirebaseOptions options) async {
 
   await initializeDateFormatting('id_ID', null);
   await PreferenceHandler.init();
-  await FcmService().init();
 
   final savedLang = PreferenceHandler.language;
   if (savedLang != null) {

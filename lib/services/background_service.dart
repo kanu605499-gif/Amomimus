@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +24,17 @@ Future<void> amowSummaryTask() async {
   final userId = prefs.getString('savedAmomimusId');
   if (userId == null || userId.isEmpty) return;
 
+  // Offline check: If there's no internet, abort this alarm cycle.
+  // It won't pile up; it will simply wait for the next scheduled alarm (e.g., 16:34)
+  try {
+    final result = await InternetAddress.lookup('google.com').timeout(const Duration(seconds: 5));
+    if (result.isEmpty || result[0].rawAddress.isEmpty) {
+      return;
+    }
+  } catch (_) {
+    return;
+  }
+
   // Initialize Slang translation based on device locale
   LocaleSettings.useDeviceLocale();
 
@@ -32,11 +44,17 @@ Future<void> amowSummaryTask() async {
       .doc(userId)
       .collection('notifications');
 
-  // Query unread and not notified locally
-  final snapshot = await notificationsRef
-      .where('isRead', isEqualTo: false)
-      .where('notifiedLocally', isEqualTo: false)
-      .get();
+  // Query unread and not notified locally, force server to avoid cache loops
+  QuerySnapshot snapshot;
+  try {
+    snapshot = await notificationsRef
+        .where('isRead', isEqualTo: false)
+        .where('notifiedLocally', isEqualTo: false)
+        .get(const GetOptions(source: Source.server));
+  } catch (_) {
+    // If it fails (e.g., offline or timeout), skip this cycle
+    return;
+  }
 
   if (snapshot.docs.isEmpty) {
     // Show empty summary
@@ -52,7 +70,7 @@ Future<void> amowSummaryTask() async {
   int resonateCount = 0;
   
   for (var doc in snapshot.docs) {
-    final notif = NotificationModel.fromMap(doc.data());
+    final notif = NotificationModel.fromMap(doc.data() as Map<String, dynamic>);
     if (notif.type == NotificationType.chat || notif.type == NotificationType.chatRequest) {
       chatCount++;
     } else if (notif.type == NotificationType.comment || notif.type == NotificationType.reply) {
