@@ -113,11 +113,16 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
       if (!mounted) return;
 
       if (isSuccess) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const AmomimusApp5()),
-          (route) => false,
-        );
+        if (!widget.isGoogleAuth) {
+          await context.read<AccountManager>().logout();
+          _showEmailVerificationSentDialog();
+        } else {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const AmomimusApp5()),
+            (route) => false,
+          );
+        }
       } else {
         _showAlreadyRegisteredDialog();
       }
@@ -288,6 +293,69 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
             padding: EdgeInsets.zero,
           ),
         ],
+      ),
+    );
+  }
+
+  void _showEmailVerificationSentDialog() {
+    final t = Translations.of(context);
+    bool hasRedirected = false;
+
+    void redirect() {
+      if (hasRedirected || !mounted) return;
+      hasRedirected = true;
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const AmomimusApp2()),
+        (route) => false,
+      );
+    }
+
+    // Auto redirect to login after 3.5 seconds
+    Future.delayed(const Duration(milliseconds: 3500), redirect);
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: widget.isDarkMode
+            ? const Color(0xff1e1b24)
+            : const Color(0xfffdfbfe),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: BorderSide(
+            color: widget.isDarkMode
+                ? const Color(0xff3d344d)
+                : const Color(0xffe1dbec),
+            width: 1.5,
+          ),
+        ),
+        title: Row(
+          children: [
+            const Icon(Icons.check_circle_outline_rounded, color: Colors.green),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                t.email_verification_title,
+                style: TextStyle(
+                  color: widget.isDarkMode
+                      ? Colors.white
+                      : const Color(0xff121212),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          t.email_verification_sent_body,
+          style: TextStyle(
+            color: widget.isDarkMode ? Colors.grey[400] : Colors.grey[700],
+            height: 1.4,
+          ),
+        ),
       ),
     );
   }

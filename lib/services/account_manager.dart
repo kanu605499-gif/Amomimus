@@ -933,4 +933,11 @@ class AccountManager extends ChangeNotifier {
     notifyListeners();
     return true;
   }
+
+  Future<void> logout() async {
+    await authService.logout();
+    _currentUser = null;
+    _accounts.clear();
+    notifyListeners();
+  }
 }

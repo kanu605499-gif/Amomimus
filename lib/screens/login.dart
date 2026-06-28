@@ -1,4 +1,4 @@
-﻿import 'package:flutter/gestures.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:amomimus/amomimusdark.dart';
 import 'package:amomimus/screens/register_screen.dart';
@@ -11,6 +11,7 @@ import 'package:amomimus/services/account_manager.dart';
 
 import '../services/preference_handler.dart';
 import '../widgets/custom_input_field.dart';
+import 'package:amomimus/i18n/strings.g.dart';
 
 void main() {
   runApp(const AmomimusApp2());
@@ -148,25 +149,93 @@ class _LoginScreenState extends State<LoginScreen>
 
     // Removed 3-account limit check for login as requested
 
-    final isSuccess = await accountManager.login(email, password);
+    try {
+      final isSuccess = await accountManager.login(email, password);
 
-    if (isSuccess) {
-      await _saveLoginPreferences();
-      if (!mounted) return;
+      if (isSuccess) {
+        await _saveLoginPreferences();
+        if (!mounted) return;
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const SplashScreen()),
-      );
-    } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const SplashScreen()),
+        );
+      } else {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invalid email or password'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid email or password'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (e.toString().contains('email-not-verified')) {
+        _showEmailNotVerifiedDialog();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invalid email or password'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
+  }
+
+  void _showEmailNotVerifiedDialog() {
+    final t = Translations.of(context);
+    
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xfffdfbfe),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(
+            color: Color(0xffe1dbec),
+            width: 1.5,
+          ),
+        ),
+        title: Row(
+          children: [
+            const Icon(Icons.error_outline_rounded, color: Colors.orangeAccent),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                t.email_verification_title,
+                style: const TextStyle(
+                  color: Color(0xff121212),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          t.email_not_verified_body,
+          style: TextStyle(
+            color: Colors.grey[700],
+            height: 1.4,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(
+              'OK',
+              style: TextStyle(
+                color: Colors.grey[500],
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _navigateToSignUp() {

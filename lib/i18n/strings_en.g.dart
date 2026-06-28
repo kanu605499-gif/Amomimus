@@ -110,8 +110,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// en: 'Date of Birth:'
 	String get dob => 'Date of Birth:';
 
-	/// en: '* Required — you must select your date of birth'
-	String get dob_required => '* Required — you must select your date of birth';
+	/// en: '* Required â€” you must select your date of birth'
+	String get dob_required => '* Required â€” you must select your date of birth';
 
 	/// en: 'Agreement verified'
 	String get agreement_verified => 'Agreement verified';
@@ -1007,14 +1007,23 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// en: 'Your bio is about to expire'
 	String get notif_bio_expiry => 'Your bio is about to expire';
 
-	/// en: 'Amow 👻'
-	String get amow_summary_title => 'Amow 👻';
+	/// en: 'Amow ðŸ‘»'
+	String get amow_summary_title => 'Amow ðŸ‘»';
 
 	/// en: 'Hellloo! Amoooww here just to tell you that you got ${chat} messages, ${comment} comments and ${resonate} resonates, come check it out!'
 	String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'Hellloo! Amoooww here just to tell you that you got ${chat} messages, ${comment} comments and ${resonate} resonates, come check it out!';
 
 	/// en: 'Hellloo! Amoooww here! No new notifications for now, I'll check back later!'
 	String get amow_summary_empty => 'Hellloo! Amoooww here! No new notifications for now, I\'ll check back later!';
+
+	/// en: 'E-mail Verification'
+	String get email_verification_title => 'E-mail Verification';
+
+	/// en: 'E-mail has not been verified. Please check your inbox or spam folder.'
+	String get email_not_verified_body => 'E-mail has not been verified. Please check your inbox or spam folder.';
+
+	/// en: 'Account successfully created. A verification link has been sent to your E-mail. Please verify before logging in.'
+	String get email_verification_sent_body => 'Account successfully created. A verification link has been sent to your E-mail. Please verify before logging in.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1048,7 +1057,7 @@ extension on Translations {
 			'privacy_rules_text' => 'Last updated: May 2026\n\n1. Keep It Ghostly\nYou\'re a ghost here, bud. No real names, no phone numbers, and definitely no leaking your ex\'s address or social media handles. We want this space to be completely detached from your real-world drama.\n\nIf you accidentally slip up and reveal your true identity or doxx someone else, don\'t expect a warning. We will scrub that post faster than you can blink, and your access might vanish along with it. Keep it 100% incognito.\n\n2. Don\'t Be a Total Jerk\nRanting? Cool. Crying? We got you. Venting about how much your job or life sucks is exactly why we built this app, so feel free to let off some steam without holding back.\n\nBut throwing straight-up hate speech, targeted harassment, or bullying someone who is already down? Nah, that\'s a fast pass to getting booted. There is a very clear line between venting your pain and just being a miserable troll.\n\n3. Zero Data Retention\nWe don\'t buy, sell, or even care about your personal data. What happens in Amomimus, stays in Amomimus. Your temporary sessions are encrypted and will be wiped clean periodically from our servers.\n\n4. No Commercial Spamming\nThis platform is made for human emotions, not for selling your crypto coins, promoting your online shop, or spamming affiliate links. Commercial ads without permission will result in an immediate hardware ban.\n\n5. Age Restriction\nUsers must be at least 18 years old to participate in this blind community. The contents shared here can be mature, heavy, and raw. Protect your own mental health before reading others\' rants.\n\n6. Content Ownership Disclaimer\nYou own the words you write, but by posting them here, you grant Amomimus a non-exclusive right to display them anonymously within the app interface. We will never claim your stories as our corporate property.\n\n7. Report and Moderation System\nEven ghosts have boundaries. If you find a post that violates our community safety guidelines, use the report feature immediately. Our automated system and moderators review flags 24/7.\n\n8. Illegal Activities Ban\nDo not use this app to plan, coordinate, or promote any form of illegal activities, physical violence, or real-world harm. We comply with digital safety regulations and will take strict action against violations.\n\n9. Application Analytics\nWe only collect anonymous technical logs (such as crash reports, device model, and system language) to ensure the app runs smoothly on your phone. None of these logs can be traced back to your real identity.\n\n10. Changes to the Terms\nAmomimus reserves the right to update these rules anytime to adapt to new laws or features. Continued use of the app after updates means you agree to follow the latest ghostly protocols.',
 			'system_language' => 'Amomimus System Language:',
 			'dob' => 'Date of Birth:',
-			'dob_required' => '* Required — you must select your date of birth',
+			'dob_required' => '* Required â€” you must select your date of birth',
 			'agreement_verified' => 'Agreement verified',
 			'ready_to_verify' => 'Ready to verified our terms?',
 			'age_warning' => 'You must be at least 18 years old to use Amomimus.',
@@ -1347,9 +1356,12 @@ extension on Translations {
 			'notif_blocked' => 'has blocked you',
 			'notif_unblocked' => 'has unblocked you',
 			'notif_bio_expiry' => 'Your bio is about to expire',
-			'amow_summary_title' => 'Amow 👻',
+			'amow_summary_title' => 'Amow ðŸ‘»',
 			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'Hellloo! Amoooww here just to tell you that you got ${chat} messages, ${comment} comments and ${resonate} resonates, come check it out!',
 			'amow_summary_empty' => 'Hellloo! Amoooww here! No new notifications for now, I\'ll check back later!',
+			'email_verification_title' => 'E-mail Verification',
+			'email_not_verified_body' => 'E-mail has not been verified. Please check your inbox or spam folder.',
+			'email_verification_sent_body' => 'Account successfully created. A verification link has been sent to your E-mail. Please verify before logging in.',
 			_ => null,
 		};
 	}

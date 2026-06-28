@@ -1,4 +1,4 @@
-﻿import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:math' as math;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -34,6 +34,11 @@ class FirebaseAuthService implements AuthService {
       );
 
       if (userCredential.user != null) {
+        if (!userCredential.user!.emailVerified) {
+          await _auth.signOut();
+          throw Exception('email-not-verified');
+        }
+
         final qs = await _firestore
             .collection('users')
             .where('master_email', isEqualTo: email)
@@ -45,6 +50,9 @@ class FirebaseAuthService implements AuthService {
       }
       return null;
     } catch (e) {
+      if (e.toString().contains('email-not-verified')) {
+        throw Exception('email-not-verified');
+      }
       print("==== FIREBASE LOGIN ERROR: $e ====");
       return null;
     }
@@ -214,6 +222,7 @@ class FirebaseAuthService implements AuthService {
           email: credentials.email!,
           password: credentials.password!,
         );
+        await _auth.currentUser?.sendEmailVerification();
       } on FirebaseAuthException catch (e) {
         if (e.code == 'email-already-in-use') {
           // Master Email already exists (Sub-profile creation)
