@@ -1,10 +1,11 @@
-﻿import 'package:amomimus/i18n/strings.g.dart';
+import 'package:amomimus/i18n/strings.g.dart';
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:amomimus/screens/feed_screen.dart';
 import 'package:amomimus/services/preference_handler.dart';
 import 'package:amomimus/screens/login.dart';
@@ -85,9 +86,21 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _checkSession() async {
-    await Future.delayed(
-      const Duration(milliseconds: 3500),
-    ); // Enjoy the TV static
+    final tasks = <Future>[
+      Future.delayed(const Duration(milliseconds: 3500)), // Enjoy the TV static
+    ];
+
+    if (Platform.isAndroid) {
+      final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+      final androidPlugin = flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>();
+      if (androidPlugin != null) {
+        tasks.add(androidPlugin.requestNotificationsPermission() ?? Future.value());
+      }
+    }
+
+    await Future.wait(tasks);
 
     if (!mounted) return;
 

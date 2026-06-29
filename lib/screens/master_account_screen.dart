@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:amomimus/services/preference_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../services/account_manager.dart';
 import '../../services/auth_service.dart';
@@ -83,8 +83,7 @@ class _MasterAccountScreenState extends State<MasterAccountScreen>
   }
 
   Future<void> _handleSwitchMasterAccount(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', false);
+    await PreferenceHandler.setLogin(false);
     if (!context.mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(

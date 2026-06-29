@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:amomimus/amomimusdark.dart';
 import 'package:amomimus/screens/register_screen.dart';
 import 'package:amomimus/screens/splash_screen.dart';
 import 'package:amomimus/screens/welcome_form_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:provider/provider.dart';
 import 'package:amomimus/services/account_manager.dart';
@@ -76,27 +76,24 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   Future<void> _loadSavedPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
     if (!mounted) return;
 
     setState(() {
-      _emailController.text = prefs.getString('savedEmail') ?? '';
-      _rememberMe = prefs.getBool('rememberMe') ?? false;
+      _emailController.text = PreferenceHandler.savedEmail ?? '';
+      _rememberMe = PreferenceHandler.rememberMe;
     });
   }
 
   Future<void> _saveLoginPreferences() async {
     await PreferenceHandler.setLogin(true);
-    final prefs = await SharedPreferences.getInstance();
 
     if (_rememberMe) {
-      await prefs.setString('savedEmail', _emailController.text.trim());
+      await PreferenceHandler.setSavedEmail(_emailController.text.trim());
     } else {
-      await prefs.remove('savedEmail');
+      await PreferenceHandler.setSavedEmail('');
     }
 
-    await prefs.setBool('rememberMe', _rememberMe);
-    await prefs.setBool('isLoggedIn', true);
+    await PreferenceHandler.setRememberMe(_rememberMe);
   }
 
   @override

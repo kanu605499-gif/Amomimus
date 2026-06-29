@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as flutter_secure_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/chat_request_model.dart';
@@ -19,8 +19,10 @@ class ChatRequestManager extends ChangeNotifier {
   }
 
   Future<void> _loadLocalCache() async {
-    final prefs = await SharedPreferences.getInstance();
-    final data = prefs.getString(_storageKey);
+    final storage = const flutter_secure_storage.FlutterSecureStorage(
+      aOptions: flutter_secure_storage.AndroidOptions(encryptedSharedPreferences: true)
+    );
+    final data = await storage.read(key: _storageKey);
     if (data != null && data.isNotEmpty) {
       try {
         final List decoded = jsonDecode(data);
@@ -33,10 +35,12 @@ class ChatRequestManager extends ChangeNotifier {
   }
 
   Future<void> _saveLocalCache() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-      _storageKey,
-      jsonEncode(_requests.map((e) => e.toJson()).toList()),
+    final storage = const flutter_secure_storage.FlutterSecureStorage(
+      aOptions: flutter_secure_storage.AndroidOptions(encryptedSharedPreferences: true)
+    );
+    await storage.write(
+      key: _storageKey,
+      value: jsonEncode(_requests.map((e) => e.toJson()).toList()),
     );
   }
 

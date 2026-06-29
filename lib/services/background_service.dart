@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../models/notification_model.dart';
 import '../i18n/strings.g.dart';
@@ -20,8 +20,10 @@ Future<void> amowSummaryTask() async {
     print('Firebase init error in background: $e');
   }
   
-  final prefs = await SharedPreferences.getInstance();
-  final userId = prefs.getString('savedAmomimusId');
+  const storage = FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+  );
+  final userId = await storage.read(key: 'savedAmomimusId');
   if (userId == null || userId.isEmpty) return;
 
   // Offline check: If there's no internet, abort this alarm cycle.

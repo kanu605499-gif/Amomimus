@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:amomimus/amomimusdark.dart';
 import 'package:amomimus/i18n/strings.g.dart';
@@ -12,7 +12,6 @@ import 'package:amomimus/screens/splash_screen.dart';
 import 'package:amomimus/screens/app_documentation_screen.dart';
 import 'package:amomimus/screens/app_features_screen.dart';
 import 'package:amomimus/screens/master_account_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'right_options_panel.dart';
 
 class LeftDrawerMenu extends StatelessWidget {

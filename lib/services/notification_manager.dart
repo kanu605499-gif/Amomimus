@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as flutter_secure_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/notification_model.dart';
 import 'audio_manager.dart';
@@ -76,8 +76,10 @@ class NotificationManager extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    final prefs = await SharedPreferences.getInstance();
-    final String? data = prefs.getString(_notificationsKey);
+    final storage = const flutter_secure_storage.FlutterSecureStorage(
+      aOptions: flutter_secure_storage.AndroidOptions(encryptedSharedPreferences: true)
+    );
+    final String? data = await storage.read(key: _notificationsKey);
 
     if (data != null && data.isNotEmpty) {
       try {
@@ -98,10 +100,12 @@ class NotificationManager extends ChangeNotifier {
   }
 
   Future<void> _saveNotifications() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-      _notificationsKey,
-      jsonEncode(_notifications.map((e) => e.toJson()).toList()),
+    final storage = const flutter_secure_storage.FlutterSecureStorage(
+      aOptions: flutter_secure_storage.AndroidOptions(encryptedSharedPreferences: true)
+    );
+    await storage.write(
+      key: _notificationsKey,
+      value: jsonEncode(_notifications.map((e) => e.toJson()).toList()),
     );
   }
 
@@ -166,8 +170,10 @@ class NotificationManager extends ChangeNotifier {
   }
 
   Future<void> clearAll() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_notificationsKey);
+    final storage = const flutter_secure_storage.FlutterSecureStorage(
+      aOptions: flutter_secure_storage.AndroidOptions(encryptedSharedPreferences: true)
+    );
+    await storage.delete(key: _notificationsKey);
     _notifications.clear();
     notifyListeners();
     // We optionally could delete from Firestore here, but UI might not expect a hard delete.

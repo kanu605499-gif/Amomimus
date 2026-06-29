@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'preference_handler.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as flutter_secure_storage;
 import '../database_helper.dart';
 import '../models/report_model.dart';
 import '../models/user_indicator_model.dart';
@@ -72,10 +73,9 @@ class AccountManager extends ChangeNotifier {
       _accounts = [];
     }
 
-    // Auto-select based on savedAmomimusId in SharedPreferences
-    final prefs = await SharedPreferences.getInstance();
-    final savedAmomimusId = prefs.getString('savedAmomimusId');
-    final savedEmail = prefs.getString('savedEmail');
+    // Auto-select based on savedAmomimusId in PreferenceHandler
+    final savedAmomimusId = PreferenceHandler.savedAmomimusId;
+    final savedEmail = PreferenceHandler.savedEmail;
 
     if (savedAmomimusId != null && savedAmomimusId.isNotEmpty) {
       final matchingAccounts = _accounts.where(
@@ -182,11 +182,10 @@ class AccountManager extends ChangeNotifier {
     notifyListeners();
     
     // Persist the switch
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', true);
-    await prefs.setString('savedEmail', account.email);
-    await prefs.setString('savedAmomimusId', account.amomimusId);
-    await prefs.setBool('rememberMe', true);
+    await PreferenceHandler.setLogin(true);
+    await PreferenceHandler.setSavedEmail(account.email);
+    await PreferenceHandler.setSavedAmomimusId(account.amomimusId);
+    await PreferenceHandler.setRememberMe(true);
 
     // Schedule local push notifications for Amow Summaries
     await scheduleAmowSummaries();
@@ -567,10 +566,12 @@ class AccountManager extends ChangeNotifier {
 
   static const String _reportTokenKey = 'amomimus_report_tokens';
 
-  /// Loads the current report token state from SharedPreferences.
+  /// Loads the current report token state from secure storage.
   Future<Map<String, dynamic>> _loadReportTokens() async {
-    final prefs = await SharedPreferences.getInstance();
-    final data = prefs.getString(_reportTokenKey);
+    final data = await const flutter_secure_storage.FlutterSecureStorage(
+      aOptions: flutter_secure_storage.AndroidOptions(encryptedSharedPreferences: true)
+    ).read(key: _reportTokenKey);
+    
     if (data == null) return {};
     try {
       return Map<String, dynamic>.from(jsonDecode(data));
@@ -579,10 +580,11 @@ class AccountManager extends ChangeNotifier {
     }
   }
 
-  /// Saves report token state to SharedPreferences.
+  /// Saves report token state to secure storage.
   Future<void> _saveReportTokens(Map<String, dynamic> tokens) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_reportTokenKey, jsonEncode(tokens));
+    await const flutter_secure_storage.FlutterSecureStorage(
+      aOptions: flutter_secure_storage.AndroidOptions(encryptedSharedPreferences: true)
+    ).write(key: _reportTokenKey, value: jsonEncode(tokens));
   }
 
   /// Gets daily report counts by category for today.
