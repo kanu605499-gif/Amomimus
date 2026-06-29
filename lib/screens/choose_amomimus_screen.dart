@@ -333,7 +333,7 @@ class _ChooseAmomusPageState extends State<ChooseAmomusPage>
         ),
         title: Row(
           children: [
-            const Icon(Icons.check_circle_outline_rounded, color: Colors.green),
+            const Icon(Icons.check_circle_outline_rounded, color: Color(0xff8c72c4)),
             const SizedBox(width: 10),
             Expanded(
               child: Text(
