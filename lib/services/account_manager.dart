@@ -112,6 +112,12 @@ class AccountManager extends ChangeNotifier {
 
     _isLoading = false;
     notifyListeners();
+
+    // Re-schedule alarms on every app start if user is already logged in.
+    // This ensures background notifications work even after a reboot or app update.
+    if (_currentUser != null && !_currentUser!.isDemo) {
+      scheduleAmowSummaries();
+    }
   }
 
   Future<bool> registerAndLogin(

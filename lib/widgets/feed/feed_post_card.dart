@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -38,6 +39,22 @@ class FeedCard extends StatefulWidget {
 class _FeedCardState extends State<FeedCard> {
   bool isMenuOpen = false;
   bool _isGhostRevealed = false;
+  Timer? _timeRefreshTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    // Refresh timestamp label every 60 seconds so "X menit lalu" stays accurate
+    _timeRefreshTimer = Timer.periodic(const Duration(seconds: 60), (_) {
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timeRefreshTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

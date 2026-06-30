@@ -1,60 +1,42 @@
-# Struktur UI Amomimus (Khusus Light Theme)
+# Struktur UI Amomimus (Light & Dark Theme)
 
-Dokumen ini berisi rangkuman struktur User Interface (UI) dari aplikasi Amomimus, dikhususkan pada penggunaan **Light Theme**. Struktur dan konfigurasi tema ini dirancang agar dapat digunakan kembali sebagai *blueprint* atau kerangka dasar untuk pengembangan aplikasi baru (seperti aplikasi absensi).
+Dokumen ini berisi rangkuman struktur User Interface (UI) dari aplikasi Amomimus, mencakup konfigurasi **Light Theme** dan **Dark Theme**, serta detail struktur halaman profil. Rangkuman ini dirancang agar dapat digunakan kembali sebagai *blueprint* untuk pengembangan aplikasi baru (seperti aplikasi absensi).
 
 ---
 
-## 🎨 Konfigurasi Tema (Light Theme)
+## 🎨 Konfigurasi Tema (Light vs Dark)
 
-Warna utama (Primary Color) yang digunakan pada aplikasi adalah **Purple** (`Color(0xff8c72c4)`). Berikut adalah rincian `ThemeData` untuk Light Mode yang dapat langsung diimplementasikan ke aplikasi baru:
+Aplikasi Amomimus menggunakan skema warna utama (Primary) **Purple** (`Color(0xff8c72c4)`) untuk Light Mode, dan tambahan warna aksen kontras **Police Line Yellow** (`Color(0xFFFFD700)`) untuk Dark Mode.
 
-### 1. Warna Dasar & Scaffold
-- **Scaffold Background**: `Colors.white`
-- **Surface / Card Background**: `Colors.white`
-- **Primary Color**: `Color(0xff8c72c4)` (Ungu Utama)
-- **Shadow Color**: `Colors.grey.withOpacity(0.2)`
-- **Blur Overlay**: `Colors.white.withOpacity(0.75)`
+Berikut adalah perbandingan properti `ThemeData` antara Light Mode dan Dark Mode:
 
-### 2. Tipografi (TextTheme)
-- **Title Large**: `Colors.black87` (FontWeight: bold)
-- **Body Large**: `Colors.black87`
-- **Body Medium**: `Colors.black54`
+| Komponen / Properti | Light Theme ☀️ | Dark Theme 🌙 |
+| :--- | :--- | :--- |
+| **Scaffold Background** | `Colors.white` | `Color(0xff121212)` |
+| **Card / Surface Background** | `Colors.white` | `Color(0xff1e1e1e)` |
+| **Primary Color** | `Color(0xff8c72c4)` (Purple) | `Color(0xff8c72c4)` (Purple) |
+| **Accent / Highlight Color** | N/A | `Color(0xFFFFD700)` (Yellow) |
+| **Text Primary** | `Colors.black87` | `Color(0xfff5f5f5)` |
+| **Text Secondary** | `Colors.black54` | `Color(0xffb3b3b3)` |
+| **Divider Color** | `Colors.grey[300]` | `Color(0xff2d2d2d)` |
+| **AppBar Background** | `Colors.white` | `Color(0xff121212)` |
+| **AppBar Text/Icon** | `Colors.black87` | `Color(0xfff5f5f5)` |
+| **AppBar Title Color** | `Color(0xff8c72c4)` | `Color(0xff8c72c4)` (Atau `Color(0xFFFFD700)` di beberapa screen) |
+| **FAB Background** | `Color(0xff8c72c4)` | `Color(0xff8c72c4)` / `Color(0xFFFFD700)` |
+| **FAB Foreground** | `Colors.white` | `Colors.black` |
+| **BottomAppBar Color** | `Color(0xFFF5F5F5)` | `Color(0xff1e1e1e)` |
+| **Drawer Background** | `Colors.white` | `Color(0xff121212)` |
+| **ListTile Icon / Text** | `Colors.black54` / `Colors.black87` | `Color(0xffb3b3b3)` / `Color(0xfff5f5f5)` |
+| **SnackBar Background** | `Colors.grey[800]` | `Color(0xff1e1e1e)` |
 
-### 3. Komponen Tema
-- **AppBarTheme**:
-  - Background: `Colors.white`
-  - Icon: `Colors.black87`
-  - Title Text: `Color(0xff8c72c4)` (Size: 20, Bold)
-  - Elevation: 0, SurfaceTintColor: Transparent
-- **FloatingActionButtonTheme**:
-  - Background: `Color(0xff8c72c4)`
-  - Foreground (Icon): `Colors.white`
-  - Shape: CircleBorder, Elevation: 6
-- **BottomAppBarTheme**:
-  - Background: `Color(0xFFF5F5F5)`
-  - Elevation: 0
-- **DrawerTheme**:
-  - Background: `Colors.white`
-  - Elevation: 16
-- **DividerTheme**:
-  - Color: `Colors.grey[300]`
-  - Thickness: 1, Space: 1
-- **ListTileTheme**:
-  - Icon Color: `Colors.black54`
-  - Text Color: `Colors.black87`
-  - Gap: 12
-- **PopupMenuTheme**:
-  - Background: `Colors.white`
-  - Radius: 12
-  - Text: `Colors.black87` (Bold)
-- **SnackBarTheme**:
-  - Background: `Colors.grey[800]`
-  - Text: `Colors.white`
-  - Behavior: Floating, Radius: 16
+---
 
-### 4. Dekorasi Kartu (Card Decoration)
-Untuk membuat wadah (container/card) yang konsisten dengan gaya Amomimus, gunakan *BoxDecoration* berikut:
+### 📦 Dekorasi Kartu (Card Decoration)
+
+Untuk membuat wadah (container/card) yang konsisten dengan gaya Amomimus, gunakan *BoxDecoration* dinamis berikut:
+
 ```dart
+// Untuk Light Mode
 BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.circular(16),
@@ -67,63 +49,121 @@ BoxDecoration(
     ),
   ],
 )
+
+// Untuk Dark Mode
+BoxDecoration(
+  color: const Color(0xff1e1e1e),
+  borderRadius: BorderRadius.circular(16),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.3),
+      blurRadius: 10,
+      offset: const Offset(0, 4),
+    ),
+  ],
+)
 ```
 
 ---
 
-## 📂 Struktur Folder UI
+## 👤 Detail Struktur UI Halaman Profil (Profile Screen)
 
-Berikut adalah rekomendasi adaptasi struktur folder `lib/` (khusus untuk UI: Screens dan Widgets) yang terinspirasi dari arsitektur Amomimus untuk digunakan pada **Aplikasi Absensi** yang baru.
+Halaman profil (`ProfileScreen`) di Amomimus dirancang dengan struktur layout yang dinamis dan interaktif. Halaman ini membedakan tampilan antara profil diri sendiri (pemilik akun) dan profil orang lain (terkunci/tidak terkunci).
 
-### `lib/screens/`
-Folder ini berisi tampilan utama dari setiap halaman aplikasi.
-- `splash_screen.dart` : Halaman awal saat aplikasi dibuka.
-- `login_screen.dart` & `register_screen.dart` : Autentikasi pengguna.
-- `onboarding_screen.dart` : Penjelasan awal fitur aplikasi absensi.
-- `home_screen.dart` : Dashboard utama (terinspirasi dari `feed_screen.dart`).
-- `attendance_screen.dart` : Halaman khusus untuk melakukan absen masuk/keluar (Form).
-- `history_screen.dart` : Riwayat absensi pengguna.
-- `profile_screen.dart` : Halaman profil pengguna (terinspirasi dari `profile_screen.dart`).
-- `settings_screen.dart` : Pengaturan aplikasi.
+Berikut adalah hirarki komponen di dalam `ProfileScreen`:
 
-### `lib/widgets/`
-Folder ini berisi komponen UI yang bisa digunakan kembali *(reusable components)*.
-- **`/forms/`** *(Adaptasi dari input dialog)*
-  - `custom_input_field.dart` : TextField khusus untuk input data absensi/catatan.
-  - `date_picker_field.dart` : Widget untuk memilih tanggal.
-- **`/buttons/`**
-  - `primary_button.dart` : Tombol aksi utama (seperti tombol "Absen Sekarang").
-- **`/cards/`**
-  - `attendance_history_card.dart` : Kartu yang menampilkan rincian tiap riwayat absensi.
-  - `stat_card.dart` : Kartu untuk dashboard (menampilkan jumlah hadir/izin).
-- **`/dialogs/`**
-  - `confirmation_dialog.dart` : Dialog konfirmasi (mirip `report_dialog.dart`).
-  - `info_dialog.dart` : Menampilkan informasi sukses/gagal absen.
-- **`/effects/`**
-  - Efek UI tambahan jika diperlukan (misal: background atau animasi loading sederhana).
-- `update_checker.dart` : Widget pengecek versi aplikasi.
+1. **Scaffold & AppBar**:
+   - Judul AppBar: "Profil" dengan font tebal (`FontWeight.bold`). Warna dinamis (`primaryPurple` pada Light Theme, `policeLineYellow` pada Dark Theme).
+   - **Tombol Aksi (Actions)**:
+     - 🔍 *Icon Search*: Mengarah ke halaman dokumen/informasi (`FakePdfScreen`).
+     - ⚙️ *Icon Settings*: Hanya muncul jika melihat profil sendiri, mengarah ke `SettingsScreen`.
+     - ⚠️ *Icon Warning*: Muncul jika melihat profil orang lain untuk melaporkan akun (`ReportDialog`).
+
+2. **Body (SingleChildScrollView > Column)**:
+   - **`ProfileHeaderInfo`**: Komponen teratas yang menampilkan avatar, nama anonim, ID pengguna, jenis kelamin (Amo/Ami/Amom), dan status aktif.
+   - **Kondisi Profil Terkunci (`isLocked`)**:
+     - Jika profil orang lain belum berteman/terkunci:
+       - Menampilkan `ProfileIndicatorCard` (metrik profil dasar).
+       - Menampilkan `LockedProfileView` (pesan bahwa profil terkunci dengan efek blur).
+     - Jika profil sendiri / sudah berteman (terbuka):
+       - Menampilkan `ProfileBioSection` (informasi biodata lengkap, preferensi, dll).
+       - Menampilkan `ProfileVaultSection` (brankas rahasia pengguna - hanya muncul di profil sendiri).
+       - Menampilkan `ProfileIndicatorCard` (metrik performa interaksi).
+       - Menampilkan `ProfileRecentResonates` (daftar aktivitas atau postingan terbaru).
+
+3. **FloatingActionButton (FAB)**:
+   - Terletak melayang di bagian bawah tengah (`FloatingActionButtonLocation.centerFloat`).
+   - Diberi **Micro-Animation** berupa efek pantulan naik-turun secara halus (`_fabAnimation`).
+   - Ikon di dalam FAB mewakili gender user (`GenderHelpers.getGenderIcon(user.gender)`).
+   - Warna background berubah dinamis: **Yellow** (`policeLineYellow`) saat Dark Theme, dan **Purple** (`primaryPurple`) saat Light Theme.
 
 ---
 
-## 🚀 Implementasi Awal pada Aplikasi Baru
+## 📂 Struktur Folder UI Aplikasi Absensi
 
-Untuk memakai tema ini pada fungsi `main.dart` aplikasi absensi baru Anda:
+Berikut adalah rekomendasi adaptasi struktur folder `lib/` (khusus untuk UI: Screens dan Widgets) untuk proyek **Aplikasi Absensi** yang baru.
+
+### `lib/screens/`
+Folder ini berisi halaman-halaman utama aplikasi.
+- `splash_screen.dart` : Halaman loading awal & cek sesi.
+- `login_screen.dart` & `register_screen.dart` : Halaman autentikasi karyawan/siswa.
+- `onboarding_screen.dart` : Panduan singkat penggunaan aplikasi absensi.
+- `home_screen.dart` : Dashboard utama (statistik absensi hari ini, tombol cepat absen).
+- `attendance_screen.dart` : Halaman form absen (pilihan WFH/WFO, foto selfie, koordinat lokasi).
+- `history_screen.dart` : Halaman riwayat absensi bulanan/mingguan.
+- `profile_screen.dart` : Halaman profil pengguna (menampilkan data diri, jabatan, sisa cuti, dsb).
+- `settings_screen.dart` : Pengaturan aplikasi (ubah kata sandi, ganti tema Light/Dark).
+
+### `lib/widgets/`
+Folder ini berisi komponen kecil yang bisa digunakan berulang kali.
+- **`/forms/`**
+  - `custom_input_field.dart` : Field input teks (misalnya untuk alasan izin/sakit).
+  - `date_picker_field.dart` : Input pemilihan tanggal cuti.
+- **`/buttons/`**
+  - `primary_button.dart` : Tombol aksi utama dengan gaya border rounded.
+- **`/cards/`**
+  - `attendance_history_card.dart` : Menampilkan log absen (Jam masuk, Jam keluar, Status: Tepat Waktu/Terlambat).
+  - `stat_card.dart` : Menampilkan ringkasan (contoh: Hadir: 20, Izin: 2, Alfa: 0).
+- **`/dialogs/`**
+  - `confirmation_dialog.dart` : Dialog konfirmasi sebelum kirim absen.
+  - `info_dialog.dart` : Notifikasi berhasil melakukan absensi.
+- **`/effects/`**
+  - Efek visual (loading shimmer, blur overlay pada dialog sukses).
+
+---
+
+## 🚀 Cara Implementasi di Proyek Baru
+
+Bungkus `MaterialApp` dengan state management (seperti `Provider` or `Bloc`) untuk memantau perubahan tema:
 
 ```dart
 MaterialApp(
   debugShowCheckedModeBanner: false,
+  // Tema Terang
   theme: ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
     scaffoldBackgroundColor: Colors.white,
-    
-    // Gunakan konfigurasi TextTheme, AppBarTheme, dll sesuai rincian di atas
-    
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black87,
+      elevation: 0,
+    ),
+    // ... Detail konfigurasi Light Theme di atas
   ),
+  // Tema Gelap
+  darkTheme: ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    scaffoldBackgroundColor: const Color(0xff121212),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Color(0xff121212),
+      foregroundColor: Color(0xfff5f5f5),
+      elevation: 0,
+    ),
+    // ... Detail konfigurasi Dark Theme di atas
+  ),
+  themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
   home: const SplashScreen(),
 )
 ```
-
-**Panduan Lanjutan:**
-1. Anda cukup menyalin blok *Light Mode* yang ada pada metode `currentThemeData` dari file `amomimusdark.dart` secara utuh.
-2. Karena hanya menggunakan versi Light, tidak perlu menggunakan `ChangeNotifier` untuk *toggle* mode gelap-terang. Cukup berikan `ThemeData` secara konstan (statis) ke `MaterialApp`.
