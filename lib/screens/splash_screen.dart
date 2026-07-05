@@ -11,6 +11,7 @@ import 'package:amomimus/services/preference_handler.dart';
 import 'package:amomimus/screens/login.dart';
 import 'package:amomimus/screens/onboarding_screen.dart' as amomimus_onboarding;
 import 'package:amomimus/amomimusdark.dart';
+import 'package:amomimus/services/account_manager.dart';
 
 class SplashScreen extends StatefulWidget {
   final bool isShutdown;
@@ -106,6 +107,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     if (widget.isShutdown) {
       // Validator: ensure logout is complete
+      context.read<AccountManager>().logout();
       await PreferenceHandler.logOut();
       if (!mounted) return;
       Navigator.pushReplacement(

@@ -336,13 +336,13 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get tap_to_reveal => 'Tap to reveal';
 	@override String get passcode_hint_security => 'Enter 6-digit passcode for security.';
 	@override String get notif_chat => 'hat dir eine Nachricht gesendet';
-	@override String presence_cooldown_hours({required Object hours}) => 'Ihre Statusnderung kann in den nchsten ${hours} Stunden zurckgesetzt werden';
-	@override String presence_cooldown_minutes({required Object minutes}) => 'Ihre Statusnderung kann in den nchsten ${minutes} Minuten zurckgesetzt werden';
+	@override String presence_cooldown_hours({required Object hours}) => 'Ihre Statusänderung könnte in den nächsten ${hours} Stunden zurückgesetzt werden';
+	@override String presence_cooldown_minutes({required Object minutes}) => 'Ihre Statusänderung könnte in den nächsten ${minutes} Minuten zurückgesetzt werden';
 	@override String get notif_chat_request => 'hat dir eine Chat-Anfrage gesendet';
 	@override String get notif_blocked => 'hat dich blockiert';
 	@override String get notif_unblocked => 'hat deine Blockierung aufgehoben';
 	@override String get notif_bio_expiry => 'Deine Bio lÃ¤uft bald ab';
-	@override String get amow_summary_title => 'Amow ðŸ‘»';
+	@override String get amow_summary_title => 'Amow 👻';
 	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'Halloo! Amow hier, um dir zu sagen, dass du ${chat} Nachrichten, ${comment} Kommentare und ${resonate} Resonates hast. Komm und sieh es dir an!';
 	@override String get amow_summary_empty => 'Halloo! Amow hier! Keine neuen Benachrichtigungen fÃ¼r den Moment, ich schaue spÃ¤ter wieder vorbei!';
 	@override String get email_verification_title => 'E-Mail-Verifizierung';
@@ -361,6 +361,10 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bug_category_other => 'Andere';
 	@override String get my_favorited_stickers => 'Meine Lieblingssticker';
 	@override String get no_favorited_stickers => 'Keine Lieblingssticker';
+	@override String get submit_report => 'Bericht senden';
+	@override String get report_submitted => 'Bericht eingereicht';
+	@override String get magick_depleted => 'Magie erschöpft.';
+	@override String get report_limit_reached => 'Berichtslimit erreicht.';
 }
 
 /// The flat map containing all translations for locale <de>.
@@ -668,13 +672,13 @@ extension on TranslationsDe {
 			'tap_to_reveal' => 'Tap to reveal',
 			'passcode_hint_security' => 'Enter 6-digit passcode for security.',
 			'notif_chat' => 'hat dir eine Nachricht gesendet',
-			'presence_cooldown_hours' => ({required Object hours}) => 'Ihre Statusnderung kann in den nchsten ${hours} Stunden zurckgesetzt werden',
-			'presence_cooldown_minutes' => ({required Object minutes}) => 'Ihre Statusnderung kann in den nchsten ${minutes} Minuten zurckgesetzt werden',
+			'presence_cooldown_hours' => ({required Object hours}) => 'Ihre Statusänderung könnte in den nächsten ${hours} Stunden zurückgesetzt werden',
+			'presence_cooldown_minutes' => ({required Object minutes}) => 'Ihre Statusänderung könnte in den nächsten ${minutes} Minuten zurückgesetzt werden',
 			'notif_chat_request' => 'hat dir eine Chat-Anfrage gesendet',
 			'notif_blocked' => 'hat dich blockiert',
 			'notif_unblocked' => 'hat deine Blockierung aufgehoben',
 			'notif_bio_expiry' => 'Deine Bio lÃ¤uft bald ab',
-			'amow_summary_title' => 'Amow ðŸ‘»',
+			'amow_summary_title' => 'Amow 👻',
 			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'Halloo! Amow hier, um dir zu sagen, dass du ${chat} Nachrichten, ${comment} Kommentare und ${resonate} Resonates hast. Komm und sieh es dir an!',
 			'amow_summary_empty' => 'Halloo! Amow hier! Keine neuen Benachrichtigungen fÃ¼r den Moment, ich schaue spÃ¤ter wieder vorbei!',
 			'email_verification_title' => 'E-Mail-Verifizierung',
@@ -693,6 +697,10 @@ extension on TranslationsDe {
 			'bug_category_other' => 'Andere',
 			'my_favorited_stickers' => 'Meine Lieblingssticker',
 			'no_favorited_stickers' => 'Keine Lieblingssticker',
+			'submit_report' => 'Bericht senden',
+			'report_submitted' => 'Bericht eingereicht',
+			'magick_depleted' => 'Magie erschöpft.',
+			'report_limit_reached' => 'Berichtslimit erreicht.',
 			_ => null,
 		};
 	}

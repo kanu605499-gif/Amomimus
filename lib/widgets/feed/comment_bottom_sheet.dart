@@ -64,7 +64,9 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+        bottom: MediaQuery.of(context).viewInsets.bottom > 0
+            ? MediaQuery.of(context).viewInsets.bottom + 16
+            : MediaQuery.of(context).padding.bottom + 16,
         left: 16,
         right: 16,
         top: 16,

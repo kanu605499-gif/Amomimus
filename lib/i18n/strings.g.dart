@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 6
-/// Strings: 1995 (332 per locale)
+/// Strings: 2011 (335 per locale)
 ///
-/// Built on 2026-07-05 at 08:16 UTC
+/// Built on 2026-07-05 at 13:43 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
@@ -21,8 +21,8 @@ export 'package:slang_flutter/slang_flutter.dart';
 import 'strings_de.g.dart' deferred as l_de;
 import 'strings_id.g.dart' deferred as l_id;
 import 'strings_ja.g.dart' deferred as l_ja;
+import 'strings_tamriel.g.dart' deferred as l_tamriel;
 import 'strings_th.g.dart' deferred as l_th;
-import 'strings_tm.g.dart' deferred as l_tm;
 part 'strings_en.g.dart';
 
 /// Supported locales.
@@ -36,8 +36,8 @@ enum AppLocale with BaseAppLocale<AppLocale, Translations> {
 	de(languageCode: 'de'),
 	id(languageCode: 'id'),
 	ja(languageCode: 'ja'),
-	th(languageCode: 'th'),
-	tm(languageCode: 'tm');
+	tamriel(languageCode: 'tamriel'),
+	th(languageCode: 'th');
 
 	const AppLocale({
 		required this.languageCode,
@@ -83,16 +83,16 @@ enum AppLocale with BaseAppLocale<AppLocale, Translations> {
 					cardinalResolver: cardinalResolver,
 					ordinalResolver: ordinalResolver,
 				);
-			case AppLocale.th:
-				await l_th.loadLibrary();
-				return l_th.TranslationsTh(
+			case AppLocale.tamriel:
+				await l_tamriel.loadLibrary();
+				return l_tamriel.TranslationsTamriel(
 					overrides: overrides,
 					cardinalResolver: cardinalResolver,
 					ordinalResolver: ordinalResolver,
 				);
-			case AppLocale.tm:
-				await l_tm.loadLibrary();
-				return l_tm.TranslationsTm(
+			case AppLocale.th:
+				await l_th.loadLibrary();
+				return l_th.TranslationsTh(
 					overrides: overrides,
 					cardinalResolver: cardinalResolver,
 					ordinalResolver: ordinalResolver,
@@ -131,14 +131,14 @@ enum AppLocale with BaseAppLocale<AppLocale, Translations> {
 					cardinalResolver: cardinalResolver,
 					ordinalResolver: ordinalResolver,
 				);
-			case AppLocale.th:
-				return l_th.TranslationsTh(
+			case AppLocale.tamriel:
+				return l_tamriel.TranslationsTamriel(
 					overrides: overrides,
 					cardinalResolver: cardinalResolver,
 					ordinalResolver: ordinalResolver,
 				);
-			case AppLocale.tm:
-				return l_tm.TranslationsTm(
+			case AppLocale.th:
+				return l_th.TranslationsTh(
 					overrides: overrides,
 					cardinalResolver: cardinalResolver,
 					ordinalResolver: ordinalResolver,

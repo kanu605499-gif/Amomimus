@@ -57,7 +57,7 @@ class _CreatePostFormState extends State<_CreatePostForm> {
 
     return Padding(
       padding: EdgeInsets.only(
-        bottom: viewInsets.bottom,
+        bottom: viewInsets.bottom > 0 ? viewInsets.bottom + 16 : systemPadding.bottom + 16,
       ),
       child: Container(
         height: (screenHeight / 3) + extraBottomPadding,

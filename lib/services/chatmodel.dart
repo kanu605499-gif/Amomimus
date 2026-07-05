@@ -124,9 +124,24 @@ class ChatModel extends ChangeNotifier {
         .where('participants', arrayContains: _currentUserId)
         .snapshots()
         .listen((snapshot) {
-      _sessions = snapshot.docs
+      final onlineSessions = snapshot.docs
           .map((doc) => ChatSession.fromMap(doc.data()))
+          .where((s) => !(_localAccountIds.contains(s.user1Id) && _localAccountIds.contains(s.user2Id)))
           .toList();
+
+      final localSessions = _sessions
+          .where((s) => _localAccountIds.contains(s.user1Id) && _localAccountIds.contains(s.user2Id))
+          .toList();
+
+      final Map<String, ChatSession> merged = {};
+      for (var s in localSessions) {
+        merged[s.id] = s;
+      }
+      for (var s in onlineSessions) {
+        merged[s.id] = s;
+      }
+      
+      _sessions = merged.values.toList();
       _checkExpirations();
       _saveChats();
       notifyListeners();
@@ -733,8 +748,14 @@ class ChatModel extends ChangeNotifier {
     }
 
     final hasDeleted = session.roomDeletedBy.contains(_currentUserId!);
-    final shouldStartTimer = session.roomStartedAt == null &&
+    bool isLocalChat = _localAccountIds.contains(session.user1Id) && _localAccountIds.contains(session.user2Id);
+    
+    bool shouldStartTimer = session.roomStartedAt == null &&
         session.messages.any((m) => m.senderId != _currentUserId);
+
+    if (isLocalChat) {
+      shouldStartTimer = shouldStartTimer && session.messages.length >= 500;
+    }
 
     if (changed || shouldStartTimer || hasDeleted) {
       final nowUtc = UTCTimeManager.nowUTC();

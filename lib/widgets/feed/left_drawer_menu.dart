@@ -264,7 +264,7 @@ class LeftDrawerMenu extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20 + MediaQuery.of(context).padding.bottom),
               ],
             ),
           ),

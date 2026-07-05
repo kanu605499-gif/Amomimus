@@ -451,7 +451,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                                 return 'English';
                               case AppLocale.ja:
                                 return '??';
-                              case AppLocale.tm:
+                              case AppLocale.tamriel:
                                 return 'Tamriel';
                               case AppLocale.de:
                                 return 'Deutsch';
@@ -489,8 +489,8 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                                   LocaleSettings.setLocale(AppLocale.ja);
                                   PreferenceHandler.setLanguage('ja');
                                 } else if (newValue == 'Tamriel') {
-                                  LocaleSettings.setLocale(AppLocale.tm);
-                                  PreferenceHandler.setLanguage('tm');
+                                  LocaleSettings.setLocale(AppLocale.tamriel);
+                                  PreferenceHandler.setLanguage('tamriel');
                                 }
                               });
                             }

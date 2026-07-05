@@ -132,7 +132,7 @@ class _AmomimusApp7State extends State<AmomimusApp7>
         preview = ChatPreview(
           name: localProfile.customUsername ?? localProfile.anonymousUsername,
           username: localProfile.amomimusId,
-          initialLastMessage: "Tap to open local chat",
+          initialLastMessage: "",
           initialTime: "",
         );
       }

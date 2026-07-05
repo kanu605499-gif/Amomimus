@@ -160,7 +160,7 @@ class _RightOptionsPanelState extends State<RightOptionsPanel> {
                                   if (loc == AppLocale.ja) return '忍者';
                                   if (loc == AppLocale.de) return 'Deutsch';
                                   if (loc == AppLocale.th) return 'ภาษาไทย';
-                                  if (loc == AppLocale.tm) return 'Tamriel';
+                                  if (loc == AppLocale.tamriel) return 'Tamriel';
                                   return 'English';
                                 }(),
                                 onSelected: (String newValue) {
@@ -178,8 +178,8 @@ class _RightOptionsPanelState extends State<RightOptionsPanel> {
                                       LocaleSettings.setLocale(AppLocale.th);
                                       PreferenceHandler.setLanguage('th');
                                     } else if (newValue == 'Tamriel') {
-                                      LocaleSettings.setLocale(AppLocale.tm);
-                                      PreferenceHandler.setLanguage('tm');
+                                      LocaleSettings.setLocale(AppLocale.tamriel);
+                                      PreferenceHandler.setLanguage('tamriel');
                                     } else {
                                       LocaleSettings.setLocale(AppLocale.en);
                                       PreferenceHandler.setLanguage('en');
@@ -222,7 +222,7 @@ class _RightOptionsPanelState extends State<RightOptionsPanel> {
                                           return 'Deutsch';
                                         if (loc == AppLocale.th)
                                           return 'ภาษาไทย';
-                                        if (loc == AppLocale.tm)
+                                        if (loc == AppLocale.tamriel)
                                           return 'Tamriel';
                                         return 'English';
                                       }(),

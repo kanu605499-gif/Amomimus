@@ -7,7 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:amomimus/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:amomimus/services/chatmodel.dart';
 import 'package:amomimus/screens/chatroomhome.dart';
+import 'package:amomimus/utils/utc_time_manager.dart';
 import 'package:amomimus/screens/fake_pdf_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:amomimus/widgets/feed/left_drawer_menu.dart';
@@ -260,7 +262,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                               ),
                             ),
                             subtitle: Text(
-                              t.just_now, // Ideally parse ISO string to time ago
+                              UTCTimeManager.formatTimeAgo(notif.createdAt),
                               style: TextStyle(
                                 color: isDark ? Colors.white54 : Colors.black54,
                                 fontSize: 12,
@@ -273,7 +275,10 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const AmomimusApp6(), // Since we don't have the explicit constructor parameters handled here, might need to pass username
+                                    builder: (context) => AmomimusApp6(
+                                      username: notif.feedId,
+                                      name: notif.actorName,
+                                    ),
                                   ),
                                 );
                               } else if (notif.feedId.isNotEmpty) {

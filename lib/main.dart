@@ -41,7 +41,12 @@ Future<void> runAmomimusApp(FirebaseOptions options) async {
 
   final savedLang = PreferenceHandler.language;
   if (savedLang != null) {
-    LocaleSettings.setLocaleRaw(savedLang);
+    if (savedLang == 'tm') {
+      LocaleSettings.setLocaleRaw('tamriel');
+      PreferenceHandler.setLanguage('tamriel');
+    } else {
+      LocaleSettings.setLocaleRaw(savedLang);
+    }
   } else {
     LocaleSettings.useDeviceLocale();
   }
@@ -82,7 +87,13 @@ Future<void> runAmomimusApp(FirebaseOptions options) async {
             create: (context) => ChatRequestManager(),
             update: (context, auth, reqModel) {
               if (auth.currentUser != null) {
-                reqModel!.setCurrentUser(auth.currentUser!.amomimusId);
+                reqModel!.setCurrentUser(
+                  auth.currentUser!.amomimusId,
+                  auth.accounts
+                      .where((a) => a.masterEmail == auth.currentUser!.masterEmail)
+                      .map((a) => a.amomimusId)
+                      .toList(),
+                );
               }
               return reqModel!;
             },

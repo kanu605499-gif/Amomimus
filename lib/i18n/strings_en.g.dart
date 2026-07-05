@@ -1007,8 +1007,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// en: 'Your bio is about to expire'
 	String get notif_bio_expiry => 'Your bio is about to expire';
 
-	/// en: 'Amow ðŸ‘»'
-	String get amow_summary_title => 'Amow ðŸ‘»';
+	/// en: 'Amow 👻'
+	String get amow_summary_title => 'Amow 👻';
 
 	/// en: 'Hellloo! Amoooww here just to tell you that you got ${chat} messages, ${comment} comments and ${resonate} resonates, come check it out!'
 	String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'Hellloo! Amoooww here just to tell you that you got ${chat} messages, ${comment} comments and ${resonate} resonates, come check it out!';
@@ -1063,6 +1063,12 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
 	/// en: 'No favorited stickers'
 	String get no_favorited_stickers => 'No favorited stickers';
+
+	/// en: 'Magick depleted.'
+	String get magick_depleted => 'Magick depleted.';
+
+	/// en: 'Report limit reached.'
+	String get report_limit_reached => 'Report limit reached.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1395,7 +1401,7 @@ extension on Translations {
 			'notif_blocked' => 'has blocked you',
 			'notif_unblocked' => 'has unblocked you',
 			'notif_bio_expiry' => 'Your bio is about to expire',
-			'amow_summary_title' => 'Amow ðŸ‘»',
+			'amow_summary_title' => 'Amow 👻',
 			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'Hellloo! Amoooww here just to tell you that you got ${chat} messages, ${comment} comments and ${resonate} resonates, come check it out!',
 			'amow_summary_empty' => 'Hellloo! Amoooww here! No new notifications for now, I\'ll check back later!',
 			'email_verification_title' => 'E-mail Verification',
@@ -1414,6 +1420,8 @@ extension on Translations {
 			'bug_category_other' => 'Other',
 			'my_favorited_stickers' => 'My Favorited Stickers',
 			'no_favorited_stickers' => 'No favorited stickers',
+			'magick_depleted' => 'Magick depleted.',
+			'report_limit_reached' => 'Report limit reached.',
 			_ => null,
 		};
 	}

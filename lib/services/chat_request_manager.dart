@@ -9,6 +9,8 @@ import '../models/chat_request_model.dart';
 class ChatRequestManager extends ChangeNotifier {
   List<ChatRequest> _requests = [];
   String? _currentUserId;
+  List<String> _localAccountIds = [];
+  bool _initialized = false;
   StreamSubscription? _subscription;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -31,6 +33,7 @@ class ChatRequestManager extends ChangeNotifier {
         _requests = [];
       }
     }
+    _initialized = true;
     notifyListeners();
   }
 
@@ -44,10 +47,13 @@ class ChatRequestManager extends ChangeNotifier {
     );
   }
 
-  void setCurrentUser(String userId) {
-    if (_currentUserId != userId) {
+  void setCurrentUser(String userId, List<String> localAccountIds) {
+    if (_currentUserId != userId || _localAccountIds.join(',') != localAccountIds.join(',')) {
       _currentUserId = userId;
-      _setupFirestoreListener();
+      _localAccountIds = List.from(localAccountIds);
+      if (_initialized) {
+        _setupFirestoreListener();
+      }
     }
   }
 
@@ -131,6 +137,10 @@ class ChatRequestManager extends ChangeNotifier {
     _saveLocalCache();
     notifyListeners();
 
+    if (_localAccountIds.contains(_currentUserId) && _localAccountIds.contains(targetId)) {
+      return; // Skip Firestore for local sub-profiles
+    }
+
     try {
       await _firestore
           .collection('chat_requests')
@@ -144,8 +154,13 @@ class ChatRequestManager extends ChangeNotifier {
   Future<void> acceptRequest(String requestId) async {
     final idx = _requests.indexWhere((r) => r.id == requestId);
     if (idx != -1) {
-      _requests[idx].status = RequestStatus.accepted;
+      final req = _requests[idx];
+      req.status = RequestStatus.accepted;
       notifyListeners();
+
+      if (_localAccountIds.contains(req.senderId) && _localAccountIds.contains(req.receiverId)) {
+        return; // Skip Firestore for local sub-profiles
+      }
 
       try {
         await _firestore
@@ -161,8 +176,13 @@ class ChatRequestManager extends ChangeNotifier {
   Future<void> rejectRequest(String requestId) async {
     final idx = _requests.indexWhere((r) => r.id == requestId);
     if (idx != -1) {
-      _requests[idx].status = RequestStatus.rejected;
+      final req = _requests[idx];
+      req.status = RequestStatus.rejected;
       notifyListeners();
+
+      if (_localAccountIds.contains(req.senderId) && _localAccountIds.contains(req.receiverId)) {
+        return; // Skip Firestore for local sub-profiles
+      }
 
       try {
         await _firestore
@@ -188,10 +208,17 @@ class ChatRequestManager extends ChangeNotifier {
     notifyListeners();
 
     final batch = _firestore.batch();
+    bool hasRemoteDeletes = false;
     for (var req in toDelete) {
-      final docRef = _firestore.collection('chat_requests').doc(req.id);
-      batch.delete(docRef);
+      if (!(_localAccountIds.contains(req.senderId) && _localAccountIds.contains(req.receiverId))) {
+        final docRef = _firestore.collection('chat_requests').doc(req.id);
+        batch.delete(docRef);
+        hasRemoteDeletes = true;
+      }
     }
+    
+    if (!hasRemoteDeletes) return;
+
     try {
       await batch.commit();
     } catch (e) {

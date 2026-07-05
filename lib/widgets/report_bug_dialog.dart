@@ -61,9 +61,7 @@ class _ReportBugDialogState extends State<ReportBugDialog> {
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.only(bottom: 100.0, left: 24.0, right: 24.0),
         content: Text(
-          success
-              ? (t as dynamic).bug_report_success ?? "Bug report submitted successfully."
-              : (t as dynamic).bug_report_fail_limit ?? "Failed to submit. You may have reached your weekly limit (3/week).",
+          success ? t.bug_report_success : t.bug_report_fail_limit,
           style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: success ? Colors.green : Colors.red,
@@ -159,7 +157,7 @@ class _ReportBugDialogState extends State<ReportBugDialog> {
             ),
             const SizedBox(height: 8),
             Text(
-              (t as dynamic).bug_report_describe ?? "Describe the glitch or issue you encountered.",
+              t.bug_report_describe,
               style: TextStyle(color: textColor.withOpacity(0.7), fontSize: 14),
             ),
             const SizedBox(height: 16),
@@ -185,7 +183,7 @@ class _ReportBugDialogState extends State<ReportBugDialog> {
                   Expanded(
                     child: Text(
                       isLimitReached && lastDate != null 
-                        ? "${(t as dynamic).bug_report_wait ?? 'Wait'} ${_getWaitTime(lastDate)}"
+                        ? "${t.bug_report_wait} ${_getWaitTime(lastDate)}"
                         : '$remainingSlots / 3',
                       style: TextStyle(
                         color: isLimitReached ? Colors.red : textColor,
@@ -305,7 +303,9 @@ class _ReportBugDialogState extends State<ReportBugDialog> {
               const SizedBox(height: 10),
               Center(
                 child: Text(
-                  isDark ? 'Magick depleted.' : 'Report limit reached.',
+                  isDark 
+                    ? ((t as dynamic).magick_depleted ?? 'Magick depleted.') 
+                    : ((t as dynamic).report_limit_reached ?? 'Report limit reached.'),
                   style: TextStyle(color: textColor.withOpacity(0.5)),
                 ),
               )

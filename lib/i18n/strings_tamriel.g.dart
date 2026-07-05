@@ -11,13 +11,13 @@ import 'package:slang/generated.dart';
 import 'strings.g.dart';
 
 // Path: <root>
-class TranslationsTm extends Translations with BaseTranslations<AppLocale, Translations> {
+class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, Translations> {
 	/// You can call this constructor and build your own translation instance of this locale.
 	/// Constructing via the enum [AppLocale.build] is preferred.
-	TranslationsTm({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
+	TranslationsTamriel({Map<String, Node>? overrides, PluralResolver? cardinalResolver, PluralResolver? ordinalResolver, TranslationMetadata<AppLocale, Translations>? meta})
 		: assert(overrides == null, 'Set "translation_overrides: true" in order to enable this feature.'),
 		  $meta = meta ?? TranslationMetadata(
-		    locale: AppLocale.tm,
+		    locale: AppLocale.tamriel,
 		    overrides: overrides ?? {},
 		    cardinalResolver: cardinalResolver,
 		    ordinalResolver: ordinalResolver,
@@ -27,16 +27,16 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 		$meta.setFlatMapFunction(_flatMapFunction);
 	}
 
-	/// Metadata for the translations of <tm>.
+	/// Metadata for the translations of <tamriel>.
 	@override final TranslationMetadata<AppLocale, Translations> $meta;
 
 	/// Access flat map
 	@override dynamic operator[](String key) => $meta.getTranslation(key) ?? super.$meta.getTranslation(key);
 
-	late final TranslationsTm _root = this; // ignore: unused_field
+	late final TranslationsTamriel _root = this; // ignore: unused_field
 
 	@override 
-	TranslationsTm $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsTm(meta: meta ?? this.$meta);
+	TranslationsTamriel $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsTamriel(meta: meta ?? this.$meta);
 
 	// Translations
 	@override String get app_doc => 'Faal Kel';
@@ -314,8 +314,8 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get provide_details => 'Detail the transgression...';
 	@override String get block_ban_user => 'Throw in Dungeon';
 	@override String get comment_required_ban => 'You must scribe a reason to banish this soul.';
-	@override String get submit_report => 'Summon Guards';
-	@override String get report_submitted => 'Guards Summoned';
+	@override String get submit_report => 'Hasabat tabşyryň';
+	@override String get report_submitted => 'Hasabat iberildi';
 	@override String get report_sent_user_blocked => 'The guards have taken the soul to the dungeon.';
 	@override String get thank_you_safe => 'You have done Skyrim a great service.';
 	@override String get close => 'Sheathe';
@@ -348,13 +348,13 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get tap_to_reveal => 'Tap to reveal';
 	@override String get passcode_hint_security => 'Enter 6-digit passcode for security.';
 	@override String get notif_chat => 'sent a message to your rot';
-	@override String presence_cooldown_hours({required Object hours}) => 'Status tgemniz indiki ${hours} sagadyn dowamynda nol edilip bilner';
-	@override String presence_cooldown_minutes({required Object minutes}) => 'Status tgemniz indiki ${minutes} minudyn dowamynda nol edilip bilner';
+	@override String presence_cooldown_hours({required Object hours}) => 'Siziň ýagdaý üýtgeşmäňiz indiki ${hours} sagadyň dowamynda nol edilip biler';
+	@override String presence_cooldown_minutes({required Object minutes}) => 'Siziň ýagdaý üýtgeşmäňiz indiki ${minutes} minudyň dowamynda nol edilip biler';
 	@override String get notif_chat_request => 'Ã§at haÃ½yÅŸy iberdi';
 	@override String get notif_blocked => 'sizi bloklady';
 	@override String get notif_unblocked => 'siziÅˆ blogyÅˆyzy aÃ½yrdy';
 	@override String get notif_bio_expiry => 'GysgaÃ§a maglumatyÅˆyzyÅˆ wagty gutarÃ½ar';
-	@override String get amow_summary_title => 'Amow ðŸ‘»';
+	@override String get amow_summary_title => 'Amow 👻';
 	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'SÃ¤her! Amow ÅŸu Ã½erde~ ${chat} hat, ${comment} teswir we ${resonate} seslenme garaÅŸÃ½ar. Gelip gÃ¶r!';
 	@override String get amow_summary_empty => 'SÃ¤her! Amow ÅŸu Ã½erde~ HÃ¤zirlikÃ§e tÃ¤ze bildiriÅŸ Ã½ok, soÅˆrak Ã½ene barlaryn!';
 	@override String get email_verification_title => 'E-poçta tassyklamasy';
@@ -373,14 +373,16 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bug_category_other => 'Other Chaos';
 	@override String get my_favorited_stickers => 'My Treasured Runes';
 	@override String get no_favorited_stickers => 'Your satchel holds no treasured Runes.';
+	@override String get magick_depleted => 'Jady gutardy.';
+	@override String get report_limit_reached => 'Hasabat çägine ýetildi.';
 }
 
-/// The flat map containing all translations for locale <tm>.
+/// The flat map containing all translations for locale <tamriel>.
 /// Only for edge cases! For simple maps, use the map function of this library.
 ///
 /// The Dart AOT compiler has issues with very large switch statements,
 /// so the map is split into smaller functions (512 entries each).
-extension on TranslationsTm {
+extension on TranslationsTamriel {
 	dynamic _flatMapFunction(String path) {
 		return switch (path) {
 			'app_doc' => 'Faal Kel',
@@ -658,8 +660,8 @@ extension on TranslationsTm {
 			'provide_details' => 'Detail the transgression...',
 			'block_ban_user' => 'Throw in Dungeon',
 			'comment_required_ban' => 'You must scribe a reason to banish this soul.',
-			'submit_report' => 'Summon Guards',
-			'report_submitted' => 'Guards Summoned',
+			'submit_report' => 'Hasabat tabşyryň',
+			'report_submitted' => 'Hasabat iberildi',
 			'report_sent_user_blocked' => 'The guards have taken the soul to the dungeon.',
 			'thank_you_safe' => 'You have done Skyrim a great service.',
 			'close' => 'Sheathe',
@@ -692,13 +694,13 @@ extension on TranslationsTm {
 			'tap_to_reveal' => 'Tap to reveal',
 			'passcode_hint_security' => 'Enter 6-digit passcode for security.',
 			'notif_chat' => 'sent a message to your rot',
-			'presence_cooldown_hours' => ({required Object hours}) => 'Status tgemniz indiki ${hours} sagadyn dowamynda nol edilip bilner',
-			'presence_cooldown_minutes' => ({required Object minutes}) => 'Status tgemniz indiki ${minutes} minudyn dowamynda nol edilip bilner',
+			'presence_cooldown_hours' => ({required Object hours}) => 'Siziň ýagdaý üýtgeşmäňiz indiki ${hours} sagadyň dowamynda nol edilip biler',
+			'presence_cooldown_minutes' => ({required Object minutes}) => 'Siziň ýagdaý üýtgeşmäňiz indiki ${minutes} minudyň dowamynda nol edilip biler',
 			'notif_chat_request' => 'Ã§at haÃ½yÅŸy iberdi',
 			'notif_blocked' => 'sizi bloklady',
 			'notif_unblocked' => 'siziÅˆ blogyÅˆyzy aÃ½yrdy',
 			'notif_bio_expiry' => 'GysgaÃ§a maglumatyÅˆyzyÅˆ wagty gutarÃ½ar',
-			'amow_summary_title' => 'Amow ðŸ‘»',
+			'amow_summary_title' => 'Amow 👻',
 			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'SÃ¤her! Amow ÅŸu Ã½erde~ ${chat} hat, ${comment} teswir we ${resonate} seslenme garaÅŸÃ½ar. Gelip gÃ¶r!',
 			'amow_summary_empty' => 'SÃ¤her! Amow ÅŸu Ã½erde~ HÃ¤zirlikÃ§e tÃ¤ze bildiriÅŸ Ã½ok, soÅˆrak Ã½ene barlaryn!',
 			'email_verification_title' => 'E-poçta tassyklamasy',
@@ -717,6 +719,8 @@ extension on TranslationsTm {
 			'bug_category_other' => 'Other Chaos',
 			'my_favorited_stickers' => 'My Treasured Runes',
 			'no_favorited_stickers' => 'Your satchel holds no treasured Runes.',
+			'magick_depleted' => 'Jady gutardy.',
+			'report_limit_reached' => 'Hasabat çägine ýetildi.',
 			_ => null,
 		};
 	}

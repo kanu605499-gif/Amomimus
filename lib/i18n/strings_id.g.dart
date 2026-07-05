@@ -361,7 +361,7 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get notif_blocked => 'telah memblokir kamu';
 	@override String get notif_unblocked => 'telah membuka blokir kamu';
 	@override String get notif_bio_expiry => 'Bio kamu akan segera kedaluwarsa';
-	@override String get amow_summary_title => 'Amow ðŸ‘»';
+	@override String get amow_summary_title => 'Amow 👻';
 	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'Haloow! Amow di mari~ Ada ${chat} chat, ${comment} komen, dan ${resonate} resonate yang nungguin lu nih. Sini cek dong!';
 	@override String get amow_summary_empty => 'Haloow! Amow di mari~ Belum ada notifikasi baru nih. Nanti Amow cek lagi ya!';
 	@override String get email_verification_title => 'Verifikasi E-mail';
@@ -380,6 +380,8 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get bug_category_other => 'Lainnya';
 	@override String get my_favorited_stickers => 'Stiker Favoritku';
 	@override String get no_favorited_stickers => 'Belum ada stiker favorit';
+	@override String get magick_depleted => 'Magick habis.';
+	@override String get report_limit_reached => 'Batas laporan tercapai.';
 }
 
 /// The flat map containing all translations for locale <id>.
@@ -712,7 +714,7 @@ extension on TranslationsId {
 			'notif_blocked' => 'telah memblokir kamu',
 			'notif_unblocked' => 'telah membuka blokir kamu',
 			'notif_bio_expiry' => 'Bio kamu akan segera kedaluwarsa',
-			'amow_summary_title' => 'Amow ðŸ‘»',
+			'amow_summary_title' => 'Amow 👻',
 			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'Haloow! Amow di mari~ Ada ${chat} chat, ${comment} komen, dan ${resonate} resonate yang nungguin lu nih. Sini cek dong!',
 			'amow_summary_empty' => 'Haloow! Amow di mari~ Belum ada notifikasi baru nih. Nanti Amow cek lagi ya!',
 			'email_verification_title' => 'Verifikasi E-mail',
@@ -731,6 +733,8 @@ extension on TranslationsId {
 			'bug_category_other' => 'Lainnya',
 			'my_favorited_stickers' => 'Stiker Favoritku',
 			'no_favorited_stickers' => 'Belum ada stiker favorit',
+			'magick_depleted' => 'Magick habis.',
+			'report_limit_reached' => 'Batas laporan tercapai.',
 			_ => null,
 		};
 	}

@@ -63,23 +63,6 @@ class ChatListTileWidget extends StatelessWidget {
     final chatModel = context.watch<ChatModel>();
     final lastMsg = chat.lastMessageObject;
 
-    final accountManagerRead = context.read<AccountManager>();
-    final currentUser = accountManagerRead.currentUser;
-    final isLocalProfile = currentUser != null && accountManagerRead.accounts.any((acc) => acc.masterEmail == currentUser.masterEmail && acc.amomimusId == chat.username && acc.amomimusId != currentUser.amomimusId);
-    
-    IconData? localIcon;
-    if (isLocalProfile) {
-       final localSubProfiles = accountManagerRead.accounts.where((acc) => acc.masterEmail == currentUser.masterEmail && acc.amomimusId != currentUser.amomimusId).toList();
-       int localIndex = localSubProfiles.indexWhere((acc) => acc.amomimusId == chat.username);
-       if (localIndex == 0) {
-         localIcon = Icons.sentiment_satisfied_alt;
-       } else if (localIndex == 1) {
-         localIcon = Icons.sentiment_very_dissatisfied;
-       } else {
-         localIcon = Icons.sentiment_satisfied;
-       }
-    }
-
     // Only show pending if it's been slow (>2s) — fast sends show nothing
     final isLastMessagePending =
         lastMsg != null &&
@@ -286,10 +269,6 @@ class ChatListTileWidget extends StatelessWidget {
                                     color: textColor,
                                   ),
                                 ),
-                                if (localIcon != null) ...[
-                                  const SizedBox(width: 6),
-                                  Icon(localIcon, size: 16, color: dynamicTileColor),
-                                ],
                               ],
                             ),
                             Text(

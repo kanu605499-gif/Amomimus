@@ -571,7 +571,17 @@ class _AmomimusApp6State extends State<AmomimusApp6>
         : false;
 
     // Build the dynamic header style based on user indicator
-    UserAccount? targetAccount;
+    UserAccount targetAccount = accountManager.getAccountById(widget.username ?? '') ??
+      UserAccount(
+        email: 'unknown@example.com',
+        masterEmail: 'unknown@example.com',
+        realUsername: widget.name ?? 'Unknown',
+        anonymousUsername: widget.name ?? 'Unknown',
+        amomimusId: widget.username ?? 'Unknown',
+        gender: 'Amo',
+        registrationDate: DateTime.now().toIso8601String(),
+        isDemo: true,
+      );
     final chatModel = context.watch<ChatModel>();
     final activeChat = chatModel.getChatByUsername(
       widget.username ?? '@partner_dev',
@@ -825,7 +835,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                                                 currentTextSecondary,
                                             currentText: currentText,
                                             currentBg: currentBg,
-                                            targetAccount: targetAccount!,
+                                            targetAccount: targetAccount,
                                             activeChat: activeChat,
                                             onToggleProfileMenu: () {
                                               setState(() {
@@ -965,7 +975,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                             themeProvider: themeProvider,
                             dynamicHeaderColor: dynamicHeaderColor,
                             dynamicHeaderIcon: dynamicHeaderIcon,
-                            targetAccount: targetAccount!,
+                            targetAccount: targetAccount,
                             targetUsername: widget.username ?? '',
                           ),
                           secondChild: SelectionActionBar(
