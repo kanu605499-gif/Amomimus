@@ -207,26 +207,22 @@ class _ChatInputBarState extends State<ChatInputBar> {
                 ),
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  child: TextField(
-                    controller: _messageController,
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,
-                    minLines: 1,
-                    style: TextStyle(color: currentText, fontSize: 15),
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      border: InputBorder.none,
-                      hintText: t.write_message,
-                      hintStyle: TextStyle(
-                        fontSize: 14,
-                        color: currentTextSecondary.withValues(alpha: 0.7),
-                      ),
+                child: TextField(
+                  controller: _messageController,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  minLines: 1,
+                  style: TextStyle(color: currentText, fontSize: 15),
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    border: InputBorder.none,
+                    hintText: t.write_message,
+                    hintStyle: TextStyle(
+                      fontSize: 14,
+                      color: currentTextSecondary.withValues(alpha: 0.7),
                     ),
                   ),
                 ),

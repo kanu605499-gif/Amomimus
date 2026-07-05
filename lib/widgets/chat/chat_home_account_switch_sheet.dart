@@ -15,8 +15,8 @@ void showAccountSwitchSheet(BuildContext context) {
   final accounts = List.of(accountManager.switchableAccounts);
 
   accounts.sort((a, b) {
-    if (a.id == accountManager.currentUser?.id) return -1;
-    if (b.id == accountManager.currentUser?.id) return 1;
+    if (a.amomimusId == accountManager.currentUser?.amomimusId) return -1;
+    if (b.amomimusId == accountManager.currentUser?.amomimusId) return 1;
     return 0;
   });
 

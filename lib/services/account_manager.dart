@@ -145,7 +145,19 @@ class AccountManager extends ChangeNotifier {
   }
 
   Future<GoogleAuthResult?> loginWithGoogle() async {
-    return await authService.loginWithGoogle();
+    final result = await authService.loginWithGoogle();
+    if (result != null && !result.isNewUser && result.account != null) {
+      await loadAccounts();
+      final loggedInUser = _accounts.firstWhere(
+        (acc) => acc.amomimusId == result.account!.amomimusId,
+        orElse: () {
+          _accounts.add(result.account!);
+          return result.account!;
+        },
+      );
+      await switchAccount(loggedInUser);
+    }
+    return result;
   }
 
   Future<bool> registerGoogleAccount(UserCredentialsModel credentials, UserAccount newUser) async {

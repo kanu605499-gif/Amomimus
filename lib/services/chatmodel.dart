@@ -8,6 +8,8 @@ import '../models/message_model.dart';
 import '../models/chat_room_model.dart';
 import '../models/chat_preview_model.dart';
 import '../widgets/chat/delayed_sync_dialog.dart';
+import '../helpers/notification_helper.dart';
+import '../i18n/strings.g.dart';
 
 import '../utils/utc_time_manager.dart';
 import 'package:amomimus/utils/jelly_dialog.dart';
@@ -128,6 +130,41 @@ class ChatModel extends ChangeNotifier {
           .map((doc) => ChatSession.fromMap(doc.data()))
           .where((s) => !(_localAccountIds.contains(s.user1Id) && _localAccountIds.contains(s.user2Id)))
           .toList();
+          
+      // Check for new chat messages
+      if (_sessions.isNotEmpty) {
+        for (var change in snapshot.docChanges) {
+          if (change.type == DocumentChangeType.modified || change.type == DocumentChangeType.added) {
+            final data = change.doc.data();
+            if (data != null) {
+              final updatedSession = ChatSession.fromMap(data);
+              // Only notify if the last message is NOT from us, and we are not locally ignoring it
+              if (updatedSession.messages.isNotEmpty) {
+                final lastMsg = updatedSession.messages.last;
+                if (lastMsg.senderId != _currentUserId && !lastMsg.isTyping) {
+                  // Find if the local session had a different last message
+                  final localSessionIdx = _sessions.indexWhere((s) => s.id == updatedSession.id);
+                  bool isNewMessage = true;
+                  if (localSessionIdx != -1) {
+                    final localSession = _sessions[localSessionIdx];
+                    if (localSession.messages.isNotEmpty && localSession.messages.last.id == lastMsg.id) {
+                      isNewMessage = false; // We already saw this exact message
+                    }
+                  }
+                  
+                  if (isNewMessage) {
+                    final senderText = lastMsg.senderName ?? 'Someone';
+                    NotificationHelper.showRealtimeNotification(
+                      title: '$senderText ${t.notif_chat}',
+                      body: lastMsg.text,
+                    );
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
 
       final localSessions = _sessions
           .where((s) => _localAccountIds.contains(s.user1Id) && _localAccountIds.contains(s.user2Id))
@@ -836,16 +873,55 @@ class ChatModel extends ChangeNotifier {
     if (_currentUserId == null) return;
 
     final chatId = _getChatId(_currentUserId!, targetUserId);
-    _sessions.removeWhere((s) => s.id == chatId);
+    final index = _sessions.indexWhere((s) => s.id == chatId);
+    if (index == -1) return;
+
+    final session = _sessions[index];
+    final isLocalChat = _localAccountIds.contains(session.user1Id) && _localAccountIds.contains(session.user2Id);
+    
+    if (isLocalChat) {
+      _sessions.removeAt(index);
+      _saveChats();
+      notifyListeners();
+      return;
+    }
+
+    final updatedRoomDeletedBy = List<String>.from(session.roomDeletedBy)..add(_currentUserId!);
+
+    _sessions[index] = ChatSession(
+      id: session.id,
+      user1Id: session.user1Id,
+      user1Name: session.user1Name,
+      user2Id: session.user2Id,
+      user2Name: session.user2Name,
+      messages: session.messages,
+      unreadCounts: session.unreadCounts,
+      pinnedMessageIds: session.pinnedMessageIds,
+      createdAt: session.createdAt,
+      roomStartedAt: session.roomStartedAt,
+      roomExpiresAt: session.roomExpiresAt,
+      seenResetAnimationBy: session.seenResetAnimationBy,
+      resetIndicatorVisibleFor: session.resetIndicatorVisibleFor,
+      cheatDetectedUserId: session.cheatDetectedUserId,
+      roomDeletedBy: updatedRoomDeletedBy,
+      chatLogs: session.chatLogs,
+    );
+
     notifyListeners();
     _saveChats();
-    _firestore.collection('chat_sessions').doc(chatId).delete();
+    
+    if (!isLocalChat) {
+      _firestore.collection('chat_sessions').doc(chatId).delete();
+    }
   }
 
   void clearAllChatsForUser(String userId) {
     final chatsToDelete = _sessions.where((s) => s.user1Id == userId || s.user2Id == userId).toList();
     for (var s in chatsToDelete) {
-      _firestore.collection('chat_sessions').doc(s.id).delete();
+      final isLocalChat = _localAccountIds.contains(s.user1Id) && _localAccountIds.contains(s.user2Id);
+      if (!isLocalChat) {
+        _firestore.collection('chat_sessions').doc(s.id).delete();
+      }
     }
     _sessions.removeWhere((s) => s.user1Id == userId || s.user2Id == userId);
     notifyListeners();

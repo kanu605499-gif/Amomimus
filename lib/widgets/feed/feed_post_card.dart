@@ -272,7 +272,11 @@ class _FeedCardState extends State<FeedCard> {
                                     isSameEmailGroup = true;
                                     final groupAccounts = accountMgr.accounts.where((acc) => acc.masterEmail == currentUser.masterEmail).toList();
                                     if (groupAccounts.isNotEmpty) {
-                                      final masterId = groupAccounts.first.amomimusId;
+                                      final masterAccount = groupAccounts.firstWhere(
+                                        (acc) => acc.email == acc.masterEmail,
+                                        orElse: () => groupAccounts.first,
+                                      );
+                                      final masterId = masterAccount.amomimusId;
                                       final isCurrentMaster = currentUser.amomimusId == masterId;
                                       final isTargetMaster = targetId == masterId;
                                       if (!isCurrentMaster && !isTargetMaster) {

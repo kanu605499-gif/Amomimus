@@ -12,6 +12,8 @@ import 'package:amomimus/services/account_manager.dart';
 import '../services/preference_handler.dart';
 import '../widgets/custom_input_field.dart';
 import 'package:amomimus/i18n/strings.g.dart';
+import '../widgets/effects/static_tv_effect.dart';
+import '../services/audio_manager.dart';
 
 void main() {
   runApp(const AmomimusApp2());
@@ -51,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen>
   String? _passwordErrorMsg;
   bool _showEasterEggBubble = false;
   bool _isGoogleLoading = false;
+  bool _isRegularLoading = false;
 
   // We will load accounts directly from AccountManager
   // Future<List<UserCredentialsModel>>? _userListFuture;
@@ -142,6 +145,12 @@ class _LoginScreenState extends State<LoginScreen>
       return;
     }
 
+    setState(() {
+      _isRegularLoading = true;
+    });
+    
+    AudioManager().playIntro();
+
     final accountManager = Provider.of<AccountManager>(context, listen: false);
 
     // Removed 3-account limit check for login as requested
@@ -159,6 +168,9 @@ class _LoginScreenState extends State<LoginScreen>
         );
       } else {
         if (!mounted) return;
+        setState(() {
+          _isRegularLoading = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
             content: Text('Invalid email or password'),
@@ -168,6 +180,9 @@ class _LoginScreenState extends State<LoginScreen>
       }
     } catch (e) {
       if (!mounted) return;
+      setState(() {
+        _isRegularLoading = false;
+      });
       if (e.toString().contains('email-not-verified')) {
         _showEmailNotVerifiedDialog();
       } else {
@@ -579,7 +594,7 @@ class _LoginScreenState extends State<LoginScreen>
                     width: double.infinity,
                     height: 54,
                     child: ElevatedButton(
-                      onPressed: _handleLogin,
+                      onPressed: _isRegularLoading ? null : _handleLogin,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xff6c52a3),
                         shape: RoundedRectangleBorder(
@@ -696,6 +711,11 @@ class _LoginScreenState extends State<LoginScreen>
                   valueColor: AlwaysStoppedAnimation<Color>(Color(0xff6c52a3)),
                 ),
               ),
+            ),
+            
+          if (_isRegularLoading)
+            const Positioned.fill(
+              child: StaticTvEffect(),
             ),
         ],
       ),

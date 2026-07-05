@@ -164,7 +164,10 @@ class _MessageBubbleState extends State<MessageBubble> with SingleTickerProvider
             onLongPress: widget.onLongPress,
             onTap: widget.isSelectionMode
                 ? widget.onSelectionTap
-                : () {
+                : () async {
+                    FocusScope.of(context).unfocus();
+                    await Future.delayed(const Duration(milliseconds: 50));
+                    if (!mounted) return;
                     showModalBottomSheet(
                       context: context,
                       backgroundColor: isDark

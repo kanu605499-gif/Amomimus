@@ -29,6 +29,10 @@ class AudioManager {
     await _player.play(AssetSource('audio/old_radio.mp3'));
   }
   
+  Future<void> playIntro() async {
+    await _player.play(AssetSource('audio/intro.mp3'));
+  }
+  
   Future<void> stop() async {
     await _player.stop();
   }

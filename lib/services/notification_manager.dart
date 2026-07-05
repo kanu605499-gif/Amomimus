@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as flutter_secure_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/notification_model.dart';
+import '../helpers/notification_helper.dart';
+import '../i18n/strings.g.dart';
 import 'audio_manager.dart';
 
 class NotificationManager extends ChangeNotifier {
@@ -39,16 +41,21 @@ class NotificationManager extends ChangeNotifier {
         .snapshots()
         .listen((snapshot) {
       
-      // Check for new notifications to play sound
+      // Check for new notifications to play sound and show banner
       bool hasNewUnread = false;
+      NotificationModel? latestNewNotif;
+      
       // We only care if it's not the initial load. If _notifications is empty, it's likely initial load.
       if (_notifications.isNotEmpty) {
         for (var change in snapshot.docChanges) {
           if (change.type == DocumentChangeType.added) {
             final data = change.doc.data();
-            final isRead = data?['isRead'] == true || data?['isRead'] == 1;
-            if (!isRead) {
-              hasNewUnread = true;
+            if (data != null) {
+              final notif = NotificationModel.fromMap(data);
+              if (!notif.isRead) {
+                hasNewUnread = true;
+                latestNewNotif = notif;
+              }
             }
           }
         }
@@ -64,8 +71,12 @@ class NotificationManager extends ChangeNotifier {
       _saveNotifications(); // Backup to local cache
       notifyListeners();
       
-      if (hasNewUnread) {
+      if (hasNewUnread && latestNewNotif != null) {
         AudioManager().playNotifAlert();
+        NotificationHelper.showRealtimeNotification(
+          title: t.amow_summary_title,
+          body: latestNewNotif.message,
+        );
       }
     }, onError: (e) {
       print('Error listening to notifications: $e');
