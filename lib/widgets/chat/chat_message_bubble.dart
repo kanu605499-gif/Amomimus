@@ -214,7 +214,7 @@ class _MessageBubbleState extends State<MessageBubble> with SingleTickerProvider
                                       ClipboardData(text: widget.message.text),
                                     );
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
+                                      SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
                                         content: Text(
                                           t.copied_to_clipboard,
                                           style: const TextStyle(
@@ -593,20 +593,25 @@ class _MessageBubbleState extends State<MessageBubble> with SingleTickerProvider
         ),
       );
 
-      return _buildSwipeableBubble(mainWidget, textSecondaryColor);
+      return _buildSwipeableBubble(mainWidget, textSecondaryColor, isUserMessage);
     }
 
-    return _buildSwipeableBubble(bubbleContent, textSecondaryColor);
+    return _buildSwipeableBubble(bubbleContent, textSecondaryColor, isUserMessage);
   }
 
-  Widget _buildSwipeableBubble(Widget child, Color textSecondaryColor) {
+  Widget _buildSwipeableBubble(Widget child, Color textSecondaryColor, bool isUserMessage) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onHorizontalDragUpdate: (details) {
         setState(() {
           _dragOffset += details.primaryDelta!;
-          if (_dragOffset < -80) _dragOffset = -80;
-          if (_dragOffset > 0) _dragOffset = 0;
+          if (isUserMessage) {
+            if (_dragOffset < -80) _dragOffset = -80;
+            if (_dragOffset > 0) _dragOffset = 0;
+          } else {
+            if (_dragOffset > 80) _dragOffset = 80;
+            if (_dragOffset < 0) _dragOffset = 0;
+          }
           _isDragging = true;
         });
       },
@@ -623,13 +628,14 @@ class _MessageBubbleState extends State<MessageBubble> with SingleTickerProvider
         });
       },
       child: Stack(
-        alignment: Alignment.centerRight,
+        alignment: isUserMessage ? Alignment.centerRight : Alignment.centerLeft,
         clipBehavior: Clip.none,
         children: [
           Positioned(
-            right: 16,
+            right: isUserMessage ? 16 : null,
+            left: !isUserMessage ? 16 : null,
             child: Opacity(
-              opacity: (_dragOffset / -80).clamp(0.0, 1.0),
+              opacity: (isUserMessage ? (_dragOffset / -80) : (_dragOffset / 80)).clamp(0.0, 1.0),
               child: Text(
                 widget.message.timeStamp,
                 style: TextStyle(

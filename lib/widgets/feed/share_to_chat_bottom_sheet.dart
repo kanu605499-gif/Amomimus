@@ -140,7 +140,7 @@ class ShareToChatBottomSheet extends StatelessWidget {
                               );
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
+                                SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
                                   content: Text("Post shared to chat!"),
                                   duration: Duration(seconds: 2),
                                 ),

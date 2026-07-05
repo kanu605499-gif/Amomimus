@@ -367,6 +367,19 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get email_verification_title => 'Verifikasi E-mail';
 	@override String get email_not_verified_body => 'E-mail belum terverifikasi, silakan periksa kotak masuk atau folder spam Anda.';
 	@override String get email_verification_sent_body => 'Akun berhasil dibuat. Tautan verifikasi telah dikirim ke E-mail Anda. Silakan verifikasi sebelum masuk.';
+	@override String get send_email => 'Kirim Email';
+	@override String get visit_instagram => 'Kunjungi Instagram';
+	@override String get developer_role => 'Developer';
+	@override String get bug_report_success => 'Laporan bug berhasil dikirim.';
+	@override String get bug_report_fail_limit => 'Gagal mengirim. Batas mingguan Anda (3/minggu) sudah tercapai.';
+	@override String get bug_report_describe => 'Jelaskan bug atau masalah yang Anda temui.';
+	@override String get bug_report_wait => 'Tunggu';
+	@override String get bug_category_ui => 'UI / Masalah Visual';
+	@override String get bug_category_crash => 'Aplikasi Crash / Freeze';
+	@override String get bug_category_feature => 'Fitur Tidak Berfungsi';
+	@override String get bug_category_other => 'Lainnya';
+	@override String get my_favorited_stickers => 'Stiker Favoritku';
+	@override String get no_favorited_stickers => 'Belum ada stiker favorit';
 }
 
 /// The flat map containing all translations for locale <id>.
@@ -705,6 +718,19 @@ extension on TranslationsId {
 			'email_verification_title' => 'Verifikasi E-mail',
 			'email_not_verified_body' => 'E-mail belum terverifikasi, silakan periksa kotak masuk atau folder spam Anda.',
 			'email_verification_sent_body' => 'Akun berhasil dibuat. Tautan verifikasi telah dikirim ke E-mail Anda. Silakan verifikasi sebelum masuk.',
+			'send_email' => 'Kirim Email',
+			'visit_instagram' => 'Kunjungi Instagram',
+			'developer_role' => 'Developer',
+			'bug_report_success' => 'Laporan bug berhasil dikirim.',
+			'bug_report_fail_limit' => 'Gagal mengirim. Batas mingguan Anda (3/minggu) sudah tercapai.',
+			'bug_report_describe' => 'Jelaskan bug atau masalah yang Anda temui.',
+			'bug_report_wait' => 'Tunggu',
+			'bug_category_ui' => 'UI / Masalah Visual',
+			'bug_category_crash' => 'Aplikasi Crash / Freeze',
+			'bug_category_feature' => 'Fitur Tidak Berfungsi',
+			'bug_category_other' => 'Lainnya',
+			'my_favorited_stickers' => 'Stiker Favoritku',
+			'no_favorited_stickers' => 'Belum ada stiker favorit',
 			_ => null,
 		};
 	}

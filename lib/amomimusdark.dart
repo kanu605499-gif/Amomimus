@@ -101,7 +101,7 @@ class AmomimusDarkTheme extends ChangeNotifier {
         snackBarTheme: SnackBarThemeData(
           behavior: SnackBarBehavior.floating,
 shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.0),
           ),
           backgroundColor: surfaceDark,
           contentTextStyle: const TextStyle(color: textPrimary),
@@ -180,7 +180,7 @@ shape: RoundedRectangleBorder(
         snackBarTheme: SnackBarThemeData(
           behavior: SnackBarBehavior.floating,
 shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.0),
           ),
           backgroundColor: Colors.grey[800],
           contentTextStyle: const TextStyle(color: Colors.white),
@@ -193,7 +193,7 @@ shape: RoundedRectangleBorder(
   BoxDecoration get cardDecoration {
     return BoxDecoration(
       color: _isDarkMode ? surfaceDark : Colors.white,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(16.0),
       border: _isDarkMode ? null : Border.all(color: Colors.grey[300]!),
       boxShadow: [
         BoxShadow(

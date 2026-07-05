@@ -360,6 +360,19 @@ class TranslationsTm extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get email_verification_title => 'E-poçta tassyklamasy';
 	@override String get email_not_verified_body => 'E-poçta entek tassyklanmady. Gelen gutuňyzy ýa-da spam bukjanyzy barlap görüň.';
 	@override String get email_verification_sent_body => 'Hasap üstünlikli döredildi. Tassyklama baglanyşygy e-poçtaňyza iberildi. Hasaba girmezden ozal tassyklaň.';
+	@override String get send_email => 'Send Missive';
+	@override String get visit_instagram => 'Gaze upon Visage';
+	@override String get developer_role => 'Architect';
+	@override String get bug_report_success => 'Your report to the Guards has been sent.';
+	@override String get bug_report_fail_limit => 'The Guards ignore you. Weekly limit reached (3/week).';
+	@override String get bug_report_describe => 'Describe the anomaly in the realm.';
+	@override String get bug_report_wait => 'Tarry';
+	@override String get bug_category_ui => 'Illusion Glitch';
+	@override String get bug_category_crash => 'Realm Crash / Freeze';
+	@override String get bug_category_feature => 'Spell Fizzled';
+	@override String get bug_category_other => 'Other Chaos';
+	@override String get my_favorited_stickers => 'My Treasured Runes';
+	@override String get no_favorited_stickers => 'Your satchel holds no treasured Runes.';
 }
 
 /// The flat map containing all translations for locale <tm>.
@@ -691,6 +704,19 @@ extension on TranslationsTm {
 			'email_verification_title' => 'E-poçta tassyklamasy',
 			'email_not_verified_body' => 'E-poçta entek tassyklanmady. Gelen gutuňyzy ýa-da spam bukjanyzy barlap görüň.',
 			'email_verification_sent_body' => 'Hasap üstünlikli döredildi. Tassyklama baglanyşygy e-poçtaňyza iberildi. Hasaba girmezden ozal tassyklaň.',
+			'send_email' => 'Send Missive',
+			'visit_instagram' => 'Gaze upon Visage',
+			'developer_role' => 'Architect',
+			'bug_report_success' => 'Your report to the Guards has been sent.',
+			'bug_report_fail_limit' => 'The Guards ignore you. Weekly limit reached (3/week).',
+			'bug_report_describe' => 'Describe the anomaly in the realm.',
+			'bug_report_wait' => 'Tarry',
+			'bug_category_ui' => 'Illusion Glitch',
+			'bug_category_crash' => 'Realm Crash / Freeze',
+			'bug_category_feature' => 'Spell Fizzled',
+			'bug_category_other' => 'Other Chaos',
+			'my_favorited_stickers' => 'My Treasured Runes',
+			'no_favorited_stickers' => 'Your satchel holds no treasured Runes.',
 			_ => null,
 		};
 	}

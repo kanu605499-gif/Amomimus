@@ -68,7 +68,11 @@ class _AmomimusApp5State extends State<AmomimusApp5>
   Future<void> _handleCreatePost(BuildContext context, bool isDark, UserAccount currentUser) async {
     if (currentUser.indicator == 'noise') {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Akun Anda berada di zona NOISE. Anda tidak dapat membuat postingan baru.')),
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
+          content: Text('Akun Anda berada di zona NOISE. Anda tidak dapat membuat postingan baru.'),
+        ),
       );
       return;
     }
@@ -86,7 +90,11 @@ class _AmomimusApp5State extends State<AmomimusApp5>
           
       if (snapshot.docs.length >= 10) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Anda telah mencapai batas maksimal 10 postingan per hari.')),
+          SnackBar(
+            behavior: SnackBarBehavior.floating,
+            margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
+            content: Text('Anda telah mencapai batas maksimal 10 postingan per hari.'),
+          ),
         );
         return;
       }
@@ -329,6 +337,8 @@ class _AmomimusApp5State extends State<AmomimusApp5>
           currentBackPressTime = now;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
               content: Text(Translations.of(context).press_back_again),
               duration: const Duration(seconds: 2),
             ),
@@ -592,7 +602,8 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                     child: Container(
-                      height: 80,
+                      height: 80 + MediaQuery.of(context).padding.bottom,
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
                       decoration: BoxDecoration(
                         color: isDark
                             ? AmomimusDarkTheme.surfaceDark.withValues(
@@ -683,7 +694,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                 ),
               ),
               Positioned(
-                bottom: 40,
+                bottom: 40 + MediaQuery.of(context).padding.bottom,
                 left: 0,
                 right: 0,
                 child: Align(

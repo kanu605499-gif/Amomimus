@@ -8,6 +8,7 @@ import '../amomimusdark.dart';
 import '../models/sticker_batch_model.dart';
 import '../services/account_manager.dart';
 import 'sticker_inventory_screen.dart';
+import 'favorited_stickers_screen.dart';
 
 class StickerShopScreen extends StatefulWidget {
   const StickerShopScreen({super.key});
@@ -348,12 +349,26 @@ class _StickerShopScreenState extends State<StickerShopScreen>
                     return ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: isDark
+                            ? AmomimusDarkTheme.surfaceDark
+                            : Colors.white,
+                        foregroundColor: isDark
                             ? AmomimusDarkTheme.policeLineYellow
                             : AmomimusDarkTheme.primaryPurple,
-                        foregroundColor: isDark ? Colors.black : Colors.white,
+                        elevation: 4,
+                        shadowColor: isDark ? Colors.black87 : Colors.black45,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(
+                            color: isDark
+                                ? AmomimusDarkTheme.policeLineYellow.withValues(
+                                    alpha: 0.3,
+                                  )
+                                : AmomimusDarkTheme.primaryPurple.withValues(
+                                    alpha: 0.2,
+                                  ),
+                            width: 1,
+                          ),
                         ),
                       ),
                       onPressed: () async {
@@ -782,6 +797,23 @@ class _StickerShopScreenState extends State<StickerShopScreen>
                 ],
               ),
             ),
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.favorite_border,
+              color: isDark
+                  ? AmomimusDarkTheme.policeLineYellow
+                  : AmomimusDarkTheme.primaryPurple,
+            ),
+            tooltip: (t as dynamic).my_favorited_stickers ?? "My Favorited Stickers",
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const FavoritedStickersScreen(),
+                ),
+              );
+            },
           ),
           IconButton(
             icon: Icon(

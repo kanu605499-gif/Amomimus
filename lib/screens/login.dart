@@ -160,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen>
       } else {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
             content: Text('Invalid email or password'),
             backgroundColor: Colors.red,
           ),
@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen>
         _showEmailNotVerifiedDialog();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
             content: Text('Invalid email or password'),
             backgroundColor: Colors.red,
           ),
@@ -264,7 +264,7 @@ class _LoginScreenState extends State<LoginScreen>
     if (result == null) {
       // User canceled or error occurred
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
           content: Text('Google Sign-In canceled or failed'),
           backgroundColor: Colors.orange,
         ),

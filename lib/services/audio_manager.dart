@@ -13,7 +13,7 @@ class AudioManager {
   DateTime _lastAlertTime = DateTime.fromMillisecondsSinceEpoch(0);
 
   Future<void> playClickChat() async {
-    await _player.play(AssetSource('audio/click_chat.mp3'));
+    await _player.play(AssetSource('audio/mouse_click.mp3'));
   }
 
   Future<void> playNotifAlert() async {

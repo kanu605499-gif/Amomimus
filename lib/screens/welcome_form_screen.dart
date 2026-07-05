@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:math' as math;
 import '../services/preference_handler.dart';
@@ -450,13 +450,13 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                               case AppLocale.en:
                                 return 'English';
                               case AppLocale.ja:
-                                return '忍者';
+                                return '??';
                               case AppLocale.tm:
                                 return 'Tamriel';
                               case AppLocale.de:
                                 return 'Deutsch';
                               case AppLocale.th:
-                                return 'ภาษาไทย';
+                                return '???????';
                               default:
                                 return 'Bahasa';
                             }
@@ -482,10 +482,10 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                                 } else if (newValue == 'Deutsch') {
                                   LocaleSettings.setLocale(AppLocale.de);
                                   PreferenceHandler.setLanguage('de');
-                                } else if (newValue == 'ภาษาไทย') {
+                                } else if (newValue == '???????') {
                                   LocaleSettings.setLocale(AppLocale.th);
                                   PreferenceHandler.setLanguage('th');
-                                } else if (newValue == '忍者') {
+                                } else if (newValue == '??') {
                                   LocaleSettings.setLocale(AppLocale.ja);
                                   PreferenceHandler.setLanguage('ja');
                                 } else if (newValue == 'Tamriel') {
@@ -500,8 +500,8 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                                 'Bahasa',
                                 'Deutsch',
                                 'English',
-                                'ภาษาไทย',
-                                '忍者',
+                                '???????',
+                                '??',
                                 'Tamriel',
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
@@ -617,7 +617,7 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
 
                                 if (age < 18) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                                    SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
                                       content: Text(
                                         t.age_warning,
                                         style: const TextStyle(
@@ -625,7 +625,6 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                                         ),
                                       ),
                                       backgroundColor: Colors.redAccent,
-                                      behavior: SnackBarBehavior.floating,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),

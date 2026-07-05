@@ -1,4 +1,4 @@
-﻿import 'package:amomimus/i18n/strings.g.dart';
+import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
 import 'package:amomimus/amomimusdark.dart';
 import 'package:amomimus/models/user_model.dart';
@@ -51,12 +51,16 @@ class _CreatePostFormState extends State<_CreatePostForm> {
     final t = Translations.of(context);
     final screenHeight = MediaQuery.of(context).size.height;
 
+    final systemPadding = MediaQuery.of(context).padding;
+    final viewInsets = MediaQuery.of(context).viewInsets;
+    final extraBottomPadding = viewInsets.bottom == 0 ? systemPadding.bottom : 0.0;
+
     return Padding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
+        bottom: viewInsets.bottom,
       ),
       child: Container(
-        height: screenHeight / 3,
+        height: (screenHeight / 3) + extraBottomPadding,
         decoration: BoxDecoration(
           color: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
           borderRadius: const BorderRadius.only(
@@ -64,7 +68,12 @@ class _CreatePostFormState extends State<_CreatePostForm> {
             topRight: Radius.circular(30),
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: EdgeInsets.only(
+          left: 24, 
+          right: 24, 
+          top: 16, 
+          bottom: 16 + extraBottomPadding
+        ),
         child: Column(
           children: [
             Container(
@@ -156,9 +165,10 @@ class _CreatePostFormState extends State<_CreatePostForm> {
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
+                            behavior: SnackBarBehavior.floating,
+                            margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
                             content: Text(t.spam_cooldown_warning),
                             backgroundColor: Colors.redAccent,
-                            behavior: SnackBarBehavior.floating,
                             duration: Duration(seconds: 3),
                           ),
                         );

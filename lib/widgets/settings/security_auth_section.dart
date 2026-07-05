@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/account_manager.dart';
 import '../../models/user_credentials_model.dart';
@@ -36,7 +36,7 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
           _isEditingFavChar = false;
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Can only edit once every 24 hours!")),
+            SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),content: Text("Can only edit once every 24 hours!")),
           );
         }
       });
@@ -52,7 +52,7 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
     if (favInput.toLowerCase() !=
         (widget.credentials.favoriteCharacter ?? '').toLowerCase()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Incorrect favorite character.")),
+        SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),content: Text("Incorrect favorite character.")),
       );
       return;
     }
@@ -67,7 +67,7 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
         if (success) {
           _isResettingPasscode = false;
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Passcode successfully reset.")),
+            SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),content: Text("Passcode successfully reset.")),
           );
         }
       });

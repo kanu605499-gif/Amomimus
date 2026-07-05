@@ -99,6 +99,127 @@ Berikut adalah hirarki komponen di dalam `ProfileScreen`:
 
 ---
 
+## 🎯 Detail Komponen: `ProfileIndicatorCard` (Indikator di Profil)
+
+Widget `ProfileIndicatorCard` adalah kartu interaktif di halaman profil yang menampilkan **level/tier** seorang user Amomimus berdasarkan **benevolent points** mereka. Kartu ini dilengkapi animasi partikel dinamis sebagai latar belakang.
+
+### 📐 Hierarki Layout Widget
+
+```
+ProfileIndicatorCard (StatelessWidget)
+└── Container (margin: horizontal 20, height: 120)
+    ├── decoration: cardDecoration + Border warna indikator (width: 2)
+    └── Stack
+        ├── [0] Positioned.fill → ClipRRect (borderRadius: 14)
+        │       └── ParticleBackground   ← ✨ ANIMASI PARTIKEL
+        │           ├── particleColor : indicatorColor
+        │           ├── maxParticles  : 20 / 40 / 60 (tergantung tier)
+        │           ├── particleSize  : 4.0 (dp)
+        │           └── speedMultiplier: 1.0 / 1.5 / 2.0
+        └── [1] Padding(all: 20)
+                └── Row (spaceBetween)
+                    ├── Column (crossAxis: start, mainAxis: center)
+                    │   ├── Text("Amomimus Indicators")  ← label kecil abu-abu
+                    │   └── Text(indicatorLabel)          ← label besar berwarna
+                    │       - fontSize: 28
+                    │       - fontWeight: bold
+                    │       - letterSpacing: 3.0
+                    │       - color: indicatorColor
+                    └── Icon(userIcon, size: 36, color: iconColor)
+                            ← ikon gender user (Amo/Ami/Amom)
+```
+
+---
+
+### 🏷️ Tiga Tier Indikator (`UserIndicator` enum)
+
+| Tier | Label | Warna (Hex) | Benevolent Points | Deskripsi |
+| :--- | :--- | :--- | :--- | :--- |
+| `cloudy` | **CLOUDY** | `#BDBDBD` (Grey) | 0 – 69 | Netral / pengguna biasa |
+| `ghost` | **GHOST** | `#FFD54F` (Yellow) | 70 – 89 | Amoral / acuh tak acuh |
+| `noise` | **NOISE** | `#B388FF` (Purple) | 90 – 100 | Flagged / berisiko toksik |
+
+> [!NOTE]
+> Warna untuk label di **Feed Card** berbeda dengan warna di **Indicator Card**.  
+> `ghost` di dark theme → `#FFE082`, light theme → `#FBC02D`.  
+> `noise` di dark theme → `#D500F9`, light theme → `#6200EA`.
+
+---
+
+### ✨ Animasi: `ParticleBackground`
+
+Widget `ParticleBackground` adalah `StatefulWidget` yang menggambar partikel mengambang secara terus-menerus menggunakan `CustomPainter`.
+
+**Mekanisme Animasi:**
+```
+_ParticleBackgroundState
+└── AnimationController (_particleController)
+    - duration: 2 detik
+    - repeat: true (loop terus)
+└── AnimatedBuilder → rebuild setiap frame
+    └── CustomPaint(painter: ParticlePainter)
+```
+
+**Logika Gerak Partikel (`ParticlePainter.paint()`):**
+```dart
+// Setiap partikel bergerak ke atas secara independen
+double time = DateTime.now().millisecondsSinceEpoch / 2000.0;
+double currentY = (p.y - (time * p.speed * speedMultiplier)) % 1.0;
+// Jika currentY negatif → wrap ke atas (munculkan dari bawah kembali)
+```
+
+- Partikel bergerak **ke atas** (Y berkurang seiring waktu).
+- Saat keluar dari batas atas, partikel **muncul kembali dari bawah** (wrap-around `% 1.0`).
+- Setiap partikel punya kecepatan acak: `speed = 0.2 + random * 0.5`.
+- Opacity partikel: **60%** (`color.withValues(alpha: 0.6)`).
+- Bentuk: **lingkaran** (`canvas.drawCircle`), radius = `particleSize`.
+
+**Variasi per Tier:**
+
+| Tier | `maxParticles` | `speedMultiplier` | Efek Visual |
+| :--- | :---: | :---: | :--- |
+| `cloudy` | 20 | 1.0× | Sedikit partikel, lambat — kesan tenang |
+| `ghost` | 40 | 1.5× | Sedang, agak cepat — kesan misterius |
+| `noise` | 60 | 2.0× | Banyak & cepat — kesan kacau/aktif |
+
+---
+
+### 🎬 Animasi Tambahan: FAB Bounce di `ProfileScreen`
+
+Selain partikel, `ProfileScreen` memiliki **micro-animation** pada Floating Action Button (FAB) berupa efek naik-turun (bob/bounce).
+
+```dart
+// Controller — loop bolak-balik 1.5 detik
+_fabAnimationController = AnimationController(
+  vsync: this,
+  duration: const Duration(milliseconds: 1500),
+)..repeat(reverse: true);
+
+// Animasi translasi vertikal: bergerak 0 → 10 px ke atas lalu kembali
+_fabAnimation = Tween<double>(begin: 0, end: 10).animate(
+  CurvedAnimation(
+    parent: _fabAnimationController,
+    curve: Curves.easeInOut,    // ← smooth accelerate-decelerate
+  ),
+);
+
+// Diterapkan via Transform.translate di dalam AnimatedBuilder
+Transform.translate(
+  offset: Offset(0, -_fabAnimation.value), // negatif = ke atas
+  child: FloatingActionButton(...),
+)
+```
+
+**Detail FAB:**
+- Ukuran: `63 × 63` px, bentuk `CircleBorder`.
+- Background: **Yellow** (`policeLineYellow`) di dark mode, **Purple** (`primaryPurple`) di light mode.
+- Icon: ikon gender user (`GenderHelpers.getGenderIcon(user.gender)`), ukuran `39` px.
+- Icon color: **hitam** (`Colors.black`) di dark mode, **putih** (`Colors.white`) di light mode.
+- Posisi: `FloatingActionButtonLocation.centerFloat` + padding bottom `24.0`.
+- Fungsi: tekan → `Navigator.pop(context)` (kembali ke halaman sebelumnya).
+
+---
+
 ## 📂 Struktur Folder UI Aplikasi Absensi
 
 Berikut adalah rekomendasi adaptasi struktur folder `lib/` (khusus untuk UI: Screens dan Widgets) untuk proyek **Aplikasi Absensi** yang baru.

@@ -363,6 +363,19 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get email_verification_title => 'การยืนยันอีเมล';
 	@override String get email_not_verified_body => 'อีเมลยังไม่ได้รับการยืนยัน โปรดตรวจสอบกล่องจดหมายหรือโฟลเดอร์สแปมของคุณ';
 	@override String get email_verification_sent_body => 'สร้างบัญชีสำเร็จแล้ว ส่งลิงก์ยืนยันไปยังอีเมลของคุณแล้ว โปรดยืนยันก่อนเข้าสู่ระบบ';
+	@override String get send_email => 'ส่งอีเมล';
+	@override String get visit_instagram => 'ไปที่ Instagram';
+	@override String get developer_role => 'นักพัฒนา';
+	@override String get bug_report_success => 'ส่งรายงานข้อผิดพลาดสำเร็จ';
+	@override String get bug_report_fail_limit => 'ส่งไม่สำเร็จ คุณอาจถึงขีดจำกัดรายสัปดาห์ (3 ครั้ง/สัปดาห์) แล้ว';
+	@override String get bug_report_describe => 'อธิบายข้อผิดพลาดหรือปัญหาที่คุณพบ';
+	@override String get bug_report_wait => 'รอ';
+	@override String get bug_category_ui => 'ปัญหา UI / การแสดงผล';
+	@override String get bug_category_crash => 'แอปขัดข้อง / ค้าง';
+	@override String get bug_category_feature => 'ฟีเจอร์ไม่ทำงาน';
+	@override String get bug_category_other => 'อื่นๆ';
+	@override String get my_favorited_stickers => 'สติกเกอร์ที่ฉันชื่นชอบ';
+	@override String get no_favorited_stickers => 'ไม่มีสติกเกอร์ที่ชื่นชอบ';
 }
 
 /// The flat map containing all translations for locale <th>.
@@ -697,6 +710,19 @@ extension on TranslationsTh {
 			'email_verification_title' => 'การยืนยันอีเมล',
 			'email_not_verified_body' => 'อีเมลยังไม่ได้รับการยืนยัน โปรดตรวจสอบกล่องจดหมายหรือโฟลเดอร์สแปมของคุณ',
 			'email_verification_sent_body' => 'สร้างบัญชีสำเร็จแล้ว ส่งลิงก์ยืนยันไปยังอีเมลของคุณแล้ว โปรดยืนยันก่อนเข้าสู่ระบบ',
+			'send_email' => 'ส่งอีเมล',
+			'visit_instagram' => 'ไปที่ Instagram',
+			'developer_role' => 'นักพัฒนา',
+			'bug_report_success' => 'ส่งรายงานข้อผิดพลาดสำเร็จ',
+			'bug_report_fail_limit' => 'ส่งไม่สำเร็จ คุณอาจถึงขีดจำกัดรายสัปดาห์ (3 ครั้ง/สัปดาห์) แล้ว',
+			'bug_report_describe' => 'อธิบายข้อผิดพลาดหรือปัญหาที่คุณพบ',
+			'bug_report_wait' => 'รอ',
+			'bug_category_ui' => 'ปัญหา UI / การแสดงผล',
+			'bug_category_crash' => 'แอปขัดข้อง / ค้าง',
+			'bug_category_feature' => 'ฟีเจอร์ไม่ทำงาน',
+			'bug_category_other' => 'อื่นๆ',
+			'my_favorited_stickers' => 'สติกเกอร์ที่ฉันชื่นชอบ',
+			'no_favorited_stickers' => 'ไม่มีสติกเกอร์ที่ชื่นชอบ',
 			_ => null,
 		};
 	}

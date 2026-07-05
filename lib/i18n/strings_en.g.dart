@@ -1024,6 +1024,45 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
 	/// en: 'Account successfully created. A verification link has been sent to your E-mail. Please verify before logging in.'
 	String get email_verification_sent_body => 'Account successfully created. A verification link has been sent to your E-mail. Please verify before logging in.';
+
+	/// en: 'Send Email'
+	String get send_email => 'Send Email';
+
+	/// en: 'Visit Instagram'
+	String get visit_instagram => 'Visit Instagram';
+
+	/// en: 'Developer'
+	String get developer_role => 'Developer';
+
+	/// en: 'Bug report submitted successfully.'
+	String get bug_report_success => 'Bug report submitted successfully.';
+
+	/// en: 'Failed to submit. You may have reached your weekly limit (3/week).'
+	String get bug_report_fail_limit => 'Failed to submit. You may have reached your weekly limit (3/week).';
+
+	/// en: 'Describe the glitch or issue you encountered.'
+	String get bug_report_describe => 'Describe the glitch or issue you encountered.';
+
+	/// en: 'Wait'
+	String get bug_report_wait => 'Wait';
+
+	/// en: 'UI / Visual Glitch'
+	String get bug_category_ui => 'UI / Visual Glitch';
+
+	/// en: 'App Crash / Freeze'
+	String get bug_category_crash => 'App Crash / Freeze';
+
+	/// en: 'Feature Not Working'
+	String get bug_category_feature => 'Feature Not Working';
+
+	/// en: 'Other'
+	String get bug_category_other => 'Other';
+
+	/// en: 'My Favorited Stickers'
+	String get my_favorited_stickers => 'My Favorited Stickers';
+
+	/// en: 'No favorited stickers'
+	String get no_favorited_stickers => 'No favorited stickers';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1362,6 +1401,19 @@ extension on Translations {
 			'email_verification_title' => 'E-mail Verification',
 			'email_not_verified_body' => 'E-mail has not been verified. Please check your inbox or spam folder.',
 			'email_verification_sent_body' => 'Account successfully created. A verification link has been sent to your E-mail. Please verify before logging in.',
+			'send_email' => 'Send Email',
+			'visit_instagram' => 'Visit Instagram',
+			'developer_role' => 'Developer',
+			'bug_report_success' => 'Bug report submitted successfully.',
+			'bug_report_fail_limit' => 'Failed to submit. You may have reached your weekly limit (3/week).',
+			'bug_report_describe' => 'Describe the glitch or issue you encountered.',
+			'bug_report_wait' => 'Wait',
+			'bug_category_ui' => 'UI / Visual Glitch',
+			'bug_category_crash' => 'App Crash / Freeze',
+			'bug_category_feature' => 'Feature Not Working',
+			'bug_category_other' => 'Other',
+			'my_favorited_stickers' => 'My Favorited Stickers',
+			'no_favorited_stickers' => 'No favorited stickers',
 			_ => null,
 		};
 	}

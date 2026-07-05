@@ -68,6 +68,12 @@ Future<void> runAmomimusApp(FirebaseOptions options) async {
                   auth.currentUser!.amomimusId,
                   auth.currentUser!.anonymousUsername,
                 );
+                chatModel.setLocalAccountIds(
+                  auth.accounts
+                      .where((a) => a.masterEmail == auth.currentUser!.masterEmail)
+                      .map((a) => a.amomimusId)
+                      .toList(),
+                );
               }
               return chatModel!;
             },

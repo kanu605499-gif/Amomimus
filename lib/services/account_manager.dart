@@ -11,6 +11,7 @@ import '../models/user_credentials_model.dart';
 import 'auth_service.dart';
 import 'background_service.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AccountManager extends ChangeNotifier {
   Future<void> _persistAndNotify(UserAccount updatedUser) async {
@@ -32,6 +33,7 @@ class AccountManager extends ChangeNotifier {
     notifyListeners();
   }
   final AuthService authService;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   AccountManager({required this.authService});
 
@@ -309,6 +311,47 @@ class AccountManager extends ChangeNotifier {
     }
 
     notifyListeners();
+    return true;
+  }
+
+  Future<bool> submitBugReport(String category, String description) async {
+    if (_currentUser == null) return false;
+
+    final now = DateTime.now();
+    final lastDateStr = _currentUser!.lastBugReportDate;
+    int currentCount = _currentUser!.bugReportWeeklyCount;
+
+    // Reset counter if more than 7 days have passed
+    if (lastDateStr != null) {
+      final lastDate = DateTime.tryParse(lastDateStr);
+      if (lastDate != null && now.difference(lastDate).inDays >= 7) {
+        currentCount = 0;
+      }
+    }
+
+    // Enforce 3 reports per week limit
+    if (currentCount >= 3) return false;
+
+    // Submit to Firestore
+    try {
+      await _firestore.collection('bug_reports').add({
+        'userId': _currentUser!.amomimusId,
+        'anonymousUsername': _currentUser!.anonymousUsername,
+        'category': category,
+        'description': description,
+        'timestamp': FieldValue.serverTimestamp(),
+        'status': 'pending', // pending | reviewed | resolved
+      });
+    } catch (e) {
+      return false;
+    }
+
+    // Update local user counter
+    final updated = _currentUser!.copyWith(
+      bugReportWeeklyCount: currentCount + 1,
+      lastBugReportDate: now.toIso8601String(),
+    );
+    await _persistAndNotify(updated);
     return true;
   }
 

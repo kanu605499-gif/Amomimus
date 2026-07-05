@@ -74,7 +74,7 @@ class ProfileHeaderInfo extends StatelessWidget {
                               ),
                             ),
                             behavior: SnackBarBehavior.floating,
-                            margin: const EdgeInsets.only(left: 16, right: 16, bottom: 24),
+                            margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),

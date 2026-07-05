@@ -21,6 +21,8 @@ class UserAccount {
   final String? lastRedeemed;
   final int dailyChatRequestsSent;
   final String? lastChatRequestDate;
+  final int bugReportWeeklyCount;
+  final String? lastBugReportDate;
 
   // Extended fields
   final String? dateOfBirth;
@@ -63,6 +65,8 @@ class UserAccount {
     this.lastRedeemed,
     this.dailyChatRequestsSent = 0,
     this.lastChatRequestDate,
+    this.bugReportWeeklyCount = 0,
+    this.lastBugReportDate,
     this.dateOfBirth,
     this.totalResonatesReceived = 0,
     this.ownedStickers = const [],
@@ -102,6 +106,8 @@ class UserAccount {
       lastRedeemed: map['lastRedeemed'],
       dailyChatRequestsSent: map['dailyChatRequestsSent'] ?? 0,
       lastChatRequestDate: map['lastChatRequestDate'],
+      bugReportWeeklyCount: map['bugReportWeeklyCount'] ?? 0,
+      lastBugReportDate: map['lastBugReportDate'],
       dateOfBirth: map['dateOfBirth'],
       totalResonatesReceived: map['totalResonatesReceived'] ?? 0,
       ownedStickers:
@@ -160,6 +166,8 @@ class UserAccount {
       'lastRedeemed': lastRedeemed,
       'dailyChatRequestsSent': dailyChatRequestsSent,
       'lastChatRequestDate': lastChatRequestDate,
+      'bugReportWeeklyCount': bugReportWeeklyCount,
+      'lastBugReportDate': lastBugReportDate,
       'dateOfBirth': dateOfBirth,
       'totalResonatesReceived': totalResonatesReceived,
       'ownedStickers': ownedStickers,
@@ -198,6 +206,8 @@ class UserAccount {
     String? lastRedeemed,
     int? dailyChatRequestsSent,
     String? lastChatRequestDate,
+    int? bugReportWeeklyCount,
+    String? lastBugReportDate,
     String? dateOfBirth,
     int? totalResonatesReceived,
     List<String>? ownedStickers,
@@ -235,6 +245,8 @@ class UserAccount {
       dailyChatRequestsSent:
           dailyChatRequestsSent ?? this.dailyChatRequestsSent,
       lastChatRequestDate: lastChatRequestDate ?? this.lastChatRequestDate,
+      bugReportWeeklyCount: bugReportWeeklyCount ?? this.bugReportWeeklyCount,
+      lastBugReportDate: lastBugReportDate ?? this.lastBugReportDate,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       totalResonatesReceived:
           totalResonatesReceived ?? this.totalResonatesReceived,

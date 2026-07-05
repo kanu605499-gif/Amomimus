@@ -8,7 +8,7 @@ void main() async {
     'de': 'Einige Flüstern Werden Neu Geladen...',
     'ja': 'いくつかのささやきを再読み込み中...',
     'th': 'กำลังโหลดเสียงกระซิบใหม่...',
-    'tm': 'Käbir Pyşyrdylary Täzeden Ýüklenýär...'
+    'tm': 'Resurrecting the Echoes...'
   };
 
   for (final entry in translations.entries) {

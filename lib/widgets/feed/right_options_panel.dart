@@ -1,8 +1,11 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:ui';
 
 import '../../amomimusdark.dart';
+
+import '../report_bug_dialog.dart';
+import '../../screens/contact_developers_screen.dart';
 import 'package:amomimus/i18n/strings.g.dart';
 import '../../services/preference_handler.dart';
 
@@ -92,7 +95,15 @@ class _RightOptionsPanelState extends State<RightOptionsPanel> {
                                   : Colors.black,
                             ),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ContactDevelopersScreen(),
+                              ),
+                            );
+                          },
                         ),
                         ListTile(
                           leading: Icon(
@@ -109,7 +120,13 @@ class _RightOptionsPanelState extends State<RightOptionsPanel> {
                                   : Colors.black,
                             ),
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).pop();
+                            showDialog(
+                              context: context,
+                              builder: (context) => const ReportBugDialog(),
+                            );
+                          },
                         ),
                         ListTile(
                           leading: Icon(

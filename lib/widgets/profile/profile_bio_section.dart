@@ -203,11 +203,11 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                                       _isEditingBailout = false;
                                       _bioChanged = false;
                                     });
-                                    messenger.showSnackBar(SnackBar(content: Text(t.bio_bailout_used), backgroundColor: themeColor));
+                                    messenger.showSnackBar(SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),content: Text(t.bio_bailout_used), backgroundColor: themeColor));
                                   }
                                 } else {
                                   if (mounted) {
-                                    messenger.showSnackBar(SnackBar(content: Text(t.bio_not_enough_coins), backgroundColor: Colors.redAccent));
+                                    messenger.showSnackBar(SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),content: Text(t.bio_not_enough_coins), backgroundColor: Colors.redAccent));
                                   }
                                 }
                               },
@@ -360,7 +360,7 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                               ).updateCoins(100, updateTimestamp: true);
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
                                     content: Text(
                                       t.redeemed_100_coins,
                                       style: TextStyle(
@@ -577,9 +577,9 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
       setState(() {
         _bioChanged = false;
       });
-      messenger.showSnackBar(SnackBar(content: Text(t.bio_updated), backgroundColor: themeColor));
+      messenger.showSnackBar(SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),content: Text(t.bio_updated), backgroundColor: themeColor));
     } else if (!success && mounted) {
-      messenger.showSnackBar(SnackBar(content: Text(t.bio_not_enough_coins), backgroundColor: Colors.redAccent));
+      messenger.showSnackBar(SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),content: Text(t.bio_not_enough_coins), backgroundColor: Colors.redAccent));
     }
   }
 

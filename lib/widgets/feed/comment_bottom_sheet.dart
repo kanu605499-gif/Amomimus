@@ -10,6 +10,7 @@ import 'package:amomimus/services/feed_manager.dart';
 import 'package:amomimus/services/notification_manager.dart';
 import 'package:amomimus/data/anonymous_names.dart';
 import 'package:amomimus/screens/profile_screen.dart';
+import 'package:amomimus/utils/utc_time_manager.dart';
 
 void showCommentsSheet(
   BuildContext context,
@@ -82,7 +83,8 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
           const SizedBox(height: 16),
           Consumer<FeedManager>(
             builder: (context, feedManager, child) {
-              final currentModel = feedManager.getPostById(widget.model.id) ?? widget.model;
+              final currentModel =
+                  feedManager.getPostById(widget.model.id) ?? widget.model;
               if (currentModel.comments.isEmpty) {
                 return Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -105,15 +107,35 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
                           horizontal: 0,
                           vertical: 4,
                         ),
-                        title: Text(
-                          "${comment.authorName} (${comment.authorId})",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: widget.isDarkCard
-                                ? Colors.white70
-                                : Colors.black87,
-                            fontSize: 12,
-                          ),
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "${comment.authorName} (${comment.authorId})",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: widget.isDarkCard
+                                      ? Colors.white70
+                                      : Colors.black87,
+                                  fontSize: 12,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              UTCTimeManager.formatTimeAgo(comment.timeStamp),
+                              style: TextStyle(
+                                color: widget.isDarkCard
+                                    ? Colors.white54
+                                    : Colors.black54,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
                         ),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,7 +143,10 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
                             if (comment.replyToName != null &&
                                 comment.replyToText != null)
                               Container(
-                                margin: const EdgeInsets.only(top: 4, bottom: 4),
+                                margin: const EdgeInsets.only(
+                                  top: 4,
+                                  bottom: 4,
+                                ),
                                 padding: const EdgeInsets.only(left: 8),
                                 decoration: const BoxDecoration(
                                   border: Border(
@@ -267,7 +292,8 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
                         ),
                       );
                     } else {
-                      final targetId = widget.model.realAuthorId ?? widget.model.id;
+                      final targetId =
+                          widget.model.realAuthorId ?? widget.model.id;
                       if (targetId != widget.currentUser!.amomimusId) {
                         notifManager.addNotification(
                           NotificationModel(

@@ -262,12 +262,49 @@ class _FeedCardState extends State<FeedCard> {
                                   widget.model.realAuthorId ?? widget.model.id;
 
                               if (value == 'chat') {
-                                if (currentUser != null &&
-                                    currentUser.amomimusId == targetId) {
+                                final accountMgr = Provider.of<AccountManager>(context, listen: false);
+                                bool isSameEmailGroup = false;
+                                bool isBothSubProfiles = false;
+                                
+                                if (currentUser != null && accountMgr.accounts.any((acc) => acc.amomimusId == targetId)) {
+                                  final targetUser = accountMgr.accounts.firstWhere((acc) => acc.amomimusId == targetId);
+                                  if (targetUser.masterEmail == currentUser.masterEmail) {
+                                    isSameEmailGroup = true;
+                                    final groupAccounts = accountMgr.accounts.where((acc) => acc.masterEmail == currentUser.masterEmail).toList();
+                                    if (groupAccounts.isNotEmpty) {
+                                      final masterId = groupAccounts.first.amomimusId;
+                                      final isCurrentMaster = currentUser.amomimusId == masterId;
+                                      final isTargetMaster = targetId == masterId;
+                                      if (!isCurrentMaster && !isTargetMaster) {
+                                        isBothSubProfiles = true;
+                                      }
+                                    }
+                                  }
+                                }
+
+                                if (isBothSubProfiles) {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
+                                    SnackBar(
+                                      behavior: SnackBarBehavior.floating,
+                                      margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
                                       content: Text(
-                                        "You cannot chat with yourself.",
+                                        (Translations.of(context) as dynamic).sub_profile_chat_error ?? "Sub-profiles cannot chat with each other.",
+                                      ),
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                if (isSameEmailGroup) {
+                                  context.read<ChatModel>().markAsRead(targetId);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AmomimusApp6(
+                                        username: targetId,
+                                        name: currentUser!.amomimusId == targetId 
+                                            ? (currentUser.customUsername ?? currentUser.anonymousUsername) 
+                                            : '${widget.model.userName} ${widget.model.type.name[0].toUpperCase()}${widget.model.type.name.substring(1)}',
                                       ),
                                     ),
                                   );
@@ -299,7 +336,7 @@ class _FeedCardState extends State<FeedCard> {
                                     MaterialPageRoute(
                                       builder: (context) => AmomimusApp6(
                                         username: targetId,
-                                        name: widget.model.userName,
+                                        name: '${widget.model.userName} ${widget.model.type.name[0].toUpperCase()}${widget.model.type.name.substring(1)}',
                                       ),
                                     ),
                                   );
@@ -315,7 +352,7 @@ class _FeedCardState extends State<FeedCard> {
                                 await showJellyDialog(
                                   context: context,
                                   builder: (context) => ChatRequestDialog(
-                                    targetUserName: widget.model.userName,
+                                    targetUserName: '${widget.model.userName} ${widget.model.type.name[0].toUpperCase()}${widget.model.type.name.substring(1)}',
                                     myRegisteredName:
                                         currentUser?.customUsername ??
                                         currentUser?.anonymousUsername ??

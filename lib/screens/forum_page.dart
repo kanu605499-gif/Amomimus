@@ -13,6 +13,7 @@ import '../models/post_model.dart';
 import '../widgets/feed/feed_post_card.dart'; // To reuse FeedCard
 import 'profile_screen.dart';
 import 'fake_pdf_screen.dart';
+import '../utils/utc_time_manager.dart';
 
 class ForumPage extends StatefulWidget {
   final String feedId;
@@ -155,15 +156,35 @@ class _ForumPageState extends State<ForumPage> {
                                 ),
                                 child: Icon(iconData, color: iconColor),
                               ),
-                              title: Text(
-                                "${comment.authorName} (${comment.authorId})",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: isDark
-                                      ? Colors.white70
-                                      : Colors.black87,
-                                  fontSize: 12,
-                                ),
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "${comment.authorName} (${comment.authorId})",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: isDark
+                                            ? Colors.white70
+                                            : Colors.black87,
+                                        fontSize: 12,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    UTCTimeManager.formatTimeAgo(comment.timeStamp),
+                                    style: TextStyle(
+                                      color: isDark
+                                          ? Colors.white54
+                                          : Colors.black54,
+                                      fontSize: 10,
+                                    ),
+                                  ),
+                                ],
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,7 +252,7 @@ class _ForumPageState extends State<ForumPage> {
               // Inline comment input
               Container(
                 padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                  bottom: MediaQuery.of(context).viewInsets.bottom + 16 + (MediaQuery.of(context).viewInsets.bottom == 0 ? MediaQuery.of(context).padding.bottom : 0.0),
                   left: 16,
                   right: 16,
                   top: 16,

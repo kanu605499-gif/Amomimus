@@ -176,14 +176,17 @@ class _ChatInputBarState extends State<ChatInputBar> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: GestureDetector(
-                  onTap: () {
+                padding: const EdgeInsets.only(bottom: 2), // Aligned with send button
+                child: IconButton(
+                  iconSize: 26,
+                  padding: const EdgeInsets.all(8), // Increases tap area
+                  constraints: const BoxConstraints(), // Removes default minimum size constraints to keep it compact
+                  onPressed: () {
                     setState(() {
                       _isStickerPickerExpanded = !_isStickerPickerExpanded;
                     });
                   },
-                  child: AnimatedSwitcher(
+                  icon: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 350),
                     transitionBuilder: (child, animation) {
                       return ScaleTransition(
@@ -199,12 +202,10 @@ class _ChatInputBarState extends State<ChatInputBar> {
                           : Icons.sentiment_satisfied_alt_outlined,
                       key: ValueKey<bool>(_isStickerPickerExpanded),
                       color: dynamicAccentColor,
-                      size: 26,
                     ),
                   ),
                 ),
               ),
-              const SizedBox(width: 10),
               Expanded(
                 child: SingleChildScrollView(
                   keyboardDismissBehavior:

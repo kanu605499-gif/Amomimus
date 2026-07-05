@@ -94,7 +94,18 @@ class ChatModel extends ChangeNotifier {
     }
   }
 
+  List<String> _localAccountIds = [];
+
+  void setLocalAccountIds(List<String> ids) {
+    _localAccountIds = ids;
+  }
+
   Future<void> _updateSessionToFirestore(ChatSession session) async {
+    if (_localAccountIds.contains(session.user1Id) && _localAccountIds.contains(session.user2Id)) {
+      print('Local Master-Sub Chat detected. Bypassing Firestore.');
+      return;
+    }
+
     try {
       await _firestore
           .collection('chat_sessions')
@@ -174,7 +185,18 @@ class ChatModel extends ChangeNotifier {
   List<ChatPreview> get chatList {
     if (_currentUserId == null) return [];
 
-    final list = _sessions
+    // Deduplicate sessions by ID — prevents duplicate tiles when
+    // Firestore snapshot and local cache both have the same session
+    final Map<String, ChatSession> seenIds = {};
+    for (final s in _sessions) {
+      if (!seenIds.containsKey(s.id)) {
+        seenIds[s.id] = s;
+      } else if (s.messages.length > seenIds[s.id]!.messages.length) {
+        seenIds[s.id] = s;
+      }
+    }
+
+    final list = seenIds.values
         .where(
           (s) =>
               (s.user1Id == _currentUserId || s.user2Id == _currentUserId) &&

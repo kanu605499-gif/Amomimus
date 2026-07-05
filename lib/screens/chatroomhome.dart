@@ -104,6 +104,40 @@ class _AmomimusApp7State extends State<AmomimusApp7>
       }
       return true;
     }).toList();
+
+    // Pin Local Sub-Profiles to the top
+    final localSubProfiles = accountManager.accounts.where((acc) {
+      return accountManager.currentUser != null &&
+          acc.masterEmail == accountManager.currentUser!.masterEmail &&
+          acc.amomimusId != myAmomimusId;
+    }).toList();
+
+    // Sort local profiles by recent interaction (their existing index in filteredChatList)
+    localSubProfiles.sort((a, b) {
+      int indexA = filteredChatList.indexWhere((c) => c.username == a.amomimusId);
+      int indexB = filteredChatList.indexWhere((c) => c.username == b.amomimusId);
+      int weightA = indexA == -1 ? 999999 : indexA;
+      int weightB = indexB == -1 ? 999999 : indexB;
+      return weightA.compareTo(weightB);
+    });
+
+    List<ChatPreview> finalChatList = List.from(filteredChatList);
+    // Reverse the list so the first sub-profile ends up at the absolute top when inserted at 0
+    for (var localProfile in localSubProfiles.reversed) {
+      int existingIndex = finalChatList.indexWhere((c) => c.username == localProfile.amomimusId);
+      ChatPreview preview;
+      if (existingIndex != -1) {
+        preview = finalChatList.removeAt(existingIndex);
+      } else {
+        preview = ChatPreview(
+          name: localProfile.customUsername ?? localProfile.anonymousUsername,
+          username: localProfile.amomimusId,
+          initialLastMessage: "Tap to open local chat",
+          initialTime: "",
+        );
+      }
+      finalChatList.insert(0, preview);
+    }
     final currentBg = themeProvider.isDarkMode
         ? AmomimusDarkTheme.backgroundDark
         : Colors.white;
@@ -245,9 +279,9 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                     ),
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate((context, index) {
-                        final chat = filteredChatList[index];
+                        final chat = finalChatList[index];
                         return ChatListTileWidget(chat: chat);
-                      }, childCount: filteredChatList.length),
+                      }, childCount: finalChatList.length),
                     ),
                   ),
                 ],

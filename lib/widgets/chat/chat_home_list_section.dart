@@ -33,9 +33,23 @@ class ChatListTileWidget extends StatelessWidget {
         : Colors.black54;
 
     // Get the target user's gender for dynamic styling
-    // Since AccountManager only holds locally logged-in accounts, it will fail for remote users.
-    // We MUST extract the gender from the chat.name (e.g. "Astral Echo Amom" -> "Amom").
-    final targetGender = GenderHelpers.extractGenderFromName(chat.name);
+    final accountManager = context.watch<AccountManager>();
+    final targetAccount = accountManager.accounts.firstWhere(
+      (acc) => acc.amomimusId == chat.username,
+      orElse: () {
+        final extractedGender = GenderHelpers.extractGenderFromName(chat.name);
+        return UserAccount(
+          email: '',
+          realUsername: '',
+          anonymousUsername: '',
+          amomimusId: '',
+          gender: extractedGender,
+          registrationDate: '',
+          isDemo: false,
+        );
+      },
+    );
+    final targetGender = targetAccount.gender;
     final dynamicTileIcon = GenderHelpers.getGenderIcon(targetGender);
     final dynamicTileColor = GenderHelpers.getGenderColor(targetGender);
 
@@ -43,12 +57,29 @@ class ChatListTileWidget extends StatelessWidget {
         ? dynamicTileColor
         : dynamicTileColor.withValues(alpha: 0.5);
 
-    final accountManager = context.watch<AccountManager>();
     final isRecentlyUnblocked = accountManager.isRecentlyUnblocked(
       chat.username,
     );
     final chatModel = context.watch<ChatModel>();
     final lastMsg = chat.lastMessageObject;
+
+    final accountManagerRead = context.read<AccountManager>();
+    final currentUser = accountManagerRead.currentUser;
+    final isLocalProfile = currentUser != null && accountManagerRead.accounts.any((acc) => acc.masterEmail == currentUser.masterEmail && acc.amomimusId == chat.username && acc.amomimusId != currentUser.amomimusId);
+    
+    IconData? localIcon;
+    if (isLocalProfile) {
+       final localSubProfiles = accountManagerRead.accounts.where((acc) => acc.masterEmail == currentUser.masterEmail && acc.amomimusId != currentUser.amomimusId).toList();
+       int localIndex = localSubProfiles.indexWhere((acc) => acc.amomimusId == chat.username);
+       if (localIndex == 0) {
+         localIcon = Icons.sentiment_satisfied_alt;
+       } else if (localIndex == 1) {
+         localIcon = Icons.sentiment_very_dissatisfied;
+       } else {
+         localIcon = Icons.sentiment_satisfied;
+       }
+    }
+
     // Only show pending if it's been slow (>2s) — fast sends show nothing
     final isLastMessagePending =
         lastMsg != null &&
@@ -126,6 +157,8 @@ class ChatListTileWidget extends StatelessWidget {
           context.read<ChatRequestManager>().deleteRequestWith(chat.username);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
               content: Text(
                 '${t.chat_deleted_prefix}${chat.name}${t.chat_deleted_suffix}',
               ),
@@ -135,6 +168,38 @@ class ChatListTileWidget extends StatelessWidget {
         },
         child: InkWell(
           onTap: () {
+            final accountMgr = context.read<AccountManager>();
+            final currentUser = accountMgr.currentUser;
+            bool isBothSubProfiles = false;
+            
+            if (currentUser != null && accountMgr.accounts.any((acc) => acc.amomimusId == chat.username)) {
+              final targetUser = accountMgr.accounts.firstWhere((acc) => acc.amomimusId == chat.username);
+              if (targetUser.masterEmail == currentUser.masterEmail) {
+                final groupAccounts = accountMgr.accounts.where((acc) => acc.masterEmail == currentUser.masterEmail).toList();
+                if (groupAccounts.isNotEmpty) {
+                  final masterId = groupAccounts.first.amomimusId;
+                  final isCurrentMaster = currentUser.amomimusId == masterId;
+                  final isTargetMaster = chat.username == masterId;
+                  if (!isCurrentMaster && !isTargetMaster) {
+                    isBothSubProfiles = true;
+                  }
+                }
+              }
+            }
+
+            if (isBothSubProfiles) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
+                  content: Text(
+                    (Translations.of(context) as dynamic).sub_profile_chat_error ?? "Sub-profiles cannot chat with each other.",
+                  ),
+                ),
+              );
+              return;
+            }
+
             context.read<ChatModel>().markAsRead(chat.username);
             Navigator.push(
               context,
@@ -178,7 +243,7 @@ class ChatListTileWidget extends StatelessWidget {
                           size: 28,
                         ),
                       ),
-                      if (chat.isOnline) // Simplified presence check for remote users
+                      if (chat.isOnline || (targetAccount.presenceStatus != 'invisible' && targetAccount.presenceStatus != 'offline'))
                         Positioned(
                           bottom: -1,
                           right: -1,
@@ -188,13 +253,13 @@ class ChatListTileWidget extends StatelessWidget {
                               border: Border.all(color: tileBg, width: 1.5),
                             ),
                             child: ClipOval(
-                                child: Container(
-                                  color: tileBg,
-                                  child: PresencePickerCapsule.getPresenceIcon(
-                                    'online', // Remote presence not fully cached locally yet
-                                    size: 12,
-                                  ),
+                              child: Container(
+                                color: tileBg,
+                                child: PresencePickerCapsule.getPresenceIcon(
+                                  targetAccount.presenceStatus,
+                                  size: 12,
                                 ),
+                              ),
                             ),
                           ),
                         ),
@@ -209,13 +274,23 @@ class ChatListTileWidget extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              GenderHelpers.getDisplayName(chat.name),
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: textColor,
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  (targetAccount.anonymousUsername.isNotEmpty)
+                                      ? targetAccount.anonymousUsername
+                                      : GenderHelpers.getDisplayName(chat.name),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: textColor,
+                                  ),
+                                ),
+                                if (localIcon != null) ...[
+                                  const SizedBox(width: 6),
+                                  Icon(localIcon, size: 16, color: dynamicTileColor),
+                                ],
+                              ],
                             ),
                             Text(
                               chat.time,

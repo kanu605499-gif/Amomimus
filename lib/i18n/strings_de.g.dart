@@ -348,6 +348,19 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get email_verification_title => 'E-Mail-Verifizierung';
 	@override String get email_not_verified_body => 'E-Mail wurde noch nicht verifiziert. Bitte überprüfen Sie Ihren Posteingang oder Spam-Ordner.';
 	@override String get email_verification_sent_body => 'Konto erfolgreich erstellt. Ein Bestätigungslink wurde an Ihre E-Mail gesendet. Bitte vor dem Anmelden verifizieren.';
+	@override String get send_email => 'E-Mail senden';
+	@override String get visit_instagram => 'Instagram besuchen';
+	@override String get developer_role => 'Entwickler';
+	@override String get bug_report_success => 'Fehlerbericht erfolgreich gesendet.';
+	@override String get bug_report_fail_limit => 'Senden fehlgeschlagen. Sie haben möglicherweise Ihr wöchentliches Limit (3/Woche) erreicht.';
+	@override String get bug_report_describe => 'Beschreiben Sie den Fehler oder das Problem, das Sie haben.';
+	@override String get bug_report_wait => 'Warten';
+	@override String get bug_category_ui => 'UI / Anzeigefehler';
+	@override String get bug_category_crash => 'App-Absturz / Einfrieren';
+	@override String get bug_category_feature => 'Funktion funktioniert nicht';
+	@override String get bug_category_other => 'Andere';
+	@override String get my_favorited_stickers => 'Meine Lieblingssticker';
+	@override String get no_favorited_stickers => 'Keine Lieblingssticker';
 }
 
 /// The flat map containing all translations for locale <de>.
@@ -667,6 +680,19 @@ extension on TranslationsDe {
 			'email_verification_title' => 'E-Mail-Verifizierung',
 			'email_not_verified_body' => 'E-Mail wurde noch nicht verifiziert. Bitte überprüfen Sie Ihren Posteingang oder Spam-Ordner.',
 			'email_verification_sent_body' => 'Konto erfolgreich erstellt. Ein Bestätigungslink wurde an Ihre E-Mail gesendet. Bitte vor dem Anmelden verifizieren.',
+			'send_email' => 'E-Mail senden',
+			'visit_instagram' => 'Instagram besuchen',
+			'developer_role' => 'Entwickler',
+			'bug_report_success' => 'Fehlerbericht erfolgreich gesendet.',
+			'bug_report_fail_limit' => 'Senden fehlgeschlagen. Sie haben möglicherweise Ihr wöchentliches Limit (3/Woche) erreicht.',
+			'bug_report_describe' => 'Beschreiben Sie den Fehler oder das Problem, das Sie haben.',
+			'bug_report_wait' => 'Warten',
+			'bug_category_ui' => 'UI / Anzeigefehler',
+			'bug_category_crash' => 'App-Absturz / Einfrieren',
+			'bug_category_feature' => 'Funktion funktioniert nicht',
+			'bug_category_other' => 'Andere',
+			'my_favorited_stickers' => 'Meine Lieblingssticker',
+			'no_favorited_stickers' => 'Keine Lieblingssticker',
 			_ => null,
 		};
 	}

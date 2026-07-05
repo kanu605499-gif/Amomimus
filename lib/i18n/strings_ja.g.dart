@@ -346,6 +346,19 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get email_verification_title => 'メールアドレスの確認';
 	@override String get email_not_verified_body => 'メールアドレスがまだ確認されていません。受信トレイまたは迷惑メールフォルダを確認してください。';
 	@override String get email_verification_sent_body => 'アカウントが正常に作成されました。確認リンクがメールに送信されました。ログインする前に確認してください。';
+	@override String get send_email => 'メールを送信';
+	@override String get visit_instagram => 'Instagramを見る';
+	@override String get developer_role => '開発者';
+	@override String get bug_report_success => 'バグレポートが正常に送信されました。';
+	@override String get bug_report_fail_limit => '送信に失敗しました。週間上限（3回/週）に達している可能性があります。';
+	@override String get bug_report_describe => '発生したバグや問題について説明してください。';
+	@override String get bug_report_wait => '待機';
+	@override String get bug_category_ui => 'UI / 表示のバグ';
+	@override String get bug_category_crash => 'アプリのクラッシュ / フリーズ';
+	@override String get bug_category_feature => '機能が動作しない';
+	@override String get bug_category_other => 'その他';
+	@override String get my_favorited_stickers => 'お気に入りのステッカー';
+	@override String get no_favorited_stickers => 'お気に入りのステッカーはありません';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -663,6 +676,19 @@ extension on TranslationsJa {
 			'email_verification_title' => 'メールアドレスの確認',
 			'email_not_verified_body' => 'メールアドレスがまだ確認されていません。受信トレイまたは迷惑メールフォルダを確認してください。',
 			'email_verification_sent_body' => 'アカウントが正常に作成されました。確認リンクがメールに送信されました。ログインする前に確認してください。',
+			'send_email' => 'メールを送信',
+			'visit_instagram' => 'Instagramを見る',
+			'developer_role' => '開発者',
+			'bug_report_success' => 'バグレポートが正常に送信されました。',
+			'bug_report_fail_limit' => '送信に失敗しました。週間上限（3回/週）に達している可能性があります。',
+			'bug_report_describe' => '発生したバグや問題について説明してください。',
+			'bug_report_wait' => '待機',
+			'bug_category_ui' => 'UI / 表示のバグ',
+			'bug_category_crash' => 'アプリのクラッシュ / フリーズ',
+			'bug_category_feature' => '機能が動作しない',
+			'bug_category_other' => 'その他',
+			'my_favorited_stickers' => 'お気に入りのステッカー',
+			'no_favorited_stickers' => 'お気に入りのステッカーはありません',
 			_ => null,
 		};
 	}
