@@ -6,6 +6,7 @@ import '../../amomimusdark.dart';
 
 import '../report_bug_dialog.dart';
 import '../../screens/contact_developers_screen.dart';
+import 'package:amomimus/services/account_manager.dart';
 import 'package:amomimus/i18n/strings.g.dart';
 import '../../services/preference_handler.dart';
 
@@ -164,27 +165,35 @@ class _RightOptionsPanelState extends State<RightOptionsPanel> {
                                   return 'English';
                                 }(),
                                 onSelected: (String newValue) {
+                                  String selectedLang = 'en';
                                   setState(() {
                                     if (newValue == 'Bahasa') {
                                       LocaleSettings.setLocale(AppLocale.id);
                                       PreferenceHandler.setLanguage('id');
+                                      selectedLang = 'id';
                                     } else if (newValue == '忍者') {
                                       LocaleSettings.setLocale(AppLocale.ja);
                                       PreferenceHandler.setLanguage('ja');
+                                      selectedLang = 'ja';
                                     } else if (newValue == 'Deutsch') {
                                       LocaleSettings.setLocale(AppLocale.de);
                                       PreferenceHandler.setLanguage('de');
+                                      selectedLang = 'de';
                                     } else if (newValue == 'ภาษาไทย') {
                                       LocaleSettings.setLocale(AppLocale.th);
                                       PreferenceHandler.setLanguage('th');
+                                      selectedLang = 'th';
                                     } else if (newValue == 'Tamriel') {
                                       LocaleSettings.setLocale(AppLocale.tamriel);
                                       PreferenceHandler.setLanguage('tamriel');
+                                      selectedLang = 'tamriel';
                                     } else {
                                       LocaleSettings.setLocale(AppLocale.en);
                                       PreferenceHandler.setLanguage('en');
+                                      selectedLang = 'en';
                                     }
                                   });
+                                  context.read<AccountManager>().updateLanguage(selectedLang);
                                 },
                                 itemBuilder: (BuildContext context) {
                                   return <String>[

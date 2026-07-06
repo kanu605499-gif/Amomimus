@@ -15,9 +15,15 @@ import 'package:amomimus/services/firebase_auth_service.dart';
 import 'package:amomimus/services/feed_manager.dart';
 import 'package:amomimus/services/chat_request_manager.dart';
 import 'package:amomimus/services/notification_manager.dart';
+import 'package:amomimus/helpers/notification_helper.dart';
 
 import 'package:flutter/services.dart';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
 
 Future<void> runAmomimusApp(FirebaseOptions options) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +32,17 @@ Future<void> runAmomimusApp(FirebaseOptions options) async {
     options: options,
   );
   
-  await AndroidAlarmManager.initialize();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  
+  // Tangkap sinyal FCM saat aplikasi sedang terbuka di layar (Foreground)
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    if (message.notification != null) {
+      NotificationHelper.showRealtimeNotification(
+        title: message.notification!.title ?? 'Amomimus',
+        body: message.notification!.body ?? '',
+      );
+    }
+  });
   
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(

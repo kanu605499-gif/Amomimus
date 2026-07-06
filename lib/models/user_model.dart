@@ -44,6 +44,7 @@ class UserAccount {
   final String presenceStatus; // 'auto', 'online', 'invisible', 'dnd'
   final String? presenceUpdatedAt;
   final String? fcmToken; // Firebase Cloud Messaging token for push notifications
+  final String language; // Selected language for push notifications
 
   UserAccount({
     this.id,
@@ -82,6 +83,7 @@ class UserAccount {
     this.presenceStatus = 'auto',
     this.presenceUpdatedAt,
     this.fcmToken,
+    this.language = 'id',
   }) : masterEmail = (masterEmail == null || masterEmail.isEmpty) ? email : masterEmail;
 
   /// Firestore-ready: creates a [UserAccount] from a [Map].
@@ -141,6 +143,7 @@ class UserAccount {
       presenceStatus: map['presenceStatus'] ?? 'auto',
       presenceUpdatedAt: map['presenceUpdatedAt'],
       fcmToken: map['fcmToken'],
+      language: map['language'] ?? 'id',
     );
   }
 
@@ -183,6 +186,7 @@ class UserAccount {
       'presenceStatus': presenceStatus,
       'presenceUpdatedAt': presenceUpdatedAt,
       'fcmToken': fcmToken,
+      'language': language,
     };
   }
 
@@ -223,6 +227,7 @@ class UserAccount {
     String? presenceStatus,
     String? presenceUpdatedAt,
     String? fcmToken,
+    String? language,
   }) {
     return UserAccount(
       id: id ?? this.id,
@@ -264,6 +269,7 @@ class UserAccount {
       presenceStatus: presenceStatus ?? this.presenceStatus,
       presenceUpdatedAt: presenceUpdatedAt ?? this.presenceUpdatedAt,
       fcmToken: fcmToken ?? this.fcmToken,
+      language: language ?? this.language,
     );
   }
 

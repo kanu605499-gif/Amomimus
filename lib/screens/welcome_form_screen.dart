@@ -472,27 +472,35 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                           ),
                           onChanged: (String? newValue) {
                             if (newValue != null) {
+                              String selectedLang = 'en';
                               setState(() {
                                 if (newValue == 'Bahasa') {
                                   LocaleSettings.setLocale(AppLocale.id);
                                   PreferenceHandler.setLanguage('id');
+                                  selectedLang = 'id';
                                 } else if (newValue == 'English') {
                                   LocaleSettings.setLocale(AppLocale.en);
                                   PreferenceHandler.setLanguage('en');
+                                  selectedLang = 'en';
                                 } else if (newValue == 'Deutsch') {
                                   LocaleSettings.setLocale(AppLocale.de);
                                   PreferenceHandler.setLanguage('de');
+                                  selectedLang = 'de';
                                 } else if (newValue == '???????') {
                                   LocaleSettings.setLocale(AppLocale.th);
                                   PreferenceHandler.setLanguage('th');
+                                  selectedLang = 'th';
                                 } else if (newValue == '??') {
                                   LocaleSettings.setLocale(AppLocale.ja);
                                   PreferenceHandler.setLanguage('ja');
+                                  selectedLang = 'ja';
                                 } else if (newValue == 'Tamriel') {
                                   LocaleSettings.setLocale(AppLocale.tamriel);
                                   PreferenceHandler.setLanguage('tamriel');
+                                  selectedLang = 'tamriel';
                                 }
                               });
+                              context.read<AccountManager>().updateLanguage(selectedLang);
                             }
                           },
                           items:

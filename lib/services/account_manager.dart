@@ -10,7 +10,7 @@ import '../helpers/benevolent_calculator.dart';
 import '../models/user_credentials_model.dart';
 import 'auth_service.dart';
 import 'background_service.dart';
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AccountManager extends ChangeNotifier {
@@ -115,10 +115,9 @@ class AccountManager extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
 
-    // Re-schedule alarms on every app start if user is already logged in.
-    // This ensures background notifications work even after a reboot or app update.
+    // Fetch and save FCM token on load for the current user
     if (_currentUser != null && !_currentUser!.isDemo) {
-      scheduleAmowSummaries();
+      _updateFcmToken(_currentUser!);
     }
   }
 
@@ -207,33 +206,56 @@ class AccountManager extends ChangeNotifier {
     await PreferenceHandler.setSavedAmomimusId(account.amomimusId);
     await PreferenceHandler.setRememberMe(true);
 
-    // Schedule local push notifications for Amow Summaries
-    await scheduleAmowSummaries();
+    // Save FCM token for the newly switched account
+    await _updateFcmToken(account);
   }
 
-  Future<void> scheduleAmowSummaries() async {
-    final times = [
-      const TimeOfDay(hour: 10, minute: 59),
-      const TimeOfDay(hour: 16, minute: 34),
-      const TimeOfDay(hour: 21, minute: 44),
-      const TimeOfDay(hour: 5, minute: 29),
-      const TimeOfDay(hour: 23, minute: 59),
-    ];
-    
-    final now = DateTime.now();
-    for (int i = 0; i < times.length; i++) {
-      var nextTime = DateTime(now.year, now.month, now.day, times[i].hour, times[i].minute);
-      if (nextTime.isBefore(now)) {
-        nextTime = nextTime.add(const Duration(days: 1));
+  Future<void> _updateFcmToken(UserAccount account) async {
+    try {
+      final messaging = FirebaseMessaging.instance;
+      // Request permission (important for iOS and Android 13+)
+      await messaging.requestPermission();
+      final token = await messaging.getToken();
+      if (token != null) {
+        // Update local user object
+        final updatedUser = account.copyWith(fcmToken: token);
+        await DatabaseHelper.instance.updateUser(updatedUser);
+        
+        // Update in Firestore
+        final query = await _firestore.collection('users')
+            .where('amomimusId', isEqualTo: account.amomimusId)
+            .get();
+        if (query.docs.isNotEmpty) {
+          await query.docs.first.reference.update({
+            'fcmToken': token,
+            'language': updatedUser.language,
+          });
+        }
       }
-      await AndroidAlarmManager.periodic(
-        const Duration(days: 1),
-        i, // unique ID for each alarm
-        amowSummaryTask,
-        startAt: nextTime,
-        exact: true,
-        wakeup: true,
-      );
+    } catch (e) {
+      print("==== FCM TOKEN UPDATE FAILED: $e ====");
+    }
+  }
+
+  Future<void> updateLanguage(String lang) async {
+    if (_currentUser == null || _currentUser!.isDemo) return;
+    
+    try {
+      // Update local user object
+      final updatedUser = _currentUser!.copyWith(language: lang);
+      _currentUser = updatedUser;
+      await DatabaseHelper.instance.updateUser(updatedUser);
+      notifyListeners();
+      
+      // Update in Firestore
+      final query = await _firestore.collection('users')
+          .where('amomimusId', isEqualTo: updatedUser.amomimusId)
+          .get();
+      if (query.docs.isNotEmpty) {
+        await query.docs.first.reference.update({'language': lang});
+      }
+    } catch (e) {
+      print("==== LANGUAGE UPDATE FAILED: $e ====");
     }
   }
 

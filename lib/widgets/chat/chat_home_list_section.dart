@@ -63,6 +63,22 @@ class ChatListTileWidget extends StatelessWidget {
     final chatModel = context.watch<ChatModel>();
     final lastMsg = chat.lastMessageObject;
 
+    IconData? subProfileIcon;
+    final currentUser = accountManager.currentUser;
+    if (currentUser != null && targetAccount.masterEmail == currentUser.masterEmail) {
+      final groupAccounts = accountManager.accounts.where((acc) => acc.masterEmail == currentUser.masterEmail).toList();
+      if (groupAccounts.isNotEmpty) {
+        final masterId = groupAccounts.first.amomimusId;
+        final isTargetMaster = targetAccount.amomimusId == masterId;
+        if (!isTargetMaster) {
+          final subProfiles = groupAccounts.where((acc) => acc.amomimusId != masterId).toList();
+          final index = subProfiles.indexWhere((acc) => acc.amomimusId == targetAccount.amomimusId);
+          if (index == 0) subProfileIcon = Icons.sentiment_satisfied_outlined;
+          else if (index >= 1) subProfileIcon = Icons.sentiment_dissatisfied_outlined;
+        }
+      }
+    }
+
     // Only show pending if it's been slow (>2s) — fast sends show nothing
     final isLastMessagePending =
         lastMsg != null &&
@@ -326,35 +342,50 @@ class ChatListTileWidget extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 5),
-                        Text(
-                          isLastMessagePending
-                              ? t.message_is_pending
-                              : showSuccessMessage
-                              ? t.message_successfully_sent
-                              : chat.lastMessage == 'room_chat_resetted'
-                              ? t.room_chat_resetted
-                              : (chat.lastMessage.startsWith('[STICKER]:')
-                                    ? '[STICKER]'
-                                    : chat.lastMessage),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: chat.lastMessage == 'room_chat_resetted'
-                                ? Colors.redAccent.withValues(alpha: 0.8)
-                                : isLastMessagePending
-                                ? Colors.redAccent
-                                : showSuccessMessage
-                                ? Colors.green
-                                : subTextColor,
-                            fontFamily: 'serif',
-                            fontStyle:
-                                (isLastMessagePending ||
-                                    showSuccessMessage ||
-                                    chat.lastMessage == 'room_chat_resetted')
-                                ? FontStyle.italic
-                                : FontStyle.normal,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                isLastMessagePending
+                                    ? t.message_is_pending
+                                    : showSuccessMessage
+                                    ? t.message_successfully_sent
+                                    : chat.lastMessage == 'room_chat_resetted'
+                                    ? t.room_chat_resetted
+                                    : (chat.lastMessage.startsWith('[STICKER]:')
+                                          ? '[STICKER]'
+                                          : chat.lastMessage),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: chat.lastMessage == 'room_chat_resetted'
+                                      ? Colors.redAccent.withValues(alpha: 0.8)
+                                      : isLastMessagePending
+                                      ? Colors.redAccent
+                                      : showSuccessMessage
+                                      ? Colors.green
+                                      : subTextColor,
+                                  fontFamily: 'serif',
+                                  fontStyle:
+                                      (isLastMessagePending ||
+                                          showSuccessMessage ||
+                                          chat.lastMessage == 'room_chat_resetted')
+                                      ? FontStyle.italic
+                                      : FontStyle.normal,
+                                ),
+                              ),
+                            ),
+                            if (subProfileIcon != null) ...[
+                              const SizedBox(width: 8),
+                              Icon(
+                                subProfileIcon,
+                                size: 16,
+                                color: subTextColor.withValues(alpha: 0.7),
+                              ),
+                            ],
+                          ],
                         ),
                       ],
                     ),
