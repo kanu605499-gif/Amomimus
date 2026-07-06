@@ -6,6 +6,7 @@ import '../../amomimusdark.dart';
 import '../../services/chat_request_manager.dart';
 import 'chat_home_requests_sheet.dart';
 import 'package:amomimus/i18n/strings.g.dart';
+import '../../services/account_manager.dart';
 
 class ChatHomeRequestsCard extends StatelessWidget {
   final AnimationController pulseController;
@@ -25,10 +26,22 @@ class ChatHomeRequestsCard extends StatelessWidget {
 
     return Consumer<ChatRequestManager>(
       builder: (context, reqManager, child) {
-        final requests = reqManager.incomingRequests;
-        if (requests.isEmpty) {
+        final accountManager = context.read<AccountManager>();
+        final blockedUsers = accountManager.currentUser?.blockedUsers ?? [];
+        final blockedBy = accountManager.currentUser?.blockedBy ?? [];
+
+        final incomingReqs = reqManager.incomingRequests.where((req) {
+          return !blockedUsers.contains(req.senderId) && !blockedBy.contains(req.senderId);
+        }).toList();
+        
+        final outgoingReqs = reqManager.outgoingRequests.where((req) {
+          return !blockedUsers.contains(req.receiverId) && !blockedBy.contains(req.receiverId);
+        }).toList();
+
+        if (incomingReqs.isEmpty && outgoingReqs.isEmpty) {
           return const SliverToBoxAdapter(child: SizedBox.shrink());
         }
+        final totalReqs = incomingReqs.length + outgoingReqs.length;
 
         return SliverToBoxAdapter(
           child: Padding(
@@ -72,7 +85,7 @@ class ChatHomeRequestsCard extends StatelessWidget {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        '${t.chat_requests} (${requests.length})',
+                        '${t.chat_requests} ($totalReqs)',
                         style: TextStyle(
                           color: themeProvider.isDarkMode
                               ? Colors.white

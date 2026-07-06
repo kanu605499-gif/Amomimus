@@ -54,24 +54,24 @@ class _GlitchEffectState extends State<GlitchEffect>
   }
 
   void _startGlitchTimer() {
-    _timer = Timer.periodic(const Duration(milliseconds: 350), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 250), (timer) {
       if (!mounted) return;
 
-      // Randomly decide whether to glitch on this tick (60% for horror, 15% otherwise)
+      // Randomly decide whether to glitch on this tick (60% for horror, 30% otherwise)
       final bool shouldGlitchHorror = widget.isRedHorror && _random.nextDouble() > 0.4;
-      final bool shouldGlitchNormal = !widget.isRedHorror && _random.nextDouble() > 0.85;
+      final bool shouldGlitchNormal = !widget.isRedHorror && _random.nextDouble() > 0.70;
 
       if (shouldGlitchHorror || shouldGlitchNormal) {
         setState(() {
           _isGlitching = true;
           _xOffset1 =
-              (_random.nextDouble() - 0.5) * (widget.isRedHorror ? 15 : 4);
+              (_random.nextDouble() - 0.5) * (widget.isRedHorror ? 15 : 6);
           _yOffset1 =
-              (_random.nextDouble() - 0.5) * (widget.isRedHorror ? 15 : 4);
+              (_random.nextDouble() - 0.5) * (widget.isRedHorror ? 15 : 6);
           _xOffset2 =
-              (_random.nextDouble() - 0.5) * (widget.isRedHorror ? 15 : 4);
+              (_random.nextDouble() - 0.5) * (widget.isRedHorror ? 15 : 6);
           _yOffset2 =
-              (_random.nextDouble() - 0.5) * (widget.isRedHorror ? 15 : 4);
+              (_random.nextDouble() - 0.5) * (widget.isRedHorror ? 15 : 6);
         });
 
         // Return to normal very quickly

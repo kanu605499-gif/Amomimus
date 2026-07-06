@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../services/account_manager.dart';
 import '../amomimusdark.dart';
 import '../services/chatmodel.dart';
+import '../services/chat_request_manager.dart';
 import 'fake_pdf_screen.dart';
 import '../widgets/chat/chat_home_mini_island.dart';
 import '../widgets/chat/chat_home_list_section.dart';
@@ -83,6 +84,9 @@ class _AmomimusApp7State extends State<AmomimusApp7>
 
     final myAmomimusId = accountManager.currentUser?.amomimusId ?? '';
 
+    final reqManager = context.watch<ChatRequestManager>();
+    final outgoingReqs = reqManager.outgoingRequests;
+
     final rawChatList = chatModel.chatList;
     final chatList = rawChatList
         .where(
@@ -91,6 +95,8 @@ class _AmomimusApp7State extends State<AmomimusApp7>
               (!blockedBy.contains(c.username) || !c.hasSeenResetAnimation),
         )
         .toList();
+
+    // The chat list is fetched directly from the rawChatList filter.
 
     // Filter chat list so the unblocked user (Ex-Blocked) doesn't see the empty room trigger.
     // They will only see the room once the unblocker sends a real message (for replying).

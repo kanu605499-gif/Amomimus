@@ -25,6 +25,15 @@ class AudioManager {
     }
   }
 
+  Future<void> playChatNotif() async {
+    final now = DateTime.now();
+    // Prevent spam: only play if it has been more than 3 seconds since the last alert
+    if (now.difference(_lastAlertTime).inSeconds > 3) {
+      _lastAlertTime = now;
+      await _player.play(AssetSource('audio/chat_notif.mp3'));
+    }
+  }
+
   Future<void> playOldRadio() async {
     await _player.play(AssetSource('audio/old_radio.mp3'));
   }

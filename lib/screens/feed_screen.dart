@@ -20,6 +20,7 @@ import 'package:amomimus/widgets/chat/amomimus_wave_clipper.dart';
 import '../amomimusdark.dart';
 import '../services/chatmodel.dart';
 import '../services/account_manager.dart';
+import '../services/chat_request_manager.dart';
 import '../services/feed_manager.dart';
 import '../services/notification_manager.dart';
 import '../models/notification_model.dart';
@@ -631,8 +632,16 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                               builder: (context) {
                                 final chatModel = context.watch<ChatModel>();
                                 final accountManager = context.watch<AccountManager>();
+                                final requestManager = context.watch<ChatRequestManager>();
                                 final blockedUsers = accountManager.currentUser?.blockedUsers ?? [];
                                 final blockedByUsers = accountManager.currentUser?.blockedBy ?? [];
+                                
+                                final hasUnreadChat = chatModel.hasUnreadMessages(blockedUsers, blockedByUsers);
+                                final hasPendingRequest = requestManager.incomingRequests.any(
+                                  (req) => !blockedUsers.contains(req.senderId) && !blockedByUsers.contains(req.senderId)
+                                );
+                                final showRedDot = hasUnreadChat || hasPendingRequest;
+
                                 return Stack(
                                   clipBehavior: Clip.none,
                                   children: [
@@ -642,7 +651,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                                           ? AmomimusDarkTheme.policeLineYellow
                                           : AmomimusDarkTheme.primaryPurple,
                                     ),
-                                    if (chatModel.hasUnreadMessages(blockedUsers, blockedByUsers))
+                                    if (showRedDot)
                                       Positioned(
                                         top: -2,
                                         right: -2,

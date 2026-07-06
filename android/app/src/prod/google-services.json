@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "932913168592",
+    "firebase_url": "https://amomimus-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "amomimus",
+    "storage_bucket": "amomimus.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:932913168592:android:ff00762b55b048c108ded5",
+        "android_client_info": {
+          "package_name": "com.diata.amomimus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "932913168592-jftgvm6j4qfuatqij1g4h982dmrncuh5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.diata.amomimus",
+            "certificate_hash": "af774d7f643b8ca7d9831f9ff618cb07589c9cde"
+          }
+        },
+        {
+          "client_id": "932913168592-l3ero5lshl31gsmmlmvi08eljkd8kbe0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.diata.amomimus",
+            "certificate_hash": "1c8e004c059f2197ba2049b5e93c5d219d2986c9"
+          }
+        },
+        {
+          "client_id": "932913168592-8pt7fcv6a1jg0a1t2tpkva3ca47o1vl3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB40D2ZvebawuJ2US71UZLgzHNPa7Kb4g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "932913168592-8pt7fcv6a1jg0a1t2tpkva3ca47o1vl3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

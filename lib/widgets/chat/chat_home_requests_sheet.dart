@@ -58,7 +58,7 @@ void showRequestsBottomSheet(
             const SizedBox(height: 16),
             if (reqManager.incomingRequests.isEmpty)
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(bottom: 16.0),
                 child: Text(
                   t.no_incoming_requests,
                   style: TextStyle(color: textCol.withValues(alpha: 0.6)),
@@ -68,81 +68,147 @@ void showRequestsBottomSheet(
             Expanded(
               child: ListView(
                 shrinkWrap: true,
-                children: reqManager.incomingRequests.where((req) {
-                  final accountManager = context.read<AccountManager>();
-                  final blockedUsers = accountManager.currentUser?.blockedUsers ?? [];
-                  final blockedBy = accountManager.currentUser?.blockedBy ?? [];
-                  return !blockedUsers.contains(req.senderId) && !blockedBy.contains(req.senderId);
-                }).map((req) {
-                  final accountManager = context.read<AccountManager>();
-              final senderAccount = accountManager.accounts.firstWhere(
-                (acc) => acc.amomimusId == req.senderId,
-                orElse: () => UserAccount(
-                  email: '',
-                  realUsername: '',
-                  anonymousUsername: '',
-                  amomimusId: '',
-                  gender: 'Amo',
-                  registrationDate: '',
-                  isDemo: false,
-                ),
-              );
-              final senderGender = senderAccount.gender;
-              final senderIcon = GenderHelpers.getGenderIcon(senderGender);
-              final senderColor = GenderHelpers.getGenderColor(senderGender);
+                children: [
+                  ...reqManager.incomingRequests.where((req) {
+                    final accountManager = context.read<AccountManager>();
+                    final blockedUsers = accountManager.currentUser?.blockedUsers ?? [];
+                    final blockedBy = accountManager.currentUser?.blockedBy ?? [];
+                    return !blockedUsers.contains(req.senderId) && !blockedBy.contains(req.senderId);
+                  }).map((req) {
+                    final accountManager = context.read<AccountManager>();
+                    final senderAccount = accountManager.accounts.firstWhere(
+                      (acc) => acc.amomimusId == req.senderId,
+                      orElse: () => UserAccount(
+                        email: '',
+                        realUsername: '',
+                        anonymousUsername: '',
+                        amomimusId: '',
+                        gender: 'Amo',
+                        registrationDate: '',
+                        isDemo: false,
+                      ),
+                    );
+                    final senderGender = senderAccount.gender;
+                    final senderIcon = GenderHelpers.getGenderIcon(senderGender);
+                    final senderColor = GenderHelpers.getGenderColor(senderGender);
 
-              return ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: senderColor, width: 1.5),
-                  ),
-                  child: Icon(senderIcon, color: senderColor, size: 22),
-                ),
-                title: Text(
-                  senderAccount.anonymousUsername.isNotEmpty
-                      ? senderAccount.anonymousUsername
-                      : req.senderName,
-                  style: TextStyle(color: textCol, fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                  'ID: ${req.senderId}',
-                  style: TextStyle(
-                    color: textCol.withValues(alpha: 0.7),
-                    fontSize: 12,
-                  ),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.redAccent),
-                      onPressed: () {
-                        reqManager.rejectRequest(req.id);
-                        Navigator.pop(ctx);
-                      },
+                    return ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: senderColor, width: 1.5),
+                        ),
+                        child: Icon(senderIcon, color: senderColor, size: 22),
+                      ),
+                      title: Text(
+                        senderAccount.anonymousUsername.isNotEmpty
+                            ? senderAccount.anonymousUsername
+                            : req.senderName,
+                        style: TextStyle(color: textCol, fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        'ID: ${req.senderId}',
+                        style: TextStyle(
+                          color: textCol.withValues(alpha: 0.7),
+                          fontSize: 12,
+                        ),
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.close, color: Colors.redAccent),
+                            onPressed: () {
+                              reqManager.rejectRequest(req.id);
+                              Navigator.pop(ctx);
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.check, color: Colors.green),
+                            onPressed: () {
+                              reqManager.acceptRequest(req.id);
+                              context.read<ChatModel>().sendMessage(
+                                req.senderId,
+                                t.chat_req_accepted,
+                                targetName: req.senderName,
+                              );
+                              Navigator.pop(ctx);
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+                  
+                  if (reqManager.outgoingRequests.isNotEmpty) ...[
+                    const Divider(height: 32),
+                    Text(
+                      (t as dynamic).outgoing_requests ?? "Permintaan Keluar",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: textCol,
+                      ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.check, color: Colors.green),
-                      onPressed: () {
-                        reqManager.acceptRequest(req.id);
-                        // Initialize chat with accepted message
-                        context.read<ChatModel>().sendMessage(
-                          req.senderId,
-                          t.chat_req_accepted,
-                          targetName: req.senderName,
-                        );
-                        Navigator.pop(ctx);
-                      },
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-            ),
+                    const SizedBox(height: 16),
+                    ...reqManager.outgoingRequests.map((req) {
+                      final accountManager = context.read<AccountManager>();
+                      final receiverAccount = accountManager.accounts.firstWhere(
+                        (acc) => acc.amomimusId == req.receiverId,
+                        orElse: () => UserAccount(
+                          email: '',
+                          realUsername: '',
+                          anonymousUsername: '',
+                          amomimusId: '',
+                          gender: 'Amo',
+                          registrationDate: '',
+                          isDemo: false,
+                        ),
+                      );
+                      final receiverGender = receiverAccount.gender;
+                      final receiverIcon = GenderHelpers.getGenderIcon(receiverGender);
+                      final receiverColor = GenderHelpers.getGenderColor(receiverGender);
+
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: receiverColor, width: 1.5),
+                          ),
+                          child: Icon(receiverIcon, color: receiverColor, size: 22),
+                        ),
+                        title: Text(
+                          receiverAccount.anonymousUsername.isNotEmpty
+                              ? receiverAccount.anonymousUsername
+                              : req.receiverName,
+                          style: TextStyle(color: textCol, fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(
+                          t.chat_req_pending,
+                          style: TextStyle(
+                            color: Colors.orangeAccent,
+                            fontSize: 12,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.cancel_outlined, color: Colors.grey),
+                          onPressed: () {
+                            reqManager.cancelRequest(req.id);
+                            Navigator.pop(ctx);
+                          },
+                        ),
+                      );
+                    }),
+                  ]
+                ],
+              ),
             ),
           ],
         ),

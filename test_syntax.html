@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amomimus - Anonymous Social</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons for modern iconography -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // Enable class-based dark mode
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Dynamic Colors for Amomimus
+                        amoPurple: '#8b5cf6',
+                        amoYellow: '#facc15',
+                        // Dark Theme Colors
+                        amoDark: '#0f0f13',      
+                        amoSurfaceDark: '#1a1a20',
+                        // Light Theme Colors
+                        amoLight: '#f8fafc',
+                        amoSurfaceLight: '#ffffff'
+                    },
+                    animation: {
+                        'bounce-slight': 'bounceSlight 0.3s ease-in-out',
+                    },
+                    keyframes: {
+                        bounceSlight: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base styles transition for smooth theme switching */
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        /* Glassmorphism effect: Light vs Dark */
+        .glass-panel {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .dark .glass-panel {
+            background: rgba(26, 26, 32, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        html:not(.dark) .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        /* Hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* Mini Island Animations */
+        #mini-island { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .island-expanded { width: 300px !important; height: 100px !important; border-radius: 24px !important; }
+        /* Heart animation */
+        .heart-active { color: #ef4444 !important; animation: bounce-slight 0.3s ease-in-out forwards; }
+    </style>
+</head>
+<body class="bg-amoLight dark:bg-amoDark text-slate-800 dark:text-slate-200 h-screen flex flex-col md:flex-row antialiased selection:bg-amoPurple selection:text-white">
+    <!-- Floating Mini Island -->
+    <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full flex justify-center pointer-events-none">
+        <div id="mini-island" class="bg-black/90 dark:bg-black/80 text-white rounded-full h-10 w-40 flex items-center justify-center pointer-events-auto cursor-pointer shadow-lg shadow-amoPurple/20 border border-white/10 overflow-hidden" onclick="toggleIsland()">
+            <div id="island-collapsed-content" class="flex items-center gap-2 text-sm font-medium w-full px-4 justify-center transition-opacity duration-300">
+                <i class="ph ph-bell-ringing text-amoYellow"></i>
+                <span>No alerts</span>
+            </div>
+            
+            <div id="island-expanded-content" class="absolute inset-0 opacity-0 p-4 flex flex-col justify-between hidden transition-opacity duration-300">
+                <div class="flex justify-between items-center w-full">
+                    <span class="text-xs font-bold text-amoYellow tracking-wider">SYSTEM</span>
+                    <i class="ph ph-x cursor-pointer text-gray-400 hover:text-white"></i>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-amoPurple flex items-center justify-center">
+                        <i class="ph ph-chat-circle-dots text-xl text-white"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold">New Chat Request</p>
+                        <p class="text-xs text-gray-400">from #AMM-772</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Sidebar / Bottom Nav -->
+    <nav class="glass-panel w-full md:w-64 h-16 md:h-full fixed bottom-0 md:relative md:flex flex-col justify-between border-t md:border-t-0 md:border-r border-black/5 dark:border-white/5 z-40">
+        <!-- Logo Area -->
+        <div class="hidden md:flex items-center gap-3 p-6 border-b border-black/5 dark:border-white/5">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amoPurple to-blue-600 flex items-center justify-center shadow-lg shadow-amoPurple/20">
+                <i class="ph-fill ph-mask-happy text-2xl text-white"></i>
+            </div>
+            <h1 class="text-xl font-bold tracking-tight text-slate-800 dark:text-white">Amomimus</h1>
+        </div>
+        <!-- Nav Links -->
+        <div class="flex md:flex-col justify-around md:justify-start p-2 md:p-4 gap-2 h-full md:h-auto overflow-y-auto no-scrollbar">
+            <a href="#" class="flex flex-col md:flex-row items-center gap-1 md:gap-3 p-2 md:p-3 rounded-xl bg-black/5 dark:bg-white/10 text-amoPurple dark:text-white transition-colors">
+                <i class="ph-fill ph-house text-2xl md:text-xl"></i>
+                <span class="text-[10px] md:text-sm font-medium">Global Feed</span>
+            </a>
+            <a href="#" class="flex flex-col md:flex-row items-center gap-1 md:gap-3 p-2 md:p-3 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white transition-colors relative">
+                <i class="ph ph-chat-teardrop-text text-2xl md:text-xl"></i>
+                <span class="text-[10px] md:text-sm font-medium">Chats</span>
+                <span class="absolute top-2 right-2 md:relative md:top-auto md:right-auto md:ml-auto w-2 h-2 bg-amoYellow rounded-full"></span>
+            </a>
+            <!-- Theme Toggle Button -->
+            <button onclick="toggleTheme()" class="flex flex-col md:flex-row items-center gap-1 md:gap-3 p-2 md:p-3 rounded-xl text-slate-500 dark:text-slate-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white transition-colors text-left w-full">
+                <i id="theme-icon" class="ph ph-moon text-2xl md:text-xl"></i>
+                <span id="theme-text" class="text-[10px] md:text-sm font-medium">Dark Mode</span>
+            </button>
+        </div>
+        <!-- Current Identity (Desktop) -->
+        <div class="hidden md:block p-4 border-t border-black/5 dark:border-white/5">
+            <div class="p-4 rounded-2xl bg-white dark:bg-amoSurfaceDark border border-black/5 dark:border-white/10 relative overflow-hidden group cursor-pointer shadow-sm dark:shadow-none">
+                <div class="absolute -right-4 -top-4 w-20 h-20 bg-amoPurple/10 dark:bg-amoPurple/20 rounded-full blur-xl group-hover:bg-amoPurple/20 dark:group-hover:bg-amoPurple/40 transition-colors"></div>
+                
+                <p class="text-xs text-slate-500 dark:text-slate-400 mb-1">Active Identity</p>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 border-2 border-amoPurple flex items-center justify-center flex-shrink-0">
+                        <i class="ph-fill ph-ghost text-xl text-amoPurple"></i>
+                    </div>
+                    <div>
+                        <p class="font-bold text-slate-900 dark:text-white text-sm" id="current-id">#AMO-892</p>
+                        <p class="text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                            <i class="ph-fill ph-star"></i> 450 BP
+                        </p>
+                    </div>
+                </div>
+                
+                <button onclick="switchIdentity()" class="mt-3 w-full py-1.5 rounded-lg border border-black/5 dark:border-white/10 text-xs font-medium hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                    Switch Sub-profile
+                </button>
+            </div>
+        </div>
+    </nav>
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-[calc(100vh-64px)] md:h-screen relative pt-16 md:pt-0">
+        <!-- Header -->
+        <header class="glass-panel sticky top-0 z-30 px-6 py-4 flex justify-between items-center border-b border-black/5 dark:border-white/5">
+            <h2 class="text-xl font-bold text-slate-900 dark:text-white">Global Feed</h2>
+            <button class="w-10 h-10 rounded-full bg-white dark:bg-amoSurfaceDark border border-black/5 dark:border-white/10 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                <i class="ph ph-faders text-slate-800 dark:text-white"></i>
+            </button>
+        </header>
+        <!-- Feed Container -->
+        <div class="flex-1 overflow-y-auto no-scrollbar p-4 md:p-6 pb-24 md:pb-6 flex justify-center">
+            <div class="w-full max-w-2xl space-y-6">
+                <!-- Post Input -->
+                <div class="glass-panel rounded-2xl p-4 border border-black/5 dark:border-white/10 mb-8 bg-white/50 dark:bg-transparent">
+                    <div class="flex gap-4">
+                        <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 border border-amoPurple flex items-center justify-center flex-shrink-0">
+                             <i class="ph-fill ph-ghost text-xl text-amoPurple"></i>
+                        </div>
+                        <div class="flex-1">
+                            <textarea id="post-textarea" class="w-full bg-transparent border-none focus:ring-0 resize-none text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-lg outline-none" rows="2" placeholder="What's on your mind? (Anonymous)"></textarea>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center mt-4 pt-4 border-t border-black/5 dark:border-white/5">
+                        <div class="flex gap-2 text-amoPurple items-center">
+                            <button class="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"><i class="ph ph-image text-xl"></i></button>
+                            <button class="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"><i class="ph ph-gif text-xl"></i></button>
+                            <div class="w-px h-6 bg-black/10 dark:bg-white/10 mx-1"></div>
+                            
+                            <button id="ai-generate-btn" onclick="generateAIPost()" class="p-2 rounded-lg text-amoPurple hover:bg-amoPurple/10 transition-colors flex items-center gap-1 group relative" title="Generate AI Post Idea">
+                                <i class="ph-fill ph-magic-wand text-xl group-hover:animate-bounce-slight"></i>
+                                <span class="text-xs font-medium hidden sm:inline">AI Idea</span>
+                            </button>
+                            <button id="ai-polish-btn" onclick="polishAIPost()" class="p-2 rounded-lg text-amoYellow hover:bg-amoYellow/10 transition-colors flex items-center gap-1 group relative" title="Polish Post with AI">
+                                <i class="ph-fill ph-sparkle text-xl group-hover:animate-bounce-slight"></i>
+                                <span class="text-xs font-medium hidden sm:inline">Polish</span>
+                            </button>
+                        </div>
+                        <button onclick="createPost()" class="px-6 py-2 rounded-full bg-amoPurple text-white font-semibold hover:bg-purple-600 transition-colors shadow-lg shadow-amoPurple/20 flex items-center gap-2">
+                            <span>Post</span>
+                            <i id="post-spinner" class="ph ph-spinner animate-spin hidden"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Feed Posts (Injected by JS) -->
+                <div id="feed-list" class="space-y-6"></div>
+            </div>
+        </div>
+    </main>
+    <script>
+        // --- Light/Dark Theme Logic ---
+        function toggleTheme() {
+            const htmlClassList = document.documentElement.classList;
+            const isDark = htmlClassList.contains('dark');
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            
+            if (isDark) {
+                htmlClassList.remove('dark');
+                icon.className = 'ph ph-sun text-2xl md:text-xl text-amoYellow';
+                text.innerText = 'Light Mode';
+            } else {
+                htmlClassList.add('dark');
+                icon.className = 'ph ph-moon text-2xl md:text-xl';
+                text.innerText = 'Dark Mode';
+            }
+        }
+        // --- Mock Data & Functions ---
+        const identities = [
+            { id: '#AMO-892', bp: 450, iconColor: 'text-amoPurple', borderColor: 'border-amoPurple' },
+            { id: '#AMM-114', bp: 320, iconColor: 'text-blue-500', borderColor: 'border-blue-500' },
+            { id: '#AMX-990', bp: 50, iconColor: 'text-red-500', borderColor: 'border-red-500' }
+        ];
+        let currentIdentityIndex = 0;
+
+        const GEMINI_API_KEY = ""; // Automatically injected by Canvas
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
+
+        // Exponential backoff fetch for rate limiting/throttling
+        async function fetchWithRetry(url, options, maxRetries = 3) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.status === 429) { 
+                        const delay = Math.pow(2, i) * 1000;
+                        await new Promise(res => setTimeout(res, delay));
+                        continue;
+                    }
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return response;
+                } catch (error) {
+                    if (i === maxRetries - 1) throw error;
+                    const delay = Math.pow(2, i) * 1000;
+                    await new Promise(res => setTimeout(res, delay));
+                }
+            }
+        }
+
+        // Generic wrapper for calling Gemini text generation
+        async function callGemini(systemPrompt, userPrompt) {
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] },
+            };
+            try {
+                const response = await fetchWithRetry(GEMINI_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                return result.candidates?.[0]?.content?.parts?.[0]?.text || "";
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                return null;
+            }
+        }
+
+        async function generateAIPost() {
+            const textarea = document.getElementById('post-textarea');
+            const icon = document.querySelector('#ai-generate-btn i');
+            
+            textarea.disabled = true;
+            textarea.value = "";
+            textarea.placeholder = "Consulting the void (AI thinking)...";
+            icon.classList.remove('ph-magic-wand');
+            icon.classList.add('ph-spinner', 'animate-spin');
+
+            const sysPrompt = "You are an anonymous user on a dark, mysterious social network called Amomimus. Generate a short, intriguing, philosophical, or mildly humorous anonymous thought (1-2 sentences max). Do not use hashtags, emojis, or greetings. Just the raw thought.";
+            const text = await callGemini(sysPrompt, "Give me an anonymous thought to post.");
+            
+            if (text) textarea.value = text.trim();
+            else textarea.placeholder = "Failed to connect to the void. Try again.";
+            
+            textarea.disabled = false;
+            icon.classList.add('ph-magic-wand');
+            icon.classList.remove('ph-spinner', 'animate-spin');
+        }
+
+        async function polishAIPost() {
+            const textarea = document.getElementById('post-textarea');
+            const currentText = textarea.value.trim();
+            if (!currentText) return;
+
+            const icon = document.querySelector('#ai-polish-btn i');
+            textarea.disabled = true;
+            const originalText = textarea.value;
+            textarea.value = "Polishing your thought...";
+            icon.classList.remove('ph-sparkle');
+            icon.classList.add('ph-spinner', 'animate-spin');
+
+            const sysPrompt = "You are an editor for an anonymous social network. Take the user's text and rewrite it to be more engaging, slightly more poetic or mysterious, but keep the original core meaning. Keep it under 2 sentences. No hashtags or emojis. Only return the revised text.";
+            const text = await callGemini(sysPrompt, `Rewrite this: ${originalText}`);
+            
+            textarea.value = text ? text.trim() : originalText;
+            textarea.disabled = false;
+            icon.classList.add('ph-sparkle');
+            icon.classList.remove('ph-spinner', 'animate-spin');
+        }
+
+        function createPost() {
+            const textarea = document.getElementById('post-textarea');
+            const text = textarea.value.trim();
+            if(!text) return;
+
+            const currentId = identities[currentIdentityIndex];
+            // Assign a random cool gradient for new posts
+            const colors = ['bg-indigo-100 dark:bg-indigo-900/30', 'bg-rose-100 dark:bg-rose-900/30', 'bg-cyan-100 dark:bg-cyan-900/30', 'bg-emerald-100 dark:bg-emerald-900/30'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+            const newPost = {
+                authorId: currentId.id,
+                avatarColor: randomColor,
+                textColor: currentId.iconColor,
+                time: 'Just now',
+                content: text,
+                likes: 0,
+                comments: 0,
+                isLiked: false
+            };
+
+            mockPosts.unshift(newPost);
+            renderPosts();
+            textarea.value = '';
+        }
+
+        const mockPosts = [
+            {
+                authorId: '#AMM-402',
+                avatarColor: 'bg-emerald-100 dark:bg-emerald-900',
+                textColor: 'text-emerald-600 dark:text-emerald-400',
+                time: '2m ago',
+                content: 'Just realized something crazy. We spend so much time worrying about what others think, but here, we are just thoughts floating in the void.',
+                likes: 42, comments: 12, isLiked: false
+            },
+            {
+                authorId: '#AMO-911',
+                avatarColor: 'bg-yellow-100 dark:bg-yellow-900/30',
+                textColor: 'text-amoYellow',
+                time: '15m ago',
+                content: 'Anyone else struggling with the new tech stack update? I feel like I am reading hieroglyphics today. ??',
+                media: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800&h=400',
+                likes: 18, comments: 5, isLiked: false
+            }
+        ];
+        
+        function renderPosts() {
+            const container = document.getElementById('feed-list');
+            if(!container) return;
+            container.innerHTML = '';
+            
+            mockPosts.forEach((post, index) => {
+                const postHTML = `
+                    <div class="glass-panel rounded-2xl p-5 border border-black/5 dark:border-white/5 bg-white/70 dark:bg-transparent hover:border-black/10 dark:hover:border-white/10 transition-colors relative overflow-hidden group shadow-sm dark:shadow-none">
+                        <div class="absolute -top-10 -left-10 w-32 h-32 rounded-full ${post.avatarColor} blur-[50px] opacity-40 dark:opacity-20 pointer-events-none"></div>
+                        <div class="flex justify-between items-start mb-3 relative z-10">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-black/50 border border-black/5 dark:border-white/10 flex items-center justify-center">
+                                    <i class="ph-fill ph-user ${post.textColor} text-xl"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 dark:text-white tracking-wide">${post.authorId}</h4>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">${post.time}</p>
+                                </div>
+                            </div>
+                            <button class="text-slate-400 hover:text-slate-800 dark:hover:text-white p-1">
+                                <i class="ph ph-dots-three text-xl"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed mb-4 relative z-10">${post.content}</p>
+                        ${post.media ? `<div class="rounded-xl overflow-hidden mb-4 border border-black/5 dark:border-white/5 relative z-10"><img src="${post.media}" class="w-full h-auto object-cover max-h-64"></div>` : ''}
+                        
+                        <div class="flex items-center justify-between mt-4 pt-4 border-t border-black/5 dark:border-white/5 relative z-10">
+                            <div class="flex gap-6">
+                                <button onclick="toggleLike(${index})" class="flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors group/btn">
+                                    <i id="heart-icon-${index}" class="ph${post.isLiked ? '-fill heart-active' : ''} ph-heart text-xl group-hover/btn:text-red-500 transition-colors"></i>
+                                    <span id="like-count-${index}" class="text-sm font-medium ${post.isLiked ? 'text-red-500' : ''}">${post.likes}</span>
+                                </button>
+                                <button class="flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors">
+                                    <i class="ph ph-chat-circle text-xl"></i>
+                                    <span class="text-sm font-medium">${post.comments}</span>
+                                </button>
+                            </div>
+                            <button class="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amoPurple/10 hover:bg-amoPurple/20 text-amoPurple border border-amoPurple/20 dark:border-amoPurple/30 transition-all text-sm font-semibold">
+                                <i class="ph ph-paper-plane-tilt"></i> Chat Req
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', postHTML);
+            });
+        }
+        function toggleLike(index) {
+            const post = mockPosts[index];
+            post.isLiked = !post.isLiked;
+            post.likes += post.isLiked ? 1 : -1;
+            const icon = document.getElementById(`heart-icon-${index}`);
+            const count = document.getElementById(`like-count-${index}`);
+            if (post.isLiked) {
+                icon.className = 'ph-fill heart-active ph-heart text-xl transition-colors text-red-500';
+                count.className = 'text-sm font-medium text-red-500';
+            } else {
+                icon.className = 'ph ph-heart text-xl group-hover/btn:text-red-500 transition-colors';
+                count.className = 'text-sm font-medium';
+            }
+            setTimeout(() => icon.classList.remove('heart-active'), 300);
+            count.innerText = post.likes;
+        }
+        function toggleIsland() { /* Kept concise */ }
+        function switchIdentity() { /* Kept concise */ }
+        window.onload = () => {
+            renderPosts();
+            setTimeout(() => {
+                const text = document.querySelector('#island-collapsed-content span');
+                const icon = document.querySelector('#island-collapsed-content i');
+                text.innerText = "1 New Chat Request";
+                icon.classList.add('animate-bounce');
+            }, 3000);
+        };
+    </script>
+</body>
+</html>

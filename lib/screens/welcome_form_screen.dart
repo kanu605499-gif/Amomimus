@@ -450,13 +450,13 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                               case AppLocale.en:
                                 return 'English';
                               case AppLocale.ja:
-                                return '??';
+                                return '忍者';
                               case AppLocale.tamriel:
                                 return 'Tamriel';
                               case AppLocale.de:
                                 return 'Deutsch';
                               case AppLocale.th:
-                                return '???????';
+                                return 'ภาษาไทย';
                               default:
                                 return 'Bahasa';
                             }
@@ -486,11 +486,11 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                                   LocaleSettings.setLocale(AppLocale.de);
                                   PreferenceHandler.setLanguage('de');
                                   selectedLang = 'de';
-                                } else if (newValue == '???????') {
+                                } else if (newValue == 'ภาษาไทย') {
                                   LocaleSettings.setLocale(AppLocale.th);
                                   PreferenceHandler.setLanguage('th');
                                   selectedLang = 'th';
-                                } else if (newValue == '??') {
+                                } else if (newValue == '忍者') {
                                   LocaleSettings.setLocale(AppLocale.ja);
                                   PreferenceHandler.setLanguage('ja');
                                   selectedLang = 'ja';
@@ -508,8 +508,8 @@ class _AmomimusFormPageState extends State<AmomimusFormPage>
                                 'Bahasa',
                                 'Deutsch',
                                 'English',
-                                '???????',
-                                '??',
+                                'ภาษาไทย',
+                                '忍者',
                                 'Tamriel',
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(

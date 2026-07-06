@@ -94,7 +94,13 @@ class ChatRequestManager extends ChangeNotifier {
 
   List<ChatRequest> get outgoingRequests {
     if (_currentUserId == null) return [];
-    return _requests.where((r) => r.senderId == _currentUserId).toList();
+    return _requests
+        .where(
+          (r) =>
+              r.senderId == _currentUserId &&
+              r.status == RequestStatus.pending,
+        )
+        .toList();
   }
 
   bool hasPendingRequestWith(String targetId) {
@@ -191,6 +197,28 @@ class ChatRequestManager extends ChangeNotifier {
             .update({'status': RequestStatus.rejected.name});
       } catch (e) {
         print('Error rejecting chat request: $e');
+      }
+    }
+  }
+
+  Future<void> cancelRequest(String requestId) async {
+    final idx = _requests.indexWhere((r) => r.id == requestId);
+    if (idx != -1) {
+      final req = _requests[idx];
+      _requests.removeAt(idx);
+      notifyListeners();
+
+      if (_localAccountIds.contains(req.senderId) && _localAccountIds.contains(req.receiverId)) {
+        return; // Skip Firestore for local sub-profiles
+      }
+
+      try {
+        await _firestore
+            .collection('chat_requests')
+            .doc(requestId)
+            .delete();
+      } catch (e) {
+        print('Error canceling chat request: $e');
       }
     }
   }
