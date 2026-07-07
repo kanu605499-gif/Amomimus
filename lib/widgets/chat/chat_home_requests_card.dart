@@ -33,15 +33,10 @@ class ChatHomeRequestsCard extends StatelessWidget {
         final incomingReqs = reqManager.incomingRequests.where((req) {
           return !blockedUsers.contains(req.senderId) && !blockedBy.contains(req.senderId);
         }).toList();
-        
-        final outgoingReqs = reqManager.outgoingRequests.where((req) {
-          return !blockedUsers.contains(req.receiverId) && !blockedBy.contains(req.receiverId);
-        }).toList();
-
-        if (incomingReqs.isEmpty && outgoingReqs.isEmpty) {
+        if (incomingReqs.isEmpty) {
           return const SliverToBoxAdapter(child: SizedBox.shrink());
         }
-        final totalReqs = incomingReqs.length + outgoingReqs.length;
+        final totalReqs = incomingReqs.length;
 
         return SliverToBoxAdapter(
           child: Padding(
@@ -71,9 +66,7 @@ class ChatHomeRequestsCard extends StatelessWidget {
                     AnimatedBuilder(
                       animation: pulseController,
                       builder: (context, child) {
-                        // Vibrate animation: rapid slight rotation
-                        final double angle =
-                            sin(pulseController.value * 3.14159 * 20) * 0.15;
+                        final double angle = sin(pulseController.value * 3.14159 * 20) * 0.15;
                         return Transform.rotate(angle: angle, child: child);
                       },
                       child: Icon(
@@ -87,9 +80,7 @@ class ChatHomeRequestsCard extends StatelessWidget {
                       child: Text(
                         '${t.chat_requests} ($totalReqs)',
                         style: TextStyle(
-                          color: themeProvider.isDarkMode
-                              ? Colors.white
-                              : Colors.black87,
+                          color: themeProvider.isDarkMode ? Colors.white : Colors.black87,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),

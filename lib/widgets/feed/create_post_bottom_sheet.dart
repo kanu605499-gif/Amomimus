@@ -6,12 +6,12 @@ import 'package:amomimus/services/feed_manager.dart';
 import 'package:amomimus/models/post_model.dart';
 import 'package:provider/provider.dart';
 
-void showCreatePostBottomSheet(
+Future<void> showCreatePostBottomSheet(
   BuildContext context,
   bool isDark,
   UserAccount currentUser,
 ) {
-  showModalBottomSheet(
+  return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     enableDrag: true,

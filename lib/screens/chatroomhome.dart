@@ -85,7 +85,6 @@ class _AmomimusApp7State extends State<AmomimusApp7>
     final myAmomimusId = accountManager.currentUser?.amomimusId ?? '';
 
     final reqManager = context.watch<ChatRequestManager>();
-    final outgoingReqs = reqManager.outgoingRequests;
 
     final rawChatList = chatModel.chatList;
     final chatList = rawChatList

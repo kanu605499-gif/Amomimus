@@ -140,7 +140,7 @@ class FirebaseAuthService implements AuthService {
   Future<GoogleAuthResult?> loginWithGoogle() async {
     try {
       final googleSignIn = GoogleSignIn(
-        serverClientId: '959959455583-gpaahsld9r6qb2526mer6vjipbphik7f.apps.googleusercontent.com',
+        serverClientId: '932913168592-8pt7fcv6a1jg0a1t2tpkva3ca47o1vl3.apps.googleusercontent.com',
       );
       
       // Force Android to forget the previous choice so the account picker always shows up!

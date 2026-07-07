@@ -599,8 +599,8 @@ class _AmomimusApp6State extends State<AmomimusApp6>
       });
     }
 
-    final iAmBlocker = accountManager.currentUser?.blockedUsers.contains(widget.username) == true;
-    final iAmBlocked = accountManager.isBlockedBy(widget.username!);
+    final iAmBlocker = widget.username != null && accountManager.currentUser?.blockedUsers.contains(widget.username) == true;
+    final iAmBlocked = widget.username != null && accountManager.isBlockedBy(widget.username!);
     
     // Play glitch if blocked, or if blocker hasn't seen it
     final shouldPlayGlitch = iAmBlocked || (iAmBlocker && !activeChat.hasSeenResetAnimation);

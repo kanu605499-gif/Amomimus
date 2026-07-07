@@ -6,6 +6,7 @@ import 'package:amomimus/services/chatmodel.dart';
 import 'package:amomimus/services/account_manager.dart';
 import 'package:amomimus/services/preference_handler.dart';
 import 'package:amomimus/screens/splash_screen.dart'; // Add SplashScreen
+import 'package:amomimus/widgets/update_checker.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -24,6 +25,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
 }
+
+final GlobalKey<NavigatorState> globalNavigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> runAmomimusApp(FirebaseOptions options) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -142,7 +145,15 @@ class MyApp extends StatelessWidget {
     return Consumer<AmomimusDarkTheme>(
       builder: (context, themeProvider, child) {
         return MaterialApp(
+          navigatorKey: globalNavigatorKey,
           debugShowCheckedModeBanner: false,
+          navigatorObservers: [updateNavigatorObserver],
+          builder: (context, child) {
+            return CustomUpdateChecker(
+              navigatorKey: globalNavigatorKey,
+              child: child!,
+            );
+          },
 
           // FIXED: Use the dynamic instance getter we fixed earlier!
           theme: themeProvider.currentThemeData,

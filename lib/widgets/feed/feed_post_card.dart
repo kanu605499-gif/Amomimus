@@ -291,8 +291,8 @@ class _FeedCardState extends State<FeedCard> {
                                     SnackBar(
                                       behavior: SnackBarBehavior.floating,
                                       margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
-                                      content: Text(
-                                        (Translations.of(context) as dynamic).sub_profile_chat_error ?? "Sub-profiles cannot chat with each other.",
+                                      content: const Text(
+                                        "Sub-profiles cannot chat with each other.",
                                       ),
                                     ),
                                   );

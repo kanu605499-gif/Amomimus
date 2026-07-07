@@ -41,6 +41,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
   late Animation<double> _animation;
   late AnimationController _waveController;
   DateTime? currentBackPressTime;
+  bool _isCreatingPost = false;
 
   @override
   void initState() {
@@ -69,6 +70,8 @@ class _AmomimusApp5State extends State<AmomimusApp5>
   }
 
   Future<void> _handleCreatePost(BuildContext context, bool isDark, UserAccount currentUser) async {
+    if (_isCreatingPost) return;
+    
     if (currentUser.indicator == 'noise') {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -80,11 +83,12 @@ class _AmomimusApp5State extends State<AmomimusApp5>
       return;
     }
 
-    // Check 10 posts per day limit
-    final now = DateTime.now();
-    final startOfDay = DateTime(now.year, now.month, now.day).toIso8601String();
-    
+    _isCreatingPost = true;
     try {
+      // Check 10 posts per day limit
+      final now = DateTime.now();
+      final startOfDay = DateTime(now.year, now.month, now.day).toIso8601String();
+      
       final snapshot = await FirebaseFirestore.instance
           .collection('feeds')
           .where('realAuthorId', isEqualTo: currentUser.amomimusId)
@@ -92,21 +96,29 @@ class _AmomimusApp5State extends State<AmomimusApp5>
           .get();
           
       if (snapshot.docs.length >= 10) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            behavior: SnackBarBehavior.floating,
-            margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
-            content: Text('Anda telah mencapai batas maksimal 10 postingan per hari.'),
-          ),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
+              content: Text('Anda telah mencapai batas maksimal 10 postingan per hari.'),
+            ),
+          );
+        }
         return;
+      }
+      
+      if (context.mounted) {
+        await showCreatePostBottomSheet(context, isDark, currentUser);
       }
     } catch (e) {
       print('Error checking post limit: $e');
-    }
-
-    if (context.mounted) {
-      showCreatePostBottomSheet(context, isDark, currentUser);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCreatingPost = false;
+        });
+      }
     }
   }
 

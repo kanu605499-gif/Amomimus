@@ -48,7 +48,8 @@ class UpdateNavigatorObserver extends NavigatorObserver {
 
 class CustomUpdateChecker extends StatefulWidget {
   final Widget child;
-  const CustomUpdateChecker({super.key, required this.child});
+  final GlobalKey<NavigatorState> navigatorKey;
+  const CustomUpdateChecker({super.key, required this.child, required this.navigatorKey});
 
   @override
   State<CustomUpdateChecker> createState() => _CustomUpdateCheckerState();
@@ -133,11 +134,14 @@ class _CustomUpdateCheckerState extends State<CustomUpdateChecker> {
 
   void _showUpdateDialog() {
     _isDialogShowing = true;
+    final navContext = widget.navigatorKey.currentContext;
+    if (navContext == null) return;
+
     showDialog(
-      context: context,
+      context: navContext,
       barrierDismissible: false,
-      builder: (context) {
-        final isDark = context.watch<AmomimusDarkTheme>().isDarkMode;
+      builder: (dialogContext) {
+        final isDark = context.read<AmomimusDarkTheme>().isDarkMode;
         final bgColor = isDark ? Colors.black : Colors.white;
         final fgColor = isDark ? AmomimusDarkTheme.policeLineYellow : AmomimusDarkTheme.primaryPurple;
 

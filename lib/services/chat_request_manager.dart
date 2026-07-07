@@ -87,21 +87,13 @@ class ChatRequestManager extends ChangeNotifier {
         .where(
           (r) =>
               r.receiverId == _currentUserId &&
-              r.status == RequestStatus.pending,
+              r.status == RequestStatus.pending &&
+              !_localAccountIds.contains(r.senderId),
         )
         .toList();
   }
 
-  List<ChatRequest> get outgoingRequests {
-    if (_currentUserId == null) return [];
-    return _requests
-        .where(
-          (r) =>
-              r.senderId == _currentUserId &&
-              r.status == RequestStatus.pending,
-        )
-        .toList();
-  }
+
 
   bool hasPendingRequestWith(String targetId) {
     if (_currentUserId == null) return false;
@@ -126,6 +118,11 @@ class ChatRequestManager extends ChangeNotifier {
   Future<void> sendRequest(String targetId, String targetName, String senderName) async {
     if (_currentUserId == null) return;
 
+    // Strictly block requests between local sub-profiles
+    if (_localAccountIds.contains(_currentUserId) && _localAccountIds.contains(targetId)) {
+      return; 
+    }
+
     // Check if already requested
     if (hasPendingRequestWith(targetId) || isChatAllowed(targetId)) return;
 
@@ -142,10 +139,6 @@ class ChatRequestManager extends ChangeNotifier {
     _requests.add(newReq);
     _saveLocalCache();
     notifyListeners();
-
-    if (_localAccountIds.contains(_currentUserId) && _localAccountIds.contains(targetId)) {
-      return; // Skip Firestore for local sub-profiles
-    }
 
     try {
       await _firestore
@@ -172,7 +165,7 @@ class ChatRequestManager extends ChangeNotifier {
         await _firestore
             .collection('chat_requests')
             .doc(requestId)
-            .update({'status': RequestStatus.accepted.name});
+            .update({'status': RequestStatus.accepted.index});
       } catch (e) {
         print('Error accepting chat request: $e');
       }
@@ -194,7 +187,7 @@ class ChatRequestManager extends ChangeNotifier {
         await _firestore
             .collection('chat_requests')
             .doc(requestId)
-            .update({'status': RequestStatus.rejected.name});
+            .update({'status': RequestStatus.rejected.index});
       } catch (e) {
         print('Error rejecting chat request: $e');
       }

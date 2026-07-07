@@ -47,7 +47,13 @@ class ChatRequest {
       senderName: map['senderName'],
       receiverId: map['receiverId'],
       receiverName: map['receiverName'],
-      status: RequestStatus.values[map['status'] ?? 0],
+      status: map['status'] is int 
+          ? RequestStatus.values[map['status'] ?? 0] 
+          : (map['status'] == 'accepted' || map['status'] == RequestStatus.accepted.name
+              ? RequestStatus.accepted
+              : (map['status'] == 'rejected' || map['status'] == RequestStatus.rejected.name
+                  ? RequestStatus.rejected
+                  : RequestStatus.pending)),
       timestamp: map['timestamp'],
       createdAt: map['createdAt'],
     );
