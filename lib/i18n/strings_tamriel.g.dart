@@ -62,7 +62,7 @@ class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, 
 	@override String get privacy_rules_text => 'Last reforged: May 2026\n\n1. Faal Vokul\nYou are a rah here, joor. No real names, no farspeaker ciphers, and absolutely no leaking your ex\'s dwelling. We want this void to be completely severed from your mortal theatrics.\n\nIf you accidentally slip up and reveal your true visage or doxx another, do not expect a warning. We will purge that Thu\'um faster than you can blink, and your access might vanish with it. Keep it 100% unseen.\n\n2. Do Not Be A Wretched Falmer\nRanting? Good. Crying? We hear you. Lamenting how much your labor sucks is exactly why we forged this Kel, so feel free to release your Su\'um without holding back.\n\nBut throwing straight-up hate speech, targeted harassment, or bullying? No, that is a swift carriage to exile. There is a distinct boundary between venting your Krosis and just being a toxic troll.\n\n3. No Hermaeus Mora Hoarding\nWe do not buy, sell, or even care about your private lore. What happens in Amomimus, stays in Amomimus. Your sessions are warded and will be wiped clean from our archives.\n\n4. No Khajiit Caravans\nThis stage is for mortal passions, not for hawking your wares, boasting your bazaar, or bellowing merchant pacts. Selling here will get you exiled.\n\n5. Winters Survived\nJoore must be at least EIGHTEEN winters old to partake in this fellowship. The Thu\'um here can be mature, heavy, and raw. Shield your mind.\n\n6. Ownership of the Voice\nYou own the words you scribe, but by nailing them here, you grant Amomimus a shared privilege to display them namelessly across the realm.\n\n7. The Guards\' Watch\nEven phantoms have borders. If you discover a Thu\'um that breaks our laws, use the condemn tool. Our Golem sentinels watch day and night.\n\n8. Dark Brotherhood Ban\nDo not employ this scroll to scheme, muster, or incite any real-world bloodshed or ruin. We obey mortal laws and will strike down transgressions.\n\n9. Scrying the Aether\nWe gather only nameless arcane dust like device shape and realm zul to make sure the scroll flows smoothly. None of it can be tracked to your true face.\n\n10. Shiftings of the Rotmulaag\nWe hold the privilege to renew these decrees whenever the winds of magic shift. Continued use means you bow to the new rituals.';
 	@override String get system_language => 'Realm\'s Zul:';
 	@override String get dob => 'Day of Naming:';
-	@override String get dob_required => '* Required â€” you must select your day of naming, joor';
+	@override String get dob_required => '* Required — you must select your day of naming, joor';
 	@override String get agreement_verified => 'Pact Verified';
 	@override String get ready_to_verify => 'Ready to verify the Rotmulaag?';
 	@override String get age_warning => 'You must have survived 18 winters to wield this scroll.';
@@ -279,34 +279,34 @@ class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, 
 	@override String get cheat_partner_warning => 'Your fellow traveler tampered with the Elder Scrolls of Time.';
 	@override String get copy => 'Scribe Rune';
 	@override String get copied_to_clipboard => 'Etched into memory';
-	@override String get app_features_title => 'KÃ¶pÃ½e AÃ½ratynlyklary';
-	@override String get system_features_title => 'Ulgam AÃ½ratynlyklary';
-	@override String get feature_1_title => 'Dynamic Persona Theming';
-	@override String get feature_1_desc => 'InterfeÃ½s temasy profil jynsyÅˆyza (Amo, Amom Ã½a-da Ami) laÃ½yklaÅŸyp, her rol seansy Ã¼Ã§in sinhronlaÅŸdyrylan wizual sazlamany Ã¼pjÃ¼n edÃ½Ã¤r.';
-	@override String get feature_2_title => 'Interactive Mini Island';
-	@override String get feature_2_desc => 'Ulanyjy aragatnaÅŸygynyÅˆ amatlygyny Ã½eÅˆilleÅŸdirmek Ã¼Ã§in niÃ½etlenen gÃ¶Ã§me habarnama paneli. Ã‡at meÃ½danÃ§asynda Ã½Ã¼zÃ½Ã¤r we Ã½okarky nawigasiÃ½a zolagyna (App Bar) dinamiki birikÃ½Ã¤r.';
-	@override String get feature_3_title => 'Glitch & Ex-Blocked';
-	@override String get feature_3_desc => 'Bloklamak we hasabat bermek aÃ½ratynlyklaryna psihologik tÃ¤sir etmek Ã¼Ã§in niÃ½etlenen. Ã–Åˆki bloklanan ulanyjy bilen aragatnaÅŸyk, tebigy Ã¤tiÃ½aÃ§lygy dÃ¶retmek Ã¼Ã§in wizual Ã½oÃ½ulma duÃ½duryÅŸyny dÃ¶redÃ½Ã¤r.';
-	@override String get feature_4_title => 'Memories & Activity Log';
-	@override String get feature_4_desc => 'KÃ¶pmetaraplaÃ½yn bellik amallaryny Ã¼pjÃ¼n edÃ½Ã¤r. MÃ¶hÃ¼m habarlary Memories-e berkidip bilersiÅˆiz, Chat Log bolsa otagyÅˆ taryhyny we iÅŸjeÅˆliginiÅˆ hronologiÃ½asyny awtonom resminamalaÅŸdyrÃ½ar.';
-	@override String get feature_5_title => 'Floating Countdown Capsule';
-	@override String get feature_5_desc => 'UlanyjylaryÅˆ galan Ã§atyÅˆ dowamlylygyndan habarly bolmagyny Ã¼pjÃ¼n edÃ½Ã¤n interaktiw wagt yzarlaÃ½jy modul. Habary okamak meÃ½danyny beklemÃ¤zlik Ã¼Ã§in erkin sÃ¼Ã½rÃ¤p we taÅŸlap bolÃ½ar.';
-	@override String get system_1_title => 'Hybrid Sync Engine';
-	@override String get system_1_desc => 'HabarlaÅŸma arhitekturasy akylly asinhron simulÃ½asiÃ½a hereketlendirijisi bilen iÅŸleÃ½Ã¤r. GaraÅŸylÃ½an, Ã¼stÃ¼nlikli bolanlardan baÅŸlap, ÅŸowsuzlygy Ã½okary hakykat bilen dolandyrÃ½anÃ§a habaryÅˆ Ã½aÅŸaÃ½yÅŸ siklini dolandyrÃ½ar.';
-	@override String get system_2_title => 'Secret "Human" Cheat Detection';
-	@override String get system_2_desc => 'Ã‡at sport rejeliligini saklaÃ½an gÃ¶ze gÃ¶rÃ¼nmeÃ½Ã¤n howpsuzlyk protokoly. Gadagan edilen Ã¶zÃ¼ni alyp barÅŸyÅˆ nusgalaryny passiw gÃ¶zden geÃ§irÃ½Ã¤r we programma Ã¶ndÃ¼rijiligine agram salman dÃ¼zgÃ¼n bozujylara duÃ½duryÅŸ berÃ½Ã¤r.';
-	@override String get system_3_title => 'State Persistence Core';
-	@override String get system_3_desc => 'Shli Ã½agdaÃ½ islegleri, loglar we aragatnaÅŸyklar API integrasiÃ½asy bilen birleÅŸdirilen gibrid Ã½erli usul arkaly dolandyrylÃ½ar. MÃ¶hÃ¼m Ã§at maglumatlarynyÅˆ seanslaryÅˆ dowamynda Ã¼Ã½tgewsiz galmagyny Ã¼pjÃ¼n etmek.';
-	@override String get chat_log_title => 'Chat Log';
-	@override String get chat_log_empty => 'Heniz Ã§at logy Ã½ok.';
-	@override String get chat_log_system => 'Ulgam';
-	@override String get chat_log_room_created => 'Ã‡at baÅŸlady';
-	@override String get chat_log_room_expired => 'HasaplaÃ½jy nol edildi: Ã‡at otagy arassalandy';
-	@override String chat_log_delete_room({required Object actor}) => '${actor} bu Ã§at otagyny pozdy';
+	@override String get app_features_title => 'Scrolls of Power';
+	@override String get system_features_title => 'Arcane Mechanisms';
+	@override String get feature_1_title => 'Dynamic Visage Theming';
+	@override String get feature_1_desc => 'The realm adapts its hues to your chosen soul (Amo, Amom, or Ami), casting a synchronized illusion for every role.';
+	@override String get feature_2_title => 'Floating Sigil Island';
+	@override String get feature_2_desc => 'A portable scrying pool for omens. It floats in the void and seamlessly fuses into the upper wards of the UI.';
+	@override String get feature_3_title => 'Illusion & Outlaw Ward';
+	@override String get feature_3_desc => 'Forged to give weight to banishment. Gazing upon an outlaw triggers a visual distortion, warning you of their foul presence.';
+	@override String get feature_4_title => 'Vahrukiv & Chronicles';
+	@override String get feature_4_desc => 'Provides deep scrying tools. Pin crucial Rot to your Vahrukiv, while the Elder Scroll autonomously etches the history of the room.';
+	@override String get feature_5_title => 'Floating Hourglass';
+	@override String get feature_5_desc => 'An interactive sands of time module ensuring joore know when the Oblivion gate closes. It can be dragged so it does not block the runes.';
+	@override String get system_1_title => 'Hybrid Magicka Engine';
+	@override String get system_1_desc => 'The courier architecture is powered by an intelligent asynchronous weave. It manages the lifespan of a Thu\'um from cast, hit, to fizzle with high realism.';
+	@override String get system_2_title => 'Secret Mortal Cheat Detection';
+	@override String get system_2_desc => 'An invisible ward maintaining honor. It passively scries for forbidden time alterations and strikes violators without burdening the realm.';
+	@override String get system_3_title => 'Soul Persistence Core';
+	@override String get system_3_desc => 'All choices, omens, and Rot are bound via a hybrid local ward combined with the Elder Server. Ensuring your lore remains intact across lives.';
+	@override String get chat_log_title => 'Chronicles';
+	@override String get chat_log_empty => 'The chronicles are blank.';
+	@override String get chat_log_system => 'The Divines';
+	@override String get chat_log_room_created => 'The Rift has opened';
+	@override String get chat_log_room_expired => 'Hourglass shattered: The Rift is cleansed';
+	@override String chat_log_delete_room({required Object actor}) => '${actor} bu çat otagyny pozdy';
 	@override String chat_log_pin({required Object actor}) => '${actor} habary Memories-e berkidi';
-	@override String chat_log_unpin({required Object actor}) => '${actor} habary Memories-den aÃ½yrdy';
+	@override String chat_log_unpin({required Object actor}) => '${actor} habary Memories-den aýyrdy';
 	@override String chat_log_erase({required Object actor}) => '${actor} habary Memories-den hemiÅŸelik pozdy';
-	@override String get reloading_whispers => 'KÃ¤bir PyÅŸyrdylary TÃ¤zeden ÃÃ¼klenÃ½Ã¤r...';
+	@override String get reloading_whispers => 'Summoning Echoes...';
 	@override String get report_user => 'Condemn Joor';
 	@override String get report_message => 'Condemn Rot';
 	@override String get select_category => 'Select a transgression:';
@@ -314,7 +314,7 @@ class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, 
 	@override String get provide_details => 'Detail the transgression...';
 	@override String get block_ban_user => 'Throw in Dungeon';
 	@override String get comment_required_ban => 'You must scribe a reason to banish this soul.';
-	@override String get submit_report => 'Hasabat tabşyryň';
+	@override String get submit_report => 'Summon Guards';
 	@override String get report_submitted => 'Hasabat iberildi';
 	@override String get report_sent_user_blocked => 'The guards have taken the soul to the dungeon.';
 	@override String get thank_you_safe => 'You have done Skyrim a great service.';
@@ -331,9 +331,9 @@ class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, 
 	@override String get bio_not_enough_coins => 'Not enough Septims.';
 	@override String get bio_locked => 'Bound';
 	@override String get bio_bailout_used => 'Bailout exhausted.';
-	@override String get bio_bailout_warning => 'Siz bionyzy Ã¼Ã½tgetmek Ã¼Ã§in bir gezeklik bailout opsiÃ½asyna basdyÅˆyz. 500 teÅˆÅˆe ulanyp bailout prosesini dowam etdirmek Ã¼Ã§in dowam et dÃ¼wmesine basyÅˆ.';
-	@override String bio_bailout_confirm({required Object duration}) => '${duration} - Kagyz uÃ§ary dÃ¼wmesine basyp bailoutyÅˆyzy tassyklaÅˆ.';
-	@override String bio_first_time_confirm({required Object duration}) => '${duration} - Kagyz uÃ§ary dÃ¼wmesine basyp bioÅˆyzy tassyklaÅˆ.';
+	@override String get bio_bailout_warning => 'You invoked the one-time Bailout to alter your Su\'um. Press continue to sacrifice 500 Faraan and proceed.';
+	@override String bio_bailout_confirm({required Object duration}) => 'You chose the Su\'um duration of ${duration}. Scribe your soul by pressing the Courier button.';
+	@override String bio_first_time_confirm({required Object duration}) => 'You chose the Su\'um duration of ${duration}. Scribe your soul by pressing the Courier button.';
 	@override String get add_profile => 'Summon Vessel';
 	@override String get switch_email => 'Change Scroll';
 	@override String get update_later_btn => 'Later';
@@ -348,18 +348,18 @@ class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, 
 	@override String get tap_to_reveal => 'Tap to reveal';
 	@override String get passcode_hint_security => 'Enter 6-digit passcode for security.';
 	@override String get notif_chat => 'sent a message to your rot';
-	@override String presence_cooldown_hours({required Object hours}) => 'Siziň ýagdaý üýtgeşmäňiz indiki ${hours} sagadyň dowamynda nol edilip biler';
-	@override String presence_cooldown_minutes({required Object minutes}) => 'Siziň ýagdaý üýtgeşmäňiz indiki ${minutes} minudyň dowamynda nol edilip biler';
-	@override String get notif_chat_request => 'Ã§at haÃ½yÅŸy iberdi';
-	@override String get notif_blocked => 'sizi bloklady';
-	@override String get notif_unblocked => 'siziÅˆ blogyÅˆyzy aÃ½yrdy';
-	@override String get notif_bio_expiry => 'GysgaÃ§a maglumatyÅˆyzyÅˆ wagty gutarÃ½ar';
-	@override String get amow_summary_title => 'Amow 👻';
-	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'SÃ¤her! Amow ÅŸu Ã½erde~ ${chat} hat, ${comment} teswir we ${resonate} seslenme garaÅŸÃ½ar. Gelip gÃ¶r!';
-	@override String get amow_summary_empty => 'SÃ¤her! Amow ÅŸu Ã½erde~ HÃ¤zirlikÃ§e tÃ¤ze bildiriÅŸ Ã½ok, soÅˆrak Ã½ene barlaryn!';
-	@override String get email_verification_title => 'E-poçta tassyklamasy';
-	@override String get email_not_verified_body => 'E-poçta entek tassyklanmady. Gelen gutuňyzy ýa-da spam bukjanyzy barlap görüň.';
-	@override String get email_verification_sent_body => 'Hasap üstünlikli döredildi. Tassyklama baglanyşygy e-poçtaňyza iberildi. Hasaba girmezden ozal tassyklaň.';
+	@override String presence_cooldown_hours({required Object hours}) => 'Your aura will remain locked for the next ${hours} hours';
+	@override String presence_cooldown_minutes({required Object minutes}) => 'Your aura will remain locked for the next ${minutes} minutes';
+	@override String get notif_chat_request => 'sent a Courier Request';
+	@override String get notif_blocked => 'cast you into the Dungeon';
+	@override String get notif_unblocked => 'granted you a Pardon';
+	@override String get notif_bio_expiry => 'Your Su\'um is fading';
+	@override String get amow_summary_title => 'Courier Ghost ??';
+	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'Greetings Joor! I bring tidings~ ${chat} scrolls, ${comment} rots and ${resonate} echoes await you. Read them!';
+	@override String get amow_summary_empty => 'Greetings Joor! The winds are quiet today, no omens to deliver!';
+	@override String get email_verification_title => 'Soul Binding';
+	@override String get email_not_verified_body => 'Your soul is unbound. Check your missives or courier pouch to bind it.';
+	@override String get email_verification_sent_body => 'Vessel forged. A binding scroll has been sent to your missives. Bind it before awakening.';
 	@override String get send_email => 'Send Missive';
 	@override String get visit_instagram => 'Gaze upon Visage';
 	@override String get developer_role => 'Architect';
@@ -373,8 +373,8 @@ class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, 
 	@override String get bug_category_other => 'Other Chaos';
 	@override String get my_favorited_stickers => 'My Treasured Runes';
 	@override String get no_favorited_stickers => 'Your satchel holds no treasured Runes.';
-	@override String get magick_depleted => 'Jady gutardy.';
-	@override String get report_limit_reached => 'Hasabat çägine ýetildi.';
+	@override String get magick_depleted => 'Magicka depleted.';
+	@override String get report_limit_reached => 'The Guards are deaf to your cries. Limit reached.';
 }
 
 /// The flat map containing all translations for locale <tamriel>.
@@ -408,7 +408,7 @@ extension on TranslationsTamriel {
 			'privacy_rules_text' => 'Last reforged: May 2026\n\n1. Faal Vokul\nYou are a rah here, joor. No real names, no farspeaker ciphers, and absolutely no leaking your ex\'s dwelling. We want this void to be completely severed from your mortal theatrics.\n\nIf you accidentally slip up and reveal your true visage or doxx another, do not expect a warning. We will purge that Thu\'um faster than you can blink, and your access might vanish with it. Keep it 100% unseen.\n\n2. Do Not Be A Wretched Falmer\nRanting? Good. Crying? We hear you. Lamenting how much your labor sucks is exactly why we forged this Kel, so feel free to release your Su\'um without holding back.\n\nBut throwing straight-up hate speech, targeted harassment, or bullying? No, that is a swift carriage to exile. There is a distinct boundary between venting your Krosis and just being a toxic troll.\n\n3. No Hermaeus Mora Hoarding\nWe do not buy, sell, or even care about your private lore. What happens in Amomimus, stays in Amomimus. Your sessions are warded and will be wiped clean from our archives.\n\n4. No Khajiit Caravans\nThis stage is for mortal passions, not for hawking your wares, boasting your bazaar, or bellowing merchant pacts. Selling here will get you exiled.\n\n5. Winters Survived\nJoore must be at least EIGHTEEN winters old to partake in this fellowship. The Thu\'um here can be mature, heavy, and raw. Shield your mind.\n\n6. Ownership of the Voice\nYou own the words you scribe, but by nailing them here, you grant Amomimus a shared privilege to display them namelessly across the realm.\n\n7. The Guards\' Watch\nEven phantoms have borders. If you discover a Thu\'um that breaks our laws, use the condemn tool. Our Golem sentinels watch day and night.\n\n8. Dark Brotherhood Ban\nDo not employ this scroll to scheme, muster, or incite any real-world bloodshed or ruin. We obey mortal laws and will strike down transgressions.\n\n9. Scrying the Aether\nWe gather only nameless arcane dust like device shape and realm zul to make sure the scroll flows smoothly. None of it can be tracked to your true face.\n\n10. Shiftings of the Rotmulaag\nWe hold the privilege to renew these decrees whenever the winds of magic shift. Continued use means you bow to the new rituals.',
 			'system_language' => 'Realm\'s Zul:',
 			'dob' => 'Day of Naming:',
-			'dob_required' => '* Required â€” you must select your day of naming, joor',
+			'dob_required' => '* Required — you must select your day of naming, joor',
 			'agreement_verified' => 'Pact Verified',
 			'ready_to_verify' => 'Ready to verify the Rotmulaag?',
 			'age_warning' => 'You must have survived 18 winters to wield this scroll.',
@@ -625,34 +625,34 @@ extension on TranslationsTamriel {
 			'cheat_partner_warning' => 'Your fellow traveler tampered with the Elder Scrolls of Time.',
 			'copy' => 'Scribe Rune',
 			'copied_to_clipboard' => 'Etched into memory',
-			'app_features_title' => 'KÃ¶pÃ½e AÃ½ratynlyklary',
-			'system_features_title' => 'Ulgam AÃ½ratynlyklary',
-			'feature_1_title' => 'Dynamic Persona Theming',
-			'feature_1_desc' => 'InterfeÃ½s temasy profil jynsyÅˆyza (Amo, Amom Ã½a-da Ami) laÃ½yklaÅŸyp, her rol seansy Ã¼Ã§in sinhronlaÅŸdyrylan wizual sazlamany Ã¼pjÃ¼n edÃ½Ã¤r.',
-			'feature_2_title' => 'Interactive Mini Island',
-			'feature_2_desc' => 'Ulanyjy aragatnaÅŸygynyÅˆ amatlygyny Ã½eÅˆilleÅŸdirmek Ã¼Ã§in niÃ½etlenen gÃ¶Ã§me habarnama paneli. Ã‡at meÃ½danÃ§asynda Ã½Ã¼zÃ½Ã¤r we Ã½okarky nawigasiÃ½a zolagyna (App Bar) dinamiki birikÃ½Ã¤r.',
-			'feature_3_title' => 'Glitch & Ex-Blocked',
-			'feature_3_desc' => 'Bloklamak we hasabat bermek aÃ½ratynlyklaryna psihologik tÃ¤sir etmek Ã¼Ã§in niÃ½etlenen. Ã–Åˆki bloklanan ulanyjy bilen aragatnaÅŸyk, tebigy Ã¤tiÃ½aÃ§lygy dÃ¶retmek Ã¼Ã§in wizual Ã½oÃ½ulma duÃ½duryÅŸyny dÃ¶redÃ½Ã¤r.',
-			'feature_4_title' => 'Memories & Activity Log',
-			'feature_4_desc' => 'KÃ¶pmetaraplaÃ½yn bellik amallaryny Ã¼pjÃ¼n edÃ½Ã¤r. MÃ¶hÃ¼m habarlary Memories-e berkidip bilersiÅˆiz, Chat Log bolsa otagyÅˆ taryhyny we iÅŸjeÅˆliginiÅˆ hronologiÃ½asyny awtonom resminamalaÅŸdyrÃ½ar.',
-			'feature_5_title' => 'Floating Countdown Capsule',
-			'feature_5_desc' => 'UlanyjylaryÅˆ galan Ã§atyÅˆ dowamlylygyndan habarly bolmagyny Ã¼pjÃ¼n edÃ½Ã¤n interaktiw wagt yzarlaÃ½jy modul. Habary okamak meÃ½danyny beklemÃ¤zlik Ã¼Ã§in erkin sÃ¼Ã½rÃ¤p we taÅŸlap bolÃ½ar.',
-			'system_1_title' => 'Hybrid Sync Engine',
-			'system_1_desc' => 'HabarlaÅŸma arhitekturasy akylly asinhron simulÃ½asiÃ½a hereketlendirijisi bilen iÅŸleÃ½Ã¤r. GaraÅŸylÃ½an, Ã¼stÃ¼nlikli bolanlardan baÅŸlap, ÅŸowsuzlygy Ã½okary hakykat bilen dolandyrÃ½anÃ§a habaryÅˆ Ã½aÅŸaÃ½yÅŸ siklini dolandyrÃ½ar.',
-			'system_2_title' => 'Secret "Human" Cheat Detection',
-			'system_2_desc' => 'Ã‡at sport rejeliligini saklaÃ½an gÃ¶ze gÃ¶rÃ¼nmeÃ½Ã¤n howpsuzlyk protokoly. Gadagan edilen Ã¶zÃ¼ni alyp barÅŸyÅˆ nusgalaryny passiw gÃ¶zden geÃ§irÃ½Ã¤r we programma Ã¶ndÃ¼rijiligine agram salman dÃ¼zgÃ¼n bozujylara duÃ½duryÅŸ berÃ½Ã¤r.',
-			'system_3_title' => 'State Persistence Core',
-			'system_3_desc' => 'Shli Ã½agdaÃ½ islegleri, loglar we aragatnaÅŸyklar API integrasiÃ½asy bilen birleÅŸdirilen gibrid Ã½erli usul arkaly dolandyrylÃ½ar. MÃ¶hÃ¼m Ã§at maglumatlarynyÅˆ seanslaryÅˆ dowamynda Ã¼Ã½tgewsiz galmagyny Ã¼pjÃ¼n etmek.',
-			'chat_log_title' => 'Chat Log',
-			'chat_log_empty' => 'Heniz Ã§at logy Ã½ok.',
-			'chat_log_system' => 'Ulgam',
-			'chat_log_room_created' => 'Ã‡at baÅŸlady',
-			'chat_log_room_expired' => 'HasaplaÃ½jy nol edildi: Ã‡at otagy arassalandy',
-			'chat_log_delete_room' => ({required Object actor}) => '${actor} bu Ã§at otagyny pozdy',
+			'app_features_title' => 'Scrolls of Power',
+			'system_features_title' => 'Arcane Mechanisms',
+			'feature_1_title' => 'Dynamic Visage Theming',
+			'feature_1_desc' => 'The realm adapts its hues to your chosen soul (Amo, Amom, or Ami), casting a synchronized illusion for every role.',
+			'feature_2_title' => 'Floating Sigil Island',
+			'feature_2_desc' => 'A portable scrying pool for omens. It floats in the void and seamlessly fuses into the upper wards of the UI.',
+			'feature_3_title' => 'Illusion & Outlaw Ward',
+			'feature_3_desc' => 'Forged to give weight to banishment. Gazing upon an outlaw triggers a visual distortion, warning you of their foul presence.',
+			'feature_4_title' => 'Vahrukiv & Chronicles',
+			'feature_4_desc' => 'Provides deep scrying tools. Pin crucial Rot to your Vahrukiv, while the Elder Scroll autonomously etches the history of the room.',
+			'feature_5_title' => 'Floating Hourglass',
+			'feature_5_desc' => 'An interactive sands of time module ensuring joore know when the Oblivion gate closes. It can be dragged so it does not block the runes.',
+			'system_1_title' => 'Hybrid Magicka Engine',
+			'system_1_desc' => 'The courier architecture is powered by an intelligent asynchronous weave. It manages the lifespan of a Thu\'um from cast, hit, to fizzle with high realism.',
+			'system_2_title' => 'Secret Mortal Cheat Detection',
+			'system_2_desc' => 'An invisible ward maintaining honor. It passively scries for forbidden time alterations and strikes violators without burdening the realm.',
+			'system_3_title' => 'Soul Persistence Core',
+			'system_3_desc' => 'All choices, omens, and Rot are bound via a hybrid local ward combined with the Elder Server. Ensuring your lore remains intact across lives.',
+			'chat_log_title' => 'Chronicles',
+			'chat_log_empty' => 'The chronicles are blank.',
+			'chat_log_system' => 'The Divines',
+			'chat_log_room_created' => 'The Rift has opened',
+			'chat_log_room_expired' => 'Hourglass shattered: The Rift is cleansed',
+			'chat_log_delete_room' => ({required Object actor}) => '${actor} bu çat otagyny pozdy',
 			'chat_log_pin' => ({required Object actor}) => '${actor} habary Memories-e berkidi',
-			'chat_log_unpin' => ({required Object actor}) => '${actor} habary Memories-den aÃ½yrdy',
+			'chat_log_unpin' => ({required Object actor}) => '${actor} habary Memories-den aýyrdy',
 			'chat_log_erase' => ({required Object actor}) => '${actor} habary Memories-den hemiÅŸelik pozdy',
-			'reloading_whispers' => 'KÃ¤bir PyÅŸyrdylary TÃ¤zeden ÃÃ¼klenÃ½Ã¤r...',
+			'reloading_whispers' => 'Summoning Echoes...',
 			'report_user' => 'Condemn Joor',
 			'report_message' => 'Condemn Rot',
 			'select_category' => 'Select a transgression:',
@@ -660,7 +660,7 @@ extension on TranslationsTamriel {
 			'provide_details' => 'Detail the transgression...',
 			'block_ban_user' => 'Throw in Dungeon',
 			'comment_required_ban' => 'You must scribe a reason to banish this soul.',
-			'submit_report' => 'Hasabat tabşyryň',
+			'submit_report' => 'Summon Guards',
 			'report_submitted' => 'Hasabat iberildi',
 			'report_sent_user_blocked' => 'The guards have taken the soul to the dungeon.',
 			'thank_you_safe' => 'You have done Skyrim a great service.',
@@ -677,9 +677,9 @@ extension on TranslationsTamriel {
 			'bio_not_enough_coins' => 'Not enough Septims.',
 			'bio_locked' => 'Bound',
 			'bio_bailout_used' => 'Bailout exhausted.',
-			'bio_bailout_warning' => 'Siz bionyzy Ã¼Ã½tgetmek Ã¼Ã§in bir gezeklik bailout opsiÃ½asyna basdyÅˆyz. 500 teÅˆÅˆe ulanyp bailout prosesini dowam etdirmek Ã¼Ã§in dowam et dÃ¼wmesine basyÅˆ.',
-			'bio_bailout_confirm' => ({required Object duration}) => '${duration} - Kagyz uÃ§ary dÃ¼wmesine basyp bailoutyÅˆyzy tassyklaÅˆ.',
-			'bio_first_time_confirm' => ({required Object duration}) => '${duration} - Kagyz uÃ§ary dÃ¼wmesine basyp bioÅˆyzy tassyklaÅˆ.',
+			'bio_bailout_warning' => 'You invoked the one-time Bailout to alter your Su\'um. Press continue to sacrifice 500 Faraan and proceed.',
+			'bio_bailout_confirm' => ({required Object duration}) => 'You chose the Su\'um duration of ${duration}. Scribe your soul by pressing the Courier button.',
+			'bio_first_time_confirm' => ({required Object duration}) => 'You chose the Su\'um duration of ${duration}. Scribe your soul by pressing the Courier button.',
 			'add_profile' => 'Summon Vessel',
 			'switch_email' => 'Change Scroll',
 			'update_later_btn' => 'Later',
@@ -694,18 +694,18 @@ extension on TranslationsTamriel {
 			'tap_to_reveal' => 'Tap to reveal',
 			'passcode_hint_security' => 'Enter 6-digit passcode for security.',
 			'notif_chat' => 'sent a message to your rot',
-			'presence_cooldown_hours' => ({required Object hours}) => 'Siziň ýagdaý üýtgeşmäňiz indiki ${hours} sagadyň dowamynda nol edilip biler',
-			'presence_cooldown_minutes' => ({required Object minutes}) => 'Siziň ýagdaý üýtgeşmäňiz indiki ${minutes} minudyň dowamynda nol edilip biler',
-			'notif_chat_request' => 'Ã§at haÃ½yÅŸy iberdi',
-			'notif_blocked' => 'sizi bloklady',
-			'notif_unblocked' => 'siziÅˆ blogyÅˆyzy aÃ½yrdy',
-			'notif_bio_expiry' => 'GysgaÃ§a maglumatyÅˆyzyÅˆ wagty gutarÃ½ar',
-			'amow_summary_title' => 'Amow 👻',
-			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'SÃ¤her! Amow ÅŸu Ã½erde~ ${chat} hat, ${comment} teswir we ${resonate} seslenme garaÅŸÃ½ar. Gelip gÃ¶r!',
-			'amow_summary_empty' => 'SÃ¤her! Amow ÅŸu Ã½erde~ HÃ¤zirlikÃ§e tÃ¤ze bildiriÅŸ Ã½ok, soÅˆrak Ã½ene barlaryn!',
-			'email_verification_title' => 'E-poçta tassyklamasy',
-			'email_not_verified_body' => 'E-poçta entek tassyklanmady. Gelen gutuňyzy ýa-da spam bukjanyzy barlap görüň.',
-			'email_verification_sent_body' => 'Hasap üstünlikli döredildi. Tassyklama baglanyşygy e-poçtaňyza iberildi. Hasaba girmezden ozal tassyklaň.',
+			'presence_cooldown_hours' => ({required Object hours}) => 'Your aura will remain locked for the next ${hours} hours',
+			'presence_cooldown_minutes' => ({required Object minutes}) => 'Your aura will remain locked for the next ${minutes} minutes',
+			'notif_chat_request' => 'sent a Courier Request',
+			'notif_blocked' => 'cast you into the Dungeon',
+			'notif_unblocked' => 'granted you a Pardon',
+			'notif_bio_expiry' => 'Your Su\'um is fading',
+			'amow_summary_title' => 'Courier Ghost ??',
+			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'Greetings Joor! I bring tidings~ ${chat} scrolls, ${comment} rots and ${resonate} echoes await you. Read them!',
+			'amow_summary_empty' => 'Greetings Joor! The winds are quiet today, no omens to deliver!',
+			'email_verification_title' => 'Soul Binding',
+			'email_not_verified_body' => 'Your soul is unbound. Check your missives or courier pouch to bind it.',
+			'email_verification_sent_body' => 'Vessel forged. A binding scroll has been sent to your missives. Bind it before awakening.',
 			'send_email' => 'Send Missive',
 			'visit_instagram' => 'Gaze upon Visage',
 			'developer_role' => 'Architect',
@@ -719,8 +719,8 @@ extension on TranslationsTamriel {
 			'bug_category_other' => 'Other Chaos',
 			'my_favorited_stickers' => 'My Treasured Runes',
 			'no_favorited_stickers' => 'Your satchel holds no treasured Runes.',
-			'magick_depleted' => 'Jady gutardy.',
-			'report_limit_reached' => 'Hasabat çägine ýetildi.',
+			'magick_depleted' => 'Magicka depleted.',
+			'report_limit_reached' => 'The Guards are deaf to your cries. Limit reached.',
 			_ => null,
 		};
 	}

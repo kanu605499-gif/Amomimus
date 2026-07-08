@@ -157,12 +157,13 @@ class _StickerShopScreenState extends State<StickerShopScreen>
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               Center(
                 child: Container(
                   width: 40,
@@ -354,21 +355,11 @@ class _StickerShopScreenState extends State<StickerShopScreen>
                         foregroundColor: isDark
                             ? AmomimusDarkTheme.policeLineYellow
                             : AmomimusDarkTheme.primaryPurple,
-                        elevation: 4,
-                        shadowColor: isDark ? Colors.black87 : Colors.black45,
+                        elevation: 6,
+                        shadowColor: isDark ? Colors.black : Colors.black38,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: isDark
-                                ? AmomimusDarkTheme.policeLineYellow.withValues(
-                                    alpha: 0.3,
-                                  )
-                                : AmomimusDarkTheme.primaryPurple.withValues(
-                                    alpha: 0.2,
-                                  ),
-                            width: 1,
-                          ),
                         ),
                       ),
                       onPressed: () async {
@@ -414,7 +405,7 @@ class _StickerShopScreenState extends State<StickerShopScreen>
               const SizedBox(height: 10),
             ],
           ),
-        );
+        ));
       },
     );
   }
@@ -685,18 +676,20 @@ class _StickerShopScreenState extends State<StickerShopScreen>
                                           ? const Color(0xFF3A382C)
                                           : const Color(0xFFE8E5F0))
                                     : (isDark
-                                          ? AmomimusDarkTheme.backgroundDark
-                                          : Colors.grey[100]),
+                                          ? AmomimusDarkTheme.surfaceDark
+                                          : Colors.white),
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: isOwned
-                                      ? Colors.transparent
-                                      : (isDark
-                                            ? AmomimusDarkTheme.policeLineYellow
-                                                  .withValues(alpha: 0.5)
-                                            : AmomimusDarkTheme.primaryPurple
-                                                  .withValues(alpha: 0.5)),
-                                ),
+                                boxShadow: isOwned
+                                    ? []
+                                    : [
+                                        BoxShadow(
+                                          color: isDark 
+                                              ? Colors.black.withValues(alpha: 0.6) 
+                                              : Colors.black.withValues(alpha: 0.15),
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 4),
+                                        ),
+                                      ],
                               ),
                               child: Center(
                                 child: Text(

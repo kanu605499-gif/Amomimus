@@ -89,18 +89,39 @@ class _AmomimusApp5State extends State<AmomimusApp5>
       final now = DateTime.now();
       final startOfDay = DateTime(now.year, now.month, now.day).toIso8601String();
       
-      final snapshot = await FirebaseFirestore.instance
-          .collection('feeds')
-          .where('realAuthorId', isEqualTo: currentUser.amomimusId)
-          .where('createdAt', isGreaterThanOrEqualTo: startOfDay)
-          .get();
+      int todayPostCount = 0;
+      
+      try {
+        final snapshot = await FirebaseFirestore.instance
+            .collection('feeds')
+            .where('realAuthorId', isEqualTo: currentUser.amomimusId)
+            .where('createdAt', isGreaterThanOrEqualTo: startOfDay)
+            .get();
+        todayPostCount = snapshot.docs.length;
+      } catch (e) {
+        // Fallback if composite index is missing: fetch user's posts and filter locally
+        print('Index missing, using fallback limit check: $e');
+        final snapshot = await FirebaseFirestore.instance
+            .collection('feeds')
+            .where('realAuthorId', isEqualTo: currentUser.amomimusId)
+            .get();
+            
+        todayPostCount = snapshot.docs.where((doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          final dateStr = data['createdAt'] as String?;
+          if (dateStr == null) return false;
+          return dateStr.compareTo(startOfDay) >= 0;
+        }).length;
+      }
+      // Check God Mode exception
+      bool isGodMode = currentUser.masterEmail.toLowerCase() == 'satarnusdiata@gmail.com';
           
-      if (snapshot.docs.length >= 10) {
+      if (!isGodMode && todayPostCount >= 10) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
               behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),
+              margin: EdgeInsets.only(bottom: 100, left: 24, right: 24),
               content: Text('Anda telah mencapai batas maksimal 10 postingan per hari.'),
             ),
           );
@@ -113,6 +134,11 @@ class _AmomimusApp5State extends State<AmomimusApp5>
       }
     } catch (e) {
       print('Error checking post limit: $e');
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Terjadi kesalahan sistem: $e')),
+        );
+      }
     } finally {
       if (mounted) {
         setState(() {

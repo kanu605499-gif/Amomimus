@@ -350,16 +350,16 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get passcode => 'รหัสผ่าน';
 	@override String get tap_to_reveal => 'แตะเพื่อแสดง';
 	@override String get passcode_hint_security => 'ป้อนรหัสผ่าน 6 หลักเพื่อความปลอดภัย';
-	@override String get notif_chat => 'à¸ªà¹ˆà¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸–à¸¶à¸‡à¸„à¸¸à¸“';
+	@override String get notif_chat => 'ส่งข้อความถึงคุณ';
 	@override String presence_cooldown_hours({required Object hours}) => 'การเปลี่ยนสถานะของคุณอาจถูกรีเซ็ตในอีก ${hours} ชั่วโมงข้างหน้า';
 	@override String presence_cooldown_minutes({required Object minutes}) => 'การเปลี่ยนสถานะของคุณอาจถูกรีเซ็ตในอีก ${minutes} นาทีข้างหน้า';
-	@override String get notif_chat_request => 'à¸ªà¹ˆà¸‡à¸„à¸³à¸‚à¸­à¹à¸Šà¸—à¸–à¸¶à¸‡à¸„à¸¸à¸“';
-	@override String get notif_blocked => 'à¹„à¸”à¹‰à¸šà¸¥à¹‡à¸­à¸à¸„à¸¸à¸“';
-	@override String get notif_unblocked => 'à¹„à¸”à¹‰à¹€à¸¥à¸´à¸à¸šà¸¥à¹‡à¸­à¸à¸„à¸¸à¸“';
-	@override String get notif_bio_expiry => 'à¸›à¸£à¸°à¸§à¸±à¸•à¸´à¸‚à¸­à¸‡à¸„à¸¸à¸“à¸à¸³à¸¥à¸±à¸‡à¸ˆà¸°à¸«à¸¡à¸”à¸­à¸²à¸¢à¸¸';
+	@override String get notif_chat_request => 'ส่งคำขอแชทถึงคุณ';
+	@override String get notif_blocked => 'ได้บล็อกคุณ';
+	@override String get notif_unblocked => 'ได้เลิกบล็อกคุณ';
+	@override String get notif_bio_expiry => 'ประวัติของคุณกำลังจะหมดอายุ';
 	@override String get amow_summary_title => 'Amow 👻';
-	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'à¸®à¸±à¸¥à¹‚à¸«à¸¥! Amow à¸­à¸¢à¸¹à¹ˆà¸™à¸µà¹ˆ~ à¸¡à¸µà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡ ${chat} à¸£à¸²à¸¢à¸à¸²à¸£ à¸„à¸§à¸²à¸¡à¸„à¸´à¸”à¹€à¸«à¹‡à¸™ ${comment} à¸£à¸²à¸¢à¸à¸²à¸£ à¹à¸¥à¸°à¸à¸²à¸£à¸ªà¸°à¸—à¹‰à¸­à¸™à¸à¸¥à¸±à¸š ${resonate} à¸£à¸²à¸¢à¸à¸²à¸£à¸£à¸­à¸„à¸¸à¸“à¸­à¸¢à¸¹à¹ˆ à¸¡à¸²à¸”à¸¹à¸ªà¸´!';
-	@override String get amow_summary_empty => 'à¸®à¸±à¸¥à¹‚à¸«à¸¥! Amow à¸­à¸¢à¸¹à¹ˆà¸™à¸µà¹ˆ~ à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¸¡à¸µà¸à¸²à¸£à¹à¸ˆà¹‰à¸‡à¹€à¸•à¸·à¸­à¸™à¹ƒà¸«à¸¡à¹ˆà¸™à¸° à¹€à¸”à¸µà¹‹à¸¢à¸§à¸¡à¸²à¹€à¸Šà¹‡à¸„à¹ƒà¸«à¸¡à¹ˆ!';
+	@override String amow_summary_body({required Object chat, required Object comment, required Object resonate}) => 'ฮัลโหล! Amow อยู่นี่~ มีข้อความ ${chat} รายการ ความคิดเห็น ${comment} รายการ และการสะท้อนกลับ ${resonate} รายการรอคุณอยู่ มาดูสิ!';
+	@override String get amow_summary_empty => 'ฮัลโหล! Amow อยู่นี่~ ยังไม่มีการแจ้งเตือนใหม่นะ เดี๋ยวมาเช็คใหม่!';
 	@override String get email_verification_title => 'การยืนยันอีเมล';
 	@override String get email_not_verified_body => 'อีเมลยังไม่ได้รับการยืนยัน โปรดตรวจสอบกล่องจดหมายหรือโฟลเดอร์สแปมของคุณ';
 	@override String get email_verification_sent_body => 'สร้างบัญชีสำเร็จแล้ว ส่งลิงก์ยืนยันไปยังอีเมลของคุณแล้ว โปรดยืนยันก่อนเข้าสู่ระบบ';
@@ -699,16 +699,16 @@ extension on TranslationsTh {
 			'passcode' => 'รหัสผ่าน',
 			'tap_to_reveal' => 'แตะเพื่อแสดง',
 			'passcode_hint_security' => 'ป้อนรหัสผ่าน 6 หลักเพื่อความปลอดภัย',
-			'notif_chat' => 'à¸ªà¹ˆà¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸–à¸¶à¸‡à¸„à¸¸à¸“',
+			'notif_chat' => 'ส่งข้อความถึงคุณ',
 			'presence_cooldown_hours' => ({required Object hours}) => 'การเปลี่ยนสถานะของคุณอาจถูกรีเซ็ตในอีก ${hours} ชั่วโมงข้างหน้า',
 			'presence_cooldown_minutes' => ({required Object minutes}) => 'การเปลี่ยนสถานะของคุณอาจถูกรีเซ็ตในอีก ${minutes} นาทีข้างหน้า',
-			'notif_chat_request' => 'à¸ªà¹ˆà¸‡à¸„à¸³à¸‚à¸­à¹à¸Šà¸—à¸–à¸¶à¸‡à¸„à¸¸à¸“',
-			'notif_blocked' => 'à¹„à¸”à¹‰à¸šà¸¥à¹‡à¸­à¸à¸„à¸¸à¸“',
-			'notif_unblocked' => 'à¹„à¸”à¹‰à¹€à¸¥à¸´à¸à¸šà¸¥à¹‡à¸­à¸à¸„à¸¸à¸“',
-			'notif_bio_expiry' => 'à¸›à¸£à¸°à¸§à¸±à¸•à¸´à¸‚à¸­à¸‡à¸„à¸¸à¸“à¸à¸³à¸¥à¸±à¸‡à¸ˆà¸°à¸«à¸¡à¸”à¸­à¸²à¸¢à¸¸',
+			'notif_chat_request' => 'ส่งคำขอแชทถึงคุณ',
+			'notif_blocked' => 'ได้บล็อกคุณ',
+			'notif_unblocked' => 'ได้เลิกบล็อกคุณ',
+			'notif_bio_expiry' => 'ประวัติของคุณกำลังจะหมดอายุ',
 			'amow_summary_title' => 'Amow 👻',
-			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'à¸®à¸±à¸¥à¹‚à¸«à¸¥! Amow à¸­à¸¢à¸¹à¹ˆà¸™à¸µà¹ˆ~ à¸¡à¸µà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡ ${chat} à¸£à¸²à¸¢à¸à¸²à¸£ à¸„à¸§à¸²à¸¡à¸„à¸´à¸”à¹€à¸«à¹‡à¸™ ${comment} à¸£à¸²à¸¢à¸à¸²à¸£ à¹à¸¥à¸°à¸à¸²à¸£à¸ªà¸°à¸—à¹‰à¸­à¸™à¸à¸¥à¸±à¸š ${resonate} à¸£à¸²à¸¢à¸à¸²à¸£à¸£à¸­à¸„à¸¸à¸“à¸­à¸¢à¸¹à¹ˆ à¸¡à¸²à¸”à¸¹à¸ªà¸´!',
-			'amow_summary_empty' => 'à¸®à¸±à¸¥à¹‚à¸«à¸¥! Amow à¸­à¸¢à¸¹à¹ˆà¸™à¸µà¹ˆ~ à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¸¡à¸µà¸à¸²à¸£à¹à¸ˆà¹‰à¸‡à¹€à¸•à¸·à¸­à¸™à¹ƒà¸«à¸¡à¹ˆà¸™à¸° à¹€à¸”à¸µà¹‹à¸¢à¸§à¸¡à¸²à¹€à¸Šà¹‡à¸„à¹ƒà¸«à¸¡à¹ˆ!',
+			'amow_summary_body' => ({required Object chat, required Object comment, required Object resonate}) => 'ฮัลโหล! Amow อยู่นี่~ มีข้อความ ${chat} รายการ ความคิดเห็น ${comment} รายการ และการสะท้อนกลับ ${resonate} รายการรอคุณอยู่ มาดูสิ!',
+			'amow_summary_empty' => 'ฮัลโหล! Amow อยู่นี่~ ยังไม่มีการแจ้งเตือนใหม่นะ เดี๋ยวมาเช็คใหม่!',
 			'email_verification_title' => 'การยืนยันอีเมล',
 			'email_not_verified_body' => 'อีเมลยังไม่ได้รับการยืนยัน โปรดตรวจสอบกล่องจดหมายหรือโฟลเดอร์สแปมของคุณ',
 			'email_verification_sent_body' => 'สร้างบัญชีสำเร็จแล้ว ส่งลิงก์ยืนยันไปยังอีเมลของคุณแล้ว โปรดยืนยันก่อนเข้าสู่ระบบ',
