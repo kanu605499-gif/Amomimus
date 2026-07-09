@@ -788,6 +788,7 @@ class AccountManager extends ChangeNotifier {
     String targetId,
     ReportCategory category, {
     bool isChatBubbleReport = false,
+    String? description,
   }) async {
     // 1. Check token limits for GLOBAL submission
     final blockReason = await checkReportAllowed(category);
@@ -888,6 +889,24 @@ class AccountManager extends ChangeNotifier {
 
     // 6. Consume report token
     await _consumeReportToken(category);
+
+    // 7. Save detailed report to Firebase 'reports' collection
+    if (_currentUser != null) {
+      try {
+        final reportModel = ReportModel(
+          reporterId: _currentUser!.amomimusId,
+          reportedUserId: normalizedTargetId,
+          category: category,
+          description: description ?? '',
+          reportedMessageId: isChatBubbleReport ? targetId : null,
+          createdAt: DateTime.now().toIso8601String(),
+        );
+
+        await _firestore.collection('reports').add(reportModel.toMap());
+      } catch (e) {
+        print("==== FIREBASE REPORT LOG FAILED: $e ====");
+      }
+    }
 
     notifyListeners();
     return null; // Success

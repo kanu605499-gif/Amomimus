@@ -43,11 +43,11 @@ class _ReportDialogState extends State<ReportDialog> {
 
     final accountManager = context.read<AccountManager>();
 
-    // Process the report to update points and indicators
     final blockReason = await accountManager.submitReport(
       widget.targetId,
       _selectedCategory,
       isChatBubbleReport: !widget.isUserReport,
+      description: comment,
     );
 
     if (blockReason != null) {
