@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../amomimusdark.dart';
 import '../../services/account_manager.dart';
+import '../../services/chatmodel.dart';
 
 class PresencePickerCapsule extends StatelessWidget {
   const PresencePickerCapsule({super.key});
@@ -150,7 +151,14 @@ class PresencePickerCapsule extends StatelessWidget {
               final isSelected = currentStatus == status;
               return InkWell(
                 onTap: () {
-                  context.read<AccountManager>().updatePresenceStatus(status);
+                  final accountManager = context.read<AccountManager>();
+                  accountManager.updatePresenceStatus(status);
+                  
+                  final currentUser = accountManager.currentUser;
+                  if (currentUser != null) {
+                    context.read<ChatModel>().updatePresenceInSessions(currentUser.amomimusId, status);
+                  }
+                  
                   Navigator.pop(context);
                 },
                 child: Container(

@@ -9,6 +9,8 @@ class ChatSession {
   final String user1Name;
   final String user2Id;
   final String user2Name;
+  final String user1Presence;
+  final String user2Presence;
   final List<ChatMessage> messages;
   final Map<String, int> unreadCounts;
   final List<String> pinnedMessageIds; // Memories — max 9
@@ -30,6 +32,8 @@ class ChatSession {
     required this.user1Name,
     required this.user2Id,
     required this.user2Name,
+    this.user1Presence = 'auto',
+    this.user2Presence = 'auto',
     required this.messages,
     required this.unreadCounts,
     this.pinnedMessageIds = const [],
@@ -51,6 +55,8 @@ class ChatSession {
       'user1Name': user1Name,
       'user2Id': user2Id,
       'user2Name': user2Name,
+      'user1Presence': user1Presence,
+      'user2Presence': user2Presence,
       'participants': participants,
       'messages': messages.map((m) => m.toMap()).toList(),
       'unreadCounts': unreadCounts,
@@ -74,6 +80,8 @@ class ChatSession {
       user1Name: map['user1Name'],
       user2Id: map['user2Id'],
       user2Name: map['user2Name'],
+      user1Presence: map['user1Presence'] ?? 'auto',
+      user2Presence: map['user2Presence'] ?? 'auto',
       messages: (map['messages'] as List)
           .map((m) => ChatMessage.fromMap(m))
           .toList(),

@@ -35,6 +35,10 @@ class ChatRequestManager extends ChangeNotifier {
     }
     _initialized = true;
     notifyListeners();
+
+    if (_currentUserId != null) {
+      _setupFirestoreListener();
+    }
   }
 
   Future<void> _saveLocalCache() async {

@@ -21,7 +21,7 @@ class AudioManager {
     // Prevent spam: only play if it has been more than 5 seconds since the last alert
     if (now.difference(_lastAlertTime).inSeconds > 5) {
       _lastAlertTime = now;
-      await _player.play(AssetSource('audio/notif_alert.mp3'));
+      await _player.play(AssetSource('audio/chat_notif.mp3'));
     }
   }
 
@@ -30,7 +30,7 @@ class AudioManager {
     // Prevent spam: only play if it has been more than 3 seconds since the last alert
     if (now.difference(_lastAlertTime).inSeconds > 3) {
       _lastAlertTime = now;
-      await _player.play(AssetSource('audio/chat_notif.mp3'));
+      await _player.play(AssetSource('audio/chat_sound_2.mp3'));
     }
   }
 

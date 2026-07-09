@@ -13,6 +13,7 @@ import '../i18n/strings.g.dart';
 
 import '../utils/utc_time_manager.dart';
 import 'package:amomimus/utils/jelly_dialog.dart';
+import 'audio_manager.dart';
 
 // Re-export so files that import chatmodel.dart still find ChatPreview
 export '../models/chat_preview_model.dart';
@@ -154,6 +155,7 @@ class ChatModel extends ChangeNotifier {
                   
                   if (isNewMessage) {
                     final senderText = lastMsg.senderName ?? 'Someone';
+                    AudioManager().playChatNotif();
                     NotificationHelper.showRealtimeNotification(
                       title: '$senderText ${t.notif_chat}',
                       body: lastMsg.text,
@@ -290,6 +292,7 @@ class ChatModel extends ChangeNotifier {
             initialLastMessage: displayLastMsg,
             initialTime: "",
             isOnline: true,
+            targetPresence: isUser1 ? s.user2Presence : s.user1Presence,
             messages: s.messages
                 .where((m) => !m.deletedBy.contains(_currentUserId))
                 .toList(),
@@ -1229,5 +1232,56 @@ class ChatModel extends ChangeNotifier {
     );
     if (session == null) return [];
     return session.chatLogs;
+  }
+  Future<void> updatePresenceInSessions(String userId, String newStatus) async {
+    if (_currentUserId == null || _currentUserId != userId) return;
+
+    final batch = FirebaseFirestore.instance.batch();
+    bool hasUpdates = false;
+
+    for (int i = 0; i < _sessions.length; i++) {
+      final session = _sessions[i];
+      if (session.user1Id == userId || session.user2Id == userId) {
+        // Update local session
+        final isUser1 = session.user1Id == userId;
+        _sessions[i] = ChatSession(
+          id: session.id,
+          user1Id: session.user1Id,
+          user1Name: session.user1Name,
+          user2Id: session.user2Id,
+          user2Name: session.user2Name,
+          user1Presence: isUser1 ? newStatus : session.user1Presence,
+          user2Presence: isUser1 ? session.user2Presence : newStatus,
+          messages: session.messages,
+          unreadCounts: session.unreadCounts,
+          pinnedMessageIds: session.pinnedMessageIds,
+          createdAt: session.createdAt,
+          roomStartedAt: session.roomStartedAt,
+          roomExpiresAt: session.roomExpiresAt,
+          seenResetAnimationBy: session.seenResetAnimationBy,
+          resetIndicatorVisibleFor: session.resetIndicatorVisibleFor,
+          cheatDetectedUserId: session.cheatDetectedUserId,
+          roomDeletedBy: session.roomDeletedBy,
+          chatLogs: session.chatLogs,
+        );
+
+        // Prepare Firestore update
+        final docRef = FirebaseFirestore.instance.collection('chat_sessions').doc(session.id);
+        batch.update(docRef, {
+          isUser1 ? 'user1Presence' : 'user2Presence': newStatus,
+        });
+        hasUpdates = true;
+      }
+    }
+
+    if (hasUpdates) {
+      notifyListeners();
+      _saveChats();
+      try {
+        await batch.commit();
+      } catch (e) {
+        print("Failed to sync presence batch to Firestore: \$e");
+      }
+    }
   }
 }

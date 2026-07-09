@@ -72,7 +72,7 @@ class NotificationManager extends ChangeNotifier {
       notifyListeners();
       
       if (hasNewUnread && latestNewNotif != null) {
-        AudioManager().playChatNotif();
+        AudioManager().playNotifAlert();
         NotificationHelper.showRealtimeNotification(
           title: t.amow_summary_title,
           body: latestNewNotif.message,

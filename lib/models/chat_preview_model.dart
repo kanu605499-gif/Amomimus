@@ -18,6 +18,7 @@ class ChatPreview {
   final bool isResetIndicatorVisible;
   final String? cheatDetectedUserId;
   final List<ChatMessage> allMessages;
+  final String targetPresence;
 
   ChatPreview({
     required this.name,
@@ -33,6 +34,7 @@ class ChatPreview {
     this.hasSeenResetAnimation = false,
     this.isResetIndicatorVisible = false,
     this.cheatDetectedUserId,
+    this.targetPresence = 'auto',
   });
 
   String get lastMessage =>

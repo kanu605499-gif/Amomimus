@@ -65,9 +65,11 @@ class RoomChatLargeProfile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutBack,
               width: 300,
-              height: 150,
+              height: isProfileMenuExpanded ? 180 : 150,
               child: Stack(
                 clipBehavior: Clip.none,
                 alignment: Alignment.center,
@@ -258,8 +260,11 @@ class RoomChatLargeProfile extends StatelessWidget {
                     ),
                   ),
                   // Main Avatar
-                  GestureDetector(
-                    onTap: onToggleProfileMenu,
+                  Positioned(
+                    left: 106,
+                    top: 31,
+                    child: GestureDetector(
+                      onTap: onToggleProfileMenu,
                     child: Container(
                       width: 88,
                       height: 88,
@@ -275,6 +280,7 @@ class RoomChatLargeProfile extends StatelessWidget {
                         dynamicHeaderIcon,
                         color: dynamicHeaderColor,
                         size: 46,
+                      ),
                       ),
                     ),
                   ),

@@ -242,7 +242,7 @@ class ChatListTileWidget extends StatelessWidget {
                           size: 28,
                         ),
                       ),
-                      if (chat.isOnline || (targetAccount.presenceStatus != 'invisible' && targetAccount.presenceStatus != 'offline'))
+                      if (chat.isOnline || (chat.targetPresence != 'invisible' && chat.targetPresence != 'offline'))
                         Positioned(
                           bottom: -1,
                           right: -1,
@@ -255,7 +255,7 @@ class ChatListTileWidget extends StatelessWidget {
                               child: Container(
                                 color: tileBg,
                                 child: PresencePickerCapsule.getPresenceIcon(
-                                  targetAccount.presenceStatus,
+                                  chat.targetPresence,
                                   size: 12,
                                 ),
                               ),
