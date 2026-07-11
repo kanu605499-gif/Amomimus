@@ -26,8 +26,6 @@ class _AmomimusApp7State extends State<AmomimusApp7>
     with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   double _headerOpacity = 0.0;
-  bool _isIslandExpanded = false;
-
   late AnimationController _particleController;
   late AnimationController _pulseController;
 
@@ -55,9 +53,6 @@ class _AmomimusApp7State extends State<AmomimusApp7>
 
         setState(() {
           _headerOpacity = Curves.easeInOut.transform(linearOpacity);
-          if (pixels > 15 && _isIslandExpanded) {
-            _isIslandExpanded = false;
-          }
         });
       } catch (_) {}
     }
@@ -294,31 +289,6 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                 ],
               ),
             ),
-
-            // Mini Floating Island di Atas pas di-scroll kebawah
-            if (_headerOpacity > 0.0)
-              Positioned(
-                top: statusBarHeight + 10,
-                left: 0,
-                right: 0,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Opacity(
-                    opacity: _headerOpacity,
-                    child: ChatHomeMiniIsland(
-                      isExpanded: _isIslandExpanded,
-                      onToggle: () {
-                        setState(() {
-                          _isIslandExpanded = !_isIslandExpanded;
-                        });
-                      },
-                      themeProvider: themeProvider,
-                      currentSurface: currentSurface,
-                      dynamicAccentColor: dynamicAccentColor,
-                    ),
-                  ),
-                ),
-              ),
           ],
         ),
       ),

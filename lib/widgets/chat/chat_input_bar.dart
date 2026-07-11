@@ -5,6 +5,7 @@ import '../../amomimusdark.dart';
 import '../../models/message_model.dart';
 import 'sticker_keyboard.dart';
 import 'package:amomimus/i18n/strings.g.dart';
+import '../secure_sticker.dart';
 
 class ChatInputBar extends StatefulWidget {
   final ChatMessage? replyingToMessage;
@@ -129,8 +130,8 @@ class _ChatInputBarState extends State<ChatInputBar> {
                               ),
                             ),
                             const SizedBox(width: 8),
-                            Image.asset(
-                              widget.replyingToMessage!.text.replaceFirst(
+                            SecureSticker(
+                              assetPath: widget.replyingToMessage!.text.replaceFirst(
                                 '[STICKER]:',
                                 '',
                               ),
@@ -210,6 +211,8 @@ class _ChatInputBarState extends State<ChatInputBar> {
                 child: TextField(
                   controller: _messageController,
                   keyboardType: TextInputType.multiline,
+                  textCapitalization: TextCapitalization.sentences,
+                  enableSuggestions: true,
                   maxLines: null,
                   minLines: 1,
                   style: TextStyle(color: currentText, fontSize: 15),

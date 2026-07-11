@@ -388,7 +388,7 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get tutorial_2_title => 'How to Reply Comments';
 	@override String get tutorial_2_desc => 'Tekan lama pada komentar yang ingin kamu balas. Tidak ada tombol balas, tetapi menekan lama akan memicu balasan dan mengirimkan notifikasi kepada pengguna tersebut.';
 	@override String get tutorial_3_title => 'Redeem & Use Coins';
-	@override String get tutorial_3_desc => 'Ambil koin gratis dari menu Vault. Koin bisa dipakai untuk beli stiker pack premium atau melakukan Bypass (memotong waktu tunggu saat ganti karakter/bio).';
+	@override String get tutorial_3_desc => 'Ambil koin gratis dengan menggeser (slide) kolom Bio di profilmu. Koin bisa dipakai untuk beli stiker pack premium atau melakukan Bypass (memotong waktu tunggu saat ganti karakter/bio).';
 	@override String get tutorial_4_title => 'Countdown System';
 	@override String get tutorial_4_desc => 'Setiap room chat memiliki batas waktu 3 hari. Saat waktu habis, chat akan terhapus permanen. Gunakan fitur Pin Memories untuk menyimpan pesan penting sebelum countdown berakhir!';
 	@override String get tutorial_5_title => 'Changing Theme Colors';
@@ -397,6 +397,10 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get tutorial_6_desc => 'Kamu bisa memblokir user mengganggu lewat profil mereka. Jika kamu membuka blokirnya (unblock), mereka akan mendapat cap "EX-BLOCKED" dan interaksi dengan mereka akan memunculkan efek glitch peringatan.';
 	@override String get tutorial_7_title => 'Ghost & Noise Indicators';
 	@override String get tutorial_7_desc => 'Saat user bertingkah mencurigakan, indikator mereka berubah jadi Ghost atau Noise. User Ghost dibatasi dalam mengirim chat, sedangkan user Noise sama sekali dilarang memulai chat baru.';
+	@override String get fav_char_prompt_title => 'Verifikasi Keamanan';
+	@override String get fav_char_prompt_desc => 'Silakan atur Karakter Favorit Anda. Jika Anda membiarkan Karakter Favorit kosong, Anda tidak akan bisa mereset kata sandi atau memulihkan akun Anda di masa mendatang.';
+	@override String get fav_char_hint => 'Karakter favorit (misal: Iron Man)';
+	@override String get save_button => 'Simpan';
 }
 
 /// The flat map containing all translations for locale <id>.
@@ -756,7 +760,7 @@ extension on TranslationsId {
 			'tutorial_2_title' => 'How to Reply Comments',
 			'tutorial_2_desc' => 'Tekan lama pada komentar yang ingin kamu balas. Tidak ada tombol balas, tetapi menekan lama akan memicu balasan dan mengirimkan notifikasi kepada pengguna tersebut.',
 			'tutorial_3_title' => 'Redeem & Use Coins',
-			'tutorial_3_desc' => 'Ambil koin gratis dari menu Vault. Koin bisa dipakai untuk beli stiker pack premium atau melakukan Bypass (memotong waktu tunggu saat ganti karakter/bio).',
+			'tutorial_3_desc' => 'Ambil koin gratis dengan menggeser (slide) kolom Bio di profilmu. Koin bisa dipakai untuk beli stiker pack premium atau melakukan Bypass (memotong waktu tunggu saat ganti karakter/bio).',
 			'tutorial_4_title' => 'Countdown System',
 			'tutorial_4_desc' => 'Setiap room chat memiliki batas waktu 3 hari. Saat waktu habis, chat akan terhapus permanen. Gunakan fitur Pin Memories untuk menyimpan pesan penting sebelum countdown berakhir!',
 			'tutorial_5_title' => 'Changing Theme Colors',
@@ -765,6 +769,10 @@ extension on TranslationsId {
 			'tutorial_6_desc' => 'Kamu bisa memblokir user mengganggu lewat profil mereka. Jika kamu membuka blokirnya (unblock), mereka akan mendapat cap "EX-BLOCKED" dan interaksi dengan mereka akan memunculkan efek glitch peringatan.',
 			'tutorial_7_title' => 'Ghost & Noise Indicators',
 			'tutorial_7_desc' => 'Saat user bertingkah mencurigakan, indikator mereka berubah jadi Ghost atau Noise. User Ghost dibatasi dalam mengirim chat, sedangkan user Noise sama sekali dilarang memulai chat baru.',
+			'fav_char_prompt_title' => 'Verifikasi Keamanan',
+			'fav_char_prompt_desc' => 'Silakan atur Karakter Favorit Anda. Jika Anda membiarkan Karakter Favorit kosong, Anda tidak akan bisa mereset kata sandi atau memulihkan akun Anda di masa mendatang.',
+			'fav_char_hint' => 'Karakter favorit (misal: Iron Man)',
+			'save_button' => 'Simpan',
 			_ => null,
 		};
 	}

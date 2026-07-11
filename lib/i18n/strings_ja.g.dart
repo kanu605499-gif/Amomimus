@@ -369,7 +369,7 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get tutorial_2_title => 'How to Reply Comments';
 	@override String get tutorial_2_desc => '返信したいコメントを長押しします。返信ボタンはありませんが、長押しすると返信がトリガーされ、ユーザーに通知が送信されます。';
 	@override String get tutorial_3_title => 'Redeem & Use Coins';
-	@override String get tutorial_3_desc => 'Vaultメニューから無料コインを獲得できます。コインを使ってプレミアムステッカーを購入したり、プロフィールの変更待機時間（クールダウン）をスキップしたりできます。';
+	@override String get tutorial_3_desc => 'プロフィールの自己紹介（Bio）セクションをスライドして無料コインをゲット。コインはプレミアムステッカーパックの購入や、キャラクター/自己紹介変更時の待機時間を短縮（バイパス）するために使用できます。';
 	@override String get tutorial_4_title => 'Countdown System';
 	@override String get tutorial_4_desc => '各チャットルームには3日間の期限があります。期限が切れるとチャットは永久に削除されます。期限前に「Memories」機能を使って重要なメッセージを保存してください！';
 	@override String get tutorial_5_title => 'Changing Theme Colors';
@@ -378,6 +378,10 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get tutorial_6_desc => '迷惑なユーザーをブロックできます。ブロックを解除すると、そのユーザーは「EX-BLOCKED」（ブロック解除済み）状態になり、今後のやり取りでグリッチ（バグのような視覚的警告）が発生します。';
 	@override String get tutorial_7_title => 'Ghost & Noise Indicators';
 	@override String get tutorial_7_desc => '怪しい行動をするユーザーは、インジケーターがGhostまたはNoiseに変わります。Ghostはチャットリクエストが制限され、Noiseのユーザーはコミュニティ保護のため新規チャットを一切開始できません。';
+	@override String get fav_char_prompt_title => 'セキュリティ確認';
+	@override String get fav_char_prompt_desc => '好きなキャラクターを設定してください。空白のままにすると、将来パスワードのリセットやアカウントの復元ができなくなります。';
+	@override String get fav_char_hint => '好きなキャラクター (例: ドラえもん)';
+	@override String get save_button => '保存';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -718,7 +722,7 @@ extension on TranslationsJa {
 			'tutorial_2_title' => 'How to Reply Comments',
 			'tutorial_2_desc' => '返信したいコメントを長押しします。返信ボタンはありませんが、長押しすると返信がトリガーされ、ユーザーに通知が送信されます。',
 			'tutorial_3_title' => 'Redeem & Use Coins',
-			'tutorial_3_desc' => 'Vaultメニューから無料コインを獲得できます。コインを使ってプレミアムステッカーを購入したり、プロフィールの変更待機時間（クールダウン）をスキップしたりできます。',
+			'tutorial_3_desc' => 'プロフィールの自己紹介（Bio）セクションをスライドして無料コインをゲット。コインはプレミアムステッカーパックの購入や、キャラクター/自己紹介変更時の待機時間を短縮（バイパス）するために使用できます。',
 			'tutorial_4_title' => 'Countdown System',
 			'tutorial_4_desc' => '各チャットルームには3日間の期限があります。期限が切れるとチャットは永久に削除されます。期限前に「Memories」機能を使って重要なメッセージを保存してください！',
 			'tutorial_5_title' => 'Changing Theme Colors',
@@ -727,6 +731,10 @@ extension on TranslationsJa {
 			'tutorial_6_desc' => '迷惑なユーザーをブロックできます。ブロックを解除すると、そのユーザーは「EX-BLOCKED」（ブロック解除済み）状態になり、今後のやり取りでグリッチ（バグのような視覚的警告）が発生します。',
 			'tutorial_7_title' => 'Ghost & Noise Indicators',
 			'tutorial_7_desc' => '怪しい行動をするユーザーは、インジケーターがGhostまたはNoiseに変わります。Ghostはチャットリクエストが制限され、Noiseのユーザーはコミュニティ保護のため新規チャットを一切開始できません。',
+			'fav_char_prompt_title' => 'セキュリティ確認',
+			'fav_char_prompt_desc' => '好きなキャラクターを設定してください。空白のままにすると、将来パスワードのリセットやアカウントの復元ができなくなります。',
+			'fav_char_hint' => '好きなキャラクター (例: ドラえもん)',
+			'save_button' => '保存',
 			_ => null,
 		};
 	}

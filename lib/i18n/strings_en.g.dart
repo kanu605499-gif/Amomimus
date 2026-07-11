@@ -1088,8 +1088,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// en: 'Redeem & Use Coins'
 	String get tutorial_3_title => 'Redeem & Use Coins';
 
-	/// en: 'Claim free coins from the Vault menu. Coins can be used to buy premium sticker packs or to bypass the cooldown timer when changing your favorite character or bio.'
-	String get tutorial_3_desc => 'Claim free coins from the Vault menu. Coins can be used to buy premium sticker packs or to bypass the cooldown timer when changing your favorite character or bio.';
+	/// en: 'Get free coins by sliding your Bio section in your profile. Coins can be used to buy premium sticker packs or to Bypass the waiting time when changing character/bio.'
+	String get tutorial_3_desc => 'Get free coins by sliding your Bio section in your profile. Coins can be used to buy premium sticker packs or to Bypass the waiting time when changing character/bio.';
 
 	/// en: 'Countdown System'
 	String get tutorial_4_title => 'Countdown System';
@@ -1114,6 +1114,18 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
 	/// en: 'When a user behaves suspiciously, their indicator turns into a "Ghost" or "Noise". Ghosts have limited chat requests, while Noise users are completely forbidden from initiating new chats to protect the community.'
 	String get tutorial_7_desc => 'When a user behaves suspiciously, their indicator turns into a "Ghost" or "Noise". Ghosts have limited chat requests, while Noise users are completely forbidden from initiating new chats to protect the community.';
+
+	/// en: 'Security Verification'
+	String get fav_char_prompt_title => 'Security Verification';
+
+	/// en: 'Please set your Favorite Character. If you leave your Favorite Character blank, you won't be able to reset your password or recover your account in the future.'
+	String get fav_char_prompt_desc => 'Please set your Favorite Character. If you leave your Favorite Character blank, you won\'t be able to reset your password or recover your account in the future.';
+
+	/// en: 'Your favorite character (e.g. Iron Man)'
+	String get fav_char_hint => 'Your favorite character (e.g. Iron Man)';
+
+	/// en: 'Save'
+	String get save_button => 'Save';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1473,7 +1485,7 @@ extension on Translations {
 			'tutorial_2_title' => 'How to Reply Comments',
 			'tutorial_2_desc' => 'Long tap on the comment you want to reply to. There is no reply button, but long-tapping will trigger the reply and send a notification to the user.',
 			'tutorial_3_title' => 'Redeem & Use Coins',
-			'tutorial_3_desc' => 'Claim free coins from the Vault menu. Coins can be used to buy premium sticker packs or to bypass the cooldown timer when changing your favorite character or bio.',
+			'tutorial_3_desc' => 'Get free coins by sliding your Bio section in your profile. Coins can be used to buy premium sticker packs or to Bypass the waiting time when changing character/bio.',
 			'tutorial_4_title' => 'Countdown System',
 			'tutorial_4_desc' => 'Every chat room has a strict 3-day countdown limit. When time is up, the chat will be permanently deleted. Use the Pin Memories feature to save important messages before the countdown ends!',
 			'tutorial_5_title' => 'Changing Theme Colors',
@@ -1482,6 +1494,10 @@ extension on Translations {
 			'tutorial_6_desc' => 'You can block annoying users from their profile. Blocking completely hides their presence. If you ever unblock them, they receive an "EX-BLOCKED" (Outlaw) status, and any future interactions with them will trigger a visual glitch warning.',
 			'tutorial_7_title' => 'Ghost & Noise Indicators',
 			'tutorial_7_desc' => 'When a user behaves suspiciously, their indicator turns into a "Ghost" or "Noise". Ghosts have limited chat requests, while Noise users are completely forbidden from initiating new chats to protect the community.',
+			'fav_char_prompt_title' => 'Security Verification',
+			'fav_char_prompt_desc' => 'Please set your Favorite Character. If you leave your Favorite Character blank, you won\'t be able to reset your password or recover your account in the future.',
+			'fav_char_hint' => 'Your favorite character (e.g. Iron Man)',
+			'save_button' => 'Save',
 			_ => null,
 		};
 	}

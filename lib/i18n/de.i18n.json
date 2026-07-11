@@ -331,7 +331,7 @@
   "tutorial_2_title": "How to Reply Comments",
   "tutorial_2_desc": "Tippe lange auf den Kommentar, auf den du antworten möchtest. Es gibt keinen Antwort-Button, aber durch langes Tippen wird die Antwort ausgelöst und eine Benachrichtigung an den Benutzer gesendet.",
   "tutorial_3_title": "Redeem & Use Coins",
-  "tutorial_3_desc": "Holen Sie sich kostenlose Münzen im Vault-Menü. Münzen können verwendet werden, um Premium-Sticker zu kaufen oder die Wartezeit (Cooldown) beim Ändern von Charakter oder Bio zu überspringen.",
+  "tutorial_3_desc": "Holen Sie sich kostenlose Münzen, indem Sie Ihren Bio-Bereich in Ihrem Profil wischen. Münzen können verwendet werden, um Premium-Sticker-Pakete zu kaufen oder die Wartezeit beim Wechseln von Charakter/Bio zu umgehen.",
   "tutorial_4_title": "Countdown System",
   "tutorial_4_desc": "Jeder Chatraum hat ein striktes 3-Tage-Limit. Danach wird der Chat endgültig gelöscht. Nutzen Sie die Funktion \"Memories anpinnen\", um wichtige Nachrichten vor Ablauf der Zeit zu speichern!",
   "tutorial_5_title": "Changing Theme Colors",
@@ -339,5 +339,9 @@
   "tutorial_6_title": "Block & Unblock Actions",
   "tutorial_6_desc": "Sie können störende Nutzer blockieren. Wenn Sie sie jemals entblocken, erhalten sie den Status \"EX-BLOCKED\" (Ex-Blockiert), und zukünftige Interaktionen lösen eine visuelle Glitch-Warnung aus.",
   "tutorial_7_title": "Ghost & Noise Indicators",
-  "tutorial_7_desc": "Wenn sich ein Nutzer auffällig verhält, ändert sich sein Indikator zu Ghost (Geist) oder Noise (Lärm). Ghosts haben begrenzte Chat-Anfragen, während Noise-Nutzer zum Schutz der Community keine neuen Chats starten dürfen."
+  "tutorial_7_desc": "Wenn sich ein Nutzer auffällig verhält, ändert sich sein Indikator zu Ghost (Geist) oder Noise (Lärm). Ghosts haben begrenzte Chat-Anfragen, während Noise-Nutzer zum Schutz der Community keine neuen Chats starten dürfen.",
+  "fav_char_prompt_title": "Sicherheitsüberprüfung",
+  "fav_char_prompt_desc": "Bitte legen Sie Ihren Lieblingscharakter fest. Wenn Sie dieses Feld leer lassen, können Sie Ihr Passwort in Zukunft nicht mehr zurücksetzen oder Ihr Konto wiederherstellen.",
+  "fav_char_hint": "Dein Lieblingscharakter (z.B. Batman)",
+  "save_button": "Speichern"
 }

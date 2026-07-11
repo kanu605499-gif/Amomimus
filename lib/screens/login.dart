@@ -227,11 +227,16 @@ class _LoginScreenState extends State<LoginScreen>
             ),
           ],
         ),
-        content: Text(
-          t.email_not_verified_body,
-          style: TextStyle(
-            color: Colors.grey[700],
-            height: 1.4,
+        content: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              t.email_not_verified_body,
+              style: TextStyle(
+                color: Colors.grey[700],
+                height: 1.4,
+              ),
+            ),
           ),
         ),
         actions: [
@@ -296,7 +301,7 @@ class _LoginScreenState extends State<LoginScreen>
             email: result.email ?? '',
             realUsername: result.name ?? 'Amo',
             password: '', // No password for Google Auth
-            favoriteCharacter: 'Amo', // Default
+            favoriteCharacter: '',
             isGoogleAuth: true,
           ),
         ),

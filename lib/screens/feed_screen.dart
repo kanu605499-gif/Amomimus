@@ -43,6 +43,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
   late AnimationController _waveController;
   DateTime? currentBackPressTime;
   bool _isCreatingPost = false;
+  static bool _hasPromptedFavChar = false;
 
   @override
   void initState() {
@@ -61,6 +62,10 @@ class _AmomimusApp5State extends State<AmomimusApp5>
       vsync: this,
       duration: const Duration(seconds: 4),
     )..repeat();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkFavoriteCharacter();
+    });
   }
 
   @override
@@ -68,6 +73,153 @@ class _AmomimusApp5State extends State<AmomimusApp5>
     _animationController.dispose();
     _waveController.dispose();
     super.dispose();
+  }
+
+  Future<void> _checkFavoriteCharacter() async {
+    if (_hasPromptedFavChar) return;
+    _hasPromptedFavChar = true;
+
+    if (!mounted) return;
+    final accountManager = context.read<AccountManager>();
+    final currentUser = accountManager.currentUser;
+    if (currentUser == null) return;
+
+    final creds = await accountManager.authService.getCredentials(currentUser.email);
+    if (creds != null && (creds.favoriteCharacter == null || creds.favoriteCharacter!.isEmpty || creds.favoriteCharacter == 'Amo')) {
+      if (!mounted) return;
+      _showFavoriteCharacterDialog();
+    }
+  }
+
+  void _showFavoriteCharacterDialog() {
+    final t = Translations.of(context);
+    final themeProvider = Provider.of<AmomimusDarkTheme>(context, listen: false);
+    final isDark = themeProvider.isDarkMode;
+    
+    final TextEditingController _favCharController = TextEditingController();
+    bool _isSaving = false;
+
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return AlertDialog(
+              backgroundColor: isDark ? const Color(0xff1e1e1e) : const Color(0xfffdfbfe),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                  color: isDark ? Colors.grey[800]! : const Color(0xffe1dbec),
+                  width: 1.5,
+                ),
+              ),
+              title: Row(
+                children: [
+                  Icon(Icons.security, color: isDark ? Colors.blue[300] : Colors.blue),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      t.fav_char_prompt_title,
+                      style: TextStyle(
+                        color: isDark ? Colors.white : const Color(0xff121212),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              content: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        t.fav_char_prompt_desc,
+                        style: TextStyle(
+                          color: isDark ? Colors.grey[300] : Colors.grey[700],
+                          height: 1.4,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: _favCharController,
+                        style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                        decoration: InputDecoration(
+                          hintText: t.fav_char_hint,
+                          hintStyle: TextStyle(color: isDark ? Colors.grey[500] : Colors.grey[400]),
+                          filled: true,
+                          fillColor: isDark ? const Color(0xff2a2a2a) : Colors.grey[100],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: Text(
+                    t.cancel,
+                    style: TextStyle(
+                      color: isDark ? Colors.grey[400] : Colors.grey[500],
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                _isSaving 
+                  ? const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: SizedBox(
+                        width: 16, height: 16, 
+                        child: CircularProgressIndicator(strokeWidth: 2)
+                      ),
+                    )
+                  : ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isDark ? Colors.blue[700] : Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      onPressed: () async {
+                        final val = _favCharController.text.trim();
+                        if (val.isEmpty || val.toLowerCase() == 'amo') return;
+                        setStateDialog(() { _isSaving = true; });
+                        final success = await context.read<AccountManager>().updateFavoriteCharacter(val);
+                        setStateDialog(() { _isSaving = false; });
+                        if (success && mounted) {
+                          Navigator.pop(ctx);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Favorite character updated successfully!'),
+                              backgroundColor: Colors.green,
+                              behavior: SnackBarBehavior.floating,
+                            )
+                          );
+                        }
+                      },
+                      child: Text(
+                        t.save_button,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+              ],
+            );
+          },
+        );
+      }
+    );
   }
 
   Future<void> _handleCreatePost(BuildContext context, bool isDark, UserAccount currentUser) async {

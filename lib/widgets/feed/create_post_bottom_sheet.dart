@@ -55,74 +55,73 @@ class _CreatePostFormState extends State<_CreatePostForm> {
     final viewInsets = MediaQuery.of(context).viewInsets;
     final extraBottomPadding = viewInsets.bottom == 0 ? systemPadding.bottom : 0.0;
 
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: viewInsets.bottom > 0 ? viewInsets.bottom + 16 : systemPadding.bottom + 16,
+    return Container(
+      height: (screenHeight / 3) + viewInsets.bottom,
+      decoration: BoxDecoration(
+        color: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
       ),
-      child: Container(
-        height: (screenHeight / 3) + extraBottomPadding,
-        decoration: BoxDecoration(
-          color: widget.isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-        ),
-        padding: EdgeInsets.only(
-          left: 24, 
-          right: 24, 
-          top: 16, 
-          bottom: 16 + extraBottomPadding
-        ),
-        child: Column(
-          children: [
-            Container(
-              width: 40,
-              height: 5,
-              decoration: BoxDecoration(
-                color: widget.isDark ? Colors.white24 : Colors.black12,
-                borderRadius: BorderRadius.circular(2.5),
-              ),
+      padding: EdgeInsets.only(
+        left: 24, 
+        right: 24, 
+        top: 16, 
+        bottom: 16 + viewInsets.bottom + systemPadding.bottom
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: 40,
+            height: 5,
+            decoration: BoxDecoration(
+              color: widget.isDark ? Colors.white24 : Colors.black12,
+              borderRadius: BorderRadius.circular(2.5),
             ),
-            const SizedBox(height: 20),
-            Text(
-              t.create_post,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            t.create_post,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: widget.isDark
+                  ? AmomimusDarkTheme.textPrimary
+                  : const Color.fromARGB(255, 140, 113, 199),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: TextField(
+              controller: _postController,
+              keyboardType: TextInputType.multiline,
+              textCapitalization: TextCapitalization.sentences,
+              enableSuggestions: true,
+              maxLines: null,
+              expands: true,
+              maxLength: 300,
+              textAlignVertical: TextAlignVertical.top,
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
                 color: widget.isDark
                     ? AmomimusDarkTheme.textPrimary
-                    : const Color.fromARGB(255, 140, 113, 199),
+                    : Colors.black,
+                fontSize: 16,
               ),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: TextField(
-                controller: _postController,
-                maxLines: null,
-                expands: true,
-                maxLength: 300,
-                textAlignVertical: TextAlignVertical.top,
-                style: TextStyle(
+              decoration: InputDecoration(
+                hintText: t.whats_on_your_mind,
+                hintStyle: TextStyle(
                   color: widget.isDark
-                      ? AmomimusDarkTheme.textPrimary
-                      : Colors.black,
+                      ? AmomimusDarkTheme.textSecondary
+                      : Colors.grey[500],
                   fontSize: 16,
                 ),
-                decoration: InputDecoration(
-                  hintText: t.whats_on_your_mind,
-                  hintStyle: TextStyle(
-                    color: widget.isDark
-                        ? AmomimusDarkTheme.textSecondary
-                        : Colors.grey[500],
-                    fontSize: 16,
-                  ),
-                  filled: false,
-                  contentPadding: const EdgeInsets.all(8),
-                  border: InputBorder.none,
-                ),
+                filled: false,
+                contentPadding: const EdgeInsets.all(8),
+                border: InputBorder.none,
               ),
             ),
+          ),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
@@ -200,8 +199,7 @@ class _CreatePostFormState extends State<_CreatePostForm> {
             const SizedBox(height: 10),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 

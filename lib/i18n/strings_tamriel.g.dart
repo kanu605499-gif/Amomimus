@@ -381,7 +381,7 @@ class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, 
 	@override String get tutorial_2_title => 'How to Reply Comments';
 	@override String get tutorial_2_desc => 'Gaze upon a Thu\'um to behold the Rot (comments). Tap the retort rune on a specific rot to weave a structured tapestry of voices.';
 	@override String get tutorial_3_title => 'Redeem & Use Coins';
-	@override String get tutorial_3_desc => 'Claim your free Faraan (coins) from the Strongbox. Faraan can be bartered for enchanted Runes or used to bypass the Sands of Time when altering your Su\'um (bio).';
+	@override String get tutorial_3_desc => 'Get free coins by sliding your Bio section in your profile. Coins can be used to buy premium sticker packs or to Bypass the waiting time when changing character/bio.';
 	@override String get tutorial_4_title => 'Countdown System';
 	@override String get tutorial_4_desc => 'Every rift is bound by a strict 3-day hourglass. When the sands run out, the rift is cleansed forever. Bind your Rot to Vahrukiv (Memories) before Oblivion takes them!';
 	@override String get tutorial_5_title => 'Changing Theme Colors';
@@ -390,6 +390,10 @@ class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, 
 	@override String get tutorial_6_desc => 'You may cast annoying bards into the Dungeon. If you ever grant them a Pardon, they bear the mark of the OUTLAW. Any future encounters with them will trigger a chaotic illusion glitch, warning you of their foul presence.';
 	@override String get tutorial_7_title => 'Ghost & Noise Indicators';
 	@override String get tutorial_7_desc => 'When a soul dabbles in dark arts, their aura shifts to Skooma Drinker (Ghost) or Bandit (Noise). Ghosts have meager magicka for Couriers, while Bandits are entirely stripped of their power to initiate parleys.';
+	@override String get fav_char_prompt_title => 'Bind Your Identity';
+	@override String get fav_char_prompt_desc => 'Speak the name of a legendary hero. If you leave this blank, the divines cannot help you recover your soul or reset your memory in the future.';
+	@override String get fav_char_hint => 'Name of a hero (e.g. Talos)';
+	@override String get save_button => 'Bind';
 }
 
 /// The flat map containing all translations for locale <tamriel>.
@@ -742,7 +746,7 @@ extension on TranslationsTamriel {
 			'tutorial_2_title' => 'How to Reply Comments',
 			'tutorial_2_desc' => 'Gaze upon a Thu\'um to behold the Rot (comments). Tap the retort rune on a specific rot to weave a structured tapestry of voices.',
 			'tutorial_3_title' => 'Redeem & Use Coins',
-			'tutorial_3_desc' => 'Claim your free Faraan (coins) from the Strongbox. Faraan can be bartered for enchanted Runes or used to bypass the Sands of Time when altering your Su\'um (bio).',
+			'tutorial_3_desc' => 'Get free coins by sliding your Bio section in your profile. Coins can be used to buy premium sticker packs or to Bypass the waiting time when changing character/bio.',
 			'tutorial_4_title' => 'Countdown System',
 			'tutorial_4_desc' => 'Every rift is bound by a strict 3-day hourglass. When the sands run out, the rift is cleansed forever. Bind your Rot to Vahrukiv (Memories) before Oblivion takes them!',
 			'tutorial_5_title' => 'Changing Theme Colors',
@@ -751,6 +755,10 @@ extension on TranslationsTamriel {
 			'tutorial_6_desc' => 'You may cast annoying bards into the Dungeon. If you ever grant them a Pardon, they bear the mark of the OUTLAW. Any future encounters with them will trigger a chaotic illusion glitch, warning you of their foul presence.',
 			'tutorial_7_title' => 'Ghost & Noise Indicators',
 			'tutorial_7_desc' => 'When a soul dabbles in dark arts, their aura shifts to Skooma Drinker (Ghost) or Bandit (Noise). Ghosts have meager magicka for Couriers, while Bandits are entirely stripped of their power to initiate parleys.',
+			'fav_char_prompt_title' => 'Bind Your Identity',
+			'fav_char_prompt_desc' => 'Speak the name of a legendary hero. If you leave this blank, the divines cannot help you recover your soul or reset your memory in the future.',
+			'fav_char_hint' => 'Name of a hero (e.g. Talos)',
+			'save_button' => 'Bind',
 			_ => null,
 		};
 	}

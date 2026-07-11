@@ -5,6 +5,7 @@ import '../models/sticker_batch_model.dart';
 import '../services/account_manager.dart';
 import '../models/effects/plastic_box_effect_model.dart';
 import 'package:amomimus/i18n/strings.g.dart';
+import '../widgets/secure_sticker.dart';
 
 class StickerInventoryScreen extends StatelessWidget {
   const StickerInventoryScreen({super.key});
@@ -117,10 +118,9 @@ class StickerInventoryScreen extends StatelessWidget {
                           Expanded(
                             flex: 5,
                             child: batch.coverAsset != null
-                                ? Image.asset(
-                                    batch.coverAsset!,
+                                ? SecureSticker(
+                                    assetPath: batch.coverAsset!,
                                     fit: BoxFit.cover,
-                                    alignment: Alignment.bottomCenter,
                                   )
                                 : Container(
                                     color: isDark
@@ -302,8 +302,8 @@ class StickerInventoryScreen extends StatelessWidget {
                                     vertical: 4.0,
                                   ),
                                   child: sticker.imageAsset.contains('/')
-                                      ? Image.asset(
-                                          sticker.imageAsset,
+                                      ? SecureSticker(
+                                          assetPath: sticker.imageAsset,
                                           fit: BoxFit.contain,
                                         )
                                       : Icon(

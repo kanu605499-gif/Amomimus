@@ -384,7 +384,7 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get tutorial_2_title => 'How to Reply Comments';
 	@override String get tutorial_2_desc => 'แตะค้างที่ความคิดเห็นที่คุณต้องการตอบกลับ ไม่มีปุ่มตอบกลับ แต่การแตะค้างจะเรียกใช้การตอบกลับและส่งการแจ้งเตือนไปยังผู้ใช้';
 	@override String get tutorial_3_title => 'Redeem & Use Coins';
-	@override String get tutorial_3_desc => 'รับเหรียญฟรีจากเมนู Vault เหรียญสามารถใช้ซื้อสติกเกอร์พรีเมียมหรือใช้ข้ามเวลารอ (Bypass) เมื่อเปลี่ยนตัวละครโปรดหรือประวัติได้';
+	@override String get tutorial_3_desc => 'รับเหรียญฟรีโดยการเลื่อนส่วนประวัติในโปรไฟล์ของคุณ เหรียญสามารถใช้ซื้อสติกเกอร์พรีเมียมหรือเพื่อลดเวลารอเมื่อเปลี่ยนตัวละคร/ประวัติ';
 	@override String get tutorial_4_title => 'Countdown System';
 	@override String get tutorial_4_desc => 'ห้องแชททุกห้องมีการนับถอยหลัง 3 วัน เมื่อหมดเวลา แชทจะถูกลบอย่างถาวร อย่าลืมใช้ฟีเจอร์ ปักหมุดความทรงจำ เพื่อบันทึกข้อความสำคัญก่อนหมดเวลา!';
 	@override String get tutorial_5_title => 'Changing Theme Colors';
@@ -393,6 +393,10 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get tutorial_6_desc => 'คุณสามารถบล็อกผู้ใช้ที่น่ารำคาญได้ หากคุณปลดบล็อกพวกเขาในภายหลัง พวกเขาจะได้รับสถานะ "EX-BLOCKED" (เคยบล็อก) และการโต้ตอบกับพวกเขาในอนาคตจะทำให้เกิดเอฟเฟกต์ภาพแตก (Glitch) เพื่อเป็นการเตือน';
 	@override String get tutorial_7_title => 'Ghost & Noise Indicators';
 	@override String get tutorial_7_desc => 'เมื่อผู้ใช้มีพฤติกรรมน่าสงสัย สถานะจะเปลี่ยนเป็น Ghost หรือ Noise โดย Ghost จะถูกจำกัดการส่งคำขอแชท ในขณะที่ Noise จะไม่สามารถเริ่มแชทใหม่ได้เลยเพื่อปกป้องชุมชน';
+	@override String get fav_char_prompt_title => 'การยืนยันความปลอดภัย';
+	@override String get fav_char_prompt_desc => 'โปรดตั้งค่าตัวละครที่คุณชื่นชอบ หากคุณปล่อยว่างไว้ คุณจะไม่สามารถรีเซ็ตรหัสผ่านหรือกู้คืนบัญชีของคุณได้ในอนาคต';
+	@override String get fav_char_hint => 'ตัวละครที่คุณชื่นชอบ (เช่น Iron Man)';
+	@override String get save_button => 'บันทึก';
 }
 
 /// The flat map containing all translations for locale <th>.
@@ -748,7 +752,7 @@ extension on TranslationsTh {
 			'tutorial_2_title' => 'How to Reply Comments',
 			'tutorial_2_desc' => 'แตะค้างที่ความคิดเห็นที่คุณต้องการตอบกลับ ไม่มีปุ่มตอบกลับ แต่การแตะค้างจะเรียกใช้การตอบกลับและส่งการแจ้งเตือนไปยังผู้ใช้',
 			'tutorial_3_title' => 'Redeem & Use Coins',
-			'tutorial_3_desc' => 'รับเหรียญฟรีจากเมนู Vault เหรียญสามารถใช้ซื้อสติกเกอร์พรีเมียมหรือใช้ข้ามเวลารอ (Bypass) เมื่อเปลี่ยนตัวละครโปรดหรือประวัติได้',
+			'tutorial_3_desc' => 'รับเหรียญฟรีโดยการเลื่อนส่วนประวัติในโปรไฟล์ของคุณ เหรียญสามารถใช้ซื้อสติกเกอร์พรีเมียมหรือเพื่อลดเวลารอเมื่อเปลี่ยนตัวละคร/ประวัติ',
 			'tutorial_4_title' => 'Countdown System',
 			'tutorial_4_desc' => 'ห้องแชททุกห้องมีการนับถอยหลัง 3 วัน เมื่อหมดเวลา แชทจะถูกลบอย่างถาวร อย่าลืมใช้ฟีเจอร์ ปักหมุดความทรงจำ เพื่อบันทึกข้อความสำคัญก่อนหมดเวลา!',
 			'tutorial_5_title' => 'Changing Theme Colors',
@@ -757,6 +761,10 @@ extension on TranslationsTh {
 			'tutorial_6_desc' => 'คุณสามารถบล็อกผู้ใช้ที่น่ารำคาญได้ หากคุณปลดบล็อกพวกเขาในภายหลัง พวกเขาจะได้รับสถานะ "EX-BLOCKED" (เคยบล็อก) และการโต้ตอบกับพวกเขาในอนาคตจะทำให้เกิดเอฟเฟกต์ภาพแตก (Glitch) เพื่อเป็นการเตือน',
 			'tutorial_7_title' => 'Ghost & Noise Indicators',
 			'tutorial_7_desc' => 'เมื่อผู้ใช้มีพฤติกรรมน่าสงสัย สถานะจะเปลี่ยนเป็น Ghost หรือ Noise โดย Ghost จะถูกจำกัดการส่งคำขอแชท ในขณะที่ Noise จะไม่สามารถเริ่มแชทใหม่ได้เลยเพื่อปกป้องชุมชน',
+			'fav_char_prompt_title' => 'การยืนยันความปลอดภัย',
+			'fav_char_prompt_desc' => 'โปรดตั้งค่าตัวละครที่คุณชื่นชอบ หากคุณปล่อยว่างไว้ คุณจะไม่สามารถรีเซ็ตรหัสผ่านหรือกู้คืนบัญชีของคุณได้ในอนาคต',
+			'fav_char_hint' => 'ตัวละครที่คุณชื่นชอบ (เช่น Iron Man)',
+			'save_button' => 'บันทึก',
 			_ => null,
 		};
 	}

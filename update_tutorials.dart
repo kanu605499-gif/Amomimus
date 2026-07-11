@@ -4,28 +4,22 @@ import 'dart:io';
 void main() async {
   final Map<String, Map<String, String>> updates = {
     'en': {
-      'tutorial_2_desc': 'Long tap on the comment you want to reply to. There is no reply button, but long-tapping will trigger the reply and send a notification to the user.',
-      'tutorial_5_desc': 'You can change the theme color by tapping the \'Amomimus\' typefont from the feed screen or the island chat inside the roomchat.'
+      'tutorial_3_desc': 'Get free coins by sliding your Bio section in your profile. Coins can be used to buy premium sticker packs or to Bypass the waiting time when changing character/bio.'
     },
     'id': {
-      'tutorial_2_desc': 'Tekan lama pada komentar yang ingin kamu balas. Tidak ada tombol balas, tetapi menekan lama akan memicu balasan dan mengirimkan notifikasi kepada pengguna tersebut.',
-      'tutorial_5_desc': 'Kamu bisa mengubah warna tema dengan menekan tulisan \'Amomimus\' dari layar feed atau island chat di dalam roomchat.'
+      'tutorial_3_desc': 'Ambil koin gratis dengan menggeser (slide) kolom Bio di profilmu. Koin bisa dipakai untuk beli stiker pack premium atau melakukan Bypass (memotong waktu tunggu saat ganti karakter/bio).'
     },
     'th': {
-      'tutorial_2_desc': 'แตะค้างที่ความคิดเห็นที่คุณต้องการตอบกลับ ไม่มีปุ่มตอบกลับ แต่การแตะค้างจะเรียกใช้การตอบกลับและส่งการแจ้งเตือนไปยังผู้ใช้',
-      'tutorial_5_desc': 'คุณสามารถเปลี่ยนสีธีมได้โดยแตะที่แบบอักษร \'Amomimus\' จากหน้าฟีดหรือเกาะแชทในห้องแชท'
+      'tutorial_3_desc': 'รับเหรียญฟรีโดยการเลื่อนส่วนประวัติในโปรไฟล์ของคุณ เหรียญสามารถใช้ซื้อสติกเกอร์พรีเมียมหรือเพื่อลดเวลารอเมื่อเปลี่ยนตัวละคร/ประวัติ'
     },
     'ja': {
-      'tutorial_2_desc': '返信したいコメントを長押しします。返信ボタンはありませんが、長押しすると返信がトリガーされ、ユーザーに通知が送信されます。',
-      'tutorial_5_desc': 'フィード画面またはルームチャット内のアイランドチャットから「Amomimus」の文字をタップすることで、テーマカラーを変更できます。'
+      'tutorial_3_desc': 'プロフィールの自己紹介（Bio）セクションをスライドして無料コインをゲット。コインはプレミアムステッカーパックの購入や、キャラクター/自己紹介変更時の待機時間を短縮（バイパス）するために使用できます。'
     },
     'de': {
-      'tutorial_2_desc': 'Tippe lange auf den Kommentar, auf den du antworten möchtest. Es gibt keinen Antwort-Button, aber durch langes Tippen wird die Antwort ausgelöst und eine Benachrichtigung an den Benutzer gesendet.',
-      'tutorial_5_desc': 'Du kannst die Themenfarbe ändern, indem du auf die Schriftart \'Amomimus\' auf dem Feed-Bildschirm oder im Insel-Chat innerhalb des Roomchats tippst.'
+      'tutorial_3_desc': 'Holen Sie sich kostenlose Münzen, indem Sie Ihren Bio-Bereich in Ihrem Profil wischen. Münzen können verwendet werden, um Premium-Sticker-Pakete zu kaufen oder die Wartezeit beim Wechseln von Charakter/Bio zu umgehen.'
     },
-    'tm': {
-      'tutorial_2_desc': 'Long tap on the comment you want to reply to. There is no reply button, but long-tapping will trigger the reply and send a notification to the user.',
-      'tutorial_5_desc': 'You can change the theme color by tapping the \'Amomimus\' typefont from the feed screen or the island chat inside the roomchat.'
+    '[tamriel]': {
+      'tutorial_3_desc': 'Get free coins by sliding your Bio section in your profile. Coins can be used to buy premium sticker packs or to Bypass the waiting time when changing character/bio.'
     }
   };
 
@@ -37,8 +31,7 @@ void main() async {
       var content = await file.readAsString();
       final Map<String, dynamic> jsonMap = jsonDecode(content);
       
-      jsonMap['tutorial_2_desc'] = entry.value['tutorial_2_desc'];
-      jsonMap['tutorial_5_desc'] = entry.value['tutorial_5_desc'];
+      jsonMap['tutorial_3_desc'] = entry.value['tutorial_3_desc'];
       
       final encoder = JsonEncoder.withIndent('  ');
       await file.writeAsString(encoder.convert(jsonMap));
