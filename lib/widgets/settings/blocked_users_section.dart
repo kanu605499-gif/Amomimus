@@ -26,47 +26,93 @@ class BlockedUsersSection extends StatelessWidget {
     final cardColor = isDark ? AmomimusDarkTheme.backgroundDark : Colors.white;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(
-          t.blocked_users,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+        _buildExpandableSection(
+          context: context,
+          title: t.blocked_users,
+          isEmpty: currentUser.blockedUsers.isEmpty,
+          emptyMessage: t.no_blocked_users,
+          items: currentUser.blockedUsers,
+          isCurrentlyBlocked: true,
+          am: am,
+          cardColor: cardColor,
+          textColor: textColor,
+          subTextColor: subTextColor,
         ),
-        const SizedBox(height: 8),
-        if (currentUser.blockedUsers.isEmpty)
-          Text(
-            t.no_blocked_users,
-            style: TextStyle(color: subTextColor, fontStyle: FontStyle.italic),
-          )
-        else
-          ...currentUser.blockedUsers.map(
-            (id) => _buildUserRow(context, id, true, am, cardColor, textColor),
-          ),
-
-        const SizedBox(height: 24),
-        Text(
-          t.previously_blocked,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
+        const SizedBox(height: 16),
+        _buildExpandableSection(
+          context: context,
+          title: t.previously_blocked,
+          isEmpty: currentUser.exBlockedUsers.isEmpty,
+          emptyMessage: t.no_previous_blocks,
+          items: currentUser.exBlockedUsers,
+          isCurrentlyBlocked: false,
+          am: am,
+          cardColor: cardColor,
+          textColor: textColor,
+          subTextColor: subTextColor,
         ),
-        const SizedBox(height: 8),
-        if (currentUser.exBlockedUsers.isEmpty)
-          Text(
-            t.no_previous_blocks,
-            style: TextStyle(color: subTextColor, fontStyle: FontStyle.italic),
-          )
-        else
-          ...currentUser.exBlockedUsers.map(
-            (id) => _buildUserRow(context, id, false, am, cardColor, textColor),
-          ),
       ],
+    );
+  }
+
+  Widget _buildExpandableSection({
+    required BuildContext context,
+    required String title,
+    required bool isEmpty,
+    required String emptyMessage,
+    required List<String> items,
+    required bool isCurrentlyBlocked,
+    required AccountManager am,
+    required Color? cardColor,
+    required Color textColor,
+    required Color subTextColor,
+  }) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: Card(
+        color: cardColor,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: textColor.withOpacity(0.3)),
+        ),
+        child: ExpansionTile(
+          iconColor: textColor,
+          collapsedIconColor: textColor,
+          title: Text(
+            title,
+            style: TextStyle(
+              color: textColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          children: [
+            if (isEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 24.0, left: 16.0, right: 16.0),
+                child: Text(
+                  emptyMessage,
+                  style: TextStyle(color: subTextColor, fontStyle: FontStyle.italic),
+                ),
+              )
+            else
+              ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 380),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    return _buildUserRow(context, items[index], isCurrentlyBlocked, am, Colors.transparent, textColor);
+                  },
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 

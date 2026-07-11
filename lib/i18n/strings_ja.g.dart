@@ -267,7 +267,7 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get delayed_sync_feed_title => 'Delayed Post';
 	@override String get message_is_pending => 'メッセージは保留中です...';
 	@override String get message_successfully_sent => 'メッセージが正常に送信されました';
-	@override String get room_chat_resetted => '新しいメッセージがあります';
+	@override String get room_chat_resetted => 'ルームチャットがリセットされました';
 	@override String get started_at => '開始:';
 	@override String get end_at => '終了:';
 	@override String get resend => '再送信';
@@ -345,7 +345,7 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get amow_summary_empty => 'ハロー!Amowだよ〜 今は新しい通知はないよ。また後で確認するね!';
 	@override String get email_verification_title => 'メールアドレスの確認';
 	@override String get email_not_verified_body => 'メールアドレスがまだ確認されていません。受信トレイまたは迷惑メールフォルダを確認してください。';
-	@override String get email_verification_sent_body => 'アカウントが正常に作成されました。確認リンクがメールに送信されました。ログインする前に確認してください。';
+	@override String get email_verification_sent_body => 'アカウントが正常に作成されました。確認リンクがメールに送信されました。アカウントを確認するには、迷惑メール（スパム）フォルダもご確認ください。';
 	@override String get send_email => 'メールを送信';
 	@override String get visit_instagram => 'Instagramを見る';
 	@override String get developer_role => '開発者';
@@ -363,6 +363,21 @@ class TranslationsJa extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get report_submitted => 'レポートが送信されました';
 	@override String get magick_depleted => '魔力が枯渇しました。';
 	@override String get report_limit_reached => 'レポート制限に達しました。';
+	@override String get function_features_title => '機能の紹介';
+	@override String get tutorial_1_title => 'How to Chat';
+	@override String get tutorial_1_desc => 'フィードの投稿者にチャットリクエストを送信します。承認されると、匿名で会話できるチャットルームが開きます。';
+	@override String get tutorial_2_title => 'How to Reply Comments';
+	@override String get tutorial_2_desc => '返信したいコメントを長押しします。返信ボタンはありませんが、長押しすると返信がトリガーされ、ユーザーに通知が送信されます。';
+	@override String get tutorial_3_title => 'Redeem & Use Coins';
+	@override String get tutorial_3_desc => 'Vaultメニューから無料コインを獲得できます。コインを使ってプレミアムステッカーを購入したり、プロフィールの変更待機時間（クールダウン）をスキップしたりできます。';
+	@override String get tutorial_4_title => 'Countdown System';
+	@override String get tutorial_4_desc => '各チャットルームには3日間の期限があります。期限が切れるとチャットは永久に削除されます。期限前に「Memories」機能を使って重要なメッセージを保存してください！';
+	@override String get tutorial_5_title => 'Changing Theme Colors';
+	@override String get tutorial_5_desc => 'フィード画面またはルームチャット内のアイランドチャットから「Amomimus」の文字をタップすることで、テーマカラーを変更できます。';
+	@override String get tutorial_6_title => 'Block & Unblock Actions';
+	@override String get tutorial_6_desc => '迷惑なユーザーをブロックできます。ブロックを解除すると、そのユーザーは「EX-BLOCKED」（ブロック解除済み）状態になり、今後のやり取りでグリッチ（バグのような視覚的警告）が発生します。';
+	@override String get tutorial_7_title => 'Ghost & Noise Indicators';
+	@override String get tutorial_7_desc => '怪しい行動をするユーザーは、インジケーターがGhostまたはNoiseに変わります。Ghostはチャットリクエストが制限され、Noiseのユーザーはコミュニティ保護のため新規チャットを一切開始できません。';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -601,7 +616,7 @@ extension on TranslationsJa {
 			'delayed_sync_feed_title' => 'Delayed Post',
 			'message_is_pending' => 'メッセージは保留中です...',
 			'message_successfully_sent' => 'メッセージが正常に送信されました',
-			'room_chat_resetted' => '新しいメッセージがあります',
+			'room_chat_resetted' => 'ルームチャットがリセットされました',
 			'started_at' => '開始:',
 			'end_at' => '終了:',
 			'resend' => '再送信',
@@ -679,7 +694,7 @@ extension on TranslationsJa {
 			'amow_summary_empty' => 'ハロー!Amowだよ〜 今は新しい通知はないよ。また後で確認するね!',
 			'email_verification_title' => 'メールアドレスの確認',
 			'email_not_verified_body' => 'メールアドレスがまだ確認されていません。受信トレイまたは迷惑メールフォルダを確認してください。',
-			'email_verification_sent_body' => 'アカウントが正常に作成されました。確認リンクがメールに送信されました。ログインする前に確認してください。',
+			'email_verification_sent_body' => 'アカウントが正常に作成されました。確認リンクがメールに送信されました。アカウントを確認するには、迷惑メール（スパム）フォルダもご確認ください。',
 			'send_email' => 'メールを送信',
 			'visit_instagram' => 'Instagramを見る',
 			'developer_role' => '開発者',
@@ -697,6 +712,21 @@ extension on TranslationsJa {
 			'report_submitted' => 'レポートが送信されました',
 			'magick_depleted' => '魔力が枯渇しました。',
 			'report_limit_reached' => 'レポート制限に達しました。',
+			'function_features_title' => '機能の紹介',
+			'tutorial_1_title' => 'How to Chat',
+			'tutorial_1_desc' => 'フィードの投稿者にチャットリクエストを送信します。承認されると、匿名で会話できるチャットルームが開きます。',
+			'tutorial_2_title' => 'How to Reply Comments',
+			'tutorial_2_desc' => '返信したいコメントを長押しします。返信ボタンはありませんが、長押しすると返信がトリガーされ、ユーザーに通知が送信されます。',
+			'tutorial_3_title' => 'Redeem & Use Coins',
+			'tutorial_3_desc' => 'Vaultメニューから無料コインを獲得できます。コインを使ってプレミアムステッカーを購入したり、プロフィールの変更待機時間（クールダウン）をスキップしたりできます。',
+			'tutorial_4_title' => 'Countdown System',
+			'tutorial_4_desc' => '各チャットルームには3日間の期限があります。期限が切れるとチャットは永久に削除されます。期限前に「Memories」機能を使って重要なメッセージを保存してください！',
+			'tutorial_5_title' => 'Changing Theme Colors',
+			'tutorial_5_desc' => 'フィード画面またはルームチャット内のアイランドチャットから「Amomimus」の文字をタップすることで、テーマカラーを変更できます。',
+			'tutorial_6_title' => 'Block & Unblock Actions',
+			'tutorial_6_desc' => '迷惑なユーザーをブロックできます。ブロックを解除すると、そのユーザーは「EX-BLOCKED」（ブロック解除済み）状態になり、今後のやり取りでグリッチ（バグのような視覚的警告）が発生します。',
+			'tutorial_7_title' => 'Ghost & Noise Indicators',
+			'tutorial_7_desc' => '怪しい行動をするユーザーは、インジケーターがGhostまたはNoiseに変わります。Ghostはチャットリクエストが制限され、Noiseのユーザーはコミュニティ保護のため新規チャットを一切開始できません。',
 			_ => null,
 		};
 	}

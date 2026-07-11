@@ -269,7 +269,7 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get delayed_sync_feed_title => 'Delayed Post';
 	@override String get message_is_pending => 'Nachricht steht aus...';
 	@override String get message_successfully_sent => 'Nachricht erfolgreich gesendet';
-	@override String get room_chat_resetted => 'Sie haben eine neue Nachricht';
+	@override String get room_chat_resetted => 'Der Roomchat wurde zurückgesetzt';
 	@override String get started_at => 'Gestartet am:';
 	@override String get end_at => 'Endet am:';
 	@override String get resend => 'Erneut senden';
@@ -347,7 +347,7 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get amow_summary_empty => 'Halloo! Amow hier! Keine neuen Benachrichtigungen für den Moment, ich schaue später wieder vorbei!';
 	@override String get email_verification_title => 'E-Mail-Verifizierung';
 	@override String get email_not_verified_body => 'E-Mail wurde noch nicht verifiziert. Bitte überprüfen Sie Ihren Posteingang oder Spam-Ordner.';
-	@override String get email_verification_sent_body => 'Konto erfolgreich erstellt. Ein Bestätigungslink wurde an Ihre E-Mail gesendet. Bitte vor dem Anmelden verifizieren.';
+	@override String get email_verification_sent_body => 'Konto erfolgreich erstellt. Ein Bestätigungslink wurde an Ihre E-Mail gesendet. Bitte überprüfen Sie Ihre E-Mails im Spam-Ordner, um Ihr Konto zu verifizieren.';
 	@override String get send_email => 'E-Mail senden';
 	@override String get visit_instagram => 'Instagram besuchen';
 	@override String get developer_role => 'Entwickler';
@@ -365,6 +365,21 @@ class TranslationsDe extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get report_submitted => 'Bericht eingereicht';
 	@override String get magick_depleted => 'Magie erschöpft.';
 	@override String get report_limit_reached => 'Berichtslimit erreicht.';
+	@override String get function_features_title => 'Funktionen';
+	@override String get tutorial_1_title => 'How to Chat';
+	@override String get tutorial_1_desc => 'Senden Sie eine Chat-Anfrage an den Autor eines Beitrags. Wenn diese akzeptiert wird, öffnet sich ein anonymer Chatraum.';
+	@override String get tutorial_2_title => 'How to Reply Comments';
+	@override String get tutorial_2_desc => 'Tippe lange auf den Kommentar, auf den du antworten möchtest. Es gibt keinen Antwort-Button, aber durch langes Tippen wird die Antwort ausgelöst und eine Benachrichtigung an den Benutzer gesendet.';
+	@override String get tutorial_3_title => 'Redeem & Use Coins';
+	@override String get tutorial_3_desc => 'Holen Sie sich kostenlose Münzen im Vault-Menü. Münzen können verwendet werden, um Premium-Sticker zu kaufen oder die Wartezeit (Cooldown) beim Ändern von Charakter oder Bio zu überspringen.';
+	@override String get tutorial_4_title => 'Countdown System';
+	@override String get tutorial_4_desc => 'Jeder Chatraum hat ein striktes 3-Tage-Limit. Danach wird der Chat endgültig gelöscht. Nutzen Sie die Funktion "Memories anpinnen", um wichtige Nachrichten vor Ablauf der Zeit zu speichern!';
+	@override String get tutorial_5_title => 'Changing Theme Colors';
+	@override String get tutorial_5_desc => 'Du kannst die Themenfarbe ändern, indem du auf die Schriftart \'Amomimus\' auf dem Feed-Bildschirm oder im Insel-Chat innerhalb des Roomchats tippst.';
+	@override String get tutorial_6_title => 'Block & Unblock Actions';
+	@override String get tutorial_6_desc => 'Sie können störende Nutzer blockieren. Wenn Sie sie jemals entblocken, erhalten sie den Status "EX-BLOCKED" (Ex-Blockiert), und zukünftige Interaktionen lösen eine visuelle Glitch-Warnung aus.';
+	@override String get tutorial_7_title => 'Ghost & Noise Indicators';
+	@override String get tutorial_7_desc => 'Wenn sich ein Nutzer auffällig verhält, ändert sich sein Indikator zu Ghost (Geist) oder Noise (Lärm). Ghosts haben begrenzte Chat-Anfragen, während Noise-Nutzer zum Schutz der Community keine neuen Chats starten dürfen.';
 }
 
 /// The flat map containing all translations for locale <de>.
@@ -605,7 +620,7 @@ extension on TranslationsDe {
 			'delayed_sync_feed_title' => 'Delayed Post',
 			'message_is_pending' => 'Nachricht steht aus...',
 			'message_successfully_sent' => 'Nachricht erfolgreich gesendet',
-			'room_chat_resetted' => 'Sie haben eine neue Nachricht',
+			'room_chat_resetted' => 'Der Roomchat wurde zurückgesetzt',
 			'started_at' => 'Gestartet am:',
 			'end_at' => 'Endet am:',
 			'resend' => 'Erneut senden',
@@ -683,7 +698,7 @@ extension on TranslationsDe {
 			'amow_summary_empty' => 'Halloo! Amow hier! Keine neuen Benachrichtigungen für den Moment, ich schaue später wieder vorbei!',
 			'email_verification_title' => 'E-Mail-Verifizierung',
 			'email_not_verified_body' => 'E-Mail wurde noch nicht verifiziert. Bitte überprüfen Sie Ihren Posteingang oder Spam-Ordner.',
-			'email_verification_sent_body' => 'Konto erfolgreich erstellt. Ein Bestätigungslink wurde an Ihre E-Mail gesendet. Bitte vor dem Anmelden verifizieren.',
+			'email_verification_sent_body' => 'Konto erfolgreich erstellt. Ein Bestätigungslink wurde an Ihre E-Mail gesendet. Bitte überprüfen Sie Ihre E-Mails im Spam-Ordner, um Ihr Konto zu verifizieren.',
 			'send_email' => 'E-Mail senden',
 			'visit_instagram' => 'Instagram besuchen',
 			'developer_role' => 'Entwickler',
@@ -701,6 +716,21 @@ extension on TranslationsDe {
 			'report_submitted' => 'Bericht eingereicht',
 			'magick_depleted' => 'Magie erschöpft.',
 			'report_limit_reached' => 'Berichtslimit erreicht.',
+			'function_features_title' => 'Funktionen',
+			'tutorial_1_title' => 'How to Chat',
+			'tutorial_1_desc' => 'Senden Sie eine Chat-Anfrage an den Autor eines Beitrags. Wenn diese akzeptiert wird, öffnet sich ein anonymer Chatraum.',
+			'tutorial_2_title' => 'How to Reply Comments',
+			'tutorial_2_desc' => 'Tippe lange auf den Kommentar, auf den du antworten möchtest. Es gibt keinen Antwort-Button, aber durch langes Tippen wird die Antwort ausgelöst und eine Benachrichtigung an den Benutzer gesendet.',
+			'tutorial_3_title' => 'Redeem & Use Coins',
+			'tutorial_3_desc' => 'Holen Sie sich kostenlose Münzen im Vault-Menü. Münzen können verwendet werden, um Premium-Sticker zu kaufen oder die Wartezeit (Cooldown) beim Ändern von Charakter oder Bio zu überspringen.',
+			'tutorial_4_title' => 'Countdown System',
+			'tutorial_4_desc' => 'Jeder Chatraum hat ein striktes 3-Tage-Limit. Danach wird der Chat endgültig gelöscht. Nutzen Sie die Funktion "Memories anpinnen", um wichtige Nachrichten vor Ablauf der Zeit zu speichern!',
+			'tutorial_5_title' => 'Changing Theme Colors',
+			'tutorial_5_desc' => 'Du kannst die Themenfarbe ändern, indem du auf die Schriftart \'Amomimus\' auf dem Feed-Bildschirm oder im Insel-Chat innerhalb des Roomchats tippst.',
+			'tutorial_6_title' => 'Block & Unblock Actions',
+			'tutorial_6_desc' => 'Sie können störende Nutzer blockieren. Wenn Sie sie jemals entblocken, erhalten sie den Status "EX-BLOCKED" (Ex-Blockiert), und zukünftige Interaktionen lösen eine visuelle Glitch-Warnung aus.',
+			'tutorial_7_title' => 'Ghost & Noise Indicators',
+			'tutorial_7_desc' => 'Wenn sich ein Nutzer auffällig verhält, ändert sich sein Indikator zu Ghost (Geist) oder Noise (Lärm). Ghosts haben begrenzte Chat-Anfragen, während Noise-Nutzer zum Schutz der Community keine neuen Chats starten dürfen.',
 			_ => null,
 		};
 	}

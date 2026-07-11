@@ -12,6 +12,7 @@ import 'auth_service.dart';
 import 'background_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../utils/secure_time.dart';
 
 class AccountManager extends ChangeNotifier {
   Future<void> _persistAndNotify(UserAccount updatedUser) async {
@@ -134,10 +135,7 @@ class AccountManager extends ChangeNotifier {
     // Set the newly created user as the active user
     final createdUser = _accounts.firstWhere(
       (acc) => acc.amomimusId == createdProfile.amomimusId,
-      orElse: () {
-        _accounts.add(createdProfile);
-        return createdProfile;
-      },
+      orElse: () => createdProfile,
     );
     await switchAccount(createdUser);
     return true;
@@ -149,10 +147,7 @@ class AccountManager extends ChangeNotifier {
       await loadAccounts();
       final loggedInUser = _accounts.firstWhere(
         (acc) => acc.amomimusId == result.account!.amomimusId,
-        orElse: () {
-          _accounts.add(result.account!);
-          return result.account!;
-        },
+        orElse: () => result.account!,
       );
       await switchAccount(loggedInUser);
     }
@@ -165,10 +160,7 @@ class AccountManager extends ChangeNotifier {
     await loadAccounts();
     final createdUser = _accounts.firstWhere(
       (acc) => acc.amomimusId == createdProfile.amomimusId,
-      orElse: () {
-        _accounts.add(createdProfile);
-        return createdProfile;
-      },
+      orElse: () => createdProfile,
     );
     await switchAccount(createdUser);
     return true;
@@ -197,7 +189,12 @@ class AccountManager extends ChangeNotifier {
   }
 
   Future<void> switchAccount(UserAccount account) async {
-    _currentUser = account;
+    // Use the canonical object from _accounts if it exists
+    final canonical = _accounts.cast<UserAccount?>().firstWhere(
+      (acc) => acc?.amomimusId == account.amomimusId,
+      orElse: () => null,
+    );
+    _currentUser = canonical ?? account;
     notifyListeners();
     
     // Persist the switch
@@ -280,12 +277,12 @@ class AccountManager extends ChangeNotifier {
   Future<bool> updateBio(String newBio, int durationDays) async {
     if (_currentUser == null) return false;
 
-    final expirationDate = DateTime.now().add(Duration(days: durationDays)).toIso8601String();
+    final expirationDate = SecureTime.now().add(Duration(days: durationDays)).toIso8601String();
 
     bool shouldResetBailout = false;
     if (_currentUser!.bioExpirationDate != null) {
       final expDate = DateTime.tryParse(_currentUser!.bioExpirationDate!);
-      if (expDate != null && expDate.isBefore(DateTime.now())) {
+      if (expDate != null && expDate.isBefore(SecureTime.now())) {
         shouldResetBailout = true;
       }
     }
@@ -351,7 +348,7 @@ class AccountManager extends ChangeNotifier {
   Future<bool> submitBugReport(String category, String description) async {
     if (_currentUser == null) return false;
 
-    final now = DateTime.now();
+    final now = SecureTime.now();
     final lastDateStr = _currentUser!.lastBugReportDate;
     int currentCount = _currentUser!.bugReportWeeklyCount;
 
@@ -400,7 +397,7 @@ class AccountManager extends ChangeNotifier {
 
     if (updateTimestamp) {
       updatedUser = updatedUser.copyWith(
-        lastRedeemed: DateTime.now().toIso8601String(),
+        lastRedeemed: SecureTime.now().toIso8601String(),
       );
     }
 
@@ -480,7 +477,7 @@ class AccountManager extends ChangeNotifier {
     );
 
     // Add new entry with timestamp
-    final timestamp = DateTime.now().toIso8601String();
+    final timestamp = SecureTime.now().toIso8601String();
     updatedExBlocked.add('$targetAmomimusId|$timestamp');
 
     final updatedUser = _currentUser!.copyWith(
@@ -537,7 +534,7 @@ class AccountManager extends ChangeNotifier {
         if (parts.length == 2) {
           final unblockDate = DateTime.tryParse(parts[1]);
           if (unblockDate != null) {
-            final diff = DateTime.now().difference(unblockDate);
+            final diff = SecureTime.now().difference(unblockDate);
             if (diff.inHours < 72) {
               return const Duration(hours: 72) - diff;
             }
@@ -558,7 +555,7 @@ class AccountManager extends ChangeNotifier {
         if (parts.length == 2) {
           final unblockDate = DateTime.tryParse(parts[1]);
           if (unblockDate != null) {
-            final diff = DateTime.now().difference(unblockDate);
+            final diff = SecureTime.now().difference(unblockDate);
             if (diff.inHours < 72) {
               return true;
             }
@@ -578,7 +575,7 @@ class AccountManager extends ChangeNotifier {
     if (creds.lastFavCharEditDate != null) {
       final lastEdit = DateTime.tryParse(creds.lastFavCharEditDate!);
       if (lastEdit != null) {
-        final diff = DateTime.now().difference(lastEdit);
+        final diff = SecureTime.now().difference(lastEdit);
         if (diff.inHours < 24) {
           return false; // Can only edit once every 24 hours
         }
@@ -587,7 +584,7 @@ class AccountManager extends ChangeNotifier {
 
     final updatedCreds = creds.copyWith(
       favoriteCharacter: newCharacter,
-      lastFavCharEditDate: DateTime.now().toIso8601String(),
+      lastFavCharEditDate: SecureTime.now().toIso8601String(),
     );
 
     return await authService.updateCredentials(updatedCreds);
@@ -637,7 +634,7 @@ class AccountManager extends ChangeNotifier {
     
     final updatedUser = _currentUser!.copyWith(
       presenceStatus: status,
-      presenceUpdatedAt: DateTime.now().toIso8601String(),
+      presenceUpdatedAt: SecureTime.now().toIso8601String(),
     );
     
     await _persistAndNotify(updatedUser);
@@ -672,7 +669,7 @@ class AccountManager extends ChangeNotifier {
 
   /// Gets daily report counts by category for today.
   Map<ReportCategory, int> _getDailyReportCounts(Map<String, dynamic> tokens) {
-    final today = DateTime.now().toIso8601String().split('T').first;
+    final today = SecureTime.now().toIso8601String().split('T').first;
     final storedDate = tokens['date'] as String?;
 
     if (storedDate != today) return {}; // New day, reset counts
@@ -690,7 +687,7 @@ class AccountManager extends ChangeNotifier {
   /// Gets weekly hate speech report count.
   int _getWeeklyHateSpeechCount(Map<String, dynamic> tokens) {
     final weeklyList = (tokens['hate_speech_weekly_dates'] as List<dynamic>?) ?? [];
-    final oneWeekAgo = DateTime.now().subtract(const Duration(days: 7));
+    final oneWeekAgo = SecureTime.now().subtract(const Duration(days: 7));
 
     int count = 0;
     for (final dateStr in weeklyList) {
@@ -738,7 +735,7 @@ class AccountManager extends ChangeNotifier {
   /// Records a report token consumption.
   Future<void> _consumeReportToken(ReportCategory category) async {
     final tokens = await _loadReportTokens();
-    final today = DateTime.now().toIso8601String().split('T').first;
+    final today = SecureTime.now().toIso8601String().split('T').first;
     final storedDate = tokens['date'] as String?;
 
     // Reset daily counts if new day
@@ -764,9 +761,9 @@ class AccountManager extends ChangeNotifier {
         // Also track weekly
         final weeklyList =
             List<String>.from((tokens['hate_speech_weekly_dates'] as List<dynamic>?) ?? []);
-        weeklyList.add(DateTime.now().toIso8601String());
+        weeklyList.add(SecureTime.now().toIso8601String());
         // Prune entries older than 7 days
-        final oneWeekAgo = DateTime.now().subtract(const Duration(days: 7));
+        final oneWeekAgo = SecureTime.now().subtract(const Duration(days: 7));
         weeklyList.removeWhere((d) {
           final date = DateTime.tryParse(d);
           return date != null && date.isBefore(oneWeekAgo);
@@ -899,7 +896,7 @@ class AccountManager extends ChangeNotifier {
           category: category,
           description: description ?? '',
           reportedMessageId: isChatBubbleReport ? targetId : null,
-          createdAt: DateTime.now().toIso8601String(),
+          createdAt: SecureTime.now().toIso8601String(),
         );
 
         await _firestore.collection('reports').add(reportModel.toMap());
@@ -940,7 +937,7 @@ class AccountManager extends ChangeNotifier {
   Future<void> incrementChatRequestCount() async {
     if (_currentUser == null) return;
 
-    final today = DateTime.now().toIso8601String().split('T').first;
+    final today = SecureTime.now().toIso8601String().split('T').first;
     final lastReqDate = _currentUser!.lastChatRequestDate?.split('T').first;
     int newCount = _currentUser!.dailyChatRequestsSent;
 
@@ -952,7 +949,7 @@ class AccountManager extends ChangeNotifier {
 
     final updatedUser = _currentUser!.copyWith(
       dailyChatRequestsSent: newCount,
-      lastChatRequestDate: DateTime.now().toIso8601String(),
+      lastChatRequestDate: SecureTime.now().toIso8601String(),
     );
 
     try {
@@ -1042,6 +1039,9 @@ class AccountManager extends ChangeNotifier {
     await authService.logout();
     _currentUser = null;
     _accounts.clear();
+    await PreferenceHandler.setLogin(false);
+    await PreferenceHandler.setSavedEmail('');
+    await PreferenceHandler.setSavedAmomimusId('');
     notifyListeners();
   }
 }

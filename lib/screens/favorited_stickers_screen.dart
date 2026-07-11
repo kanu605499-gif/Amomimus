@@ -5,6 +5,7 @@ import '../models/sticker_batch_model.dart';
 import '../services/account_manager.dart';
 import '../models/effects/plastic_box_effect_model.dart';
 import 'package:amomimus/i18n/strings.g.dart';
+import '../widgets/secure_sticker.dart';
 
 class FavoritedStickersScreen extends StatelessWidget {
   const FavoritedStickersScreen({super.key});
@@ -121,10 +122,9 @@ class FavoritedStickersScreen extends StatelessWidget {
                               Expanded(
                                 flex: 5,
                                 child: batch.coverAsset != null
-                                    ? Image.asset(
-                                        batch.coverAsset!,
+                                    ? SecureSticker(
+                                        assetPath: batch.coverAsset!,
                                         fit: BoxFit.cover,
-                                        alignment: Alignment.bottomCenter,
                                       )
                                     : Container(
                                         color: isDark
@@ -391,8 +391,8 @@ class FavoritedStickersScreen extends StatelessWidget {
                                               ],
                                             ),
                                           ),
-                                        Image.asset(
-                                          sticker.imageAsset,
+                                        SecureSticker(
+                                          assetPath: sticker.imageAsset,
                                           width: 90,
                                           height: 90,
                                           fit: BoxFit.contain,

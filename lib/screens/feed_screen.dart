@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:amomimus/services/chatmodel.dart';
 import 'package:amomimus/screens/chatroomhome.dart';
 import 'package:amomimus/utils/utc_time_manager.dart';
+import 'package:amomimus/utils/secure_time.dart';
 import 'package:amomimus/screens/fake_pdf_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:amomimus/widgets/feed/left_drawer_menu.dart';
@@ -86,7 +87,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
     _isCreatingPost = true;
     try {
       // Check 10 posts per day limit
-      final now = DateTime.now();
+      final now = SecureTime.now();
       final startOfDay = DateTime(now.year, now.month, now.day).toIso8601String();
       
       int todayPostCount = 0;

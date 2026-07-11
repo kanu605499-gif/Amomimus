@@ -6,6 +6,7 @@ import 'package:amomimus/i18n/strings.g.dart';
 import '../../amomimusdark.dart';
 import '../../models/sticker_batch_model.dart';
 import '../../services/account_manager.dart';
+import '../secure_sticker.dart';
 
 class StickerKeyboard extends StatelessWidget {
   final bool isExpanded;
@@ -722,8 +723,8 @@ class StickerKeyboard extends StatelessWidget {
                                                 padding: const EdgeInsets.all(
                                                   8,
                                                 ),
-                                                child: Image.asset(
-                                                  sticker.imageAsset,
+                                                child: SecureSticker(
+                                                  assetPath: sticker.imageAsset,
                                                   width: 70,
                                                   fit: BoxFit.contain,
                                                 ),

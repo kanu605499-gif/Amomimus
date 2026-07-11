@@ -17,6 +17,7 @@ import 'package:amomimus/services/feed_manager.dart';
 import 'package:amomimus/services/chat_request_manager.dart';
 import 'package:amomimus/services/notification_manager.dart';
 import 'package:amomimus/helpers/notification_helper.dart';
+import 'package:amomimus/utils/secure_time.dart';
 
 import 'package:flutter/services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -57,6 +58,7 @@ Future<void> runAmomimusApp(FirebaseOptions options) async {
 
   await initializeDateFormatting('id_ID', null);
   await PreferenceHandler.init();
+  await SecureTime.initialize();
 
   final savedLang = PreferenceHandler.language;
   if (savedLang != null) {
@@ -80,9 +82,10 @@ Future<void> runAmomimusApp(FirebaseOptions options) async {
             create: (context) =>
                 AccountManager(authService: context.read<AuthService>())
                   ..loadAccounts(),
-            update: (context, authService, previous) =>
-                previous ?? AccountManager(authService: authService)
-                  ..loadAccounts(),
+            update: (context, authService, previous) {
+              return previous ?? (AccountManager(authService: authService)
+                ..loadAccounts());
+            },
           ),
           ChangeNotifierProxyProvider<AccountManager, ChatModel>(
             create: (context) => ChatModel(),

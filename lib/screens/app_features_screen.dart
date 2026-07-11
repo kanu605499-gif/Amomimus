@@ -68,6 +68,32 @@ class AppFeaturesScreen extends StatelessWidget {
     }
   }
 
+  String _getTutorialTitle(int idx) {
+    switch (idx) {
+      case 1: return t.tutorial_1_title;
+      case 2: return t.tutorial_2_title;
+      case 3: return t.tutorial_3_title;
+      case 4: return t.tutorial_4_title;
+      case 5: return t.tutorial_5_title;
+      case 6: return t.tutorial_6_title;
+      case 7: return t.tutorial_7_title;
+      default: return "";
+    }
+  }
+
+  String _getTutorialDesc(int idx) {
+    switch (idx) {
+      case 1: return t.tutorial_1_desc;
+      case 2: return t.tutorial_2_desc;
+      case 3: return t.tutorial_3_desc;
+      case 4: return t.tutorial_4_desc;
+      case 5: return t.tutorial_5_desc;
+      case 6: return t.tutorial_6_desc;
+      case 7: return t.tutorial_7_desc;
+      default: return "";
+    }
+  }
+
   Widget _buildFeatureList(
       BuildContext context, int count, bool isSystem, Color textColor, Color cardColor, bool isDark) {
     return ListView.builder(
@@ -77,62 +103,80 @@ class AppFeaturesScreen extends StatelessWidget {
         final idx = index + 1;
         final title = isSystem ? _getSystemFeatureTitle(idx) : _getAppFeatureTitle(idx);
         final desc = isSystem ? _getSystemFeatureDesc(idx) : _getAppFeatureDesc(idx);
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: cardColor,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: textColor.withValues(alpha: 0.3),
-                    width: 1.0,
+        return _buildExpansionTile(context, title, desc, textColor, cardColor, isDark);
+      },
+    );
+  }
+
+  Widget _buildTutorialList(
+      BuildContext context, int count, Color textColor, Color cardColor, bool isDark) {
+    return ListView.builder(
+      padding: const EdgeInsets.all(24.0),
+      itemCount: count,
+      itemBuilder: (context, index) {
+        final idx = index + 1;
+        final title = _getTutorialTitle(idx);
+        final desc = _getTutorialDesc(idx);
+        return _buildExpansionTile(context, title, desc, textColor, cardColor, isDark);
+      },
+    );
+  }
+
+  Widget _buildExpansionTile(BuildContext context, String title, String desc, Color textColor, Color cardColor, bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            decoration: BoxDecoration(
+              color: cardColor,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: textColor.withValues(alpha: 0.3),
+                width: 1.0,
+              ),
+            ),
+            child: Theme(
+              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: ExpansionTile(
+                iconColor: textColor,
+                collapsedIconColor: textColor.withValues(alpha: 0.7),
+                tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                title: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: textColor,
+                    ),
                   ),
                 ),
-                child: Theme(
-                  data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-                  child: ExpansionTile(
-                    iconColor: textColor,
-                    collapsedIconColor: textColor.withValues(alpha: 0.7),
-                    tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    title: FittedBox(
-                      fit: BoxFit.scaleDown,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+                    child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        title,
+                        desc,
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: textColor,
+                          fontSize: 14,
+                          height: 1.5,
+                          color: isDark ? Colors.white70 : Colors.black87.withValues(alpha: 0.7),
                         ),
                       ),
                     ),
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            desc,
-                            style: TextStyle(
-                              fontSize: 14,
-                              height: 1.5,
-                              color: isDark ? Colors.white70 : Colors.black87.withValues(alpha: 0.7),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
                   ),
-                ),
+                ],
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -158,7 +202,7 @@ class AppFeaturesScreen extends StatelessWidget {
             ),
           ),
           DefaultTabController(
-            length: 2,
+            length: 3,
             child: Column(
               children: [
                 AppBar(
@@ -175,8 +219,9 @@ class AppFeaturesScreen extends StatelessWidget {
                     indicatorColor: textColor,
                     indicatorWeight: 3,
                     tabs: [
-                      Tab(text: t.app_features_title),
-                      Tab(text: t.system_features_title),
+                      Tab(child: FittedBox(fit: BoxFit.scaleDown, child: Text(t.app_features_title))),
+                      Tab(child: FittedBox(fit: BoxFit.scaleDown, child: Text(t.system_features_title))),
+                      Tab(child: FittedBox(fit: BoxFit.scaleDown, child: Text(t.function_features_title))),
                     ],
                   ),
                 ),
@@ -187,6 +232,7 @@ class AppFeaturesScreen extends StatelessWidget {
                       children: [
                         _buildFeatureList(context, 5, false, textColor, cardColor, isDark),
                         _buildFeatureList(context, 3, true, textColor, cardColor, isDark),
+                        _buildTutorialList(context, 7, textColor, cardColor, isDark),
                       ],
                     ),
                   ),

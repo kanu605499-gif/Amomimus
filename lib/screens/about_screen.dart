@@ -1,5 +1,6 @@
 import 'package:amomimus/i18n/strings.g.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class AboutPage extends StatelessWidget {
   final bool isDarkMode;
@@ -80,7 +81,7 @@ class AboutPage extends StatelessWidget {
                       ),
                     ),
                     const Text(
-                      'Kanu',
+                      'Diata',
                       style: TextStyle(
                         color: Color(0xff8c72c4),
                         fontWeight: FontWeight.bold,
@@ -99,9 +100,17 @@ class AboutPage extends StatelessWidget {
                         color: mainTextColor,
                       ),
                     ),
-                    const Text(
-                      'v1.0.0',
-                      style: TextStyle(color: Color(0xfff1c66a)),
+                    FutureBuilder<PackageInfo>(
+                      future: PackageInfo.fromPlatform(),
+                      builder: (context, snapshot) {
+                        final versionStr = snapshot.hasData 
+                            ? 'v${snapshot.data!.version}+${snapshot.data!.buildNumber}' 
+                            : 'v...';
+                        return Text(
+                          versionStr,
+                          style: const TextStyle(color: Color(0xfff1c66a)),
+                        );
+                      },
                     ),
                   ],
                 ),

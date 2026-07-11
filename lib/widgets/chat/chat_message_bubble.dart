@@ -11,6 +11,7 @@ import '../../services/account_manager.dart';
 import '../../widgets/report_dialog.dart';
 import 'chat_shared_post.dart';
 import 'package:amomimus/utils/jelly_dialog.dart';
+import '../secure_sticker.dart';
 
 class MessageBubble extends StatefulWidget {
   final ChatMessage message;
@@ -432,8 +433,8 @@ class _MessageBubbleState extends State<MessageBubble> with SingleTickerProvider
                                           ),
                                         ),
                                         const SizedBox(width: 8),
-                                        Image.asset(
-                                          widget.repliedMessage!.text
+                                        SecureSticker(
+                                          assetPath: widget.repliedMessage!.text
                                               .replaceFirst('[STICKER]:', ''),
                                           height: 20,
                                           width: 20,
@@ -456,8 +457,8 @@ class _MessageBubbleState extends State<MessageBubble> with SingleTickerProvider
                             ),
                           ),
                         if (isSticker)
-                          Image.asset(
-                            stickerAsset,
+                          SecureSticker(
+                            assetPath: stickerAsset,
                             width: 130,
                             fit: BoxFit.contain,
                           )

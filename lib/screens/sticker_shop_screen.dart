@@ -9,6 +9,8 @@ import '../models/sticker_batch_model.dart';
 import '../services/account_manager.dart';
 import 'sticker_inventory_screen.dart';
 import 'favorited_stickers_screen.dart';
+import '../models/sticker_model.dart';
+import '../widgets/secure_sticker.dart';
 
 class StickerShopScreen extends StatefulWidget {
   const StickerShopScreen({super.key});
@@ -296,8 +298,8 @@ class _StickerShopScreenState extends State<StickerShopScreen>
                                               ],
                                             ),
                                           ),
-                                        Image.asset(
-                                          sticker.imageAsset,
+                                        SecureSticker(
+                                          assetPath: sticker.imageAsset,
                                           width: 90,
                                           height: 90,
                                           fit: BoxFit.contain,
@@ -482,10 +484,9 @@ class _StickerShopScreenState extends State<StickerShopScreen>
                         ? SizedBox(
                             width: double.infinity,
                             height: double.infinity,
-                            child: Image.asset(
-                              batch.coverAsset!,
+                            child: SecureSticker(
+                              assetPath: batch.coverAsset!,
                               fit: BoxFit.cover,
-                              alignment: Alignment.bottomCenter,
                             ),
                           )
                         : Container(
@@ -512,8 +513,8 @@ class _StickerShopScreenState extends State<StickerShopScreen>
                             child: Center(
                               child:
                                   batch.stickers.first.imageAsset.contains('/')
-                                  ? Image.asset(
-                                      batch.stickers.first.imageAsset,
+                                  ? SecureSticker(
+                                      assetPath: batch.stickers.first.imageAsset,
                                       width: 180,
                                       height: 180,
                                       fit: BoxFit.contain,

@@ -731,8 +731,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// en: 'Message successfully sent'
 	String get message_successfully_sent => 'Message successfully sent';
 
-	/// en: 'You got a new message'
-	String get room_chat_resetted => 'You got a new message';
+	/// en: 'The Roomchat Has Been Reset'
+	String get room_chat_resetted => 'The Roomchat Has Been Reset';
 
 	/// en: 'Started at:'
 	String get started_at => 'Started at:';
@@ -1022,8 +1022,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	/// en: 'E-mail has not been verified. Please check your inbox or spam folder.'
 	String get email_not_verified_body => 'E-mail has not been verified. Please check your inbox or spam folder.';
 
-	/// en: 'Account successfully created. A verification link has been sent to your E-mail. Please verify before logging in.'
-	String get email_verification_sent_body => 'Account successfully created. A verification link has been sent to your E-mail. Please verify before logging in.';
+	/// en: 'Account successfully created. A verification link has been sent to your E-mail. Please check your email in spam category, to verify your account.'
+	String get email_verification_sent_body => 'Account successfully created. A verification link has been sent to your E-mail. Please check your email in spam category, to verify your account.';
 
 	/// en: 'Send Email'
 	String get send_email => 'Send Email';
@@ -1069,6 +1069,51 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 
 	/// en: 'Report limit reached.'
 	String get report_limit_reached => 'Report limit reached.';
+
+	/// en: 'Function Features'
+	String get function_features_title => 'Function Features';
+
+	/// en: 'How to Chat'
+	String get tutorial_1_title => 'How to Chat';
+
+	/// en: 'Send a Chat Request to the author of a feed post. If accepted, a chat room will open for you to communicate anonymously.'
+	String get tutorial_1_desc => 'Send a Chat Request to the author of a feed post. If accepted, a chat room will open for you to communicate anonymously.';
+
+	/// en: 'How to Reply Comments'
+	String get tutorial_2_title => 'How to Reply Comments';
+
+	/// en: 'Long tap on the comment you want to reply to. There is no reply button, but long-tapping will trigger the reply and send a notification to the user.'
+	String get tutorial_2_desc => 'Long tap on the comment you want to reply to. There is no reply button, but long-tapping will trigger the reply and send a notification to the user.';
+
+	/// en: 'Redeem & Use Coins'
+	String get tutorial_3_title => 'Redeem & Use Coins';
+
+	/// en: 'Claim free coins from the Vault menu. Coins can be used to buy premium sticker packs or to bypass the cooldown timer when changing your favorite character or bio.'
+	String get tutorial_3_desc => 'Claim free coins from the Vault menu. Coins can be used to buy premium sticker packs or to bypass the cooldown timer when changing your favorite character or bio.';
+
+	/// en: 'Countdown System'
+	String get tutorial_4_title => 'Countdown System';
+
+	/// en: 'Every chat room has a strict 3-day countdown limit. When time is up, the chat will be permanently deleted. Use the Pin Memories feature to save important messages before the countdown ends!'
+	String get tutorial_4_desc => 'Every chat room has a strict 3-day countdown limit. When time is up, the chat will be permanently deleted. Use the Pin Memories feature to save important messages before the countdown ends!';
+
+	/// en: 'Changing Theme Colors'
+	String get tutorial_5_title => 'Changing Theme Colors';
+
+	/// en: 'You can change the theme color by tapping the 'Amomimus' typefont from the feed screen or the island chat inside the roomchat.'
+	String get tutorial_5_desc => 'You can change the theme color by tapping the \'Amomimus\' typefont from the feed screen or the island chat inside the roomchat.';
+
+	/// en: 'Block & Unblock Actions'
+	String get tutorial_6_title => 'Block & Unblock Actions';
+
+	/// en: 'You can block annoying users from their profile. Blocking completely hides their presence. If you ever unblock them, they receive an "EX-BLOCKED" (Outlaw) status, and any future interactions with them will trigger a visual glitch warning.'
+	String get tutorial_6_desc => 'You can block annoying users from their profile. Blocking completely hides their presence. If you ever unblock them, they receive an "EX-BLOCKED" (Outlaw) status, and any future interactions with them will trigger a visual glitch warning.';
+
+	/// en: 'Ghost & Noise Indicators'
+	String get tutorial_7_title => 'Ghost & Noise Indicators';
+
+	/// en: 'When a user behaves suspiciously, their indicator turns into a "Ghost" or "Noise". Ghosts have limited chat requests, while Noise users are completely forbidden from initiating new chats to protect the community.'
+	String get tutorial_7_desc => 'When a user behaves suspiciously, their indicator turns into a "Ghost" or "Noise". Ghosts have limited chat requests, while Noise users are completely forbidden from initiating new chats to protect the community.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1309,7 +1354,7 @@ extension on Translations {
 			'delayed_sync_feed_title' => 'Delayed Post',
 			'message_is_pending' => 'Message is pending...',
 			'message_successfully_sent' => 'Message successfully sent',
-			'room_chat_resetted' => 'You got a new message',
+			'room_chat_resetted' => 'The Roomchat Has Been Reset',
 			'started_at' => 'Started at:',
 			'end_at' => 'End at:',
 			'resend' => 'Resend',
@@ -1406,7 +1451,7 @@ extension on Translations {
 			'amow_summary_empty' => 'Hellloo! Amoooww here! No new notifications for now, I\'ll check back later!',
 			'email_verification_title' => 'E-mail Verification',
 			'email_not_verified_body' => 'E-mail has not been verified. Please check your inbox or spam folder.',
-			'email_verification_sent_body' => 'Account successfully created. A verification link has been sent to your E-mail. Please verify before logging in.',
+			'email_verification_sent_body' => 'Account successfully created. A verification link has been sent to your E-mail. Please check your email in spam category, to verify your account.',
 			'send_email' => 'Send Email',
 			'visit_instagram' => 'Visit Instagram',
 			'developer_role' => 'Developer',
@@ -1422,6 +1467,21 @@ extension on Translations {
 			'no_favorited_stickers' => 'No favorited stickers',
 			'magick_depleted' => 'Magick depleted.',
 			'report_limit_reached' => 'Report limit reached.',
+			'function_features_title' => 'Function Features',
+			'tutorial_1_title' => 'How to Chat',
+			'tutorial_1_desc' => 'Send a Chat Request to the author of a feed post. If accepted, a chat room will open for you to communicate anonymously.',
+			'tutorial_2_title' => 'How to Reply Comments',
+			'tutorial_2_desc' => 'Long tap on the comment you want to reply to. There is no reply button, but long-tapping will trigger the reply and send a notification to the user.',
+			'tutorial_3_title' => 'Redeem & Use Coins',
+			'tutorial_3_desc' => 'Claim free coins from the Vault menu. Coins can be used to buy premium sticker packs or to bypass the cooldown timer when changing your favorite character or bio.',
+			'tutorial_4_title' => 'Countdown System',
+			'tutorial_4_desc' => 'Every chat room has a strict 3-day countdown limit. When time is up, the chat will be permanently deleted. Use the Pin Memories feature to save important messages before the countdown ends!',
+			'tutorial_5_title' => 'Changing Theme Colors',
+			'tutorial_5_desc' => 'You can change the theme color by tapping the \'Amomimus\' typefont from the feed screen or the island chat inside the roomchat.',
+			'tutorial_6_title' => 'Block & Unblock Actions',
+			'tutorial_6_desc' => 'You can block annoying users from their profile. Blocking completely hides their presence. If you ever unblock them, they receive an "EX-BLOCKED" (Outlaw) status, and any future interactions with them will trigger a visual glitch warning.',
+			'tutorial_7_title' => 'Ghost & Noise Indicators',
+			'tutorial_7_desc' => 'When a user behaves suspiciously, their indicator turns into a "Ghost" or "Noise". Ghosts have limited chat requests, while Noise users are completely forbidden from initiating new chats to protect the community.',
 			_ => null,
 		};
 	}

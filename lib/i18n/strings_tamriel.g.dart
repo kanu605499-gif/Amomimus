@@ -266,7 +266,7 @@ class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, 
 	@override String get delayed_sync_feed_title => 'Delayed Post';
 	@override String get message_is_pending => 'Message is pending...';
 	@override String get message_successfully_sent => 'Message successfully sent';
-	@override String get room_chat_resetted => 'A new Courier approaches';
+	@override String get room_chat_resetted => 'The Realm Has Been Purged';
 	@override String get started_at => 'Summoned:';
 	@override String get end_at => 'Oblivion:';
 	@override String get resend => 'Recast Thu\'um';
@@ -359,7 +359,7 @@ class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, 
 	@override String get amow_summary_empty => 'Greetings Joor! The winds are quiet today, no omens to deliver!';
 	@override String get email_verification_title => 'Soul Binding';
 	@override String get email_not_verified_body => 'Your soul is unbound. Check your missives or courier pouch to bind it.';
-	@override String get email_verification_sent_body => 'Vessel forged. A binding scroll has been sent to your missives. Bind it before awakening.';
+	@override String get email_verification_sent_body => 'Vessel forged. A binding scroll has been sent to your missives. Please check your forbidden missives (spam category), to bind your vessel.';
 	@override String get send_email => 'Send Missive';
 	@override String get visit_instagram => 'Gaze upon Visage';
 	@override String get developer_role => 'Architect';
@@ -375,6 +375,21 @@ class TranslationsTamriel extends Translations with BaseTranslations<AppLocale, 
 	@override String get no_favorited_stickers => 'Your satchel holds no treasured Runes.';
 	@override String get magick_depleted => 'Magicka depleted.';
 	@override String get report_limit_reached => 'The Guards are deaf to your cries. Limit reached.';
+	@override String get function_features_title => 'Rituals of Power';
+	@override String get tutorial_1_title => 'How to Chat';
+	@override String get tutorial_1_desc => 'Dispatch a Courier to the scribe of a Thu\'um. If they accept, a rift will open for you to converse in the shadows.';
+	@override String get tutorial_2_title => 'How to Reply Comments';
+	@override String get tutorial_2_desc => 'Gaze upon a Thu\'um to behold the Rot (comments). Tap the retort rune on a specific rot to weave a structured tapestry of voices.';
+	@override String get tutorial_3_title => 'Redeem & Use Coins';
+	@override String get tutorial_3_desc => 'Claim your free Faraan (coins) from the Strongbox. Faraan can be bartered for enchanted Runes or used to bypass the Sands of Time when altering your Su\'um (bio).';
+	@override String get tutorial_4_title => 'Countdown System';
+	@override String get tutorial_4_desc => 'Every rift is bound by a strict 3-day hourglass. When the sands run out, the rift is cleansed forever. Bind your Rot to Vahrukiv (Memories) before Oblivion takes them!';
+	@override String get tutorial_5_title => 'Changing Theme Colors';
+	@override String get tutorial_5_desc => 'The realm adapts its hues to your soul. To cast a new illusion, journey to Visage > Shadow Rites > Alter Visage, and change your mortal vessel (Amo, Amom, or Ami) to shift the colors of Mundus.';
+	@override String get tutorial_6_title => 'Block & Unblock Actions';
+	@override String get tutorial_6_desc => 'You may cast annoying bards into the Dungeon. If you ever grant them a Pardon, they bear the mark of the OUTLAW. Any future encounters with them will trigger a chaotic illusion glitch, warning you of their foul presence.';
+	@override String get tutorial_7_title => 'Ghost & Noise Indicators';
+	@override String get tutorial_7_desc => 'When a soul dabbles in dark arts, their aura shifts to Skooma Drinker (Ghost) or Bandit (Noise). Ghosts have meager magicka for Couriers, while Bandits are entirely stripped of their power to initiate parleys.';
 }
 
 /// The flat map containing all translations for locale <tamriel>.
@@ -612,7 +627,7 @@ extension on TranslationsTamriel {
 			'delayed_sync_feed_title' => 'Delayed Post',
 			'message_is_pending' => 'Message is pending...',
 			'message_successfully_sent' => 'Message successfully sent',
-			'room_chat_resetted' => 'A new Courier approaches',
+			'room_chat_resetted' => 'The Realm Has Been Purged',
 			'started_at' => 'Summoned:',
 			'end_at' => 'Oblivion:',
 			'resend' => 'Recast Thu\'um',
@@ -705,7 +720,7 @@ extension on TranslationsTamriel {
 			'amow_summary_empty' => 'Greetings Joor! The winds are quiet today, no omens to deliver!',
 			'email_verification_title' => 'Soul Binding',
 			'email_not_verified_body' => 'Your soul is unbound. Check your missives or courier pouch to bind it.',
-			'email_verification_sent_body' => 'Vessel forged. A binding scroll has been sent to your missives. Bind it before awakening.',
+			'email_verification_sent_body' => 'Vessel forged. A binding scroll has been sent to your missives. Please check your forbidden missives (spam category), to bind your vessel.',
 			'send_email' => 'Send Missive',
 			'visit_instagram' => 'Gaze upon Visage',
 			'developer_role' => 'Architect',
@@ -721,6 +736,21 @@ extension on TranslationsTamriel {
 			'no_favorited_stickers' => 'Your satchel holds no treasured Runes.',
 			'magick_depleted' => 'Magicka depleted.',
 			'report_limit_reached' => 'The Guards are deaf to your cries. Limit reached.',
+			'function_features_title' => 'Rituals of Power',
+			'tutorial_1_title' => 'How to Chat',
+			'tutorial_1_desc' => 'Dispatch a Courier to the scribe of a Thu\'um. If they accept, a rift will open for you to converse in the shadows.',
+			'tutorial_2_title' => 'How to Reply Comments',
+			'tutorial_2_desc' => 'Gaze upon a Thu\'um to behold the Rot (comments). Tap the retort rune on a specific rot to weave a structured tapestry of voices.',
+			'tutorial_3_title' => 'Redeem & Use Coins',
+			'tutorial_3_desc' => 'Claim your free Faraan (coins) from the Strongbox. Faraan can be bartered for enchanted Runes or used to bypass the Sands of Time when altering your Su\'um (bio).',
+			'tutorial_4_title' => 'Countdown System',
+			'tutorial_4_desc' => 'Every rift is bound by a strict 3-day hourglass. When the sands run out, the rift is cleansed forever. Bind your Rot to Vahrukiv (Memories) before Oblivion takes them!',
+			'tutorial_5_title' => 'Changing Theme Colors',
+			'tutorial_5_desc' => 'The realm adapts its hues to your soul. To cast a new illusion, journey to Visage > Shadow Rites > Alter Visage, and change your mortal vessel (Amo, Amom, or Ami) to shift the colors of Mundus.',
+			'tutorial_6_title' => 'Block & Unblock Actions',
+			'tutorial_6_desc' => 'You may cast annoying bards into the Dungeon. If you ever grant them a Pardon, they bear the mark of the OUTLAW. Any future encounters with them will trigger a chaotic illusion glitch, warning you of their foul presence.',
+			'tutorial_7_title' => 'Ghost & Noise Indicators',
+			'tutorial_7_desc' => 'When a soul dabbles in dark arts, their aura shifts to Skooma Drinker (Ghost) or Bandit (Noise). Ghosts have meager magicka for Couriers, while Bandits are entirely stripped of their power to initiate parleys.',
 			_ => null,
 		};
 	}

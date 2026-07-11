@@ -210,7 +210,7 @@ class ChatListTileWidget extends StatelessWidget {
           },
           borderRadius: BorderRadius.circular(20),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: tileBg,
               borderRadius: BorderRadius.circular(20),
@@ -285,6 +285,14 @@ class ChatListTileWidget extends StatelessWidget {
                                     color: textColor,
                                   ),
                                 ),
+                                if (subProfileIcon != null) ...[
+                                  const SizedBox(width: 8),
+                                  Icon(
+                                    subProfileIcon,
+                                    size: 16,
+                                    color: subTextColor.withValues(alpha: 0.7),
+                                  ),
+                                ],
                               ],
                             ),
                             Text(
@@ -341,52 +349,46 @@ class ChatListTileWidget extends StatelessWidget {
                             ],
                           ],
                         ),
-                        const SizedBox(height: 5),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                isLastMessagePending
-                                    ? t.message_is_pending
-                                    : showSuccessMessage
-                                    ? t.message_successfully_sent
-                                    : chat.lastMessage == 'room_chat_resetted'
-                                    ? t.room_chat_resetted
-                                    : (chat.lastMessage.startsWith('[STICKER]:')
-                                          ? '[STICKER]'
-                                          : chat.lastMessage),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: chat.lastMessage == 'room_chat_resetted'
-                                      ? Colors.redAccent.withValues(alpha: 0.8)
-                                      : isLastMessagePending
-                                      ? Colors.redAccent
+                        if (isLastMessagePending || showSuccessMessage || chat.lastMessage.isNotEmpty) ...[
+                          const SizedBox(height: 5),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  isLastMessagePending
+                                      ? t.message_is_pending
                                       : showSuccessMessage
-                                      ? Colors.green
-                                      : subTextColor,
-                                  fontFamily: 'serif',
-                                  fontStyle:
-                                      (isLastMessagePending ||
-                                          showSuccessMessage ||
-                                          chat.lastMessage == 'room_chat_resetted')
-                                      ? FontStyle.italic
-                                      : FontStyle.normal,
+                                      ? t.message_successfully_sent
+                                      : chat.lastMessage == 'room_chat_resetted'
+                                      ? t.room_chat_resetted
+                                      : (chat.lastMessage.startsWith('[STICKER]:')
+                                            ? '[STICKER]'
+                                            : chat.lastMessage),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: chat.lastMessage == 'room_chat_resetted'
+                                        ? Colors.redAccent.withValues(alpha: 0.8)
+                                        : isLastMessagePending
+                                        ? Colors.redAccent
+                                        : showSuccessMessage
+                                        ? Colors.green
+                                        : subTextColor,
+                                    fontFamily: 'serif',
+                                    fontStyle:
+                                        (isLastMessagePending ||
+                                            showSuccessMessage ||
+                                            chat.lastMessage == 'room_chat_resetted')
+                                        ? FontStyle.italic
+                                        : FontStyle.normal,
+                                  ),
                                 ),
                               ),
-                            ),
-                            if (subProfileIcon != null) ...[
-                              const SizedBox(width: 8),
-                              Icon(
-                                subProfileIcon,
-                                size: 16,
-                                color: subTextColor.withValues(alpha: 0.7),
-                              ),
                             ],
-                          ],
-                        ),
+                          ),
+                        ],
                       ],
                     ),
                   ),

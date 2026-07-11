@@ -1,1 +1,77 @@
-{"@@info":["Here are translations that exist in <en> but not in secondary locales.","After editing this file, you can run 'dart run slang apply --locale=<locale>' to quickly apply the newly added translations."],"de":{"report_limit_daily":"Tägliches globales Limit erreicht. Wird lokal angewendet.","report_limit_category":"Globales Token für diese Kategorie erschöpft. Wird lokal angewendet.","report_limit_weekly_hate_speech":"Wöchentliches Hassrede-Limit erreicht. Wird lokal angewendet.","report_limit_global":"Globales Limit erreicht. Wird lokal angewendet.","report_user":"Benutzer melden","report_message":"Nachricht melden","select_category":"Kategorie wählen:","detailed_comment":"Detaillierter Kommentar (erforderlich für Bann):","provide_details":"Bitte Details angeben...","block_ban_user":"Benutzer blockieren / bannen","comment_required_ban":"Sie müssen einen Kommentar abgeben, um dies zu aktivieren.","submit_report":"Bericht einreichen","report_submitted":"Bericht eingereicht","report_sent_user_blocked":"Der Bericht wurde gesendet und der Benutzer ist nun blockiert.","thank_you_safe":"Danke, dass Sie Amomimus sicherer machen.","close":"Schließen","category_spam":"Spam / Belästigung","category_inappropriate":"Unangemessener Inhalt","category_hate":"Hassrede"},"id":{},"ja":{"continue_btn":"続ける","validation_form":"検証フォーム","report_limit_daily":"1日のグローバル制限に達しました。ローカルに適用されます。","report_limit_category":"このカテゴリのグローバルトークンが枯渇しました。ローカルに適用されます。","report_limit_weekly_hate_speech":"週間ヘイトスピーチ制限に達しました。ローカルに適用されます。","report_limit_global":"グローバル制限に達しました。ローカルに適用されます。","report_user":"ユーザーを報告","report_message":"メッセージを報告","select_category":"カテゴリを選択:","detailed_comment":"詳細なコメント (BANに必要):","provide_details":"詳細を入力してください...","block_ban_user":"ユーザーをブロック / BAN","comment_required_ban":"これを有効にするにはコメントを入力する必要があります。","submit_report":"報告を送信","report_submitted":"報告が送信されました","report_sent_user_blocked":"報告が送信され、ユーザーはブロックされました。","thank_you_safe":"Amomimusをより安全な場所にしていただきありがとうございます。","close":"閉じる","category_spam":"スパム / 嫌がらせ","category_inappropriate":"不適切なコンテンツ","category_hate":"ヘイトスピーチ"},"th":{"report_limit_daily":"ถึงขีดจำกัดทั่วโลกรายวันแล้ว นำไปใช้ในพื้นที่","report_limit_category":"โทเค็นทั่วโลกสำหรับหมวดหมู่นี้หมดแล้ว นำไปใช้ในพื้นที่","report_limit_weekly_hate_speech":"ถึงขีดจำกัดคำพูดแสดงความเกลียดชังรายสัปดาห์แล้ว นำไปใช้ในพื้นที่","report_limit_global":"ถึงขีดจำกัดทั่วโลกแล้ว นำไปใช้ในพื้นที่"},"tm":{"share":"பகிரவும்","continue_btn":"தொடரவும்","validation_form":"சரிபார்ப்பு படிவம்","report_limit_daily":"தினசரி உலகளாவிய வரம்பை எட்டியது. உள்நாட்டில் பயன்படுத்தப்படுகிறது.","report_limit_category":"இந்த வகைக்கான உலகளாவிய டோக்கன் தீர்ந்துவிட்டது. உள்நாட்டில் பயன்படுத்தப்படுகிறது.","report_limit_weekly_hate_speech":"வாராந்திர வெறுப்பு பேச்சு வரம்பை எட்டியது. உள்நாட்டில் பயன்படுத்தப்படுகிறது.","report_limit_global":"உலகளாவிய வரம்பை எட்டியது. உள்நாட்டில் பயன்படுத்தப்படுகிறது."},"send_email":"Send Email","visit_instagram":"Visit Instagram","developer_role":"Developer"}
+{
+  "@@info": [
+    "Here are translations that exist in <en> but not in secondary locales.",
+    "After editing this file, you can run 'dart run slang apply --locale=<locale>' to quickly apply the newly added translations."
+  ],
+  "de": {
+    "report_limit_daily": "Tägliches globales Limit erreicht. Wird lokal angewendet.",
+    "report_limit_category": "Globales Token für diese Kategorie erschöpft. Wird lokal angewendet.",
+    "report_limit_weekly_hate_speech": "Wöchentliches Hassrede-Limit erreicht. Wird lokal angewendet.",
+    "report_limit_global": "Globales Limit erreicht. Wird lokal angewendet.",
+    "report_user": "Benutzer melden",
+    "report_message": "Nachricht melden",
+    "select_category": "Kategorie wählen:",
+    "detailed_comment": "Detaillierter Kommentar (erforderlich für Bann):",
+    "provide_details": "Bitte Details angeben...",
+    "block_ban_user": "Benutzer blockieren / bannen",
+    "comment_required_ban": "Sie müssen einen Kommentar abgeben, um dies zu aktivieren.",
+    "submit_report": "Bericht einreichen",
+    "report_submitted": "Bericht eingereicht",
+    "report_sent_user_blocked": "Der Bericht wurde gesendet und der Benutzer ist nun blockiert.",
+    "thank_you_safe": "Danke, dass Sie Amomimus sicherer machen.",
+    "close": "Schließen",
+    "category_spam": "Spam / Belästigung",
+    "category_inappropriate": "Unangemessener Inhalt",
+    "category_hate": "Hassrede"
+  },
+  "id": {},
+  "ja": {
+    "continue_btn": "続ける",
+    "validation_form": "検証フォーム",
+    "report_limit_daily": "1日のグローバル制限に達しました。ローカルに適用されます。",
+    "report_limit_category": "このカテゴリのグローバルトークンが枯渇しました。ローカルに適用されます。",
+    "report_limit_weekly_hate_speech": "週間ヘイトスピーチ制限に達しました。ローカルに適用されます。",
+    "report_limit_global": "グローバル制限に達しました。ローカルに適用されます。",
+    "report_user": "ユーザーを報告",
+    "report_message": "メッセージを報告",
+    "select_category": "カテゴリを選択:",
+    "detailed_comment": "詳細なコメント (BANに必要):",
+    "provide_details": "詳細を入力してください...",
+    "block_ban_user": "ユーザーをブロック / BAN",
+    "comment_required_ban": "これを有効にするにはコメントを入力する必要があります。",
+    "submit_report": "報告を送信",
+    "report_submitted": "報告が送信されました",
+    "report_sent_user_blocked": "報告が送信され、ユーザーはブロックされました。",
+    "thank_you_safe": "Amomimusをより安全な場所にしていただきありがとうございます。",
+    "close": "閉じる",
+    "category_spam": "スパム / 嫌がらせ",
+    "category_inappropriate": "不適切なコンテンツ",
+    "category_hate": "ヘイトスピーチ"
+  },
+  "th": {
+    "report_limit_daily": "ถึงขีดจำกัดทั่วโลกรายวันแล้ว นำไปใช้ในพื้นที่",
+    "report_limit_category": "โทเค็นทั่วโลกสำหรับหมวดหมู่นี้หมดแล้ว นำไปใช้ในพื้นที่",
+    "report_limit_weekly_hate_speech": "ถึงขีดจำกัดคำพูดแสดงความเกลียดชังรายสัปดาห์แล้ว นำไปใช้ในพื้นที่",
+    "report_limit_global": "ถึงขีดจำกัดทั่วโลกแล้ว นำไปใช้ในพื้นที่"
+  },
+  "tm": {
+    "share": "பகிரவும்",
+    "continue_btn": "தொடரவும்",
+    "validation_form": "சரிபார்ப்பு படிவம்",
+    "report_limit_daily": "தினசரி உலகளாவிய வரம்பை எட்டியது. உள்நாட்டில் பயன்படுத்தப்படுகிறது.",
+    "report_limit_category": "இந்த வகைக்கான உலகளாவிய டோக்கன் தீர்ந்துவிட்டது. உள்நாட்டில் பயன்படுத்தப்படுகிறது.",
+    "report_limit_weekly_hate_speech": "வாராந்திர வெறுப்பு பேச்சு வரம்பை எட்டியது. உள்நாட்டில் பயன்படுத்தப்படுகிறது.",
+    "report_limit_global": "உலகளாவிய வரம்பை எட்டியது. உள்நாட்டில் பயன்படுத்தப்படுகிறது."
+  },
+  "send_email": "Send Email",
+  "visit_instagram": "Visit Instagram",
+  "developer_role": "Developer",
+  "tutorial_1_title": "How to Chat",
+  "tutorial_2_title": "How to Reply Comments",
+  "tutorial_3_title": "Redeem & Use Coins",
+  "tutorial_4_title": "Countdown System",
+  "tutorial_5_title": "Changing Theme Colors",
+  "tutorial_6_title": "Block & Unblock Actions",
+  "tutorial_7_title": "Ghost & Noise Indicators",
+  "room_chat_resetted": "The Roomchat Has Been Reset"
+}

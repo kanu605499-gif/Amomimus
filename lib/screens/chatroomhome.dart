@@ -278,9 +278,11 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                   ),
 
                   SliverPadding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 10,
+                    padding: EdgeInsets.only(
+                      left: 14,
+                      right: 14,
+                      top: 10,
+                      bottom: MediaQuery.of(context).padding.bottom + 100,
                     ),
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate((context, index) {

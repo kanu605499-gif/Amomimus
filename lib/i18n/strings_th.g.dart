@@ -269,7 +269,7 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get delayed_sync_feed_title => 'Delayed Post';
 	@override String get message_is_pending => 'ข้อความกำลังรอการดำเนินการ...';
 	@override String get message_successfully_sent => 'ส่งข้อความสำเร็จแล้ว';
-	@override String get room_chat_resetted => 'คุณมีข้อความใหม่';
+	@override String get room_chat_resetted => 'ห้องแชทถูกรีเซ็ตแล้ว';
 	@override String get started_at => 'เริ่มเมื่อ:';
 	@override String get end_at => 'สิ้นสุดเมื่อ:';
 	@override String get resend => 'ส่งใหม่';
@@ -362,7 +362,7 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get amow_summary_empty => 'ฮัลโหล! Amow อยู่นี่~ ยังไม่มีการแจ้งเตือนใหม่นะ เดี๋ยวมาเช็คใหม่!';
 	@override String get email_verification_title => 'การยืนยันอีเมล';
 	@override String get email_not_verified_body => 'อีเมลยังไม่ได้รับการยืนยัน โปรดตรวจสอบกล่องจดหมายหรือโฟลเดอร์สแปมของคุณ';
-	@override String get email_verification_sent_body => 'สร้างบัญชีสำเร็จแล้ว ส่งลิงก์ยืนยันไปยังอีเมลของคุณแล้ว โปรดยืนยันก่อนเข้าสู่ระบบ';
+	@override String get email_verification_sent_body => 'สร้างบัญชีสำเร็จแล้ว ส่งลิงก์ยืนยันไปยังอีเมลของคุณแล้ว โปรดตรวจสอบอีเมลของคุณในหมวดหมู่สแปมเพื่อยืนยันบัญชีของคุณ';
 	@override String get send_email => 'ส่งอีเมล';
 	@override String get visit_instagram => 'ไปที่ Instagram';
 	@override String get developer_role => 'นักพัฒนา';
@@ -378,6 +378,21 @@ class TranslationsTh extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get no_favorited_stickers => 'ไม่มีสติกเกอร์ที่ชื่นชอบ';
 	@override String get magick_depleted => 'พลังเวทย์หมดแล้ว';
 	@override String get report_limit_reached => 'ถึงขีดจำกัดการรายงานแล้ว';
+	@override String get function_features_title => 'คู่มือการใช้งาน';
+	@override String get tutorial_1_title => 'How to Chat';
+	@override String get tutorial_1_desc => 'ส่งคำขอแชทถึงผู้เขียนโพสต์ในฟีด หากได้รับการยอมรับ ห้องแชทที่ไม่ระบุตัวตนจะเปิดขึ้น';
+	@override String get tutorial_2_title => 'How to Reply Comments';
+	@override String get tutorial_2_desc => 'แตะค้างที่ความคิดเห็นที่คุณต้องการตอบกลับ ไม่มีปุ่มตอบกลับ แต่การแตะค้างจะเรียกใช้การตอบกลับและส่งการแจ้งเตือนไปยังผู้ใช้';
+	@override String get tutorial_3_title => 'Redeem & Use Coins';
+	@override String get tutorial_3_desc => 'รับเหรียญฟรีจากเมนู Vault เหรียญสามารถใช้ซื้อสติกเกอร์พรีเมียมหรือใช้ข้ามเวลารอ (Bypass) เมื่อเปลี่ยนตัวละครโปรดหรือประวัติได้';
+	@override String get tutorial_4_title => 'Countdown System';
+	@override String get tutorial_4_desc => 'ห้องแชททุกห้องมีการนับถอยหลัง 3 วัน เมื่อหมดเวลา แชทจะถูกลบอย่างถาวร อย่าลืมใช้ฟีเจอร์ ปักหมุดความทรงจำ เพื่อบันทึกข้อความสำคัญก่อนหมดเวลา!';
+	@override String get tutorial_5_title => 'Changing Theme Colors';
+	@override String get tutorial_5_desc => 'คุณสามารถเปลี่ยนสีธีมได้โดยแตะที่แบบอักษร \'Amomimus\' จากหน้าฟีดหรือเกาะแชทในห้องแชท';
+	@override String get tutorial_6_title => 'Block & Unblock Actions';
+	@override String get tutorial_6_desc => 'คุณสามารถบล็อกผู้ใช้ที่น่ารำคาญได้ หากคุณปลดบล็อกพวกเขาในภายหลัง พวกเขาจะได้รับสถานะ "EX-BLOCKED" (เคยบล็อก) และการโต้ตอบกับพวกเขาในอนาคตจะทำให้เกิดเอฟเฟกต์ภาพแตก (Glitch) เพื่อเป็นการเตือน';
+	@override String get tutorial_7_title => 'Ghost & Noise Indicators';
+	@override String get tutorial_7_desc => 'เมื่อผู้ใช้มีพฤติกรรมน่าสงสัย สถานะจะเปลี่ยนเป็น Ghost หรือ Noise โดย Ghost จะถูกจำกัดการส่งคำขอแชท ในขณะที่ Noise จะไม่สามารถเริ่มแชทใหม่ได้เลยเพื่อปกป้องชุมชน';
 }
 
 /// The flat map containing all translations for locale <th>.
@@ -618,7 +633,7 @@ extension on TranslationsTh {
 			'delayed_sync_feed_title' => 'Delayed Post',
 			'message_is_pending' => 'ข้อความกำลังรอการดำเนินการ...',
 			'message_successfully_sent' => 'ส่งข้อความสำเร็จแล้ว',
-			'room_chat_resetted' => 'คุณมีข้อความใหม่',
+			'room_chat_resetted' => 'ห้องแชทถูกรีเซ็ตแล้ว',
 			'started_at' => 'เริ่มเมื่อ:',
 			'end_at' => 'สิ้นสุดเมื่อ:',
 			'resend' => 'ส่งใหม่',
@@ -711,7 +726,7 @@ extension on TranslationsTh {
 			'amow_summary_empty' => 'ฮัลโหล! Amow อยู่นี่~ ยังไม่มีการแจ้งเตือนใหม่นะ เดี๋ยวมาเช็คใหม่!',
 			'email_verification_title' => 'การยืนยันอีเมล',
 			'email_not_verified_body' => 'อีเมลยังไม่ได้รับการยืนยัน โปรดตรวจสอบกล่องจดหมายหรือโฟลเดอร์สแปมของคุณ',
-			'email_verification_sent_body' => 'สร้างบัญชีสำเร็จแล้ว ส่งลิงก์ยืนยันไปยังอีเมลของคุณแล้ว โปรดยืนยันก่อนเข้าสู่ระบบ',
+			'email_verification_sent_body' => 'สร้างบัญชีสำเร็จแล้ว ส่งลิงก์ยืนยันไปยังอีเมลของคุณแล้ว โปรดตรวจสอบอีเมลของคุณในหมวดหมู่สแปมเพื่อยืนยันบัญชีของคุณ',
 			'send_email' => 'ส่งอีเมล',
 			'visit_instagram' => 'ไปที่ Instagram',
 			'developer_role' => 'นักพัฒนา',
@@ -727,6 +742,21 @@ extension on TranslationsTh {
 			'no_favorited_stickers' => 'ไม่มีสติกเกอร์ที่ชื่นชอบ',
 			'magick_depleted' => 'พลังเวทย์หมดแล้ว',
 			'report_limit_reached' => 'ถึงขีดจำกัดการรายงานแล้ว',
+			'function_features_title' => 'คู่มือการใช้งาน',
+			'tutorial_1_title' => 'How to Chat',
+			'tutorial_1_desc' => 'ส่งคำขอแชทถึงผู้เขียนโพสต์ในฟีด หากได้รับการยอมรับ ห้องแชทที่ไม่ระบุตัวตนจะเปิดขึ้น',
+			'tutorial_2_title' => 'How to Reply Comments',
+			'tutorial_2_desc' => 'แตะค้างที่ความคิดเห็นที่คุณต้องการตอบกลับ ไม่มีปุ่มตอบกลับ แต่การแตะค้างจะเรียกใช้การตอบกลับและส่งการแจ้งเตือนไปยังผู้ใช้',
+			'tutorial_3_title' => 'Redeem & Use Coins',
+			'tutorial_3_desc' => 'รับเหรียญฟรีจากเมนู Vault เหรียญสามารถใช้ซื้อสติกเกอร์พรีเมียมหรือใช้ข้ามเวลารอ (Bypass) เมื่อเปลี่ยนตัวละครโปรดหรือประวัติได้',
+			'tutorial_4_title' => 'Countdown System',
+			'tutorial_4_desc' => 'ห้องแชททุกห้องมีการนับถอยหลัง 3 วัน เมื่อหมดเวลา แชทจะถูกลบอย่างถาวร อย่าลืมใช้ฟีเจอร์ ปักหมุดความทรงจำ เพื่อบันทึกข้อความสำคัญก่อนหมดเวลา!',
+			'tutorial_5_title' => 'Changing Theme Colors',
+			'tutorial_5_desc' => 'คุณสามารถเปลี่ยนสีธีมได้โดยแตะที่แบบอักษร \'Amomimus\' จากหน้าฟีดหรือเกาะแชทในห้องแชท',
+			'tutorial_6_title' => 'Block & Unblock Actions',
+			'tutorial_6_desc' => 'คุณสามารถบล็อกผู้ใช้ที่น่ารำคาญได้ หากคุณปลดบล็อกพวกเขาในภายหลัง พวกเขาจะได้รับสถานะ "EX-BLOCKED" (เคยบล็อก) และการโต้ตอบกับพวกเขาในอนาคตจะทำให้เกิดเอฟเฟกต์ภาพแตก (Glitch) เพื่อเป็นการเตือน',
+			'tutorial_7_title' => 'Ghost & Noise Indicators',
+			'tutorial_7_desc' => 'เมื่อผู้ใช้มีพฤติกรรมน่าสงสัย สถานะจะเปลี่ยนเป็น Ghost หรือ Noise โดย Ghost จะถูกจำกัดการส่งคำขอแชท ในขณะที่ Noise จะไม่สามารถเริ่มแชทใหม่ได้เลยเพื่อปกป้องชุมชน',
 			_ => null,
 		};
 	}

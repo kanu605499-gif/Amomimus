@@ -269,7 +269,7 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get delayed_sync_feed_title => 'Postingan Tertunda';
 	@override String get message_is_pending => 'Pesan sedang tertunda...';
 	@override String get message_successfully_sent => 'Pesan berhasil dikirim';
-	@override String get room_chat_resetted => 'Ada pesan baru';
+	@override String get room_chat_resetted => 'Roomchat Telah Di-reset';
 	@override String get started_at => 'Dimulai pada:';
 	@override String get end_at => 'Berakhir pada:';
 	@override String get resend => 'Kirim Ulang';
@@ -366,7 +366,7 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get amow_summary_empty => 'Haloow! Amow di mari~ Belum ada notifikasi baru nih. Nanti Amow cek lagi ya!';
 	@override String get email_verification_title => 'Verifikasi E-mail';
 	@override String get email_not_verified_body => 'E-mail belum terverifikasi, silakan periksa kotak masuk atau folder spam Anda.';
-	@override String get email_verification_sent_body => 'Akun berhasil dibuat. Tautan verifikasi telah dikirim ke E-mail Anda. Silakan verifikasi sebelum masuk.';
+	@override String get email_verification_sent_body => 'Akun berhasil dibuat. Tautan verifikasi telah dikirim ke E-mail Anda. Silakan periksa email Anda di kategori spam, untuk memverifikasi akun Anda.';
 	@override String get send_email => 'Kirim Email';
 	@override String get visit_instagram => 'Kunjungi Instagram';
 	@override String get developer_role => 'Developer';
@@ -382,6 +382,21 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override String get no_favorited_stickers => 'Belum ada stiker favorit';
 	@override String get magick_depleted => 'Magick habis.';
 	@override String get report_limit_reached => 'Batas laporan tercapai.';
+	@override String get function_features_title => 'Panduan Fitur';
+	@override String get tutorial_1_title => 'How to Chat';
+	@override String get tutorial_1_desc => 'Kirim Chat Request ke pembuat post (author) dari menu Feed. Jika request diterima, ruang obrolan anonim akan terbuka.';
+	@override String get tutorial_2_title => 'How to Reply Comments';
+	@override String get tutorial_2_desc => 'Tekan lama pada komentar yang ingin kamu balas. Tidak ada tombol balas, tetapi menekan lama akan memicu balasan dan mengirimkan notifikasi kepada pengguna tersebut.';
+	@override String get tutorial_3_title => 'Redeem & Use Coins';
+	@override String get tutorial_3_desc => 'Ambil koin gratis dari menu Vault. Koin bisa dipakai untuk beli stiker pack premium atau melakukan Bypass (memotong waktu tunggu saat ganti karakter/bio).';
+	@override String get tutorial_4_title => 'Countdown System';
+	@override String get tutorial_4_desc => 'Setiap room chat memiliki batas waktu 3 hari. Saat waktu habis, chat akan terhapus permanen. Gunakan fitur Pin Memories untuk menyimpan pesan penting sebelum countdown berakhir!';
+	@override String get tutorial_5_title => 'Changing Theme Colors';
+	@override String get tutorial_5_desc => 'Kamu bisa mengubah warna tema dengan menekan tulisan \'Amomimus\' dari layar feed atau island chat di dalam roomchat.';
+	@override String get tutorial_6_title => 'Block & Unblock Actions';
+	@override String get tutorial_6_desc => 'Kamu bisa memblokir user mengganggu lewat profil mereka. Jika kamu membuka blokirnya (unblock), mereka akan mendapat cap "EX-BLOCKED" dan interaksi dengan mereka akan memunculkan efek glitch peringatan.';
+	@override String get tutorial_7_title => 'Ghost & Noise Indicators';
+	@override String get tutorial_7_desc => 'Saat user bertingkah mencurigakan, indikator mereka berubah jadi Ghost atau Noise. User Ghost dibatasi dalam mengirim chat, sedangkan user Noise sama sekali dilarang memulai chat baru.';
 }
 
 /// The flat map containing all translations for locale <id>.
@@ -622,7 +637,7 @@ extension on TranslationsId {
 			'delayed_sync_feed_title' => 'Postingan Tertunda',
 			'message_is_pending' => 'Pesan sedang tertunda...',
 			'message_successfully_sent' => 'Pesan berhasil dikirim',
-			'room_chat_resetted' => 'Ada pesan baru',
+			'room_chat_resetted' => 'Roomchat Telah Di-reset',
 			'started_at' => 'Dimulai pada:',
 			'end_at' => 'Berakhir pada:',
 			'resend' => 'Kirim Ulang',
@@ -719,7 +734,7 @@ extension on TranslationsId {
 			'amow_summary_empty' => 'Haloow! Amow di mari~ Belum ada notifikasi baru nih. Nanti Amow cek lagi ya!',
 			'email_verification_title' => 'Verifikasi E-mail',
 			'email_not_verified_body' => 'E-mail belum terverifikasi, silakan periksa kotak masuk atau folder spam Anda.',
-			'email_verification_sent_body' => 'Akun berhasil dibuat. Tautan verifikasi telah dikirim ke E-mail Anda. Silakan verifikasi sebelum masuk.',
+			'email_verification_sent_body' => 'Akun berhasil dibuat. Tautan verifikasi telah dikirim ke E-mail Anda. Silakan periksa email Anda di kategori spam, untuk memverifikasi akun Anda.',
 			'send_email' => 'Kirim Email',
 			'visit_instagram' => 'Kunjungi Instagram',
 			'developer_role' => 'Developer',
@@ -735,6 +750,21 @@ extension on TranslationsId {
 			'no_favorited_stickers' => 'Belum ada stiker favorit',
 			'magick_depleted' => 'Magick habis.',
 			'report_limit_reached' => 'Batas laporan tercapai.',
+			'function_features_title' => 'Panduan Fitur',
+			'tutorial_1_title' => 'How to Chat',
+			'tutorial_1_desc' => 'Kirim Chat Request ke pembuat post (author) dari menu Feed. Jika request diterima, ruang obrolan anonim akan terbuka.',
+			'tutorial_2_title' => 'How to Reply Comments',
+			'tutorial_2_desc' => 'Tekan lama pada komentar yang ingin kamu balas. Tidak ada tombol balas, tetapi menekan lama akan memicu balasan dan mengirimkan notifikasi kepada pengguna tersebut.',
+			'tutorial_3_title' => 'Redeem & Use Coins',
+			'tutorial_3_desc' => 'Ambil koin gratis dari menu Vault. Koin bisa dipakai untuk beli stiker pack premium atau melakukan Bypass (memotong waktu tunggu saat ganti karakter/bio).',
+			'tutorial_4_title' => 'Countdown System',
+			'tutorial_4_desc' => 'Setiap room chat memiliki batas waktu 3 hari. Saat waktu habis, chat akan terhapus permanen. Gunakan fitur Pin Memories untuk menyimpan pesan penting sebelum countdown berakhir!',
+			'tutorial_5_title' => 'Changing Theme Colors',
+			'tutorial_5_desc' => 'Kamu bisa mengubah warna tema dengan menekan tulisan \'Amomimus\' dari layar feed atau island chat di dalam roomchat.',
+			'tutorial_6_title' => 'Block & Unblock Actions',
+			'tutorial_6_desc' => 'Kamu bisa memblokir user mengganggu lewat profil mereka. Jika kamu membuka blokirnya (unblock), mereka akan mendapat cap "EX-BLOCKED" dan interaksi dengan mereka akan memunculkan efek glitch peringatan.',
+			'tutorial_7_title' => 'Ghost & Noise Indicators',
+			'tutorial_7_desc' => 'Saat user bertingkah mencurigakan, indikator mereka berubah jadi Ghost atau Noise. User Ghost dibatasi dalam mengirim chat, sedangkan user Noise sama sekali dilarang memulai chat baru.',
 			_ => null,
 		};
 	}
