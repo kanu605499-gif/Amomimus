@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'preference_handler.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart' as flutter_secure_storage;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'
+    as flutter_secure_storage;
 import '../database_helper.dart';
 import '../models/report_model.dart';
 import '../models/user_indicator_model.dart';
@@ -13,6 +14,7 @@ import 'background_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../utils/secure_time.dart';
+import '../helpers/gender_helpers.dart';
 
 class AccountManager extends ChangeNotifier {
   Future<void> _persistAndNotify(UserAccount updatedUser) async {
@@ -33,6 +35,7 @@ class AccountManager extends ChangeNotifier {
 
     notifyListeners();
   }
+
   final AuthService authService;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -48,7 +51,9 @@ class AccountManager extends ChangeNotifier {
 
   bool get isMasterProfile {
     if (_currentUser == null || _currentUser!.isDemo) return false;
-    final masterAccs = _accounts.where((acc) => acc.masterEmail == _currentUser!.masterEmail).toList();
+    final masterAccs = _accounts
+        .where((acc) => acc.masterEmail == _currentUser!.masterEmail)
+        .toList();
     if (masterAccs.isEmpty) return false;
     return masterAccs.first.amomimusId == _currentUser!.amomimusId;
   }
@@ -56,7 +61,9 @@ class AccountManager extends ChangeNotifier {
   List<UserAccount> get switchableAccounts {
     if (_currentUser == null) return [];
     final realAccounts = _accounts
-        .where((acc) => !acc.isDemo && acc.masterEmail == _currentUser!.masterEmail)
+        .where(
+          (acc) => !acc.isDemo && acc.masterEmail == _currentUser!.masterEmail,
+        )
         .toList();
     if (realAccounts.length > 3) {
       return realAccounts.sublist(0, 3);
@@ -126,7 +133,10 @@ class AccountManager extends ChangeNotifier {
     UserCredentialsModel credentials,
     UserAccount newUser,
   ) async {
-    final createdProfile = await authService.registerAccount(credentials, newUser);
+    final createdProfile = await authService.registerAccount(
+      credentials,
+      newUser,
+    );
     if (createdProfile == null) return false;
 
     // We fetch updated accounts to sync the internal state
@@ -154,8 +164,14 @@ class AccountManager extends ChangeNotifier {
     return result;
   }
 
-  Future<bool> registerGoogleAccount(UserCredentialsModel credentials, UserAccount newUser) async {
-    final createdProfile = await authService.registerGoogleProfile(credentials, newUser);
+  Future<bool> registerGoogleAccount(
+    UserCredentialsModel credentials,
+    UserAccount newUser,
+  ) async {
+    final createdProfile = await authService.registerGoogleProfile(
+      credentials,
+      newUser,
+    );
     if (createdProfile == null) return false;
     await loadAccounts();
     final createdUser = _accounts.firstWhere(
@@ -196,7 +212,7 @@ class AccountManager extends ChangeNotifier {
     );
     _currentUser = canonical ?? account;
     notifyListeners();
-    
+
     // Persist the switch
     await PreferenceHandler.setLogin(true);
     await PreferenceHandler.setSavedEmail(account.email);
@@ -217,9 +233,10 @@ class AccountManager extends ChangeNotifier {
         // Update local user object
         final updatedUser = account.copyWith(fcmToken: token);
         await DatabaseHelper.instance.updateUser(updatedUser);
-        
+
         // Update in Firestore
-        final query = await _firestore.collection('users')
+        final query = await _firestore
+            .collection('users')
             .where('amomimusId', isEqualTo: account.amomimusId)
             .get();
         if (query.docs.isNotEmpty) {
@@ -236,16 +253,17 @@ class AccountManager extends ChangeNotifier {
 
   Future<void> updateLanguage(String lang) async {
     if (_currentUser == null || _currentUser!.isDemo) return;
-    
+
     try {
       // Update local user object
       final updatedUser = _currentUser!.copyWith(language: lang);
       _currentUser = updatedUser;
       await DatabaseHelper.instance.updateUser(updatedUser);
       notifyListeners();
-      
+
       // Update in Firestore
-      final query = await _firestore.collection('users')
+      final query = await _firestore
+          .collection('users')
           .where('amomimusId', isEqualTo: updatedUser.amomimusId)
           .get();
       if (query.docs.isNotEmpty) {
@@ -277,7 +295,9 @@ class AccountManager extends ChangeNotifier {
   Future<bool> updateBio(String newBio, int durationDays) async {
     if (_currentUser == null) return false;
 
-    final expirationDate = SecureTime.now().add(Duration(days: durationDays)).toIso8601String();
+    final expirationDate = SecureTime.now()
+        .add(Duration(days: durationDays))
+        .toIso8601String();
 
     bool shouldResetBailout = false;
     if (_currentUser!.bioExpirationDate != null) {
@@ -291,7 +311,9 @@ class AccountManager extends ChangeNotifier {
       bio: newBio,
       bioExpirationDate: expirationDate,
       bioOriginalDuration: durationDays,
-      hasUsedBioBailout: shouldResetBailout ? false : _currentUser!.hasUsedBioBailout,
+      hasUsedBioBailout: shouldResetBailout
+          ? false
+          : _currentUser!.hasUsedBioBailout,
     );
 
     try {
@@ -456,7 +478,9 @@ class AccountManager extends ChangeNotifier {
       } catch (e) {
         print("==== DB UPDATE TARGET SKIPPED: $e ====");
       }
-      final targetIdx = _accounts.indexWhere((acc) => acc.id == updatedTarget.id);
+      final targetIdx = _accounts.indexWhere(
+        (acc) => acc.id == updatedTarget.id,
+      );
       if (targetIdx != -1) _accounts[targetIdx] = updatedTarget;
     }
 
@@ -507,7 +531,9 @@ class AccountManager extends ChangeNotifier {
       } catch (e) {
         print("==== DB UPDATE TARGET SKIPPED: $e ====");
       }
-      final targetIdx = _accounts.indexWhere((acc) => acc.id == updatedTarget.id);
+      final targetIdx = _accounts.indexWhere(
+        (acc) => acc.id == updatedTarget.id,
+      );
       if (targetIdx != -1) _accounts[targetIdx] = updatedTarget;
     }
 
@@ -545,7 +571,10 @@ class AccountManager extends ChangeNotifier {
     return null;
   }
 
-  bool isRecentlyUnblockedByTarget(String myAmomimusId, String targetAmomimusId) {
+  bool isRecentlyUnblockedByTarget(
+    String myAmomimusId,
+    String targetAmomimusId,
+  ) {
     final targetAccount = getAccountById(targetAmomimusId);
     if (targetAccount == null) return false;
 
@@ -625,18 +654,36 @@ class AccountManager extends ChangeNotifier {
     }
   }
 
+  UserAccount getAccountOrFallback(String id, String displayName) {
+    try {
+      return _accounts.firstWhere(
+        (acc) => acc.amomimusId == id || acc.id.toString() == id,
+      );
+    } catch (_) {
+      final extractedGender = GenderHelpers.extractGenderFromName(
+        displayName,
+        id,
+      );
+      return UserAccount.empty().copyWith(
+        amomimusId: id,
+        gender: extractedGender,
+        anonymousUsername: GenderHelpers.getDisplayName(displayName),
+      );
+    }
+  }
+
   // ══════════════════════════════════════════════════════════
   // PRESENCE SYSTEM
   // ══════════════════════════════════════════════════════════
 
   Future<void> updatePresenceStatus(String status) async {
     if (_currentUser == null) return;
-    
+
     final updatedUser = _currentUser!.copyWith(
       presenceStatus: status,
       presenceUpdatedAt: SecureTime.now().toIso8601String(),
     );
-    
+
     await _persistAndNotify(updatedUser);
   }
 
@@ -649,9 +696,11 @@ class AccountManager extends ChangeNotifier {
   /// Loads the current report token state from secure storage.
   Future<Map<String, dynamic>> _loadReportTokens() async {
     final data = await const flutter_secure_storage.FlutterSecureStorage(
-      aOptions: flutter_secure_storage.AndroidOptions(encryptedSharedPreferences: true)
+      aOptions: flutter_secure_storage.AndroidOptions(
+        encryptedSharedPreferences: true,
+      ),
     ).read(key: _reportTokenKey);
-    
+
     if (data == null) return {};
     try {
       return Map<String, dynamic>.from(jsonDecode(data));
@@ -663,7 +712,9 @@ class AccountManager extends ChangeNotifier {
   /// Saves report token state to secure storage.
   Future<void> _saveReportTokens(Map<String, dynamic> tokens) async {
     await const flutter_secure_storage.FlutterSecureStorage(
-      aOptions: flutter_secure_storage.AndroidOptions(encryptedSharedPreferences: true)
+      aOptions: flutter_secure_storage.AndroidOptions(
+        encryptedSharedPreferences: true,
+      ),
     ).write(key: _reportTokenKey, value: jsonEncode(tokens));
   }
 
@@ -675,18 +726,17 @@ class AccountManager extends ChangeNotifier {
     if (storedDate != today) return {}; // New day, reset counts
 
     return {
-      ReportCategory.spamHarassment:
-          (tokens['spam_daily'] as int?) ?? 0,
+      ReportCategory.spamHarassment: (tokens['spam_daily'] as int?) ?? 0,
       ReportCategory.inappropriateContent:
           (tokens['inappropriate_daily'] as int?) ?? 0,
-      ReportCategory.hateSpeech:
-          (tokens['hate_speech_daily'] as int?) ?? 0,
+      ReportCategory.hateSpeech: (tokens['hate_speech_daily'] as int?) ?? 0,
     };
   }
 
   /// Gets weekly hate speech report count.
   int _getWeeklyHateSpeechCount(Map<String, dynamic> tokens) {
-    final weeklyList = (tokens['hate_speech_weekly_dates'] as List<dynamic>?) ?? [];
+    final weeklyList =
+        (tokens['hate_speech_weekly_dates'] as List<dynamic>?) ?? [];
     final oneWeekAgo = SecureTime.now().subtract(const Duration(days: 7));
 
     int count = 0;
@@ -759,8 +809,9 @@ class AccountManager extends ChangeNotifier {
         tokens['hate_speech_daily'] =
             ((tokens['hate_speech_daily'] as int?) ?? 0) + 1;
         // Also track weekly
-        final weeklyList =
-            List<String>.from((tokens['hate_speech_weekly_dates'] as List<dynamic>?) ?? []);
+        final weeklyList = List<String>.from(
+          (tokens['hate_speech_weekly_dates'] as List<dynamic>?) ?? [],
+        );
         weeklyList.add(SecureTime.now().toIso8601String());
         // Prune entries older than 7 days
         final oneWeekAgo = SecureTime.now().subtract(const Duration(days: 7));
@@ -837,7 +888,7 @@ class AccountManager extends ChangeNotifier {
       }
     }
 
-    // 4. If global tokens are exhausted, return early here. 
+    // 4. If global tokens are exhausted, return early here.
     // Local points are saved, but global target points remain unchanged.
     if (blockReason != null) {
       notifyListeners();

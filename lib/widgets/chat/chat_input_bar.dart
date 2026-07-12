@@ -210,9 +210,10 @@ class _ChatInputBarState extends State<ChatInputBar> {
               Expanded(
                 child: TextField(
                   controller: _messageController,
-                  keyboardType: TextInputType.multiline,
-                  textCapitalization: TextCapitalization.none,
-                  enableSuggestions: false,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.newline,
+                  textCapitalization: TextCapitalization.sentences,
+                  enableSuggestions: true,
                   maxLines: null,
                   minLines: 1,
                   style: TextStyle(color: currentText, fontSize: 15),

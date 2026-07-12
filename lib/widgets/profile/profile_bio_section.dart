@@ -152,7 +152,8 @@ class _ProfileBioSectionState extends State<ProfileBioSection> {
                           Expanded(
                             child: TextField(
                               controller: _bioController,
-                              keyboardType: TextInputType.multiline,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.newline,
                               textCapitalization: TextCapitalization.sentences,
                               enableSuggestions: true,
                               maxLines: 2,

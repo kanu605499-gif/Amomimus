@@ -34,21 +34,7 @@ class ChatListTileWidget extends StatelessWidget {
 
     // Get the target user's gender for dynamic styling
     final accountManager = context.watch<AccountManager>();
-    final targetAccount = accountManager.accounts.firstWhere(
-      (acc) => acc.amomimusId == chat.username,
-      orElse: () {
-        final extractedGender = GenderHelpers.extractGenderFromName(chat.name);
-        return UserAccount(
-          email: '',
-          realUsername: '',
-          anonymousUsername: '',
-          amomimusId: '',
-          gender: extractedGender,
-          registrationDate: '',
-          isDemo: false,
-        );
-      },
-    );
+    final targetAccount = accountManager.getAccountOrFallback(chat.username, chat.name);
     final targetGender = targetAccount.gender;
     final dynamicTileIcon = GenderHelpers.getGenderIcon(targetGender);
     final dynamicTileColor = GenderHelpers.getGenderColor(targetGender);

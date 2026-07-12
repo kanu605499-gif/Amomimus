@@ -88,18 +88,7 @@ class ShareToChatBottomSheet extends StatelessWidget {
                       itemCount: chatList.length,
                       itemBuilder: (context, index) {
                         final chat = chatList[index];
-                        final targetAccount = accountManager.accounts.firstWhere(
-                          (acc) => acc.amomimusId == chat.username,
-                          orElse: () => UserAccount(
-                            email: '',
-                            realUsername: '',
-                            anonymousUsername: '',
-                            amomimusId: '',
-                            gender: GenderHelpers.extractGenderFromName(chat.name),
-                            registrationDate: '',
-                            isDemo: false,
-                          ),
-                        );
+                        final targetAccount = accountManager.getAccountOrFallback(chat.username, chat.name);
                         final targetGender = targetAccount.gender;
                         final dynamicTileIcon = GenderHelpers.getGenderIcon(targetGender);
                         final dynamicTileColor = GenderHelpers.getGenderColor(targetGender);
@@ -141,6 +130,7 @@ class ShareToChatBottomSheet extends StatelessWidget {
                               chatModel.sendMessage(
                                 chat.username,
                                 '[SHARED_POST]:${post.id}',
+                                targetName: chat.name,
                               );
                               Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(

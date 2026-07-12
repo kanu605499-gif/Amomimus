@@ -237,9 +237,10 @@ class _CommentsSheetContentState extends State<_CommentsSheetContent> {
               Expanded(
                 child: TextField(
                   controller: _commentController,
-                  keyboardType: TextInputType.multiline,
-                  textCapitalization: TextCapitalization.none,
-                  enableSuggestions: false,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.newline,
+                  textCapitalization: TextCapitalization.sentences,
+                  enableSuggestions: true,
                   maxLines: null,
                   style: TextStyle(
                     color: widget.isDarkCard ? Colors.white : Colors.black,

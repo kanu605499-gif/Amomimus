@@ -238,7 +238,8 @@ class _ReportBugDialogState extends State<ReportBugDialog> {
               const SizedBox(height: 20),
               TextField(
                 controller: _commentController,
-                keyboardType: TextInputType.multiline,
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.newline,
                 textCapitalization: TextCapitalization.sentences,
                 enableSuggestions: true,
                 maxLines: 4,

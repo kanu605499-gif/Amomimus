@@ -95,7 +95,8 @@ class _CreatePostFormState extends State<_CreatePostForm> {
           Expanded(
             child: TextField(
               controller: _postController,
-              keyboardType: TextInputType.multiline,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.newline,
               textCapitalization: TextCapitalization.sentences,
               enableSuggestions: true,
               maxLines: null,

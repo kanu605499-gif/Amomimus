@@ -14,6 +14,8 @@ import '../i18n/strings.g.dart';
 import '../utils/utc_time_manager.dart';
 import 'package:amomimus/utils/jelly_dialog.dart';
 import 'audio_manager.dart';
+import 'notification_manager.dart';
+import '../models/notification_model.dart';
 
 // Re-export so files that import chatmodel.dart still find ChatPreview
 export '../models/chat_preview_model.dart';
@@ -583,6 +585,22 @@ class ChatModel extends ChangeNotifier {
             context.mounted) {
           Navigator.of(context).pop();
         }
+
+        // Trigger push notification for the chat message
+        try {
+          NotificationManager().addNotification(
+            NotificationModel(
+              targetUserId: message.roomId!,
+              actorName: message.senderName ?? 'Someone',
+              type: NotificationType.chat,
+              feedId: session.id,
+              message: message.text,
+            ),
+          );
+        } catch (e) {
+          print('Error triggering chat push notification: $e');
+        }
+
         _saveChats();
       } catch (e) {
         if (!message.isSynced) {

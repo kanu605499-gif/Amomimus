@@ -310,7 +310,8 @@ class _ForumPageState extends State<ForumPage> {
                           child: TextField(
                             focusNode: _focusNode,
                             controller: _commentController,
-                            keyboardType: TextInputType.multiline,
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.newline,
                             textCapitalization: TextCapitalization.none,
                             enableSuggestions: false,
                             maxLines: null,

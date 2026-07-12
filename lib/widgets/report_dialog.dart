@@ -243,7 +243,8 @@ class _ReportDialogState extends State<ReportDialog> {
             const SizedBox(height: 8),
             TextField(
               controller: _commentController,
-              keyboardType: TextInputType.multiline,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.newline,
               textCapitalization: TextCapitalization.sentences,
               enableSuggestions: true,
               maxLines: 3,

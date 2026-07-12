@@ -307,7 +307,7 @@ class _FeedCardState extends State<FeedCard> {
                                       builder: (context) => AmomimusApp6(
                                         username: targetId,
                                         name: currentUser!.amomimusId == targetId 
-                                            ? (currentUser.customUsername ?? currentUser.anonymousUsername) 
+                                            ? currentUser.anonymousUsername 
                                             : '${widget.model.userName} ${widget.model.type.name[0].toUpperCase()}${widget.model.type.name.substring(1)}',
                                       ),
                                     ),
@@ -366,8 +366,7 @@ class _FeedCardState extends State<FeedCard> {
                                       chatReqMgr.sendRequest(
                                         targetId,
                                         widget.model.userName,
-                                        currentUser?.customUsername ??
-                                            currentUser?.anonymousUsername ??
+                                        currentUser?.anonymousUsername ??
                                             "Anonymous",
                                       );
                                       ScaffoldMessenger.of(

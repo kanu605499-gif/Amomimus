@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../services/account_manager.dart';
 import '../amomimusdark.dart';
+import '../helpers/gender_helpers.dart';
 import '../services/chatmodel.dart';
 import '../services/chat_request_manager.dart';
 import 'fake_pdf_screen.dart';
@@ -74,10 +75,11 @@ class _AmomimusApp7State extends State<AmomimusApp7>
     final themeProvider = context.watch<AmomimusDarkTheme>();
     final chatModel = context.watch<ChatModel>();
     final accountManager = context.watch<AccountManager>();
-    final blockedUsers = accountManager.currentUser?.blockedUsers ?? [];
-    final blockedBy = accountManager.currentUser?.blockedBy ?? [];
-
-    final myAmomimusId = accountManager.currentUser?.amomimusId ?? '';
+    
+    final activeUser = accountManager.currentUser;
+    final blockedUsers = activeUser?.blockedUsers ?? [];
+    final blockedBy = activeUser?.blockedBy ?? [];
+    final myAmomimusId = activeUser?.amomimusId ?? '';
 
     final reqManager = context.watch<ChatRequestManager>();
 
@@ -107,8 +109,8 @@ class _AmomimusApp7State extends State<AmomimusApp7>
 
     // Pin Local Sub-Profiles to the top
     final localSubProfiles = accountManager.accounts.where((acc) {
-      return accountManager.currentUser != null &&
-          acc.masterEmail == accountManager.currentUser!.masterEmail &&
+      return activeUser != null &&
+          acc.masterEmail == activeUser.masterEmail &&
           acc.amomimusId != myAmomimusId;
     }).toList();
 
@@ -130,7 +132,7 @@ class _AmomimusApp7State extends State<AmomimusApp7>
         preview = finalChatList.removeAt(existingIndex);
       } else {
         preview = ChatPreview(
-          name: localProfile.customUsername ?? localProfile.anonymousUsername,
+          name: localProfile.anonymousUsername,
           username: localProfile.amomimusId,
           initialLastMessage: "",
           initialTime: "",
@@ -144,9 +146,8 @@ class _AmomimusApp7State extends State<AmomimusApp7>
     final currentSurface = themeProvider.isDarkMode
         ? AmomimusDarkTheme.surfaceDark
         : Colors.grey[200]!;
-    final dynamicAccentColor = themeProvider.isDarkMode
-        ? AmomimusDarkTheme.policeLineYellow
-        : AmomimusDarkTheme.primaryPurple;
+    
+    final dynamicAccentColor = GenderHelpers.getGenderColor(activeUser?.gender ?? 'Amo');
 
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
@@ -220,9 +221,7 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                                     IconButton(
                                       icon: Icon(
                                         Icons.search,
-                                        color: themeProvider.isDarkMode
-                                            ? AmomimusDarkTheme.policeLineYellow
-                                            : AmomimusDarkTheme.primaryPurple,
+                                        color: dynamicAccentColor,
                                       ),
                                       onPressed: () {
                                         Navigator.push(
@@ -241,11 +240,7 @@ class _AmomimusApp7State extends State<AmomimusApp7>
                                         );
                                       },
                                     ),
-                                    if (context
-                                            .watch<AccountManager>()
-                                            .switchableAccounts
-                                            .length >
-                                        1)
+                                    if (accountManager.switchableAccounts.length > 1)
                                       IconButton(
                                         icon: Icon(
                                           Icons.switch_account_outlined,

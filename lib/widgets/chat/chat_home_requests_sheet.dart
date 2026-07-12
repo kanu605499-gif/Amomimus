@@ -21,6 +21,10 @@ void showRequestsBottomSheet(
       final isDark = themeProvider.isDarkMode;
       final bgCol = isDark ? AmomimusDarkTheme.surfaceDark : Colors.white;
       final textCol = isDark ? Colors.white : Colors.black87;
+      
+      final accountManager = ctx.read<AccountManager>();
+      final blockedUsers = accountManager.currentUser?.blockedUsers ?? [];
+      final blockedBy = accountManager.currentUser?.blockedBy ?? [];
 
       return Padding(
         padding: EdgeInsets.only(
@@ -70,24 +74,9 @@ void showRequestsBottomSheet(
                 shrinkWrap: true,
                 children: [
                   ...reqManager.incomingRequests.where((req) {
-                    final accountManager = context.read<AccountManager>();
-                    final blockedUsers = accountManager.currentUser?.blockedUsers ?? [];
-                    final blockedBy = accountManager.currentUser?.blockedBy ?? [];
                     return !blockedUsers.contains(req.senderId) && !blockedBy.contains(req.senderId);
                   }).map((req) {
-                    final accountManager = context.read<AccountManager>();
-                    final senderAccount = accountManager.accounts.firstWhere(
-                      (acc) => acc.amomimusId == req.senderId,
-                      orElse: () => UserAccount(
-                        email: '',
-                        realUsername: '',
-                        anonymousUsername: '',
-                        amomimusId: '',
-                        gender: 'Amo',
-                        registrationDate: '',
-                        isDemo: false,
-                      ),
-                    );
+                    final senderAccount = accountManager.getAccountOrFallback(req.senderId, req.senderName);
                     final senderGender = senderAccount.gender;
                     final senderIcon = GenderHelpers.getGenderIcon(senderGender);
                     final senderColor = GenderHelpers.getGenderColor(senderGender);

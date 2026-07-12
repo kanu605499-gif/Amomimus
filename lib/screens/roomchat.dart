@@ -143,12 +143,12 @@ class _AmomimusApp6State extends State<AmomimusApp6>
   }
 
   void _sendPayload(String payload) {
-    final username = widget.username ?? '@partner_dev';
+    final targetId = widget.username ?? '';
     final activeUser = context.read<AccountManager>().currentUser;
     final senderName = activeUser?.anonymousUsername ?? 'You';
 
     context.read<ChatModel>().sendMessage(
-      username,
+      targetId,
       payload,
       senderName: senderName,
       targetName: widget.name,
@@ -566,26 +566,19 @@ class _AmomimusApp6State extends State<AmomimusApp6>
     final themeProvider = Provider.of<AmomimusDarkTheme>(context);
     final accountManager = Provider.of<AccountManager>(context);
 
-    final isRecentlyUnblocked = widget.username != null
-        ? accountManager.isRecentlyUnblocked(widget.username!)
+    final targetId = widget.username ?? '';
+    final targetName = widget.name ?? 'Unknown';
+
+    final isRecentlyUnblocked = targetId.isNotEmpty
+        ? accountManager.isRecentlyUnblocked(targetId)
         : false;
 
     // Build the dynamic header style based on user indicator
-    UserAccount targetAccount = accountManager.getAccountById(widget.username ?? '') ??
-      UserAccount(
-        email: 'unknown@example.com',
-        masterEmail: 'unknown@example.com',
-        realUsername: widget.name ?? 'Unknown',
-        anonymousUsername: widget.name ?? 'Unknown',
-        amomimusId: widget.username ?? 'Unknown',
-        gender: 'Amo',
-        registrationDate: DateTime.now().toIso8601String(),
-        isDemo: true,
-      );
+    UserAccount targetAccount = accountManager.getAccountOrFallback(targetId, targetName);
     final chatModel = context.watch<ChatModel>();
     final activeChat = chatModel.getChatByUsername(
-      widget.username ?? '@partner_dev',
-      targetName: widget.name ?? 'Unknown',
+      targetId,
+      targetName: targetName,
     );
     final currentUserId = accountManager.currentUser?.amomimusId;
     final messages = activeChat.messages
@@ -612,14 +605,11 @@ class _AmomimusApp6State extends State<AmomimusApp6>
             _showResetGlitch = true;
           });
           
-          context.read<ChatModel>().markResetAnimationSeen(
-            widget.username!,
-          );
+          if (targetId.isNotEmpty) {
+            context.read<ChatModel>().markResetAnimationSeen(targetId);
+          }
 
-          final activeUserId = context
-              .read<AccountManager>()
-              .currentUser
-              ?.amomimusId;
+          final activeUserId = accountManager.currentUser?.amomimusId;
           final isCheater =
               activeChat.cheatDetectedUserId != null &&
               activeChat.cheatDetectedUserId == activeUserId;
@@ -629,9 +619,6 @@ class _AmomimusApp6State extends State<AmomimusApp6>
               setState(() {
                 _showResetGlitch = false;
               });
-
-              bool iAmBlocker = accountManager.currentUser?.blockedUsers.contains(widget.username) == true;
-              bool iAmBlocked = accountManager.isBlockedBy(widget.username!);
 
               if (isCheater) {
                 showJellyDialog(
@@ -700,8 +687,8 @@ class _AmomimusApp6State extends State<AmomimusApp6>
 
     // Get the target user's gender for dynamic styling
     // We CANNOT use local AccountManager for remote users, as it will fallback to Amo.
-    // Instead, extract the gender from the provided name (e.g., "Astral Echo Amom" -> "Amom")
-    final targetGender = GenderHelpers.extractGenderFromName(widget.name ?? 'Unknown');
+    // Instead, extract the gender from the provided name or ID
+    final targetGender = GenderHelpers.extractGenderFromName(widget.name ?? 'Unknown', widget.username);
     final dynamicHeaderIcon = GenderHelpers.getGenderIcon(targetGender);
     final dynamicHeaderColor = GenderHelpers.getGenderColor(targetGender);
 
@@ -877,30 +864,22 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                                               _replyingToMessage = msg;
                                             });
                                           },
-                                          isPinned: context
-                                              .watch<ChatModel>()
-                                              .isPinned(
-                                                widget.username ??
-                                                    '@partner_dev',
+                                          isPinned: chatModel.isPinned(
+                                                targetId,
                                                 msg.id ?? '',
                                               ),
                                           onTogglePin: () {
                                             if (msg.id != null) {
-                                              final target =
-                                                  widget.username ??
-                                                  '@partner_dev';
-                                              final cm = context
-                                                  .read<ChatModel>();
-                                              if (cm.isPinned(
-                                                target,
+                                              if (chatModel.isPinned(
+                                                targetId,
                                                 msg.id!,
                                               )) {
-                                                cm.unpinMessage(
-                                                  target,
+                                                chatModel.unpinMessage(
+                                                  targetId,
                                                   msg.id!,
                                                 );
                                               } else {
-                                                cm.pinMessage(target, msg.id!);
+                                                chatModel.pinMessage(targetId, msg.id!);
                                               }
                                             }
                                           },
@@ -981,7 +960,7 @@ class _AmomimusApp6State extends State<AmomimusApp6>
                           secondChild: SelectionActionBar(
                             selectedMessageIds: _selectedMessageIds,
                             messages: messages,
-                            targetUsername: widget.username ?? '@partner_dev',
+                            targetUsername: targetId,
                             onClearSelection: _clearSelection,
                           ),
                         ),

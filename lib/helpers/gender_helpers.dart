@@ -124,10 +124,10 @@ class GenderHelpers {
     height: 1.4,
   );
 
-  /// Extracts the gender from an anonymous name (e.g., "Astral Echo Amom" -> "Amom").
-  static String extractGenderFromName(String name) {
-    if (name.endsWith(' Amom')) return 'Amom';
-    if (name.endsWith(' Ami')) return 'Ami';
+  /// Extracts the gender from an anonymous name or ID.
+  static String extractGenderFromName(String name, [String? id]) {
+    if (name.endsWith(' Amom') || (id != null && (id.contains('AMM-') || id.contains('AMOM-')))) return 'Amom';
+    if (name.endsWith(' Ami') || (id != null && id.contains('AMI-'))) return 'Ami';
     return 'Amo'; // Default for Amo or unknown
   }
 
