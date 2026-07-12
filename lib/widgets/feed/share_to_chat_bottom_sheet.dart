@@ -88,7 +88,19 @@ class ShareToChatBottomSheet extends StatelessWidget {
                       itemCount: chatList.length,
                       itemBuilder: (context, index) {
                         final chat = chatList[index];
-                        final targetGender = GenderHelpers.extractGenderFromName(chat.name);
+                        final targetAccount = accountManager.accounts.firstWhere(
+                          (acc) => acc.amomimusId == chat.username,
+                          orElse: () => UserAccount(
+                            email: '',
+                            realUsername: '',
+                            anonymousUsername: '',
+                            amomimusId: '',
+                            gender: GenderHelpers.extractGenderFromName(chat.name),
+                            registrationDate: '',
+                            isDemo: false,
+                          ),
+                        );
+                        final targetGender = targetAccount.gender;
                         final dynamicTileIcon = GenderHelpers.getGenderIcon(targetGender);
                         final dynamicTileColor = GenderHelpers.getGenderColor(targetGender);
                         final displayName = GenderHelpers.getDisplayName(chat.name);
@@ -121,15 +133,7 @@ class ShareToChatBottomSheet extends StatelessWidget {
                               color: textColor,
                             ),
                           ),
-                          subtitle: Text(
-                            chat.username,
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: AmomimusDarkTheme.policeLineYellow
-                                  .withValues(alpha: 0.5),
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                          // Subtitle removed to prevent leaking the custom username/id
                           trailing: IconButton(
                             icon: const Icon(Icons.send_rounded),
                             color: dynamicTileColor,

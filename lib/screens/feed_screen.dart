@@ -84,7 +84,7 @@ class _AmomimusApp5State extends State<AmomimusApp5>
     final currentUser = accountManager.currentUser;
     if (currentUser == null) return;
 
-    final creds = await accountManager.authService.getCredentials(currentUser.email);
+    final creds = await accountManager.authService.getCredentials(currentUser.masterEmail);
     if (creds != null && (creds.favoriteCharacter == null || creds.favoriteCharacter!.isEmpty || creds.favoriteCharacter == 'Amo')) {
       if (!mounted) return;
       _showFavoriteCharacterDialog();
@@ -106,17 +106,17 @@ class _AmomimusApp5State extends State<AmomimusApp5>
         return StatefulBuilder(
           builder: (context, setStateDialog) {
             return AlertDialog(
-              backgroundColor: isDark ? const Color(0xff1e1e1e) : const Color(0xfffdfbfe),
+              backgroundColor: isDark ? AmomimusDarkTheme.surfaceDark : Colors.white,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(20),
                 side: BorderSide(
-                  color: isDark ? Colors.grey[800]! : const Color(0xffe1dbec),
+                  color: AmomimusDarkTheme.primaryPurple.withValues(alpha: 0.3),
                   width: 1.5,
                 ),
               ),
               title: Row(
                 children: [
-                  Icon(Icons.security, color: isDark ? Colors.blue[300] : Colors.blue),
+                  const Icon(Icons.security, color: AmomimusDarkTheme.primaryPurple),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -184,9 +184,9 @@ class _AmomimusApp5State extends State<AmomimusApp5>
                     )
                   : ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isDark ? Colors.blue[700] : Colors.blue,
+                        backgroundColor: AmomimusDarkTheme.primaryPurple,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
                       onPressed: () async {

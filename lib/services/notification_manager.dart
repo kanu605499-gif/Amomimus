@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as flutter_secure_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -130,8 +131,90 @@ class NotificationManager extends ChangeNotifier {
           .collection('notifications')
           .doc(notification.id)
           .set(notification.toMap());
+          
+      // Trigger Vercel Push Notification API
+      await _triggerPushNotification(notification);
     } catch (e) {
       print('Error adding notification: $e');
+    }
+  }
+
+  Future<void> _triggerPushNotification(NotificationModel notification) async {
+    try {
+      // 1. Get Target User's FCM Token
+      final targetUserDoc = await _firestore.collection('users').doc(notification.targetUserId).get();
+      if (!targetUserDoc.exists) return;
+      
+      final targetUserData = targetUserDoc.data() as Map<String, dynamic>;
+      final targetFcmToken = targetUserData['fcmToken'];
+      final targetLanguage = targetUserData['language'] ?? 'en';
+      
+      if (targetFcmToken == null || targetFcmToken.isEmpty) return;
+
+      // Do not send push notifications for block/unblock events
+      if (notification.type == NotificationType.blocked || 
+          notification.type == NotificationType.unblocked) {
+        return;
+      }
+
+      // Translate dynamically to target user's language
+      final targetLocale = AppLocaleUtils.parse(targetLanguage);
+      final tTarget = await targetLocale.build();
+      
+      String translatedBody = notification.message; // Fallback
+      switch (notification.type) {
+        case NotificationType.resonate:
+          translatedBody = '${notification.actorName} ${tTarget.notif_resonate}';
+          break;
+        case NotificationType.comment:
+          translatedBody = '${notification.actorName} ${tTarget.notif_comment}';
+          break;
+        case NotificationType.reply:
+          translatedBody = '${notification.actorName} ${tTarget.notif_reply}';
+          break;
+        case NotificationType.chat:
+          translatedBody = '${notification.actorName} ${tTarget.notif_chat}';
+          break;
+        case NotificationType.chatRequest:
+          translatedBody = '${notification.actorName} ${tTarget.notif_chat_request}';
+          break;
+        case NotificationType.bioExpiry:
+          translatedBody = tTarget.notif_bio_expiry;
+          break;
+        default:
+          break;
+      }
+
+      // 2. Prepare payload
+      // Provide your actual Vercel endpoint URL and Secret Key here
+      const String vercelEndpoint = 'https://amomimus-api.vercel.app/api/sendNotification';
+      const String apiSecretKey = 'YOUR_SUPER_SECRET_API_KEY_HERE';
+
+      final payload = {
+        'fcmToken': targetFcmToken,
+        'title': 'Amomimus',
+        'body': translatedBody,
+        'data': {
+          'type': notification.type.name,
+          'feedId': notification.feedId,
+        }
+      };
+
+      // 3. Send HTTP POST
+      final response = await http.post(
+        Uri.parse(vercelEndpoint),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $apiSecretKey',
+        },
+        body: jsonEncode(payload),
+      );
+
+      if (response.statusCode != 200) {
+        print('FCM API Error: ${response.body}');
+      }
+    } catch (e) {
+      print('Error triggering push notification: $e');
     }
   }
 

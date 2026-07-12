@@ -20,6 +20,13 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
   bool _isEditingFavChar = false;
   bool _isResettingPasscode = false;
   bool _isLoading = false;
+  String? _localFavChar;
+
+  @override
+  void initState() {
+    super.initState();
+    _localFavChar = widget.credentials.favoriteCharacter;
+  }
 
   void _saveFavChar() async {
     final newChar = _favCharController.text.trim();
@@ -34,6 +41,7 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
         _isLoading = false;
         if (success) {
           _isEditingFavChar = false;
+          _localFavChar = newChar;
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),content: Text("Can only edit once every 24 hours!")),
@@ -50,7 +58,7 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
     if (favInput.isEmpty || newPass.isEmpty) return;
 
     if (favInput.toLowerCase() !=
-        (widget.credentials.favoriteCharacter ?? '').toLowerCase()) {
+        (_localFavChar ?? '').toLowerCase()) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(behavior: SnackBarBehavior.floating, margin: const EdgeInsets.only(bottom: 100, left: 24, right: 24),content: Text("Incorrect favorite character.")),
       );
@@ -127,7 +135,7 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
               const SizedBox(height: 8),
               if (!_isEditingFavChar) ...[
                 Text(
-                  widget.credentials.favoriteCharacter ?? "None",
+                  _localFavChar ?? "None",
                   style: TextStyle(color: textColor.withOpacity(0.8)),
                 ),
                 const SizedBox(height: 8),
@@ -135,7 +143,7 @@ class _SecurityAuthSectionState extends State<SecurityAuthSection> {
                   style: buttonStyle,
                   onPressed: () {
                     _favCharController.text =
-                        widget.credentials.favoriteCharacter ?? "";
+                        _localFavChar ?? "";
                     setState(() => _isEditingFavChar = true);
                   },
                   child: Text(t.edit_max_1_day),

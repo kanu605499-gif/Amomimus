@@ -211,8 +211,8 @@ class _ChatInputBarState extends State<ChatInputBar> {
                 child: TextField(
                   controller: _messageController,
                   keyboardType: TextInputType.multiline,
-                  textCapitalization: TextCapitalization.sentences,
-                  enableSuggestions: true,
+                  textCapitalization: TextCapitalization.none,
+                  enableSuggestions: false,
                   maxLines: null,
                   minLines: 1,
                   style: TextStyle(color: currentText, fontSize: 15),

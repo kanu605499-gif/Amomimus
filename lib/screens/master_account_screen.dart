@@ -168,32 +168,36 @@ class _MasterAccountScreenState extends State<MasterAccountScreen>
                                           width: itemWidth,
                                           child: Column(
                                             children: [
-                                              InkWell(
-                                                onTap: () => _switchToAccount(context, bindedAccounts[index]),
-                                                borderRadius: BorderRadius.circular(18),
-                                                child: AnimatedBuilder(
-                                                  animation: _danceController,
-                                                  builder: (context, child) {
-                                                    final delay = index * 2.0;
-                                                    final offset = math.sin((_danceController.value * 2 * math.pi) + delay) * 8;
-                                                    return Transform.translate(
-                                                      offset: Offset(0, -offset),
-                                                      child: child,
-                                                    );
-                                                  },
-                                                  child: Stack(
-                                                    alignment: Alignment.bottomRight,
-                                                    children: [
-                                                      Container(
-                                                        width: iconSize,
-                                                        height: iconSize,
-                                                        decoration: BoxDecoration(
-                                                          color: GenderHelpers.getGenderColor(bindedAccounts[index].gender).withValues(alpha: 0.1),
-                                                          borderRadius: BorderRadius.circular(18),
-                                                          border: Border.all(color: GenderHelpers.getGenderColor(bindedAccounts[index].gender).withValues(alpha: 0.5), width: 1.5),
+                                              AnimatedBuilder(
+                                                animation: _danceController,
+                                                builder: (context, child) {
+                                                  final delay = index * 2.0;
+                                                  final offset = math.sin((_danceController.value * 2 * math.pi) + delay) * 8;
+                                                  return Transform.translate(
+                                                    offset: Offset(0, -offset),
+                                                    child: child,
+                                                  );
+                                                },
+                                                child: Stack(
+                                                  alignment: Alignment.bottomRight,
+                                                  children: [
+                                                    Material(
+                                                      color: GenderHelpers.getGenderColor(bindedAccounts[index].gender).withValues(alpha: 0.1),
+                                                      borderRadius: BorderRadius.circular(18),
+                                                      child: InkWell(
+                                                        onTap: () => _switchToAccount(context, bindedAccounts[index]),
+                                                        borderRadius: BorderRadius.circular(18),
+                                                        child: Container(
+                                                          width: iconSize,
+                                                          height: iconSize,
+                                                          decoration: BoxDecoration(
+                                                            borderRadius: BorderRadius.circular(18),
+                                                            border: Border.all(color: GenderHelpers.getGenderColor(bindedAccounts[index].gender).withValues(alpha: 0.5), width: 1.5),
+                                                          ),
+                                                          child: Icon(GenderHelpers.getGenderIcon(bindedAccounts[index].gender), color: GenderHelpers.getGenderColor(bindedAccounts[index].gender), size: iconSize * 0.5),
                                                         ),
-                                                        child: Icon(GenderHelpers.getGenderIcon(bindedAccounts[index].gender), color: GenderHelpers.getGenderColor(bindedAccounts[index].gender), size: iconSize * 0.5),
                                                       ),
+                                                    ),
                                                       NotificationDot(
                                                         account: bindedAccounts[index],
                                                         allAccounts: bindedAccounts,
@@ -202,7 +206,6 @@ class _MasterAccountScreenState extends State<MasterAccountScreen>
                                                     ],
                                                   ),
                                                 ),
-                                              ),
                                               const SizedBox(height: 16),
                                               Text(
                                                 bindedAccounts[index].customUsername ?? bindedAccounts[index].anonymousUsername,

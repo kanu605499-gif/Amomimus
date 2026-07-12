@@ -307,15 +307,7 @@ class ChatListTileWidget extends StatelessWidget {
                         const SizedBox(height: 2),
                         Row(
                           children: [
-                            Text(
-                              chat.username,
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: AmomimusDarkTheme.policeLineYellow
-                                    .withValues(alpha: 0.5),
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+// Removed chat.username to prevent identity leak
                             if (isRecentlyUnblocked) ...[
                               const SizedBox(width: 6),
                               GlitchEffect(

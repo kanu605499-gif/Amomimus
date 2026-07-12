@@ -86,37 +86,39 @@ void showAccountSwitchSheet(BuildContext context) {
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: InkWell(
+                        child: Material(
+                          color: isActive
+                              ? genderColor.withValues(alpha: 0.12)
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(16),
-                          onTap: () async {
-                            await accountManager.switchAccount(acc);
-                            // Sync ChatModel with the new account
-                            if (ctx.mounted) {
-                              ctx.read<ChatModel>().setCurrentUser(
-                                acc.amomimusId,
-                                acc.anonymousUsername,
-                              );
-                              Navigator.pop(ctx);
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isActive
-                                  ? genderColor.withValues(alpha: 0.12)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: isActive
-                                    ? genderColor.withValues(alpha: 0.8)
-                                    : (isDark ? Colors.white12 : Colors.black12),
-                                width: isActive ? 1.5 : 1,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(16),
+                            onTap: () async {
+                              await accountManager.switchAccount(acc);
+                              // Sync ChatModel with the new account
+                              if (ctx.mounted) {
+                                ctx.read<ChatModel>().setCurrentUser(
+                                  acc.amomimusId,
+                                  acc.anonymousUsername,
+                                );
+                                Navigator.pop(ctx);
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 12,
                               ),
-                            ),
-                            child: Row(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: isActive
+                                      ? genderColor.withValues(alpha: 0.8)
+                                      : (isDark ? Colors.white12 : Colors.black12),
+                                  width: isActive ? 1.5 : 1,
+                                ),
+                              ),
+                              child: Row(
                               children: [
                                 Container(
                                   width: 40,
@@ -177,6 +179,7 @@ void showAccountSwitchSheet(BuildContext context) {
                               ],
                             ),
                           ),
+                        ),
                         ),
                       );
                     }).toList(),

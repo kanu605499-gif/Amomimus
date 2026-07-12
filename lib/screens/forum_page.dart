@@ -311,8 +311,8 @@ class _ForumPageState extends State<ForumPage> {
                             focusNode: _focusNode,
                             controller: _commentController,
                             keyboardType: TextInputType.multiline,
-                            textCapitalization: TextCapitalization.sentences,
-                            enableSuggestions: true,
+                            textCapitalization: TextCapitalization.none,
+                            enableSuggestions: false,
                             maxLines: null,
                             style: TextStyle(
                               color: isDark ? Colors.white : Colors.black,
